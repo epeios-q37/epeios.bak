@@ -32,27 +32,28 @@ import atlastk, random
 
 LIMIT = 100
 
-current = 1 # 1 or 2
+SPY = 0
+PLAY = 1
+WAIT = 2
 
-available = 1 # 0 (no more player available), 1 or 2
-
-scores = {
-  1: 0,
-  2: 0
-}
-
-
-turn = 0
-dice = 0
-
-class Player:
+class User:
   def __init__(self):
     self.id = 0
 
 
-SPY = 0
-PLAY = 1
-WAIT = 2
+def init():
+  global current, available, scores, turn, dice
+  current = 1 # 1 or 2
+
+  available = 1 # 0 (no more player available), 1 or 2
+
+  scores = {
+    1: 0,
+    2: 0
+  }
+
+  turn = 0
+  dice = 0
 
 
 def get_status(id):
@@ -69,12 +70,14 @@ def get_status(id):
     return WAIT
 
 
-def update_meter(dom, player, actual, turn):
+def update_meter(dom, ab, score, turn):
   if current + turn > LIMIT:
     turn = LIMIT - current
 
-  dom.set_attribute(f"player{player}-current", "style", f"width: {actual}%;")
-  dom.set_attribute(f"player{player}-turn", "style", f"width: {turn}%;")
+  dom.set_attribute(f"ScoreMeter{ab}", "style", f"width: {score}%;")
+  dom.set_attribute(f"TurnMeter{ab}", "style", f"width: {turn}%;")
+
+  dom.set_content(f"ScoreText{ab}", score)
 
 
 def disable_buttons(dom):
@@ -85,79 +88,89 @@ def enable_buttons(dom):
   dom.enable_elements(["Roll", "Hold"])
 
 
-def get_opponent(player):
-  return 2 if player == 1 else 1
+def get_opponent(player_ab):
+  if player_ab == 'A':
+    return 'B'
+  elif player_ab == 'B':
+    return 'A'
+  elif player_ab == 1:
+    return 2
+  else:
+    return 1
 
 
-def point_player(dom, player):
-  dom.remove_class(f"arrow{player}", "hide")
-  dom.add_class(f"arrow{get_opponent(player)}", "hide")  
+def mark_player(dom, ab):
+  dom.remove_class(f"Marker{ab}", "hide")
+  dom.add_class(f"Marker{get_opponent(ab)}", "hide")  
 
 
 def update_layout(dom, status):
   if status == WAIT:
     disable_buttons(dom)
-    point_player(dom, 2)
+    mark_player(dom, 'B')
   elif status == PLAY:
     enable_buttons(dom)
-    point_player(dom, 1)
+    mark_player(dom, 'A')
   else:
     disable_buttons(dom)
-    point_player(dom, current)
+    mark_player(dom, 'A' if current == 1 else 'B')
 
 
 def display_dice(dom, value):
-  dom.remove_class("dice", "fade-in-dice")
+  dom.remove_class("dice", "fade-in")
   dom.flush()
-  dom.add_class("dice", "fade-in-dice")
+  dom.add_class("dice", "fade-in")
 
   filename = f"dice-{value}.svg" if value != 0 else "Pig.svg"
   dom.inner("dice", open(filename).read())
 
 
-def display(player, dom):
-  if available == 0 and player.id == 0:
+def display(user, dom):
+  if available == 0 and user.id == 0:
     dom.set_contents({
-      "Label1": "Player 1",
-      "Label2": "Player 2"
+      "LabelA": "Player 1",
+      "LabelB": "Player 2"
     })
 
-  status = get_status(player.id)
+  status = get_status(user.id)
   update_layout(dom, status)
+
   if status == SPY:
-    update_meter(dom, 1, scores[1], turn if current == 1 else 0)
-    update_meter(dom, 2, scores[2], turn if current == 2 else 0)
+    update_meter(dom, 'A', scores[1], turn if current == 1 else 0)
+    update_meter(dom, 'B', scores[2], turn if current == 2 else 0)
   else:
     id = current
 
     if status == WAIT:
       id = get_opponent(id)
 
-    opponent = get_opponent(player.id)
+    opponent = get_opponent(user.id)
     me = id == current
 
-    update_meter(dom, 1, scores[id], turn if me else 0)
-    update_meter(dom, 2, scores[opponent], 0 if me else turn)
+    update_meter(dom, 'A', scores[id], turn if me else 0)
+    update_meter(dom, 'B', scores[opponent], 0 if me else turn)
 
-  display_dice(dom, dice)
 
-  dom.remove_class("Turn", "fade-in-score")
+  if turn != 0 or dice == 0:
+    display_dice(dom, dice)
+
+  dom.remove_class("Turn", "fade-in")
   dom.flush()
-  dom.add_class("Turn", "fade-in-score")
+  dom.add_class("Turn", "fade-in")
   dom.set_content("Turn", turn)
 
 
-def ac_connect(player, dom):
+def ac_connect(user, dom):
   dom.inner("", open("Main.html").read())
-  display(player, dom)
+  display(user, dom)
 
 
 
-def ac_roll(player, dom):
+def ac_roll(user, dom):
   global available, dice, turn
 
-  if player.id == 0:
-    player.id = current
+  if user.id == 0:
+    user.id = current
 
     if available == 1:
       available = 2
@@ -171,17 +184,17 @@ def ac_roll(player, dom):
   atlastk.broadcast_action("Display")
 
 
-def ac_hold(player, dom):
+def ac_hold(user, dom):
   global scores, turn, current
-  scores[player.id] += turn
+  scores[user.id] += turn
   current = get_opponent(current)
   turn = 0
   atlastk.broadcast_action("Display")
 
 
 
-def ac_display(player, dom):
-  display(player, dom)
+def ac_display(user, dom):
+  display(user, dom)
 
 
 CALLBACKS = {
@@ -191,4 +204,6 @@ CALLBACKS = {
   "Display": ac_display
 }
 
-atlastk.launch(CALLBACKS, Player, open("Head.html").read())
+init()
+
+atlastk.launch(CALLBACKS, User, open("Head.html").read())

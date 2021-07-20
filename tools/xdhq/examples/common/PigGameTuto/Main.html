@@ -1,30 +1,30 @@
 <fieldset style="display: flex; flex-direction: column; padding-top: 15px; width: 50%;">
   <span style="display: flex; align-items: center;">
-    <span id="Label1" class="score-label">Your score</span>
-    <span id="arrow1" class="arrow">➤</span>
+    <span id="LabelA" class="meter-label">You</span>
+    <span id="MarkerA" class="marker">➤</span>
     <span id="player1" class="meter-container">
-      <span id="player1-current" class="score-meter current-score" style="width: 20%"></span>
-      <span  id="player1-turn" class="score-meter turn-score" style="width: 70%""></span>
+      <span id="ScoreMeterA" class="meter score-meter" style="width: 20%"></span>
+      <span id="TurnMeterA" class="meter turn-meter" style="width: 70%""></span>
     </span>
     <span style="width: 10px;"></span>
-    <output id="score1" class="score-text">100</output>
+    <output id="ScoreTextA" class="score-text">100</output>
   </span>
   <span style="height: 15px;"></span>
   <span style="display: flex; align-items: center;">
-    <span  id="Label2" class="score-label">Op.'s score</span>
-    <span id="arrow2" class="arrow">➤</span>
+    <span  id="LabelB" class="meter-label">Opponent</span>
+    <span id="MarkerB" class="marker">➤</span>
     <span id="player1" class="meter-container">
-      <span id="player2-current" class="score-meter current-score" style="width: 30%"></span>
-      <span id="player2-turn" class="score-meter turn-score" style="width: 5%"></span>
+      <span id="ScoreMeterB" class="meter score-meter" style="width: 30%"></span>
+      <span id="TurnMeterB" class="meter turn-meter" style="width: 5%"></span>
     </span>
     <span style="width: 10px;"></span>
-    <output id="score2" class="score-text">10</output>
+    <output id="ScoreTextB" class="score-text">10</output>
   </span>
   <span style="height: 15px;"></span>
   <span style="display: flex; flex-direction: row; justify-content: space-around;">
     <span>
       <span>Turn total: </span>
-      <output id="Turn">15</output>
+      <output id="Turn" class="turn-text">15</output>
     </span>
   </span>
   <span style="height: 15px;"></span>
@@ -33,4 +33,8 @@
     <span id="dice" style="width: 100px; height: 100px;"></span>
     <button id="Hold" data-xdh-onevent="Hold">HOLD</button>
   </span>
+  <span style="height: 15px;"></span>
+  <span style="display: flex; justify-content: center;">
+    <button id="New" data-xdh-onevent="New" disabled>New game</button>
+  <span>
 </fieldset>
