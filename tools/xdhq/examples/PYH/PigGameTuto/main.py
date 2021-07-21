@@ -30,6 +30,8 @@ sys.path.extend(["../../atlastk", "."])
 
 import atlastk, random
 
+DEBUG = True
+
 LIMIT = 100
 
 SPY = 0
@@ -80,11 +82,11 @@ def update_meter(dom, ab, score, turn):
   dom.set_content(f"ScoreText{ab}", score)
 
 
-def disable_buttons(dom):
+def disable_play_buttons(dom):
   dom.disable_elements(["Roll", "Hold"])
 
 
-def enable_buttons(dom):
+def enable_play_buttons(dom):
   dom.enable_elements(["Roll", "Hold"])
 
 
@@ -100,19 +102,19 @@ def get_opponent(player_ab):
 
 
 def mark_player(dom, ab):
-  dom.remove_class(f"Marker{ab}", "hide")
-  dom.add_class(f"Marker{get_opponent(ab)}", "hide")  
+  dom.remove_class(f"Marker{ab}", "hidden")
+  dom.add_class(f"Marker{get_opponent(ab)}", "hidden")  
 
 
 def update_layout(dom, status):
   if status == WAIT:
-    disable_buttons(dom)
+    disable_play_buttons(dom)
     mark_player(dom, 'B')
   elif status == PLAY:
-    enable_buttons(dom)
+    enable_play_buttons(dom)
     mark_player(dom, 'A')
   else:
-    disable_buttons(dom)
+    disable_play_buttons(dom)
     mark_player(dom, 'A' if current == 1 else 'B')
 
 
@@ -121,11 +123,24 @@ def display_dice(dom, value):
   dom.flush()
   dom.add_class("dice", "fade-in")
 
-  filename = f"dice-{value}.svg" if value != 0 else "Pig.svg"
-  dom.inner("dice", open(filename).read())
+  if value <= 6:
+    filename = f"dice-{value}.svg" if value != 0 else "Pig.svg"
+    dom.inner("dice", open(filename).read())
+
+
+def report_winner(dom, id, winner):
+  if id == 0:
+    dom.alert(f"Player {id} won!")
+  elif id == winner:
+    dom.alert("You won!")
+  else:
+    dom.alert("You lost!")
 
 
 def display(user, dom):
+  if user.id != 0:
+    dom.enable_element("New")
+
   if available == 0 and user.id == 0:
     dom.set_contents({
       "LabelA": "Player 1",
@@ -150,24 +165,38 @@ def display(user, dom):
     update_meter(dom, 'A', scores[id], turn if me else 0)
     update_meter(dom, 'B', scores[opponent], 0 if me else turn)
 
+  if scores[1] >= LIMIT:
+    winner = 1
+  elif scores[2] >= LIMIT:
+    winner = 2
+  else:
+    winner = 0
 
-  if turn != 0 or dice == 0:
+  if winner == 0:
+    if turn != 0 or dice == 0:
+      display_dice(dom, dice)
+
+    dom.remove_class("Turn", "fade-in")
+    dom.flush()
+    dom.add_class("Turn", "fade-in")
+    dom.set_content("Turn", turn)
+  else:
+    disable_play_buttons(dom)
     display_dice(dom, dice)
-
-  dom.remove_class("Turn", "fade-in")
-  dom.flush()
-  dom.add_class("Turn", "fade-in")
-  dom.set_content("Turn", turn)
+    report_winner(dom, user.id, winner)
 
 
 def ac_connect(user, dom):
   dom.inner("", open("Main.html").read())
+
+  if DEBUG:
+    dom.remove_class("debug", "hidden")
+
   display(user, dom)
 
 
-
 def ac_roll(user, dom):
-  global available, dice, turn
+  global available, current, dice, turn, scores
 
   if user.id == 0:
     user.id = current
@@ -178,8 +207,21 @@ def ac_roll(user, dom):
       available = 0
 
   dice = random.randint(1, 6)
-  turn += dice
 
+  if DEBUG:
+    debug_dice = dom.get_content("debug")
+    if debug_dice:
+      dice = int(debug_dice)
+
+  if dice == 1:
+    current = get_opponent(current)
+    turn = 0
+  else:
+    turn += dice
+
+    if scores[current] + turn >= LIMIT:
+      scores[current] += turn
+      turn = 0
 
   atlastk.broadcast_action("Display")
 
@@ -192,8 +234,15 @@ def ac_hold(user, dom):
   atlastk.broadcast_action("Display")
 
 
+def ac_new(dom):
+  init()
+  atlastk.broadcast_action("Display")
+
 
 def ac_display(user, dom):
+  if current == 1 and available == 1:
+    dom.inner("", open("Main.html").read())
+    user.id = 0
   display(user, dom)
 
 
@@ -201,6 +250,7 @@ CALLBACKS = {
   "": ac_connect,
   "Roll": ac_roll,
   "Hold": ac_hold,
+  "New": ac_new,
   "Display": ac_display
 }
 
