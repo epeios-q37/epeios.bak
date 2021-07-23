@@ -30,7 +30,7 @@ sys.path.extend(["../../atlastk", "."])
 
 import atlastk, random
 
-DEBUG = True
+DEBUG = False
 
 LIMIT = 100
 
@@ -54,7 +54,7 @@ def init():
     2: 0
   }
 
-  turn = 0
+  turn = 0  
   dice = 0
 
 
@@ -129,12 +129,12 @@ def display_dice(dom, value):
 
 
 def report_winner(dom, id, winner):
-  if id == 0:
-    dom.alert(f"Player {id} won!")
-  elif id == winner:
-    dom.alert("You won!")
+  if winner == id or id == 0 and winner == 1:
+    ab = 'A'
   else:
-    dom.alert("You lost!")
+    ab = 'B'
+
+  dom.set_content(f"ScoreMeter{ab}", "Winner!")
 
 
 def display(user, dom):
@@ -179,7 +179,12 @@ def display(user, dom):
     dom.remove_class("Turn", "fade-in")
     dom.flush()
     dom.add_class("Turn", "fade-in")
-    dom.set_content("Turn", turn)
+    dom.set_content("Turn", turn if turn != -1 else 0)
+
+    dom.remove_class("Total", "fade-in")
+    dom.flush()
+    dom.add_class("Total", "fade-in")
+    dom.set_content("Total", scores[current] + (turn if turn != -1 else 0) )
   else:
     disable_play_buttons(dom)
     display_dice(dom, dice)
@@ -190,7 +195,7 @@ def ac_connect(user, dom):
   dom.inner("", open("Main.html").read())
 
   if DEBUG:
-    dom.remove_class("debug", "hidden")
+    dom.remove_class("debug", "removed")
 
   display(user, dom)
 
@@ -215,7 +220,7 @@ def ac_roll(user, dom):
 
   if dice == 1:
     current = get_opponent(current)
-    turn = 0
+    turn = -1 # To force the displaying of the dice.
   else:
     turn += dice
 
@@ -242,6 +247,8 @@ def ac_new(dom):
 def ac_display(user, dom):
   if current == 1 and available == 1:
     dom.inner("", open("Main.html").read())
+    if DEBUG:
+      dom.remove_class("debug", "removed")
     user.id = 0
   display(user, dom)
 
