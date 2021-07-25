@@ -1,8 +1,7 @@
 <fieldset style="display: flex; flex-direction: column; padding-top: 15px; width: 50%;">
   <span style="display: flex; align-items: center;">
-    <span class="meter-label player">You</span>
-    <span class="meter-label spy">Player 1</span>
-    <span class="marker marker-a">➤</span>
+    <span id="LabelA" class="meter-label">You</span>
+    <span id="MarkerA" class="marker">➤</span>
     <span id="player1" class="meter-container">
       <span id="ScoreMeterA" class="meter winner score-meter" style="width: 20%"></span>
       <span id="TurnMeterA" class="meter turn-meter" style="width: 70%""></span>
@@ -12,9 +11,8 @@
   </span>
   <span style="height: 15px;"></span>
   <span style="display: flex; align-items: center;">
-    <span class="meter-label player">Opponent</span>
-    <span class="meter-label spy">Player 2</span>
-    <span class="marker marker-b">➤</span>
+    <span  id="LabelB" class="meter-label">Opponent</span>
+    <span id="MarkerB" class="marker">➤</span>
     <span id="player1" class="meter-container">
       <span id="ScoreMeterB" class="meter winner score-meter" style="width: 30%"></span>
       <span id="TurnMeterB" class="meter turn-meter" style="width: 5%"></span>
@@ -39,6 +37,12 @@
   </span>
   <span style="height: 15px;"></span>
   <span style="display: flex; justify-content: center;">
-    <button id="New" data-xdh-onevent="New" disabled>New game</button>
+  <select id="Mode" disabled>
+    <option value="HC">human vs computer</option>
+    <option value="CH">computer vs human</option>
+    <option value="HH">human vs human</option>
+  </select>
+  <span style="width: 10px;"></span>
+  <button id="New" data-xdh-onevent="New" disabled>New game</button>
   <span>
 </fieldset>

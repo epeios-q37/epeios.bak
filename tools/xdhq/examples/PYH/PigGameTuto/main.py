@@ -30,7 +30,7 @@ sys.path.extend(["../../atlastk", "."])
 
 import atlastk, random
 
-# DEBUG = True  # Uncomment for debug mode.
+DEBUG = True  # Uncomment for debug mode.
 
 LIMIT = 100
 
@@ -117,8 +117,10 @@ def get_opponent(player_ab):
 
 
 def mark_player(dom, ab):
-  dom.remove_class(f"Marker{ab}", "hidden")
-  dom.add_class(f"Marker{get_opponent(ab)}", "hidden") 
+  if ab == 'B':
+    dom.disable_element("DisplayMarkerA")
+  else:
+    dom.enable_element("DisplayMarkerA")
 
 
 def display_dice(dom, value):
@@ -213,10 +215,7 @@ def display(dom, user):
     dom.enable_element("New")
 
   if available == 0 and user.player == 0:
-    dom.set_contents({
-      "LabelA": "Player 1",
-      "LabelB": "Player 2"
-    })
+    dom.disable_element("PlayerView")
 
   update_layout(dom, user.player)
 
@@ -279,7 +278,7 @@ def ac_hold(user, dom):
   atlastk.broadcast_action("Display")
 
 
-def ac_new(dom):
+def ac_new():
   init()
   atlastk.broadcast_action("Display")
 
@@ -287,6 +286,7 @@ def ac_new(dom):
 def ac_display(user, dom):
   if current == 1 and available == 1:
     dom.inner("", open("Main.html").read())
+    dom.enable_element("PlayerView")
     if debug():
       dom.remove_class("debug", "removed")
     user.player = 0
