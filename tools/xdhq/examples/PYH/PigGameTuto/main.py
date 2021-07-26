@@ -86,8 +86,8 @@ def fade(dom, element):
 
 
 def update_meter(dom, ab, score, turn):
-  if current + turn > LIMIT:
-    turn = LIMIT - current
+  if score + turn > LIMIT:
+    turn = LIMIT - score
 
   fade(dom, f"TurnMeter{ab}")
   dom.set_attribute(f"TurnMeter{ab}", "style", f"width: {turn}%;")
