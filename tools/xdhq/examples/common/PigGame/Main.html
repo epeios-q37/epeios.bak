@@ -1,6 +1,7 @@
 <fieldset style="display: flex; flex-direction: column; padding-top: 15px; width: 50%;">
   <span style="display: flex; align-items: center;">
-    <span class="meter-label">You</span>
+    <span class="meter-label player">You</span>
+    <span class="meter-label viewer">Player 1</span>
     <span class="marker marker-a">➤</span>
     <span id="PlayerA" class="meter-container">
       <span id="ScoreMeterA" class="meter winner score-meter" style="width: 20%"></span>
@@ -11,7 +12,8 @@
   </span>
   <span style="height: 15px;"></span>
   <span style="display: flex; align-items: center;">
-    <span class="meter-label">Opponent</span>
+    <span class="meter-label player">Opponent</span>
+    <span class="meter-label viewer">Player 2</span>
     <span class="marker marker-b">➤</span>
     <span id="PlayerB" class="meter-container">
       <span id="ScoreMeterB" class="meter winner score-meter" style="width: 30%"></span>
@@ -39,7 +41,6 @@
   <span style="display: flex; justify-content: center;">
     <select id="Mode">
       <option value="HC">human vs computer</option>
-      <option value="CH">computer vs human</option>
       <option value="HH">human vs human</option>
     </select>
     <span style="width: 10px;"></span>
