@@ -56,15 +56,15 @@ class User:
   def __init__(self):
     self._player = 0
     self._game = None 
-    self.token = None # if None, opponent is the computer.
-
+    self.token = None # == None ('_game' != None): 2 human players
+                      # != None ('_game' == None): human vs computer.
   def __del__(self):
     if self.token:
       remove_game(self.token, self._player)
 
   def init(self, token = None):
     if self.token:
-      remove_game(self.token)
+      remove_game(self.token, self._player)
 
     self.token = token
     self._game = None if token else Game()  
@@ -72,21 +72,32 @@ class User:
 
   def get_game(self):
     if self.token:
-      return get_game(self.token)
+      game = get_game(self.token)
+      if game is None:
+        self.token = None
     else:
-      return self._game
+      game = self._game
+
+    return game
 
   def get_raw_player(self):
     return self._player
 
-  def get_player(self):
+  def get_player(self): # Assign a place, if not yet done, and if possible.
     if self._player == 0:
       if self.token:
         self._player = get_game_available_player(self.token)
       else:
         self._player = get_available_player(self._game)
-      
+
     return self._player
+
+
+def debug():
+  try:
+    return DEBUG
+  except:
+    return False    
 
 
 def create_game(token):
@@ -97,11 +108,11 @@ def create_game(token):
 
   with lock:
     games[token] = game
-
-  print("Create: ", token)
+    if debug():
+      print("Create: ", token)
 
   return game
-  
+
 
 def remove_game(token, player):
   global lock, games
@@ -113,7 +124,8 @@ def remove_game(token, player):
 
       if game.available == 1 or player != 0:
         del games[token]
-        print("Remove: ", token)
+        if debug():
+          print("Remove: ", token)
 
 
 def get_game(token):
@@ -123,7 +135,7 @@ def get_game(token):
     if token in games:
       return games[token]
     else:
-      return None:
+      return None
 
 
 def get_available_player(game):
@@ -132,10 +144,7 @@ def get_available_player(game):
   if game.available:
     player = game.available
 
-  if game.available == 1:
-    game.available = 2
-  else:
-    game.available = 0
+    game.available = 2 if game.available == 1 else 0
 
   return player
 
@@ -144,17 +153,7 @@ def get_game_available_player(token):
   global lock
 
   with lock:
-    if token in games:
-      return get_available_player(games[token])
-    else:
-      return 0
-
-
-def debug():
-  try:
-    return DEBUG
-  except:
-    return False
+    return get_available_player(games[token]) if token in games else 0
 
 
 def fade(dom, element):
@@ -163,14 +162,15 @@ def fade(dom, element):
   dom.add_class(element, "fade-in")
 
 
-def update_meter(dom, ab, score, turn):
+def update_meter(dom, ab, score, turn, dice): # turn includes dice
   if score + turn > LIMIT:
-    turn = LIMIT - current
-
-  fade(dom, f"TurnMeter{ab}")
-  dom.set_attribute(f"TurnMeter{ab}", "style", f"width: {turn}%;")
+    turn = LIMIT - score
 
   dom.set_attribute(f"ScoreMeter{ab}", "style", f"width: {score}%;")
+  dom.set_attribute(f"TurnMeter{ab}", "style", f"width: {turn-dice}%;")
+
+  fade(dom, f"DiceMeter{ab}")
+  dom.set_attribute(f"DiceMeter{ab}", "style", f"width: {dice}%;")
 
   dom.set_content(f"ScoreText{ab}", score)
 
@@ -225,14 +225,18 @@ def update_meters(dom, game, player):
     a, b = 1, 2
     turn_A = game.turn if game.current == 1 else 0
     turn_B = game.turn if game.current == 2 else 0
+    dice_A = game.dice if game.current == 1 else 0
+    dice_B = game.dice if game.current == 2 else 0
   else:  
     a = game.current if my_turn else get_opponent(game.current)
     b = get_opponent(a)
     turn_A = game.turn if my_turn else 0
     turn_B =  0 if my_turn else game.turn
+    dice_A = game.dice if my_turn else 0
+    dice_B =  0 if my_turn else game.dice
 
-  update_meter(dom, 'A', game.scores[a], turn_A)
-  update_meter(dom, 'B', game.scores[b], turn_B)
+  update_meter(dom, 'A', game.scores[a], turn_A, dice_A)
+  update_meter(dom, 'B', game.scores[b], turn_B, dice_B)
 
 
 def update_markers(dom, game, player):
@@ -261,8 +265,8 @@ def display_turn(dom, element, value):
 
 
 def update_dice(dom, game, winner):
-  if winner != 0 or game.turn != 0 or game.dice == 0:
-      display_dice(dom, game.dice)
+  if winner != 0 or game.turn != 0:
+    display_dice(dom, game.dice if game.turn != -1 else 1)
 
 
 def update_turn(dom, game, winner):
@@ -309,13 +313,18 @@ def display(dom, game, player):
   update_layout(dom, game, player)
 
 
-def ac_connect(user, dom, id):
+def set_layout(dom):
   dom.inner("", open("Main.html").read())
-  user.init(id)
 
   if debug():
     dom.remove_class("debug", "removed")
 
+
+def ac_connect(user, dom, id):
+  set_layout(dom)
+  display_dice(dom, 0)
+
+  user.init(id)
   display(dom, user.get_game(), user.get_raw_player())
 
 
@@ -325,22 +334,37 @@ def get_player(user, dom):
   if player == 0:
     dom.alert("Game has already two players!\nReverting to default game mode.")
     user.init()
-    player = 0
     display(dom, user.get_game(), player)
    
   return player
 
 
+def bot_decision(bot_score, turn_score, human_score, times_thrown):
+  if bot_score + turn_score - human_score >= 30:
+    if turn_score < 20 and times_thrown < 4:
+      return True
+    else:
+      return False
+  else:
+    if turn_score < human_score/2 and times_thrown < 6:
+      return True
+    else:
+      return False
+
+
 def computer_turn(game, dom):
   game.current = 2
+  times_thrown = 0
 
   time.sleep(1)
 
   while True:
     game.dice = random.randint(1, 6)
+    times_thrown += 1
 
     if game.dice == 1:
       game.turn = -1
+      game.dice = 0
       game.current = 1
       display(dom, game, 1)
       break;
@@ -356,12 +380,16 @@ def computer_turn(game, dom):
     display(dom, game, 1)
     time.sleep(2.5)    
 
-    if random.randrange(3) == 0:
+    if not bot_decision(game.scores[2], game.turn, game.scores[1], times_thrown):
       game.scores[2] += game.turn
       game.turn = 0
       game.current = 1
       display(dom, game, 1)
       break;
+
+
+def broadcast(token):
+    atlastk.broadcast_action("Display", token )
 
 
 def ac_roll(user, dom):
@@ -372,12 +400,10 @@ def ac_roll(user, dom):
   if player == 0:
     return
 
-
   game = user.get_game()
 
   if game is None:
-    disable_play_buttons(dom)
-    dom.alert("Game aborted!")
+    broadcast(user.token)
     return
 
   game.dice = random.randint(1, 6)
@@ -389,7 +415,8 @@ def ac_roll(user, dom):
 
   if game.dice == 1:
     game.current = get_opponent(game.current)
-    game.turn = -1 # To force the displaying of the dice.
+    game.turn = -1 # To force the displaying of the dice of value 1.
+    game.dice = 0
 
     if not user.token:
       display(dom, game, 1)
@@ -402,7 +429,7 @@ def ac_roll(user, dom):
       game.turn = 0
 
   if user.token:
-    atlastk.broadcast_action("Display", user.token)
+    broadcast(user.token)
   else:
     display(dom, game, 1)
 
@@ -426,6 +453,7 @@ def ac_hold(user, dom):
   game.scores[player] += game.turn
   game.current = get_opponent(game.current)
   game.turn = 0
+  game.dice = 0
 
   if user.token:
     atlastk.broadcast_action("Display", user.token)
@@ -438,15 +466,15 @@ def new_between_humans(user, dom):
   global games
 
   if debug():
-    token="demo"
+    token="debug"
   else:
     token = str(uuid.uuid4())
 
   create_game(token)
 
   url = atlastk.get_app_url(token)
-  dom.inner("qrcode", f'<a href="{url}" title="{url}" target="_blank"><img style="margin: auto; width:100%;" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={urllib.parse.quote(url)}"/></a>')
   dom.disable_element("HideHHLinkSection")
+  dom.inner("qrcode", f'<a href="{url}" title="{url}" target="_blank"><img style="margin: auto; width:100%;" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={urllib.parse.quote(url)}&bgcolor=FFB6C1"/></a>')
   user.init(token)
 
 
@@ -461,12 +489,13 @@ def new_against_computer(user, dom):
 
 
 def ac_new(user, dom):
+  token = user.token
+
   mode = dom.get_content("Mode")
 
-  print(mode)
-
-  dom.inner("", open("Main.html").read())
+  set_layout(dom)
   dom.enable_element("PlayerView")
+  display_dice(dom, 0)
 
   if mode == "HC":
     new_against_computer(user, dom)
@@ -474,6 +503,9 @@ def ac_new(user, dom):
     new_between_humans(user, dom)
 
   display(dom, user.get_game(), 1)
+
+  if token:
+    broadcast(token)
 
 
 def ac_display(user, dom, id):
@@ -489,10 +521,9 @@ def ac_display(user, dom, id):
     return
 
   if game.current == 1 and game.available == 1:
-    dom.inner("", open("Main.html").read())
-    if debug():
-      dom.remove_class("debug", "removed")
+    set_layout(dom)
     user.player = 0
+
   display(dom, user.get_game(), user.get_raw_player())
 
 
