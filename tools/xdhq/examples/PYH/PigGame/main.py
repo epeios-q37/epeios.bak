@@ -30,9 +30,10 @@ sys.path.extend(["../../atlastk", "."])
 
 import atlastk, random, threading, time, urllib, uuid
 
-DEBUG = True  # Uncomment for debug mode.
+# DEBUG = True  # Uncomment for debug mode.
 
 LIMIT = 100
+
 
 lock = threading.Lock()
 games = {}
@@ -55,9 +56,9 @@ class Game:
 class User:
   def __init__(self):
     self._player = 0
-    self._game = None 
-    self.token = None # == None ('_game' != None): 2 human players
-                      # != None ('_game' == None): human vs computer.
+    self._game = None
+    self.token = None   # == None ('_game' != None): 2 human players
+                        # != None ('_game' == None): human vs computer.
   def __del__(self):
     if self.token:
       remove_game(self.token, self._player)
@@ -162,15 +163,17 @@ def fade(dom, element):
   dom.add_class(element, "fade-in")
 
 
+METER = '<span class="{}" style="width: {}%;"></span>'
+
+
 def update_meter(dom, ab, score, turn, dice): # turn includes dice
   if score + turn > LIMIT:
     turn = LIMIT - score
 
-  dom.set_attribute(f"ScoreMeter{ab}", "style", f"width: {score}%;")
-  dom.set_attribute(f"TurnMeter{ab}", "style", f"width: {turn-dice}%;")
-
-  fade(dom, f"DiceMeter{ab}")
-  dom.set_attribute(f"DiceMeter{ab}", "style", f"width: {dice}%;")
+  if turn != 0:
+    dom.end(f"ScoreMeter{ab}",METER.format("fade-in dice-meter", dice))
+  else:
+    dom.inner(f"ScoreMeter{ab}",METER.format("score-meter", score))
 
   dom.set_content(f"ScoreText{ab}", score)
 
@@ -231,9 +234,9 @@ def update_meters(dom, game, player):
     a = game.current if my_turn else get_opponent(game.current)
     b = get_opponent(a)
     turn_A = game.turn if my_turn else 0
-    turn_B =  0 if my_turn else game.turn
+    turn_B = 0 if my_turn else game.turn
     dice_A = game.dice if my_turn else 0
-    dice_B =  0 if my_turn else game.dice
+    dice_B = 0 if my_turn else game.dice
 
   update_meter(dom, 'A', game.scores[a], turn_A, dice_A)
   update_meter(dom, 'B', game.scores[b], turn_B, dice_B)
@@ -265,7 +268,7 @@ def display_turn(dom, element, value):
 
 
 def update_dice(dom, game, winner):
-  if winner != 0 or game.turn != 0:
+  if winner != 0 or game.turn != 0 or game.dice == 1:
     display_dice(dom, game.dice if game.turn != -1 else 1)
 
 
@@ -281,7 +284,7 @@ def report_winner(dom, player, winner):
   else:
     ab = 'B'
 
-  dom.set_content(f"ScoreMeter{ab}", "Winner!")
+  dom.set_content(f"ScoreMeter{ab}", "<span class='winner'>Winner!</span>")
 
 
 def update_layout(dom, game, player):
@@ -308,6 +311,8 @@ def display(dom, game, player):
     dom.alert("Game aborted!")
     return
 
+  print(game.available, player)
+
   if game.available == 0 and player == 0 :
     dom.disable_element("PlayerView")
   update_layout(dom, game, player)
@@ -329,27 +334,11 @@ def ac_connect(user, dom, id):
 
 
 def get_player(user, dom):
-  player = user.get_player()
-
-  if player == 0:
-    dom.alert("Game has already two players!\nReverting to default game mode.")
-    user.init()
-    display(dom, user.get_game(), player)
-   
-  return player
+  return user.get_player()
 
 
 def bot_decision(bot_score, turn_score, human_score, times_thrown):
-  if bot_score + turn_score - human_score >= 30:
-    if turn_score < 20 and times_thrown < 4:
-      return True
-    else:
-      return False
-  else:
-    if turn_score < human_score/2 and times_thrown < 6:
-      return True
-    else:
-      return False
+  return turn_score < 20
 
 
 def computer_turn(game, dom):
@@ -363,8 +352,7 @@ def computer_turn(game, dom):
     times_thrown += 1
 
     if game.dice == 1:
-      game.turn = -1
-      game.dice = 0
+      game.turn = 0
       game.current = 1
       display(dom, game, 1)
       break;
@@ -415,12 +403,7 @@ def ac_roll(user, dom):
 
   if game.dice == 1:
     game.current = get_opponent(game.current)
-    game.turn = -1 # To force the displaying of the dice of value 1.
-    game.dice = 0
-
-    if not user.token:
-      display(dom, game, 1)
-      computer_turn(game, dom)
+    game.turn = 0
   else:
     game.turn += game.dice
 
@@ -432,7 +415,8 @@ def ac_roll(user, dom):
     broadcast(user.token)
   else:
     display(dom, game, 1)
-
+    if game.dice == 1:
+      computer_turn(game, dom)
 
 
 def ac_hold(user, dom):
@@ -509,7 +493,6 @@ def ac_new(user, dom):
 
 
 def ac_display(user, dom, id):
-
   if id != user.token:
     return
 
