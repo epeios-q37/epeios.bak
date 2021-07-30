@@ -64,12 +64,16 @@ class User:
       remove_game(self.token, self._player)
 
   def init(self, token = None):
+    deleted = False
+
     if self.token:
-      remove_game(self.token, self._player)
+      deleted = remove_game(self.token, self._player)
 
     self.token = token
     self._game = None if token else Game()  
     self.player_ = 0
+
+    return deleted
 
   def get_game(self):
     if self.token:
@@ -127,6 +131,8 @@ def remove_game(token, player):
         del games[token]
         if debug():
           print("Remove: ", token)
+        return True
+  return False
 
 
 def get_game(token):
@@ -171,9 +177,9 @@ def update_meter(dom, ab, score, turn, dice): # turn includes dice
     turn = LIMIT - score
 
   if turn != 0:
-    dom.end(f"ScoreMeter{ab}",METER.format("fade-in dice-meter", dice))
+    dom.end(f"ScoreMeter{ab}", METER.format("fade-in dice-meter", dice))
   else:
-    dom.inner(f"ScoreMeter{ab}",METER.format("score-meter", score))
+    dom.inner(f"ScoreMeter{ab}", METER.format("score-meter", score))
 
   dom.set_content(f"ScoreText{ab}", score)
 
@@ -459,17 +465,20 @@ def new_between_humans(user, dom):
   url = atlastk.get_app_url(token)
   dom.disable_element("HideHHLinkSection")
   dom.inner("qrcode", f'<a href="{url}" title="{url}" target="_blank"><img style="margin: auto; width:100%;" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={urllib.parse.quote(url)}&bgcolor=FFB6C1"/></a>')
-  user.init(token)
+
+  return user.init(token)
 
 
 def new_against_computer(user, dom):
   dom.enable_element("HideHHLinkSection")
-  user.init()
+  deleted = user.init()
 
   game = user.get_game()
 
   game.current = 1
   game.available = 0
+
+  return deleted
 
 
 def ac_new(user, dom):
@@ -482,13 +491,13 @@ def ac_new(user, dom):
   display_dice(dom, 0)
 
   if mode == "HC":
-    new_against_computer(user, dom)
+    deleted = new_against_computer(user, dom)
   else:
-    new_between_humans(user, dom)
+    deleted = new_between_humans(user, dom)
 
   display(dom, user.get_game(), 1)
 
-  if token:
+  if token and deleted:
     broadcast(token)
 
 
