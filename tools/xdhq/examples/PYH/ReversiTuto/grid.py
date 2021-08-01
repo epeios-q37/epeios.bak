@@ -30,7 +30,7 @@ html = ""
 for y in range(8):
   html += (f'<tr>')
   for x in range(8):
-    html += (f'\n <td id="{x}{y}" data-xdh-onevent="Play"/>')
+    html += (f'\n <td id="{x}{y}" xdh:onevent="Play"/>')
   html += "\n</tr>\n"
 
 print(html)

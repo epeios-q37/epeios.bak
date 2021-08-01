@@ -45,14 +45,14 @@ tableItem = """
 """
 
 statesItem = """
-<tr data-xdh-mark="{State}" data-xdh-onevent="View" style="cursor: default;" title="Pop: {Pop}, tracts: {Tracts}">
+<tr xdh:mark="{State}" xdh:onevent="View" style="cursor: default;" title="Pop: {Pop}, tracts: {Tracts}">
   <td>{State}</td>
   <td>{Pop}</td>
 </tr>
 """
 
 countiesItem = """
-<tr data-xdh-onevent="View" data-xdh-mark="{State}.{County}" style="cursor: default;">
+<tr xdh:onevent="View" xdh:mark="{State}.{County}" style="cursor: default;">
   <td>{County}</td>
   <td>{Pop}</td>
   <td>{Tracts}</td>

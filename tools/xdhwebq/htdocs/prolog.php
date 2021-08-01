@@ -30,7 +30,7 @@ $out = str_replace(array("\r", "\n", "\t"), '',<<<MLS
 			<script src="xdhtml.js"></script>
 			<script src="xdhwebq.js"></script>
 			<!-- Below both scripts are for PROD environment. -->
-			<script src="xdhtml_20210511.js"></script>
+			<script src="xdhtml_20210801.js"></script>
 			<script src="xdhwebq_20210528.js"></script>
 			<script data-goatcounter="https://faas.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>			
 			<style id="XDHStyle">
@@ -61,7 +61,7 @@ $head
 				}
 			</script>
 		</head>
-		<!--body id="Root" data-xdh-onevents="(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)"-->
+		<!--body id="Root" xdh:onevents="(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)"-->
 		<body onload="ignition('$token','$id',$qrcodeOnly);">
 			<div class="xdh_style">
 				<noscript>

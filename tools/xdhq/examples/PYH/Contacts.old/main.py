@@ -89,7 +89,7 @@ def displayContacts(dom, contacts):
     contact = contacts[i]
     html.push_tag("tr")
     html.put_attribute("id", i)
-    html.put_attribute("data-xdh-onevent", "Select")
+    html.put_attribute("xdh:onevent", "Select")
     for key in contact:
       if (key == 'Note'):
         id = "Note." + str(i)

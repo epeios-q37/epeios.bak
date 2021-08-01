@@ -47,6 +47,11 @@ Source code is available for [*Java*](https://repl.it/@AtlasTK/atlas-java#exampl
 
 Graphics drawn with [*matplotlib*](https://matplotlib.org/) can be used with the *Atlas* *Toolkit*.
 
+## `PigGame` ([file](./PigGame/Main.html))
+
+A multi-player version of the [Pig game](https://en.wikipedia.org/wiki/Pig_(dice_game)#Gameplay).  
+You can choose to play against the computer, or with a partner.
+
 ## `TodoMVC` ([file](./TodoMVC/Main.html))
 
 The [*TodoMVC* app](http://todomvc.com/), but **not** using the [*MVC*](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) pattern.

@@ -30,20 +30,35 @@ sys.path.extend(["../../atlastk", "."])
 
 import atlastk, random, threading, time, urllib, uuid
 
-DEBUG = True  # Uncomment for debug mode.
+#DEBUG = True  # Uncomment for debug mode.
 
 # To put checkpoints.
-from XDHq import l
-
+# from XDHq import l
 
 LIMIT = 100
 
 GAME_CONTROLS = ["New"]
 PLAY_CONTROLS = ["Roll", "Hold"]
 
+METER = '<span class="{}" style="width: {}%;"></span>'
 
 lock = threading.Lock()
 games = {}
+
+dices = {}
+
+
+def upload_dice(affix):
+  return open(f"{affix}.svg").read()
+
+
+def upload_dices():
+  global dices
+
+  dices[0] = upload_dice("Pig")
+
+  for i in range(1, 7):
+    dices[i] = upload_dice(f"dice-{i}")
 
 
 class Game:
@@ -171,9 +186,6 @@ def fade(dom, element):
   dom.add_class(element, "fade-in")
 
 
-METER = '<span class="{}" style="width: {}%;"></span>'
-
-
 def update_meter(dom, ab, score, turn, dice): # turn includes dice
   if turn != 0:
     dom.end(f"ScoreMeter{ab}", METER.format("fade-in dice-meter", dice))
@@ -221,8 +233,7 @@ def display_dice(dom, value):
   fade(dom, "dice")
 
   if value <= 6:
-    filename = f"dice-{value}.svg" if value != 0 else "Pig.svg"
-    dom.inner("dice", open(filename).read())
+    dom.inner("dice", dices[value])
 
 
 def update_meters(dom, game, my_turn):
@@ -509,5 +520,7 @@ CALLBACKS = {
   "New": ac_new,
   "Display": ac_display
 }
+
+upload_dices()
 
 atlastk.launch(CALLBACKS, User, open("Head.html").read())

@@ -453,7 +453,7 @@ function fetchEventHandlersAndWidgest(id) {
 				eventDigests += "(" + getOrGenerateId(node) + "|" + getPatchedNodeName(node) + "|(" + getXDHAttribute(node, xdhOnEvents) + "))|";
           
 			if (hasXDHAttribute(node, xdhWidget))
-				widgetDigests += "(" + getOrGenerateId(node) + "|(" + getXDHAttribute(xdhWidget) + "))|";
+				widgetDigests += "(" + getOrGenerateId(node) + "|(" + getXDHAttribute(node, xdhWidget) + "))|";
 
 
 			if (node.nodeName === "A")
@@ -492,7 +492,7 @@ function fetchWidgets(id) {
 	while (cont) {
 		if (node.nodeType === Node.ELEMENT_NODE) {
 			if (hasXDHAttribute(node, xdhWidget))
-				digests += "(" + getOrGenerateId(node) + "|(" + getXDHAttribute(xdhWidget) + "))|";
+				digests += "(" + getOrGenerateId(node) + "|(" + getXDHAttribute(node, xdhWidget) + "))|";
 		}
 
 		if ((candidate = node.firstChild) === null) {
@@ -545,7 +545,7 @@ function getContent(elementOrId)	// Deprecated!
 			content =  element.textContent;
 			break;
 		default:
-			content = hasXDHAttribute(element, xdhContent) ? getXDHAttribute(xdhContent) :
+			content = hasXDHAttribute(element, xdhContent) ? getXDHAttribute(element, xdhContent) :
 				( hasXDHAttribute(element, xdhOldContent) ? getXDHAttribute(element, xdhOldContent) : "" );
 			break;
 	}
@@ -608,16 +608,16 @@ function getMark(idOrElement) {
 		element = element.parentNode;
 	
 	if ( element !== null )
-		mark = getXDHAttribute(xdhMark);
+		mark = getXDHAttribute(element, xdhMark);
 	
 	return mark;
 }
 
 function getWidgetRetrievingMethod( elementOrId ) {
-    element = getElement( elementOrId );
+    element = getElement(elementOrId);
     
     if (hasXDHAttribute(element, xdhWidgetContentRetrievingMethod))
-        return getXDHAttribute(element, widgetContentRetrievingMethod);
+        return getXDHAttribute(element, xdhWidgetContentRetrievingMethod);
     else
         return "";
     
@@ -697,7 +697,7 @@ function instantiateWidget(id, type, parameters, contentRetrievingMethod, focusi
     element = getElement(id);
     
     if ( !hasXDHAttribute(element, xdhWidgetContentRetrievingMethod)) {
-        setXDHAttribute(xdhWidgetContentRetrievingMethod,'jQuery( getElement( "' + id + '") ).' + contentRetrievingMethod);
+        setXDHAttribute(element, xdhWidgetContentRetrievingMethod, 'jQuery( getElement( "' + id + '") ).' + contentRetrievingMethod);
         
         return 'jQuery( getElement( "' + id + '") ).' + type + '(' + parameters + ');'
     } else

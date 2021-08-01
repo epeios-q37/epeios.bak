@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- NO BOM !! -->
-<xsl:stylesheet	version="1.0" xmlns="http://www.w3.org/1999/xhtml" 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xpp="http://q37.info/ns/xpp/">
+<xsl:stylesheet version="1.0"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:xdh="http://q37.info/ns/xdh">
  <xsl:output method="html" encoding="UTF-8"/>
  <xsl:template match="/XDHTML[@Background='Layout']">
   <div class="menu">
@@ -27,8 +30,8 @@
   </div>
   <div class="list-filter ember-view">
    <div style="display: flex; width: 80%; margin: auto;">
-    <input id="Pattern" placeholder="Filter By City" class="light ember-text-field ember-view" type="text" data-xdh-onevent="Submit"/>
-    <input type="checkbox" data-xdh-onevent="ToggleMaps"/>
+    <input id="Pattern" placeholder="Filter By City" class="light ember-text-field ember-view" type="text" xdh:onevent="Submit"/>
+    <input type="checkbox" xdh:onevent="ToggleMaps"/>
    </div>
    <div id="Rentals"/>
   </div>

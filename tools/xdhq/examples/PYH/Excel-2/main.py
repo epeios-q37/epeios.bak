@@ -58,7 +58,7 @@ updatesItem = """
 """
 
 modificationsItem = """
-<tr data-xdh-onevent="View" data-xdh-mark="{}">
+<tr xdh:onevent="View" xdh:mark="{}">
   <td>{}</td>
   <td>{}</td>
 </tr>

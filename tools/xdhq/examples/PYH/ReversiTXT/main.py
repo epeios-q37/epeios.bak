@@ -188,7 +188,7 @@ def drawBoard(reversi, dom, prefetch=False):
       board.push_tag("td")
       board.put_attribute("id", str(x) + str(y))
       if (r == EMPTY) and (reversi.isAllowed(y, x, reversi.player)):
-        board.put_attribute("data-xdh-onevent", "Play")
+        board.put_attribute("xdh:onevent", "Play")
       board.putValue({EMPTY: ' ', BLACK: 'X', WHITE: 'O'}[r])
       board.pop_tag()
     board.pop_tag()

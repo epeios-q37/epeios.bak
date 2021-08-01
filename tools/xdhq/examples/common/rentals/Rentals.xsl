@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- NO BOM !! -->
-<xsl:stylesheet	version="1.0" xmlns="http://www.w3.org/1999/xhtml" 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xpp="http://q37.info/ns/xpp/">
+<xsl:stylesheet version="1.0"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:xdh="http://q37.info/ns/xdh">
  <xsl:output method="html" encoding="UTF-8"/>
  <xsl:template match="/XDHTML[@Background='Layout']">
   <xsl:apply-templates select="Rentals"/>
@@ -13,7 +16,7 @@
     </ul>
    </xsl:when>
    <xsl:when test="@Mode = 'Record'">
-    <a data-xdh-onevent="ToList"  style="cursor: pointer;">Back to list</a>
+    <a xdh:onevent="ToList"  style="cursor: pointer;">Back to list</a>
     <xsl:apply-templates select="Rental" mode="Record"/>
    </xsl:when>
    <xsl:otherwise>
@@ -64,7 +67,7 @@
   <li>
    <div class="ember-view">
     <article class="listing">
-     <a class="image" data-xdh-onevent="HandlePicture">
+     <a class="image" xdh:onevent="HandlePicture">
       <img alt="">
        <xsl:attribute name="src">
         <xsl:value-of select="image"/>
@@ -73,8 +76,8 @@
       <small>View Larger</small>
      </a>
      <h3>
-      <a class="ember-view" data-xdh-onevent="DisplayRecord" style="cursor: pointer;">
-       <xsl:attribute name="data-xdh-mark">
+      <a class="ember-view" xdh:onevent="DisplayRecord" style="cursor: pointer;">
+       <xsl:attribute name="xdh:mark">
         <xsl:value-of select="@id"/>
        </xsl:attribute>
        <xsl:value-of select="title"/>
@@ -83,7 +86,7 @@
      <xsl:call-template name="Details"/>
      <div class="ember-view">
       <div>
-       <div class="map" style="overflow: hidden;" data-xdh-cast="MapCast" data-xdh-display-reminder="">
+       <div class="map" style="overflow: hidden;" xdh:cast="MapCast" xdh:display-reminder="">
        <xsl:if test="/XDHTML/Rentals/@HideMaps='true'">
         <xsl:attribute name="style">display: none;</xsl:attribute>
        </xsl:if>
@@ -104,7 +107,7 @@
        </div>
        <div class="map" style="overflow: hidden;">
         <div style="height: 100px; width: 1000px;">
-         <xsl:attribute name="data-xdh-widget_">
+         <xsl:attribute name="xdh:widget_">
           <xsl:text>geomap|{center: [1, 43],zoom: 6}</xsl:text>
          </xsl:attribute>
         </div>

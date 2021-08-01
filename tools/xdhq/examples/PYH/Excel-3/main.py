@@ -36,9 +36,9 @@ import atlastk
 import scrambler
 
 targetTemplate = """
-<tr id="tr.{Produce}" class="unselected" data-xdh-mark="{Produce}">
+<tr id="tr.{Produce}" class="unselected" xdh:mark="{Produce}">
   <td class="checkbox">
-    <input id="checkbox.{Produce}" type="checkbox" data-xdh-onevent="CheckboxClick"/>
+    <input id="checkbox.{Produce}" type="checkbox" xdh:onevent="CheckboxClick"/>
   </td>
   <td>{Produce}</td>
   <td>{Count}</td>
@@ -46,9 +46,9 @@ targetTemplate = """
 """
 
 sourceTemplate = """
-<tr id="tr.{Produce}" class="unselected" data-xdh-mark="{Produce}">
+<tr id="tr.{Produce}" class="unselected" xdh:mark="{Produce}">
   <td class="radio">
-    <input id="radio.{Produce}" type="radio" name="radio" data-xdh-onevent="RadioClick"/>
+    <input id="radio.{Produce}" type="radio" name="radio" xdh:onevent="RadioClick"/>
   </td>
   <td>{Produce}</td>
   <td>{Count}</td>

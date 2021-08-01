@@ -38,6 +38,7 @@ SPY = 0
 PLAY = 1
 WAIT = 2
 
+
 class User:
   def __init__(self):
     self.player = 0
