@@ -20,7 +20,7 @@ along with xdhwebq. If not, see <http://www.gnu.org/licenses/>.
 
 $out = str_replace(array("\r", "\n", "\t"), '',<<<MLS
 	<!DOCTYPE html>
-	<html>
+	<html xmlns:xdh="http://q37.info/ns/xdh">
 		<head>
 			<!-- If modified, report modification in "xdhcefq.html" from "xdhcefq" -->
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>

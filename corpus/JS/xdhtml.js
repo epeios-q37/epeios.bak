@@ -17,16 +17,32 @@
 // 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-const onEventAttributeName = "data-xdh-onevent";
-const onEventsAttributeName = "data-xdh-onevents";
-const widgetAttributeName = "data-xdh-widget";
-const radioAttributeName = "data-xdh-radio"
+const xdhURI = "http://q37.info/ns/xdh";
+const xdhPrefix = "xdh:";
+const xdhOldPrefix = "data-xdh-";
+
+const xdhOnEvent = "onevent";
+const xdhOnEvents = "onevents";
+const xdhWidget = "widget";
+const xdhRadio = "radio";
  // Method to retrieve widget content, but also if present, then the widget is already handled.
-const widgetContentRetrievingMethodAttribute = "data-xdh-widget-content-retrieving-method";
-const contentAttributeName = "data-xdh-content";	// Deprecated.
-const oldContentAttributeName = "data-xdh-value";	// For compatibility with previous version.
+const xdhWidgetContentRetrievingMethod = "widget-content-retrieving-method";
+const xdhContent = "content";	// Deprecated.
+const xdhOldContent = "value";	// For compatibility with previous version.
+const xdhMark = "mark"
 const styleId = "XDHStyle";
-const markAttributeName = "data-xdh-mark"
+
+function hasXDHAttribute(element, name) {
+	return element.hasAttributeNS(xdhURI, name) || element.hasAttribute(xdhPrefix + name) || element.hasAttribute(xdhOldPrefix + name);
+}
+
+function getXDHAttribute(element, name) {
+	return element.getAttributeNS(xdhURI, name) || element.getAttribute(xdhPrefix + name) || element.getAttribute(xdhOldPrefix + name);
+}
+
+function setXDHAttribute(element, name, value) {
+	element.setAttribute(xdhPrefix + name, value);
+}
 
 var counter = 0;
 var drag = false;
@@ -192,7 +208,7 @@ function convert(xml) {
 		case 'A':	// Set attribute
 			[name, offset] = getString(xml, offset);
 			[value, offset] = getString(xml, offset);
-			node.setAttribute(name, value );
+			node.setAttribute(name, value);
 			break;
 		case 'V':	// Set value.
 			[value,offset] = getString( xml, offset );
@@ -370,8 +386,8 @@ function setValue(idOrElement, value) {
 	}
 }
 
-function setMark(idOrElement,mark) {
-	getElement(idOrElement).setAttribute(markAttributeName, mark);
+function setMark(idOrElement, mark) {
+	setXDHAttribute(getElement(idOrElement), xdhMark, mark);
 }
 
 function setContents(ids, contents) {	// Deprecated!
@@ -430,14 +446,14 @@ function fetchEventHandlersAndWidgest(id) {
 
 	while (cont) {
 		if (node.nodeType === Node.ELEMENT_NODE) {
-			if (node.hasAttribute(onEventAttributeName))
-				eventDigests += "(" + getOrGenerateId(node) + "|" + getPatchedNodeName( node ) + "|((" + node.getAttribute(onEventAttributeName) + ")))|";
+			if (hasXDHAttribute(node, xdhOnEvent))
+				eventDigests += "(" + getOrGenerateId(node) + "|" + getPatchedNodeName( node ) + "|((" + getXDHAttribute(node, xdhOnEvent) + ")))|";
 
-			if (node.hasAttribute(onEventsAttributeName))
-				eventDigests += "(" + getOrGenerateId(node) + "|" + getPatchedNodeName(node) + "|(" + node.getAttribute(onEventsAttributeName) + "))|";
+			if (hasXDHAttribute(node, xdhOnEvents))
+				eventDigests += "(" + getOrGenerateId(node) + "|" + getPatchedNodeName(node) + "|(" + getXDHAttribute(node, xdhOnEvents) + "))|";
           
-			if (node.hasAttribute(widgetAttributeName))
-				widgetDigests += "(" + getOrGenerateId(node) + "|(" + node.getAttribute(widgetAttributeName) + "))|";
+			if (hasXDHAttribute(node, xdhWidget))
+				widgetDigests += "(" + getOrGenerateId(node) + "|(" + getXDHAttribute(xdhWidget) + "))|";
 
 
 			if (node.nodeName === "A")
@@ -475,8 +491,8 @@ function fetchWidgets(id) {
 
 	while (cont) {
 		if (node.nodeType === Node.ELEMENT_NODE) {
-			if (node.hasAttribute(widgetAttributeName))
-				digests += "(" + getOrGenerateId(node) + "|(" + node.getAttribute(widgetAttributeName) + "))|";
+			if (hasXDHAttribute(node, xdhWidget))
+				digests += "(" + getOrGenerateId(node) + "|(" + getXDHAttribute(xdhWidget) + "))|";
 		}
 
 		if ((candidate = node.firstChild) === null) {
@@ -529,8 +545,8 @@ function getContent(elementOrId)	// Deprecated!
 			content =  element.textContent;
 			break;
 		default:
-			content = element.hasAttribute(contentAttributeName) ? element.getAttribute(contentAttributeName) :
-				( element.hasAttribute(oldContentAttributeName) ? element.getAttribute(oldContentAttributeName) : "" );
+			content = hasXDHAttribute(element, xdhContent) ? getXDHAttribute(xdhContent) :
+				( hasXDHAttribute(element, xdhOldContent) ? getXDHAttribute(element, xdhOldContent) : "" );
 			break;
 	}
 
@@ -551,7 +567,7 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 					if ( element.hasAttribute("value") )
 						value = element.value;
 					else
-						value =  element.checked;
+						value = element.checked;
 					break;
 				default:
 					value =  element.value;
@@ -573,8 +589,8 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 			value =  element.textContent;
 			break;
 		default:
-			if ( element.hasAttribute( radioAttributeName ) ) {
-				if ( checked = document.querySelector('input[name="' + element.getAttribute( radioAttributeName) + '"]:checked') )
+			if ( hasXDHAttribute( element, wdhRadio ) ) {
+				if ( checked = document.querySelector('input[name="' + getXDHAttribute(element,  xdhRadio) + '"]:checked') )
 					value = checked.value;
 			}	else
 				value = element.innerHTML;
@@ -588,11 +604,11 @@ function getMark(idOrElement) {
 	var element = getElement(idOrElement);
 	mark = "";
 	
-	while ( (element !== null) && !element.hasAttribute(markAttributeName))
+	while ( (element !== null) && !hasXDHAttribute(element, xdhMark))
 		element = element.parentNode;
 	
 	if ( element !== null )
-		mark = element.getAttribute(markAttributeName);
+		mark = getXDHAttribute(xdhMark);
 	
 	return mark;
 }
@@ -600,8 +616,8 @@ function getMark(idOrElement) {
 function getWidgetRetrievingMethod( elementOrId ) {
     element = getElement( elementOrId );
     
-    if (element.hasAttribute(widgetContentRetrievingMethodAttribute))
-        return element.getAttribute(widgetContentRetrievingMethodAttribute);
+    if (hasXDHAttribute(element, xdhWidgetContentRetrievingMethod))
+        return getXDHAttribute(element, widgetContentRetrievingMethod);
     else
         return "";
     
@@ -680,8 +696,8 @@ function instantiateWidget(id, type, parameters, contentRetrievingMethod, focusi
     
     element = getElement(id);
     
-    if ( !element.hasAttribute(widgetContentRetrievingMethodAttribute)) {
-        element.setAttribute(widgetContentRetrievingMethodAttribute,'jQuery( getElement( "' + id + '") ).' + contentRetrievingMethod);
+    if ( !hasXDHAttribute(element, xdhWidgetContentRetrievingMethod)) {
+        setXDHAttribute(xdhWidgetContentRetrievingMethod,'jQuery( getElement( "' + id + '") ).' + contentRetrievingMethod);
         
         return 'jQuery( getElement( "' + id + '") ).' + type + '(' + parameters + ');'
     } else
@@ -708,11 +724,11 @@ function instantiateWidgets(ids, types, parametersSets, contentRetrievingMethods
 function buildDigest(target, type, keys) {
 	var digest = "";
 
-	if (target.hasAttribute("data-xdh-onevent"))
-		digest += "(" + target.getAttribute("data-xdh-onevent") + ")";
+	if (hasXDHAttribute(target, xdhOnEvent))
+		digest += "(" + getXDHAttribute(target, xdhOnEvent) + ")";
 
-	if (target.hasAttribute("data-xdh-onevents"))
-		digest += target.getAttribute("data-xdh-onevents");
+	if (hasXDHAttribute(target, xdhOnEvents))
+		digest += getXDHAttribute(target, xdhOnEvents);
 
 	if (!digest) {
 		return digest;
