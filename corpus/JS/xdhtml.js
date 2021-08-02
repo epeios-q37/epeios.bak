@@ -589,7 +589,7 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 			value =  element.textContent;
 			break;
 		default:
-			if ( hasXDHAttribute( element, wdhRadio ) ) {
+			if ( hasXDHAttribute( element, xdhRadio ) ) {
 				if ( checked = document.querySelector('input[name="' + getXDHAttribute(element,  xdhRadio) + '"]:checked') )
 					value = checked.value;
 			}	else
