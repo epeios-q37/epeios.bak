@@ -44,15 +44,18 @@ def _recv(socket,size,bye):
 
 	return buffer
 
-def _send(socket, value):
+def _send(socket, value, bye):
 	totalAmount = len(value)
 	amountSent = 0
 
 	while amountSent < totalAmount:
-		amountSent += socket.send(value[amountSent:])
+		try:
+			amountSent += socket.send(value[amountSent:])
+		except timeout:
+			if bye():
+				raise timeout
 
-
-def writeUInt(socket, value):
+def writeUInt(socket, value, bye):
 	result = chr(value & 0x7f)
 	value >>= 7
 
@@ -60,11 +63,11 @@ def writeUInt(socket, value):
 		result = chr((value & 0x7f) | 0x80) + result
 		value >>= 7
 
-	_send(socket, result)
+	_send(socket, result, bye)
 
-def writeString(socket, string):
-	writeUInt(socket, len(string))
-	_send(socket, string)
+def writeString(socket, string, bye):
+	writeUInt(socket, len(string), bye)
+	_send(socket, string, bye)
 
 def _readByte(socket,bye):
 	return ord(_recv(socket,1,bye))

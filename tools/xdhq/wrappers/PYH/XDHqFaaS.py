@@ -106,14 +106,14 @@ def isTokenEmpty():
 
 def writeUInt(value):
 	global _socket
-	_writeUInt( _socket, value )
+	_writeUInt( _socket, value, lambda: _bye )
 
 def writeSInt(value):
 	writeUInt( ( ( -value - 1 ) << 1 ) | 1 if value < 0 else value << 1 )
 
 def writeString(string):
 	global _socket
-	_writeString(_socket, string)
+	_writeString(_socket, string, lambda: _bye)
 
 def writeStrings(strings):
 	writeUInt(len(strings))

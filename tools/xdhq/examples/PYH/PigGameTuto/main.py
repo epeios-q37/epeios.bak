@@ -38,6 +38,8 @@ SPY = 0
 PLAY = 1
 WAIT = 2
 
+METER = '<span class="{}" style="width: {}%;"></span>'
+
 
 class User:
   def __init__(self):
@@ -86,13 +88,7 @@ def fade(dom, element):
   dom.add_class(element, "fade-in")
 
 
-METER = '<span class="{}" style="width: {}%;"></span>'
-
-
 def update_meter(dom, ab, score, turn, dice): # turn includes dice
-  if score + turn > LIMIT:
-    turn = LIMIT - score
-
   if turn != 0:
     dom.end(f"ScoreMeter{ab}", METER.format("fade-in dice-meter", dice))
   else:
@@ -109,22 +105,12 @@ def enable_play_buttons(dom):
   dom.enable_elements(["Roll", "Hold"])
 
 
-def get_opponent(player_ab):
-  if player_ab == 'A':
-    return 'B'
-  elif player_ab == 'B':
-    return 'A'
-  elif player_ab == 1:
-    return 2
-  else:
-    return 1
+def get_opponent(player):
+  return 2 if player == 1 else 1
 
 
 def mark_player(dom, ab):
-  if ab == 'B':
-    dom.disable_element("DisplayMarkerA")
-  else:
-    dom.enable_element("DisplayMarkerA")
+  dom.disable_element("DisplayMarkerA") if ab == 'B' else dom.enable_element("DisplayMarkerA")
 
 
 def display_dice(dom, value):
@@ -141,16 +127,14 @@ def update_meters(dom, status):
     update_meter(dom, 'B', scores[2], turn if current == 2 else 0, dice if current == 2 else 0)
   else:
     a = current
-    me = True
+    my_turn = status == PLAY 
 
-    if status == WAIT:
-      a = get_opponent(a)
-      me = False
+    a = current if my_turn else get_opponent(current)
 
     b = get_opponent(a)
 
-    update_meter(dom, 'A', scores[a], turn if me else 0, dice if me else 0)
-    update_meter(dom, 'B', scores[b], 0 if me else turn, 0 if me else dice)
+    update_meter(dom, 'A', scores[a], turn if my_turn else 0, dice if my_turn else 0)
+    update_meter(dom, 'B', scores[b], 0 if my_turn else turn, 0 if my_turn else dice)
 
 
 def update_markers(dom, status):
@@ -170,8 +154,8 @@ def update_play_buttons(dom, status, winner):
 
 
 def display_turn(dom, element, value):
-    fade(dom, element)
-    dom.set_content(element, value)
+  fade(dom, element)
+  dom.set_content(element, value)
 
 
 def update_dice(dom, winner):
@@ -181,8 +165,8 @@ def update_dice(dom, winner):
 
 def update_turn(dom, winner):
   if winner == 0:
-    display_turn(dom, "Cumul", turn if turn != -1 else 0)
-    display_turn(dom, "Total", scores[current] + (turn if turn != -1 else 0))
+    display_turn(dom, "Cumul", turn)
+    display_turn(dom, "Total", scores[current] + turn)
 
 
 def report_winner(dom, player, winner):
@@ -241,10 +225,7 @@ def ac_roll(user, dom):
   if user.player == 0:
     user.player = current
 
-    if available == 1:
-      available = 2
-    elif available == 2:
-      available = 0
+    available = 2 if available == 1 else 0
   elif user.player != current:
     return
 
@@ -294,6 +275,7 @@ def ac_display(user, dom):
     if debug():
       dom.remove_class("debug", "removed")
     user.player = 0
+    dom.flush()
   display(dom, user)
 
 
