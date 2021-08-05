@@ -45,6 +45,11 @@ class User:
   def __init__(self):
     self.player = 0
 
+  def __del__(self):
+    if self.player != 0:
+      init()
+      atlastk.broadcast_action("Display")
+
 
 def debug():
   try:
@@ -76,10 +81,8 @@ def get_status(player):
       return PLAY
     else:
       return WAIT
-  elif player == current:
-    return PLAY
   else:
-    return WAIT
+    return PLAY if player == current else WAIT
 
 
 def fade(dom, element):
@@ -88,9 +91,9 @@ def fade(dom, element):
   dom.add_class(element, "fade-in")
 
 
-def update_meter(dom, ab, score, turn, dice): # turn includes dice
-  if turn != 0:
-    dom.end(f"ScoreMeter{ab}", METER.format("fade-in dice-meter", dice))
+def update_meter(dom, ab, score, adding):
+  if adding > 1:
+    dom.end(f"ScoreMeter{ab}", METER.format("fade-in dice-meter", adding))
   else:
     dom.inner(f"ScoreMeter{ab}", METER.format("score-meter", score))
 
@@ -121,20 +124,16 @@ def display_dice(dom, value):
     dom.inner("dice", open(filename).read())
 
 
-def update_meters(dom, status):
+def update_meters(dom, status, adding):
   if status == SPY:
-    update_meter(dom, 'A', scores[1], turn if current == 1 else 0, dice if current == 1 else 0)
-    update_meter(dom, 'B', scores[2], turn if current == 2 else 0, dice if current == 2 else 0)
+    update_meter(dom, 'A', scores[1], adding if current == 1 else 0)
+    update_meter(dom, 'B', scores[2], adding if current == 2 else 0)
   else:
-    a = current
-    my_turn = status == PLAY 
-
-    a = current if my_turn else get_opponent(current)
-
+    a = current if status == PLAY else get_opponent(current)
     b = get_opponent(a)
 
-    update_meter(dom, 'A', scores[a], turn if my_turn else 0, dice if my_turn else 0)
-    update_meter(dom, 'B', scores[b], 0 if my_turn else turn, 0 if my_turn else dice)
+    update_meter(dom, 'A', scores[a], adding if status == PLAY else 0)
+    update_meter(dom, 'B', scores[b], 0 if status == PLAY else adding)
 
 
 def update_markers(dom, status):
@@ -189,10 +188,10 @@ def update_layout(dom, player):
     winner = 0
 
   update_play_buttons(dom, status, winner)
+  update_markers(dom, status)
   update_dice(dom, winner)
   update_turn(dom, winner)
-  update_meters(dom, status)
-  update_markers(dom, status)
+  update_meters(dom, status, dice)
 
   if winner != 0:
     report_winner(dom, player, winner)
@@ -214,6 +213,8 @@ def ac_connect(user, dom):
   if debug():
     dom.remove_class("debug", "removed")
 
+  update_meters(dom, SPY, 0)
+  update_meters(dom, SPY, turn - dice)
   display(dom, user)
 
 
@@ -250,7 +251,7 @@ def ac_roll(user, dom):
 
 
 def ac_hold(user, dom):
-  global scores, turn, current
+  global scores, turn, dice, current
 
   disable_play_buttons(dom)  
 
@@ -259,7 +260,7 @@ def ac_hold(user, dom):
 
   scores[user.player] += turn
   current = get_opponent(current)
-  turn = 0
+  dice = turn = 0
   atlastk.broadcast_action("Display")
 
 
