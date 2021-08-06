@@ -681,7 +681,7 @@ namespace {
 	}
 
 namespace {
-	template <typename string> void Log_(
+	template <typename string> void _Log_(
 		const str::dString &IP,
 		const str::dString &Token,
 		const string &Message )

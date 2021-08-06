@@ -40,10 +40,16 @@ WAIT = 2
 
 METER = '<span class="{}" style="width: {}%;"></span>'
 
+PLAY_BUTTONS = ["Roll", "Hold"]
+
 
 class User:
-  def __init__(self):
+  def init(self):
     self.player = 0
+    self.pending = True
+
+  def __init__(self):
+    self.init()
 
   def __del__(self):
     if self.player != 0:
@@ -54,35 +60,34 @@ class User:
 def debug():
   try:
     return DEBUG
-  except:
+  except NameError:
     return False
 
 
 def init():
   global current, available, scores, turn, dice
+
   current = 1 # 1 or 2
 
-  available = 1 # 0 (no more player available), 1 or 2
+  available = 1 # 0 (no player available), 1 or 2
 
   scores = {
     1: 0,
     2: 0
   }
 
-  turn = 0  
-  dice = 0
+  turn = dice = 0
 
 
 def get_status(player):
-  if player == 0:
-    if available == 0:
-      return SPY
-    elif available == current:
-      return PLAY
-    else:
-      return WAIT
-  else:
+  if player != 0:
     return PLAY if player == current else WAIT
+  elif available == 0:
+    return SPY
+  elif available == current:
+    return PLAY
+  else:
+    return WAIT
 
 
 def fade(dom, element):
@@ -98,14 +103,6 @@ def update_meter(dom, ab, score, adding):
     dom.inner(f"ScoreMeter{ab}", METER.format("score-meter", score))
 
   dom.set_content(f"ScoreText{ab}", score)
-
-
-def disable_play_buttons(dom):
-  dom.disable_elements(["Roll", "Hold"])
-
-
-def enable_play_buttons(dom):
-  dom.enable_elements(["Roll", "Hold"])
 
 
 def get_opponent(player):
@@ -136,6 +133,11 @@ def update_meters(dom, status, adding):
     update_meter(dom, 'B', scores[b], 0 if status == PLAY else adding)
 
 
+def redraw_meters(dom):
+  update_meters(dom, SPY, 0)
+  update_meters(dom, SPY, turn - dice)
+
+
 def update_markers(dom, status):
   if status == WAIT:
     mark_player(dom, 'B')
@@ -147,9 +149,9 @@ def update_markers(dom, status):
 
 def update_play_buttons(dom, status, winner):
   if status != PLAY or winner != 0:
-    disable_play_buttons(dom)
+    dom.disable_elements(PLAY_BUTTONS)
   else:
-    enable_play_buttons(dom)
+    dom.enable_elements(PLAY_BUTTONS)
 
 
 def display_turn(dom, element, value):
@@ -169,10 +171,7 @@ def update_turn(dom, winner):
 
 
 def report_winner(dom, player, winner):
-  if winner == player or player == 0 and winner == 1:
-    ab = 'A'
-  else:
-    ab = 'B'
+  ab = 'A' if winner == player or player == 0 and winner == 1 else 'B'
 
   dom.set_content(f"ScoreMeter{ab}", "<span class='winner'>Winner!</span>")
 
@@ -201,8 +200,10 @@ def display(dom, user):
   if user.player != 0:
     dom.enable_element("New")
 
-  if available == 0 and user.player == 0:
+  if user.pending and available == 0 and user.player == 0:
     dom.disable_element("PlayerView")
+    user.pending = False
+    redraw_meters(dom)
 
   update_layout(dom, user.player)
 
@@ -213,18 +214,19 @@ def ac_connect(user, dom):
   if debug():
     dom.remove_class("debug", "removed")
 
-  update_meters(dom, SPY, 0)
-  update_meters(dom, SPY, turn - dice)
+  redraw_meters(dom)
+
   display(dom, user)
 
 
 def ac_roll(user, dom):
   global available, current, dice, turn, scores
 
-  disable_play_buttons(dom)
+  dom.disable_elements(PLAY_BUTTONS)
 
   if user.player == 0:
     user.player = current
+    user.pending = False
 
     available = 2 if available == 1 else 0
   elif user.player != current:
@@ -253,7 +255,7 @@ def ac_roll(user, dom):
 def ac_hold(user, dom):
   global scores, turn, dice, current
 
-  disable_play_buttons(dom)  
+  dom.disable_elements(PLAY_BUTTONS) 
 
   if user.player != current:
     return
@@ -275,7 +277,7 @@ def ac_display(user, dom):
     dom.enable_element("PlayerView")
     if debug():
       dom.remove_class("debug", "removed")
-    user.player = 0
+    user.init()
     dom.flush()
   display(dom, user)
 
