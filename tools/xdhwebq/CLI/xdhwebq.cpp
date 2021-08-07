@@ -126,6 +126,7 @@ namespace {
 					const str::dString &UserId)
 				{
 				qRH
+          xdhbrd::sCRow Row = qNIL;
 					websck::rFlow Flow;
 					xdwsessn::rSession Session;
 					str::wString Digest, Script;
@@ -133,11 +134,12 @@ namespace {
 				qRB
 					Flow.Init(Driver, websck::mWithTerminator);
 
-					if ( !Session.Init(Callback, Driver, "", Token, UserId) ) {
+					if ( ( Row = Session.Init(Callback, Driver, "", Token, UserId) ) ==  qNIL ) {
 						Script.Init();
 						sclm::MGetValue(registry::definition::ErrorScript, Script);
 						Session.Execute(Script);
 					} else if ( Session.Handle(NULL) ) {
+					  xdhbrd::Activate(Row);
 						while ( true ) {
 							Digest.Init();
 							if ( !websck::GetMessage(Flow, Digest) )

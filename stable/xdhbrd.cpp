@@ -37,10 +37,10 @@ namespace {
         Guardian.InitAndLock(Mutex);
     }
 
-    typedef lstbch::qLBUNCHdl(sCRow_) dCRows_;
+    typedef lstbch::qLBUNCHdl( sCRow ) dCRows_;
     qW(CRows_);
 
-    typedef lstbch::qLBUNCHw(rXCallback *, sCRow_) rXCallbacks_;
+    typedef lstbch::qLBUNCHw( rXCallback *, sCRow ) rXCallbacks_;
     rXCallbacks_ UnprotectedXCallbacks_;
     rMutex_ XCallbacksMutex_ = UndefinedMutex_;
 
@@ -51,9 +51,9 @@ namespace {
         return UnprotectedXCallbacks_;
     }
 
-    sCRow_ Store_(rXCallback &XCallback)
+    sCRow Store_(rXCallback &XCallback)
     {
-        sCRow_ CRow = qNIL;
+        sCRow CRow = qNIL;
     qRH
         hGuardian_ Guardian;
     qRB
@@ -64,13 +64,20 @@ namespace {
         return CRow;
     }
 
-    rXCallback &FetchXCallback_( sCRow_ CRow)
+    rXCallback *FetchXCallback_(
+      sCRow CRow,
+      hGuardian_ &Guardian)
+    {
+      return GetXCallbacks_(Guardian)(CRow);
+    }
+
+    rXCallback &FetchXCallback_(sCRow CRow)
     {
         rXCallback *XCallback = NULL;
     qRH
         hGuardian_ Guardian;
     qRB
-        XCallback = GetXCallbacks_(Guardian)(CRow);
+        XCallback = FetchXCallback_(CRow, Guardian);
     qRR
     qRT
     qRE
@@ -181,7 +188,7 @@ namespace {
 
 namespace {
     void Remove_(
-        sCRow_ CRow,
+        sCRow CRow,
         dCRows_ &CRows)
     {
         sdr::sRow Row = CRows.First();
@@ -233,10 +240,10 @@ void xdhbrd::rXCallback::Deactivate_(hGuardian_ &Guardian)
 {
     Hire_(Guardian, Mutex_);
 
-    State_ = sDead;
+    State_ = sIdle;
 }
 
-bso::sBool xdhbrd::rXCallback::Add_(
+sCRow xdhbrd::rXCallback::AddTo_(
     const str::dString &Token,
     bso::sBool ReturnNotFound)
 {
@@ -253,14 +260,16 @@ qRB
     }
 
     if ( Success )
-        FetchXCRows_(TRow_).GetCRows(Guardian).Add(CRow_ = Store_(*this));
+      FetchXCRows_(TRow_).GetCRows(Guardian).Add(CRow_ = Store_(*this));
+    else
+      CRow_ = qNIL;
 qRR
 qRE
 qRT
-    return Success;
+    return CRow_;
 }
 
-bso::sBool xdhbrd::rXCallback::Init(
+sCRow xdhbrd::rXCallback::Init(
     xdhcuc::cSingle &Callback,
     const str::dString &Token)
 {
@@ -272,12 +281,23 @@ bso::sBool xdhbrd::rXCallback::Init(
 
     Callback_ = &Callback;
     Mutex_ = mtx::Create();
-    State_ = sAlive;
+    State_ = sStarting;
 
-    return Add_(Token, true);
+    return AddTo_(Token, true);
 }
 
-bso::sBool xdhbrd::rXCallback::Send(
+void xdhbrd::rXCallback::Activate_(void)
+{
+//  Hire_(Guardian, Mutex_);  // 'Guardian' is already hired by calling function.
+
+  if ( State_ != sStarting )
+    qRFwk();
+
+  State_ = sAlive;
+}
+
+
+bso::sBool xdhbrd::rXCallback::Send_(
     const str::dString &Script,
     hGuardian_ &Guardian)
 {
@@ -317,27 +337,6 @@ qRE
     return TRow;
 }
 
-void xdhbrd::Remove(sTRow_ TRow)
-{
-qRH
-    rXCRows_ *XCRows = NULL;
-    hGuardian_ Guardian;
-qRB
-    rXCRowsSets_ &Sets = GetXCRowsSets_(Guardian);
-
-    XCRows = Sets(TRow);
-
-    Sets.Remove(TRow);
-
-    if ( XCRows == NULL )
-        qRGnr();
-
-    delete XCRows;
-qRR
-qRT
-qRE
-}
-
 namespace {
     namespace {
         struct sData_ {
@@ -360,7 +359,7 @@ namespace {
 
             Blocker.Release();
 
-            XCallback.Send(Script, Guardian);
+            Send_(XCallback, Script, Guardian);
         qRR
         qRT
         qRE
@@ -392,6 +391,17 @@ namespace {
     }
 }
 
+void xdhbrd::Activate(sCRow CRow)
+{
+qRH
+    hGuardian_ Guardian;
+qRB
+    FetchXCallback_(CRow, Guardian)->Activate_();
+qRR
+qRT
+qRE
+}
+
 void xdhbrd::Broadcast(
    const str::dString &Script,
    sTRow_ TRow)
@@ -400,6 +410,27 @@ qRH
     hGuardian_ Guardian;
 qRB
     Broadcast_(Script, FetchXCRows_(TRow).GetCRows(Guardian));
+qRR
+qRT
+qRE
+}
+
+void xdhbrd::Remove(sTRow_ TRow)
+{
+qRH
+    rXCRows_ *XCRows = NULL;
+    hGuardian_ Guardian;
+qRB
+    rXCRowsSets_ &Sets = GetXCRowsSets_(Guardian);
+
+    XCRows = Sets(TRow);
+
+    Sets.Remove(TRow);
+
+    if ( XCRows == NULL )
+        qRGnr();
+
+    delete XCRows;
 qRR
 qRT
 qRE

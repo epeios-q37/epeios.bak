@@ -316,7 +316,7 @@ namespace idxbtq {
 		uys::eState Init(
 			const rHF &Filenames,
 			uys::mode__ Mode,
-			uys::behavior__ Behavior,
+			uys::eBehavior Behavior,
 			flsq::id__ ID )
 		{
 			uys::eState State = Tree_.Init( Filenames.Tree, Mode, Behavior, ID );

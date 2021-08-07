@@ -10,6 +10,12 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-08-07:
+- XDHBRD: fixing connect/broadcast conflicts,
+
+## 2021-08-07:
+- IDXBTQ: [adpt]
+
 ## 2021-06-30:
 
 - FLSQ: reorganization,

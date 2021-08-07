@@ -92,6 +92,7 @@ def get_status(player):
 
 def fade(dom, element):
   dom.remove_class(element, "fade-in")
+  dom.inner(element, "<span></span>")
   dom.flush()
   dom.add_class(element, "fade-in")
 

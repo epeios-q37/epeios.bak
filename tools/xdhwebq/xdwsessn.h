@@ -66,7 +66,7 @@ namespace xdwsessn {
 			tol::reset(P, Upstream_, Broadcaster_, Session_ );
 		}
 		E_CDTOR( rSession );
-		bso::sBool Init(
+		xdhbrd::sCRow Init(
 			xdhcdc::cSingle &Callback,
 			fdr::rRWDriver &Driver,
 			const char *Language,
@@ -75,7 +75,11 @@ namespace xdwsessn {
 		{
 			Upstream_.Init(Driver);
 			Session_.Init(Callback);
-			return Session_.Initialize(Upstream_, Language, Token, UserId) && Broadcaster_.Init(Upstream_, Token);
+
+      if ( Session_.Initialize(Upstream_, Language, Token, UserId) )
+        return Broadcaster_.Init(Upstream_, Token);
+      else
+        return qNIL;
 		}
 		bso::sBool Handle( const char *EventDigest )
 		{

@@ -33,12 +33,13 @@
 # include "xdhcuc.h"
 
 namespace xdhbrd {
-    qROW(CRow_); // Callback row.
+    qROW(CRow); // Callback row.
     typedef xdhcmn::faas::sRow sTRow_; // Token row.
 
     qENUM(State_) {
+        sStarting,
         sAlive,
-        sDead,
+        sIdle,
         s_amount,
         s_Undefined
     };
@@ -52,33 +53,49 @@ namespace xdhbrd {
         qRMV(xdhcuc::cSingle, C_, Callback_);
         rMutex_ Mutex_;
         sTRow_ TRow_;
-        sCRow_ CRow_;
+        sCRow CRow_;
         eState_ State_;
         // Returns 'false' if 'Token' does not exist and 'ReturnNotFound' at 'true'.
-        bso::sBool Add_(
+        sCRow AddTo_(
             const str::dString &Token,
             bso::sBool ReturnNotFound);
         void Deactivate_(hGuardian_ &Guardian);
         void Remove_(void);
+        void Activate_(void);
+        bso::sBool Send_(
+          const str::dString &Script,
+          hGuardian_ &Guardian);
     public:
         void reset(bso::sBool P = true);
         qCDTOR(rXCallback);
         // Returns 'false' if 'Token' does nor exist.
-        bso::sBool Init(
+        sCRow Init(
             xdhcuc::cSingle &Callback,
             const str::dString &Token);
-        bso::sBool Send(
-            const str::dString &Script,
-            hGuardian_ &Guardian);
+        friend void Activate(sCRow Row);
+        friend bso::sBool Send_(
+          rXCallback &Callback,
+          const str::dString &Script,
+          hGuardian_ &Guardian);
     };
 
-    sTRow_ Create(const str::dString &Token);
+    inline bso::sBool Send_(
+      rXCallback &Callback,
+      const str::dString &Script,
+      hGuardian_ &Guardian)
+      {
+        return Callback.Send_(Script, Guardian);
+      }
 
-    void Remove(sTRow_ TRow);
+    xdhcmn::faas::sRow Create(const str::dString &Token);
+
+    void Activate(sCRow Row);
 
     void Broadcast(
         const str::dString &Script,
-        sTRow_ TRow);
+        xdhcmn::faas::sRow TRow);
+
+    void Remove(xdhcmn::faas::sRow TRow);
 }
 
 #endif
