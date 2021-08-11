@@ -183,14 +183,10 @@ def _init():
 	_socket.settimeout(1)	# In order to quit an application, in Jupyter notebooks.		
 
 def _handshake():
-	global _writeLock
+	with _writeLock:
 
-	_writeLock.acquire()
-
-	writeString(_FAAS_PROTOCOL_LABEL)
-	writeString(_FAAS_PROTOCOL_VERSION)
-
-	_writeLock.release()
+		writeString(_FAAS_PROTOCOL_LABEL)
+		writeString(_FAAS_PROTOCOL_VERSION)
 
 	error = getString()
 
@@ -204,14 +200,11 @@ def _handshake():
 
 def _ignition():
 	global _token, _url
-	_writeLock.acquire()
-
-	writeString( _token)
-	writeString(_headContent)
-	writeString(_wAddr);
-	writeString("PYH")
-
-	_writeLock.release()
+	with _writeLock:
+		writeString( _token)
+		writeString(_headContent)
+		writeString(_wAddr);
+		writeString("PYH")
 
 	_token = getString()
 
@@ -228,7 +221,6 @@ def _ignition():
 		_supply(_url)
 
 def _serve(callback,userCallback,callbacks ):
-	global _writeLock, _globalCondition
 	while True:
 		id = readSInt()
 		
@@ -244,11 +236,10 @@ def _serve(callback,userCallback,callbacks ):
 			instance.set(callback(userCallback, callbacks, instance),id)
 			_instances[id] = instance
 
-			_writeLock.acquire()
-			writeSInt(id)
-			writeString(_MAIN_PROTOCOL_LABEL)
-			writeString(_MAIN_PROTOCOL_VERSION)
-			_writeLock.release()
+			with _writeLock:
+				writeSInt(id)
+				writeString(_MAIN_PROTOCOL_LABEL)
+				writeString(_MAIN_PROTOCOL_VERSION)
 		elif id == -3:	# Value instructing that a session is closed.
 			id = readSInt();
 			if not id in _instances:
@@ -296,11 +287,10 @@ def get_app_url(id=""):
 	return _url + ("&_id=" + str(id) if id else "") 
 
 def broadcastAction(action, id = ""):
-	_writeLock.acquire()
-	writeSInt(-3)
-	writeString(action)
-	writeString(id)
-	_writeLock.release()	
+	with _writeLock:
+		writeSInt(-3)
+		writeString(action)
+		writeString(id)
 
 class DOM_FaaS:
 	_firstLaunch = True
@@ -316,10 +306,9 @@ class DOM_FaaS:
 			_globalCondition.notify()
 
 	def _sendSpecialAction(self, action):
-		_writeLock.acquire()
-		writeSInt(self.instance.getId())
-		writeString(action)
-		_writeLock.release()
+		with _writeLock:
+			writeSInt(self.instance.getId())
+			writeString(action)
 
 	def getAction(self):
 		if self._firstLaunch:
@@ -346,23 +335,21 @@ class DOM_FaaS:
 
 
 	def call(self, command, type, *args):
-		_writeLock.acquire()
-		writeSInt(self.instance.getId())
-		writeString(command)
+		with _writeLock:
+			writeSInt(self.instance.getId())
+			writeString(command)
 
-		writeUInt(type)
+			writeUInt(type)
 
-		for arg in args:
-			if isinstance(arg,str):
-				writeUInt(XDHqSHRD.RT_STRING)
-				writeString(arg)
-			else:
-				writeUInt(XDHqSHRD.RT_STRINGS)
-				writeStrings(arg)
+			for arg in args:
+				if isinstance(arg,str):
+					writeUInt(XDHqSHRD.RT_STRING)
+					writeString(arg)
+				else:
+					writeUInt(XDHqSHRD.RT_STRINGS)
+					writeStrings(arg)
 
-		writeUInt(XDHqSHRD.RT_VOID)	# To report end of argument list.
-
-		_writeLock.release()
+			writeUInt(XDHqSHRD.RT_VOID)	# To report end of argument list.
 
 		if type == XDHqSHRD.RT_STRING:
 			self.wait()

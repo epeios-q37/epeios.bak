@@ -19,7 +19,7 @@
 }
         ]]>
         </Script>
-        <!-- This script does not perform the brodcast, but is the one which is broadcasted. -->
+        <!-- This script does not perform the broadcast, but is the one which is broadcasted. -->
         <Script name="@BroadcastAction_1" Arguments="Action,Id">
           <![CDATA[
 {
