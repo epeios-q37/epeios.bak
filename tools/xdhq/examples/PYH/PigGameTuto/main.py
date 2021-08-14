@@ -135,8 +135,10 @@ def update_meters(dom, status, adding):
 
 
 def redraw_meters(dom):
-  update_meters(dom, SPY, 0)
-  update_meters(dom, SPY, turn - dice)
+  status = SPY if available == 0 else WAIT
+
+  update_meters(dom, status, 0)
+  update_meters(dom, status, turn - dice)
 
 
 def update_markers(dom, status):
@@ -198,9 +200,6 @@ def update_layout(dom, player):
 
 
 def display(dom, user):
-  if user.player != 0:
-    dom.enable_element("New")
-
   if user.pending and available == 0 and user.player == 0:
     dom.disable_element("PlayerView")
     user.pending = False
@@ -220,16 +219,23 @@ def ac_connect(user, dom):
   display(dom, user)
 
 
+def become_player(user, dom):
+  global available
+
+  dom.enable_element("New")
+  user.player = current
+  user.pending = False
+
+  available = 2 if available == 1 else 0
+
+
 def ac_roll(user, dom):
-  global available, current, dice, turn, scores
+  global current, dice, turn, scores
 
   dom.disable_elements(PLAY_BUTTONS)
 
   if user.player == 0:
-    user.player = current
-    user.pending = False
-
-    available = 2 if available == 1 else 0
+    become_player(user, dom)
   elif user.player != current:
     return
 
@@ -258,7 +264,11 @@ def ac_hold(user, dom):
 
   dom.disable_elements(PLAY_BUTTONS) 
 
-  if user.player != current:
+#  dom.raw_send("%Quit")
+
+  if user.player == 0:
+    become_player(user, dom)
+  elif user.player != current:
     return
 
   scores[user.player] += turn
@@ -284,7 +294,7 @@ def ac_display(user, dom):
 
 
 CALLBACKS = {
-  "": ac_connect,
+  "Connect": ac_connect,
   "Roll": ac_roll,
   "Hold": ac_hold,
   "New": ac_new,

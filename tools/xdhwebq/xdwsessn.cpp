@@ -42,7 +42,7 @@ qRFB
 # else	// Facilitates debugging.
 	Script.Convert(Buffer);
 
-	Flow.Write( Buffer, Script.Amount());
+	Flow.Write(Buffer, Script.Amount());
 # endif
 	Flow.Commit();
 

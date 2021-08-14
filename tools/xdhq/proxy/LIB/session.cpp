@@ -245,9 +245,6 @@ qRB;
 		Flow.Dismiss();
 
 		switch ( Version ) {
-		case prtcl::ProtocolLastVersion:
-			ReportNoErrorToBackend_( Flow );
-			break;
 		case csdcmn::UnknownVersion:
 			ReportErrorToBackend_( "\nUnknown protocol version!\n", Flow );
 			break;
@@ -255,7 +252,9 @@ qRB;
 			ReportErrorToBackend_( "\nUnknown protocol!\n", Flow );
 			break;
 		default:
-			qRUnx();
+		  if ( Version > prtcl::ProtocolLastVersion )
+        qRUnx();
+			ReportNoErrorToBackend_( Flow );
 			break;
 		}
 
@@ -287,7 +286,7 @@ bso::bool__ session::rSession::Launch_(
 	bso::sBool Cont = true;
 qRH;
 	flw::rDressedRWFlow<> Flow;
-	str::wString ScriptName, ReturnValue;
+	str::wString ScriptName, ReturnValue, Reason;
 	eType_ ReturnType = t_Undefined;
 	str::wStrings Parameters, SplitedReturnValue;
 qRB;
@@ -303,9 +302,16 @@ qRB;
 
 		Log_( Id_, IP_, ScriptName );
 
-		if ( ScriptName == faas_::StandByScriptName ) {
+		if ( ScriptName == faas_::ScriptNameForStandBy ) {
 			Flow.Dismiss();
 			break;
+		} else if ( ScriptName == faas_::ScriptNameForDismiss ) {
+		  Reason.Init();
+		  prtcl::Get(Flow, Reason);
+      Log_( Id_, IP_, Reason );
+		  Flow.Dismiss();
+		  Cont = false;
+		  break;
 		} else {
 			ReturnType = GetType_( Flow );
 

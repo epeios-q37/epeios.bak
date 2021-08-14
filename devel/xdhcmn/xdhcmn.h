@@ -57,7 +57,8 @@ namespace xdhcmn {
 		}
 		// Script name with no correspondence in 'XDHScripts.xcfg'.
 		// Is intercepted to do a special action.
-		extern const char *StandByScriptName;
+		extern const char *ScriptNameForStandBy;  // Awaiting new action.
+		extern const char *ScriptNameForDismiss;  // Cease handling of this session.
 	}
 
 	qMIMICs( bso::sU16, sIndex );	// For the 'CSS' rules.

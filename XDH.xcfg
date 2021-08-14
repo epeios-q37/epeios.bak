@@ -30,6 +30,9 @@
       </xpp:bloc>
       <!-- All scripts enclosed in following block are public. -->
       <xpp:bloc>
+        <Script name="RawSend_1" Arguments="#Data">
+          <![CDATA[%#Data%]]>
+        </Script>
         <Script name="Execute_1" Arguments="#Script">
           <![CDATA[
 {

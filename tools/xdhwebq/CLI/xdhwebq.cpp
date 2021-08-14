@@ -118,6 +118,32 @@ namespace {
 			}
 
 			namespace {
+			  namespace {
+			    bso::sBool SendConnectEvent_(
+            flw::rFlow &Flow,
+            const str::dString &UserId)
+          {
+          qRH;
+            str::wString Script;
+            qCBUFFERh Buffer;
+          qRB;
+           // Roll|BUTTON|click||((Roll))
+            Script.Init("launchEvent('");
+            Script.Append(UserId);
+            Script.Append("|BUTTON|click||((click|Connect))');");
+
+            Flow.Write(Script.Convert(Buffer), Script.Amount());
+
+            Flow.Commit();
+            Flow.Dismiss();
+          qRR;
+          qRT;
+          qRE;
+
+          return true;
+          }
+			  }
+
 				void HandleRegular_(
 					xdhups::rAgent &Agent,
 					fdr::rRWDriver &Driver,
@@ -126,7 +152,6 @@ namespace {
 					const str::dString &UserId)
 				{
 				qRH
-          xdhbrd::sCRow Row = qNIL;
 					websck::rFlow Flow;
 					xdwsessn::rSession Session;
 					str::wString Digest, Script;
@@ -134,12 +159,12 @@ namespace {
 				qRB
 					Flow.Init(Driver, websck::mWithTerminator);
 
-					if ( ( Row = Session.Init(Callback, Driver, "", Token, UserId) ) ==  qNIL ) {
+					if ( Session.Init(Callback, Driver, "", Token, UserId) ==  qNIL ) {
 						Script.Init();
 						sclm::MGetValue(registry::definition::ErrorScript, Script);
 						Session.Execute(Script);
-					} else if ( Session.Handle(NULL) ) {
-					  xdhbrd::Activate(Row);
+					// } else if ( Session.Handle(NULL) ) {
+					 } else if ( SendConnectEvent_(Flow, UserId) ) {
 						while ( true ) {
 							Digest.Init();
 							if ( !websck::GetMessage(Flow, Digest) )

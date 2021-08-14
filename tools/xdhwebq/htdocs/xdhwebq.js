@@ -33,7 +33,7 @@ const exit = {
 	// If below is modified, also modify the 'ErrorScript' entry in the 'xdhwebq.xcfg" file.
 	TOKEN: 1,		// Token does not exists.
 	BACKEND: 2,	// Backend has been shut down.
-	SOCKET: 3,	// Socket has been closed (websocket timeout, for example.).
+	SOCKET: 3,	// Socket has been closed (websocket timeout, for example).
 	},
 	messages : {
 		NONE: `

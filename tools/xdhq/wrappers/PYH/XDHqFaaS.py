@@ -71,7 +71,7 @@ def set_supplier(supplier = None):
 _FAAS_PROTOCOL_LABEL = "9efcf0d1-92a4-4e88-86bf-38ce18ca2894"
 _FAAS_PROTOCOL_VERSION = "0"
 _MAIN_PROTOCOL_LABEL = "bf077e9f-baca-48a1-bd3f-bf5181a78666"
-_MAIN_PROTOCOL_VERSION = "0"
+_MAIN_PROTOCOL_VERSION = "1"
 
 _writeLock = threading.Lock()
 _globalCondition = threading.Condition()
@@ -142,6 +142,12 @@ def getStrings():
 		amount -= 1
 
 	return strings
+
+def _dismiss(id, reason):
+	with _writeLock:
+		writeSInt(id)
+		writeString("#Dismiss_1")
+		writeString(reason)
 
 def _init():
 	global _token, _socket, _wAddr, _wPort, _cgi
@@ -250,7 +256,11 @@ def _serve(callback,userCallback,callbacks ):
 				_globalCondition.wait()
 			del _instances[id]	# Seemingly destroy the object and remove the entry too.
 		elif not id in _instances:
-			sys.exit("Unknown instance of id '" + str(id) + "'!")
+			print("Unknown instance of id '" + str(id) + "'!")
+			# Below both lines to eat if and action.
+			getString()
+			getString()
+			_dismiss(id, "Unknown instance of id '" + str(id) + "'!")
 		elif not _instances[id].IsHandshakeDone():
 			error = getString()
 
@@ -305,22 +315,22 @@ class DOM_FaaS:
 		with _globalCondition:
 			_globalCondition.notify()
 
-	def _sendSpecialAction(self, action):
+	def _standBy(self):
 		with _writeLock:
 			writeSInt(self.instance.getId())
-			writeString(action)
+			writeString("#StandBy_1")
 
 	def getAction(self):
 		if self._firstLaunch:
 			self._firstLaunch = False
 		else:
-			self._sendSpecialAction("#StandBy_1")
+			self._standBy()
 
 		self.wait()
 
 		[id,action]=["",""] if self.instance.quit else [getString(),getString()]
 
-		# The below 'is_quitting()' method MUST be called, or the library will hang. 
+		# The below 'isQuitting()' method MUST be called, or the library will hang. 
 
 		return [action,id]
 

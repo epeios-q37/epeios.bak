@@ -116,6 +116,9 @@ class DOM:
 	def execute_strings(self,script):
 		return self._dom.call("Execute_1" ,_STRINGS,script)
 
+	def raw_send(self, data):
+		return self._dom.call("RawSend_1", _VOID, data)
+
 	def flush(self):	# Returns when all the pending commands were executed.
 		self._dom.call("Flush_1",_STRING)
 

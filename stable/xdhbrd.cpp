@@ -281,21 +281,10 @@ sCRow xdhbrd::rXCallback::Init(
 
     Callback_ = &Callback;
     Mutex_ = mtx::Create();
-    State_ = sStarting;
+    State_ = sAlive;
 
     return AddTo_(Token, true);
 }
-
-void xdhbrd::rXCallback::Activate_(void)
-{
-//  Hire_(Guardian, Mutex_);  // 'Guardian' is already hired by calling function.
-
-  if ( State_ != sStarting )
-    qRFwk();
-
-  State_ = sAlive;
-}
-
 
 bso::sBool xdhbrd::rXCallback::Send_(
     const str::dString &Script,
@@ -389,17 +378,6 @@ namespace {
             Row = CRows.Next(Row);
         }
     }
-}
-
-void xdhbrd::Activate(sCRow CRow)
-{
-qRH
-    hGuardian_ Guardian;
-qRB
-    FetchXCallback_(CRow, Guardian)->Activate_();
-qRR
-qRT
-qRE
 }
 
 void xdhbrd::Broadcast(

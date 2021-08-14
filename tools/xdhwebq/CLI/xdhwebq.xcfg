@@ -12,7 +12,7 @@
 			<Language>en</Language>
 			<Command>Process</Command>
 			<Service>
-                <xpp:expand select="Service"/>
+        <xpp:expand select="Service"/>
 			</Service>
 		</Parameters>
 		<Definitions>
@@ -50,7 +50,7 @@ exitValue = exit.values.TOKEN;
 			</Translations>
 			<Translations text="ModuleFilenameArgumentDescription">
 				<Translation language="fr">Nom et chemin de la bibliothèque dynamique correspondant au module XDHTML.</Translation>
-				<Translation language="en"> Name and path of the dynamic library corresponding to the XDHTML module.</Translation>
+				<Translation language="en">Name and path of the dynamic library corresponding to the XDHTML module.</Translation>
 			</Translations>
 			<Translations text="ModuleFilenameArgumentLabel">
 				<Translation language="fr">module</Translation>

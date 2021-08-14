@@ -28,7 +28,8 @@
 
 using namespace xdhcmn;
 
-qCDEF(char *, xdhcmn::faas::StandByScriptName, "#StandBy_1");
+qCDEF(char *, xdhcmn::faas::ScriptNameForStandBy, "#StandBy_1");
+qCDEF(char *, xdhcmn::faas::ScriptNameForDismiss, "#Dismiss_1");
 
 void xdhcmn::Escape(
     const str::string_ &Source,

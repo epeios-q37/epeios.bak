@@ -37,7 +37,6 @@ namespace xdhbrd {
     typedef xdhcmn::faas::sRow sTRow_; // Token row.
 
     qENUM(State_) {
-        sStarting,
         sAlive,
         sIdle,
         s_amount,
@@ -61,7 +60,6 @@ namespace xdhbrd {
             bso::sBool ReturnNotFound);
         void Deactivate_(hGuardian_ &Guardian);
         void Remove_(void);
-        void Activate_(void);
         bso::sBool Send_(
           const str::dString &Script,
           hGuardian_ &Guardian);
@@ -72,7 +70,6 @@ namespace xdhbrd {
         sCRow Init(
             xdhcuc::cSingle &Callback,
             const str::dString &Token);
-        friend void Activate(sCRow Row);
         friend bso::sBool Send_(
           rXCallback &Callback,
           const str::dString &Script,
@@ -88,8 +85,6 @@ namespace xdhbrd {
       }
 
     xdhcmn::faas::sRow Create(const str::dString &Token);
-
-    void Activate(sCRow Row);
 
     void Broadcast(
         const str::dString &Script,
