@@ -34,6 +34,7 @@
 #include "xpp.h"
 #include "fnm.h"
 #include "flf.h"
+#include "flw.h"
 #include "mtk.h"
 #include "websck.h"
 
@@ -119,18 +120,13 @@ namespace {
 
 			namespace {
 			  namespace {
-			    bso::sBool SendConnectEvent_(
-            flw::rFlow &Flow,
-            const str::dString &UserId)
+			    bso::sBool SendConnectEvent_(flw::rRWFlow &Flow)
           {
           qRH;
             str::wString Script;
             qCBUFFERh Buffer;
           qRB;
-           // Roll|BUTTON|click||((Roll))
-            Script.Init("launchEvent('");
-            Script.Append(UserId);
-            Script.Append("|BUTTON|click||((click|Connect))');");
+            Script.Init("launchEvent('');");  // Launch an event with an empty digest.
 
             Flow.Write(Script.Convert(Buffer), Script.Amount());
 
@@ -163,8 +159,8 @@ namespace {
 						Script.Init();
 						sclm::MGetValue(registry::definition::ErrorScript, Script);
 						Session.Execute(Script);
-					// } else if ( Session.Handle(NULL) ) {
-					 } else if ( SendConnectEvent_(Flow, UserId) ) {
+					// } else if ( Session.Handle(NULL) ) { // Reponses of the connect event were mixed the ones from upcoming events.
+					 } else if ( SendConnectEvent_(Flow) ) {  // To queue upcoming events.
 						while ( true ) {
 							Digest.Init();
 							if ( !websck::GetMessage(Flow, Digest) )

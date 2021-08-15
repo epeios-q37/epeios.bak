@@ -294,7 +294,7 @@ def ac_display(user, dom):
 
 
 CALLBACKS = {
-  "Connect": ac_connect,
+  "": ac_connect,
   "Roll": ac_roll,
   "Hold": ac_hold,
   "New": ac_new,
