@@ -102,7 +102,7 @@ public class DOM {
 	}
 
 	private <XML> void handleLayout_(String variant, String id, XML xml, String xslFilename) {
-		DOM.call("HandleLayout_1", Type.VOID, a(variant), a(id), a(xml.toString()), a(xslFilename));
+		DOM.call("HandleLayout_1", Type.STRING, a(variant), a(id), a(xml.toString()), a(xslFilename));
 	}
 
 	public <XML> void prependLayout(String id, XML html) {	// Deprecated!
@@ -142,7 +142,7 @@ public class DOM {
 		if (!xsl.isEmpty() && info.q37.xdhq.XDH.isFaaS())
 			xsl = new String( "data:text/xml;base64," + java.util.Base64.getEncoder().encodeToString( info.q37.xdhq.XDH.readAsset( xsl, info.q37.xdhq.XDH.getDir() ).getBytes() ) );
 
-		DOM.call("HandleLayout_1", Type.VOID, a(variant), a(id), a(xml.toString()), a(xsl));
+		DOM.call("HandleLayout_1", Type.STRING, a(variant), a(id), a(xml.toString()), a(xsl));
 	}
 
 	public <XML> void before(String id, XML xml, String xsl) {

@@ -129,7 +129,7 @@ module XDHq
 		end
 
 		private def handleLayout(variant, id, xml, xslFilename = "")
-			call("HandleLayout_1", $VOID, variant, id, if xml.is_a?( String ) then xml else xml.toString() end, xslFilename)
+			call("HandleLayout_1", $STRING, variant, id, if xml.is_a?( String ) then xml else xml.toString() end, xslFilename)
 		end
 
 		def prependLayout(id, html)	# Deprecated!
@@ -171,7 +171,7 @@ module XDHq
 				xsl = "data:text/xml;charset=utf-8," + URI::encode(XDHq::readAsset( xsl, $dir ))
 			end
 
-			call("HandleLayout_1", $VOID, variant, id, if xml.is_a?( String ) then xml else xml.toString() end, xsl)
+			call("HandleLayout_1", $STRING, variant, id, if xml.is_a?( String ) then xml else xml.toString() end, xsl)
 		end
 		
 		def before(id, xml, xsl="")

@@ -512,22 +512,31 @@ namespace {
 		bso::sBool HandleLayout_(
 			const char *ScriptName,
 			const str::dStrings &Values,
-			xdhcuc::cSingle &Callback )
+			xdhcuc::cSingle &Callback,
+			str::dString *ReturnValue)
 		{
 			sShared_ Shared;
+
+			if ( ScriptName !=psn_::HandleLayout )
+        qRFwk();
 
 			Shared.ScriptName = ScriptName;
 			Shared.Values = &Values;
 			Shared.Callback = &Callback;
 
-			if ( false )
-				mtk::Launch(HandleLayoutRoutine_, &Shared);	// Conflicts with broadcasting.
+			if ( true )
+				mtk::Launch(HandleLayoutRoutine_, &Shared);	// Was conflicting with broadcasting.
 			else
 				mtk::SyncLaunch(HandleLayoutRoutine_, &Shared);	// In this case, with the 'arora' browser, dealing with XSL will blocks all the clients.
 
-			/* The 'HandleLayout' primitive awaits a value from client, which is NOT sent to the backend. Hence, the backend send the next script
-			immediately after the 'HandleLayout'. If the client does not answer, it blocks all the other clients. To avoid this, the answer on a
-			'HandleLayout' is red and handled asynchronously. This issue occurs with the 'arora' web browser. */
+			/*
+			The 'HandleLayout' primitive awaits a value from client, which is NOT sent to the backend. But an empty return value is sent to
+			the backend to avoid launching a command which returned value replaces the one awaited by the 'HandleLayout' primitive.
+			The settings of event handler and widget handler is done asynchronously and should be achieved before next command.
+			*/
+
+			if ( ReturnValue != NULL )  // If == NULL, old deprecated behavior : no (dummy) value sent to backend.
+        *ReturnValue = str::Empty; // To synchronize calling functions.
 
 			return true;
 		}
@@ -557,7 +566,7 @@ namespace {
 		str::dString *ReturnValue)
 	{
 		if ( IsEqual_(ScriptName, psn_::HandleLayout) )
-			return HandleLayout_(psn_::HandleLayout, Values, Callback);
+			return HandleLayout_(psn_::HandleLayout, Values, Callback, ReturnValue);
 		else
 			return BaseProcess_(ScriptName, Values, Callback, NULL, ReturnValue);
 	}

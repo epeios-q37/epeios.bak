@@ -433,7 +433,7 @@ function patchATag(node) {
 	}
 }
 
-function fetchEventHandlersAndWidgest(id) {
+function fetchEventHandlersAndWidgets(id) {
 	var root = getElement(id);
 	var node = root;	// Handling root, due to 'About'/'Refresh' corresponding action handling.
 	var cont = true;

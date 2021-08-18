@@ -47,11 +47,12 @@ qRFB
 	Flow.Commit();
 
 	if ( ReturnedValue != NULL) {
-		if ( Blocker != NULL) {
+		websck::GetMessage(Flow, *ReturnedValue);
+
+    if ( Blocker != NULL) {
 			Blocker->Unblock();
 			Blocker = NULL;	// To avoid unblocking twice below.
 		}
-		websck::GetMessage(Flow, *ReturnedValue);
 	} else if ( Blocker != NULL )
 		qRGnr();
 
@@ -59,8 +60,8 @@ qRFB
 qRFR
 	Success = false;
 qRFT
-		if ( Blocker != NULL)
-			Blocker->Unblock();
+  if ( Blocker != NULL)
+    Blocker->Unblock();
 qRFE(sclm::ErrorDefaultHandling())
 	return Success;
 }

@@ -85,7 +85,7 @@
 		getElement(id).insertAdjacentHTML("%Variant%", getLayoutHTML(xml, xsl));
   }
 
-  var digests = fetchEventHandlersAndWidgest(getElement(id).parentElement);
+  var digests = fetchEventHandlersAndWidgets(getElement(id).parentElement);
   digests;  // Not returned to user. Splitted and given after processing to 'SetEnventHandlers_1' and  InstantiateWidgets_1' above internal scripts.
 }
         ]]>

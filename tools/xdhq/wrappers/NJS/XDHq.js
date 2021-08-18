@@ -166,7 +166,7 @@ class XDH {
 		if (typeof xml !== "string")
 			xml = xml.toString();
 
-		call(this, "HandleLayout_1", types.VOID, variant, id, xml, xsl, callback);
+		call(this, "HandleLayout_1", types.STRING, variant, id, xml, xsl, callback);
 	}
 	prependLayout(id, html, callback) {	// Depredated!
 		this.handleLayout_("Prepend", id, html, "", callback);
@@ -205,7 +205,7 @@ class XDH {
 		if ((xsl !== "") && this._xdh.isFAAS)
 			xsl = "data:text/xml;charset=utf-8," + encodeURIComponent(readXSLAsset(xsl));
 
-		call(this, "HandleLayout_1", types.VOID, variant, id, typeof xml === "string" ? xml : xml.toString(), xsl, callback);
+		call(this, "HandleLayout_1", types.STRING, variant, id, typeof xml === "string" ? xml : xml.toString(), xsl, callback);
 	}
 	before(id,xml,xslOrCallback,callback) {
 		this.layout_("beforebegin", id, xml, xslOrCallback, callback);

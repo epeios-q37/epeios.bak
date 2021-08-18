@@ -105,7 +105,7 @@ sub confirm {
 sub _handleLayout {
     my ($self, $variant, $id, $xml, $xslFilename) = @_;
 
-    $self->{dom}->call("HandleLayout_1", XDHq::SHRD::RT_VOID, $variant, $id, ref $xml eq "XDHq::XML" ? $xml->toString() : $xml, $xslFilename);
+    $self->{dom}->call("HandleLayout_1", XDHq::SHRD::RT_STRING, $variant, $id, ref $xml eq "XDHq::XML" ? $xml->toString() : $xml, $xslFilename);
 }
 
 sub prependLayout { # Deprecated!
@@ -154,7 +154,7 @@ sub _layout {
         $xsl = "";
     }
 
-    $self->{dom}->call("HandleLayout_1", XDHq::SHRD::RT_VOID, $variant, $id, ref $xml eq "XDHq::XML" ? $xml->toString() : $xml, $xsl);
+    $self->{dom}->call("HandleLayout_1", XDHq::SHRD::RT_STRING, $variant, $id, ref $xml eq "XDHq::XML" ? $xml->toString() : $xml, $xsl);
 }
 
 sub before {

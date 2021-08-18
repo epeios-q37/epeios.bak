@@ -133,7 +133,7 @@ class DOM:
 	def _handleLayout(self,variant,id,xml,xsl):
 		#	If 'xslFilename' is empty, 'xml' contents HTML.
 		# 	If 'xml' is HTML and uses the compressed form, if it has a root tag,only the children will be used.
-		self._dom.call("HandleLayout_1",_VOID,variant,id,xml if isinstance(xml,str) else xml.toString(),xsl)
+		self._dom.call("HandleLayout_1",_STRING,variant,id,xml if isinstance(xml,str) else xml.toString(),xsl)
 
 	def prepend_layout(self,id,html):	# Deprecated!
 		self._handleLayout("Prepend",id,html,"")
@@ -177,7 +177,7 @@ class DOM:
 		if xsl:
 			xsl = "data:text/xml;charset=utf-8," + _encode(_readXSLAsset(xsl))
 
-		self._dom.call("HandleLayout_1",_VOID,variant,id,xml if isinstance(xml,str) else xml.toString(),xsl)
+		self._dom.call("HandleLayout_1",_STRING,variant,id,xml if isinstance(xml,str) else xml.toString(),xsl)
 
 	def before(self,id,xml,xsl=""):
 		self._layout("beforebegin",id,xml,xsl)
