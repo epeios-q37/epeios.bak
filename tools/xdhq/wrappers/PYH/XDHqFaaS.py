@@ -83,15 +83,17 @@ class Instance:
 		self.condVar = threading.Condition()
 		self.handshakeDone = False
 		self.quit = False;
+	def __del__(self):
+		_report(-1, "Quitting " + str(self.id) + "!")
 	def set(self,thread,id):
 		self.thread = thread
 		self.id = id
 	def IsHandshakeDone(self):
 		if self.handshakeDone:
 			return True
-		else:
-			self.handshakeDone = True
-			return False
+
+		self.handshakeDone = True
+		return False
 	def getId(self):
 		return self.id
 	def wait(self):
@@ -143,11 +145,16 @@ def getStrings():
 
 	return strings
 
-def _dismiss(id, reason):
+def _dismiss(id):
 	with _writeLock:
 		writeSInt(id)
 		writeString("#Dismiss_1")
-		writeString(reason)
+
+def _report(id, message):
+	with _writeLock:
+		writeSInt(id)
+		writeString("#Inform_1")
+		writeString(message)
 
 def _init():
 	global _token, _socket, _wAddr, _wPort, _cgi
@@ -190,7 +197,6 @@ def _init():
 
 def _handshake():
 	with _writeLock:
-
 		writeString(_FAAS_PROTOCOL_LABEL)
 		writeString(_FAAS_PROTOCOL_VERSION)
 
@@ -236,8 +242,7 @@ def _serve(callback,userCallback,callbacks ):
 			id = readSInt()  # The id of the new session.
 
 			if id in _instances:
-				sys.exit("Instance of id '" + str(id) + "' exists but should not !")
-
+				_report(id, "Instance of id '" + str(id) + "' exists but should not !")
 			instance = Instance()
 			instance.set(callback(userCallback, callbacks, instance),id)
 			_instances[id] = instance
@@ -250,17 +255,17 @@ def _serve(callback,userCallback,callbacks ):
 			id = readSInt();
 			if not id in _instances:
 				sys.exit("Instance of id '" + str(id) + "' not available for destruction!")
-			_instances[id].quit = True
-			_instances[id].signal();
+			instance = _instances.pop(id)
+			instance.quit = True
+			instance.signal();
 			with _globalCondition:
 				_globalCondition.wait()
-			del _instances[id]	# Seemingly destroy the object and remove the entry too.
+			instance=None	# Destroys the object.
+			# del _instances[id]	# Seemingly destroy the object and remove the entry too.
 		elif not id in _instances:
 			print("Unknown instance of id '" + str(id) + "'!")
-			# Below both lines to eat if and action.
-			getString()
-			getString()
-			_dismiss(id, "Unknown instance of id '" + str(id) + "'!")
+			_report(id, "Unknown instance of id '" + str(id) + "'!")
+			_dismiss(id)
 		elif not _instances[id].IsHandshakeDone():
 			error = getString()
 
@@ -342,7 +347,6 @@ class DOM_FaaS:
 		self.signal()
 
 		return answer;
-
 
 	def call(self, command, type, *args):
 		with _writeLock:

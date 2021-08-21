@@ -286,7 +286,7 @@ bso::bool__ session::rSession::Launch_(
 	bso::sBool Cont = true;
 qRH;
 	flw::rDressedRWFlow<> Flow;
-	str::wString ScriptName, ReturnValue, Reason;
+	str::wString ScriptName, ReturnValue, Message;
 	eType_ ReturnType = t_Undefined;
 	str::wStrings Parameters, SplitedReturnValue;
 qRB;
@@ -302,17 +302,24 @@ qRB;
 
 		Log_( Id_, IP_, ScriptName );
 
-		if ( ScriptName == faas_::ScriptNameForStandBy ) {
-			Flow.Dismiss();
-			break;
-		} else if ( ScriptName == faas_::ScriptNameForDismiss ) {
-		  Reason.Init();
-		  prtcl::Get(Flow, Reason);
-      Log_( Id_, IP_, Reason );
-		  Flow.Dismiss();
-		  Cont = false;
-		  break;
-		} else {
+		if ( !ScriptName.Amount() )
+      qRGnr();
+    else if ( ScriptName(ScriptName.First()) == faas_::SpecialScriptNameMarker ) {
+      if ( ScriptName == faas_::ScriptNameForStandBy ) {
+        Flow.Dismiss();
+        break;
+      } else if ( ScriptName == faas_::ScriptNameForDismiss ) {
+        Flow.Dismiss();
+        Cont = false;
+        break;
+      } else if ( ScriptName == faas_::ScriptNameForInform ) {
+        Message.Init();
+        prtcl::Get(Flow, Message);
+        Flow.Dismiss();
+        Log_(Id_, IP_, Message);
+      } else
+        qRGnr ();
+    } else {
 			ReturnType = GetType_( Flow );
 
 			Parameters.Init();

@@ -809,6 +809,8 @@ namespace {
 	}
 
 	void HandleSwitching_(
+    const str::dString &IP,
+    const str::dString &Token,
 		fdr::rRWDriver &Driver,
 		sRow TRow,
 		const dShareds_ &Shareds,
@@ -818,6 +820,7 @@ namespace {
 		flw::rDressedRFlow<> Flow;
 		sId Id = UndefinedId;
 		bso::sBool IsError = false;
+		str::wString Input;
 	qRB;
 		Flow.Init( Driver );
 
@@ -834,7 +837,16 @@ namespace {
 
 			switch( Id ) {
 			case UndefinedId:	// Should never happen.
-				qRGnr();
+			  Input.Init();
+			  prtcl::Get(Flow, Input);
+
+				if ( Input != xdhcmn::faas::ScriptNameForInform )
+          qRGnr();
+
+        Input.Init();
+        prtcl::Get(Flow, Input);
+
+        Log_(IP, Token, Input);
 				break;
 			case downstream::BroadcastScriptId:
 				BroadcastScript_(Flow, TRow);
@@ -891,7 +903,7 @@ namespace {
 		Handshake_( Driver );
 
 		if ( ( Backend = CreateBackend_( Driver, IP ) ) != NULL ) {
-			HandleSwitching_( Driver, Backend->TRow, Backend->Shareds, Backend->Switch );	// Does not return until disconnection or error.
+			HandleSwitching_(IP, Backend->Token, Driver, Backend->TRow, Backend->Shareds, Backend->Switch );	// Does not return until disconnection or error.
 		}
 	qRR;
 		sclm::ErrorDefaultHandling();	// Also resets the error, otherwise the `WaitUntilNoMoreClient()` will lead to a deadlock on next error.

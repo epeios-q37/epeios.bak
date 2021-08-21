@@ -10,6 +10,9 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-08-21:
+- XDHCMN: special actions *Report* and *Dismiss*,
+
 ## 2021-08-18:
 - XDHDWS: partial fix of return value mixing,
 
