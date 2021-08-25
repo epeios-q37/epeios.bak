@@ -75,9 +75,8 @@ void session::rSession::Launch(void)
 qRH
 	str::wString Id, Action, Digest;
 	qCBUFFERh Buffer;
-	bso::sBool Exit = false;
 qRB
-	while ( !Exit ) {
+	while ( true ) {
 		Blockers_.WaitSelf();
 
 		if ( Quit ) {

@@ -42,7 +42,7 @@ public abstract class Atlas implements Runnable {
 		for (;;) {
 			dom.getAction(event);
 
-			if (dom.isQuitting() ) {	// MUST be called after 'getAction()…',
+			if ( dom.isQuitting() ) {	// MUST be called after 'getAction()…',
 										// or the library will hang!
 				break;
 			}
