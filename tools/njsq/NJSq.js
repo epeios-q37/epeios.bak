@@ -21,12 +21,12 @@
 
 var njsq = null;
 
-if ( process.env.EPEIOS_SRC ) {
+if ( process.env.Q37_EPEIOS ) {
  var addonPath = null;
  if ( process.platform == 'win32' )
   addonPath = 'h:/bin/';
  else
-  addonPath = '~/bin/';
+  addonPath = '/home/csimon/bin/';
  njsq = require( addonPath + 'njsq.node');
 } else {
  const binary = require( 'node-pre-gyp' );

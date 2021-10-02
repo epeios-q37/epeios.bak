@@ -143,11 +143,11 @@ const scli::sInfo &sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 {
 	static scli::sInfo Info(NAME_LC, NAME_MC, "q37.info");
 
-	Registrar.Register( ReturnArgument_ );
-	Registrar.Register( parser::OnData, parser::OnEnd, parser::Parse );
-	Registrar.Register( stream::OnData, stream::OnEnd, stream::Read, stream::Set );
-	Registrar.Register( console_::OnData, console_::OnEnd );
-	Registrar.Register( stream_::OnData, stream_::OnEnd, stream_::Set );
+	Registrar.Register( ReturnArgument_ );                                          // 0
+	Registrar.Register( parser::OnData, parser::OnEnd, parser::Parse );             // 1 … 3
+	Registrar.Register( stream::OnData, stream::OnEnd, stream::Read, stream::Set ); // 4 … 7
+	Registrar.Register( console_::OnData, console_::OnEnd );                        // 8 … 9
+	Registrar.Register( stream_::OnData, stream_::OnEnd, stream_::Set );            // 10 .. 12
 
 	return Info;
 }

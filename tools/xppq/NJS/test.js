@@ -18,7 +18,7 @@
 */
 
 // Once installed, launch 'npm explore xppq -- node test.js'.
-// You can submit an additional parameter of value from '0' to '4' as id of the test to launch.
+// You can submit an additional parameter of value from '0' to '5' as id of the test to launch.
 
 "use strict"
 
@@ -144,24 +144,24 @@ function test( id ) {
         console.log("Console.\n");
         xppq.basic(getStream());
         break;
-    case 4:
+    case 2:
         console.log("Piping the preprocessing stream.\n");
         new xppq.Stream(getStream()).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).pipe(process.stdout);
         break;
-    case 5:
+    case 3:
         console.log("Using the preprocessing stream with a callback, which transforms to lower case.\n");
         new xppq.Stream(getStream()).on('data', (chunk) => write(chunk.toString().toLowerCase())).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).on('end', () => console.log(out));
         break;
-    case 6:
+    case 4:
         console.log("XML parsing WITHOUT preprocessing.\n");
         xppq.parse(getStream(), callback);
         break;
-    case 7:
+    case 5:
         console.log("XML parsing WITH preprocessing.\n");
         xppq.parse(new xppq.Stream(getStream()).on('error', (err) => console.error('>>> ERROR : ' + err)), callback);
         break;
     default:
-        console.log("'" + id + "' is not a valid test id ; must be '0' to '4'.");
+        console.log("'" + id + "' is not a valid test id ; must be '0' to '5'.");
         break;
     }
 }

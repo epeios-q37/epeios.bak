@@ -72,7 +72,9 @@ function overload( mode, stream, onData, onEnd )
     if ( mode == modes.READABLE )
         stream.on('readable', () => onReadable(stream, onData, onEnd) );
     else if ( mode == modes.DATA_END ) {
-    	stream.on('data', (chunk) => { njsq._call(xppq, onData, stream, chunk); process.stdout.write(""); }); // The 'process.stdout.write("")' will do nothing, but the parser stalls when parsing the preprocessor output if missing.
+    	stream.on('data', (chunk) => { njsq._call(xppq, onData, stream, chunk); process.stdout.write(""); });
+			// The 'process.stdout.write("")' will do nothing, but the parser hangs
+			// when parsing the preprocessor output if missing.
     	stream.on('end', () => njsq._call(xppq, onEnd, stream));
     } else
         throw "Unknown mode..."
@@ -85,7 +87,7 @@ class Stream extends stream.Readable {
     }
     constructor(stream, options) {
         super(options);
-        overload( modes.DATA_END, stream, 4, 5);
+        overload( modes.READABLE, stream, 4, 5);
         njsq._call(xppq, 7, stream, this);
     }
 }
@@ -103,6 +105,6 @@ var tokens = {
 module.exports.componentInfo = () => njsq._componentInfo(xppq);
 module.exports.wrapperInfo = () => njsq._wrapperInfo();
 module.exports.Stream = Stream;
-module.exports.basic = (stream) => { overload(modes.READABLE, stream, 8, 9) };
+module.exports.basic = (stream) => { overload(modes.DATA_END, stream, 8, 9) };
 module.exports.parse = (stream, callback) => { overload(modes.READABLE, stream, 1, 2); njsq._call(xppq, 3, stream, callback) };
 module.exports.tokens = tokens;

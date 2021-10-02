@@ -33,14 +33,14 @@ mods += fil flf flsq flw flx
 mods += fnm ias idsq iof iop 
 mods += lcl lck lst lstbch lstcrt 
 mods += lstctn mns mtk mtx ntvstr 
-mods += que rgstry sdr stkbse stkbch 
-mods += stkcrt stkctn str strng stsfsm 
-mods += tagsbs tht thtsub tol txf 
-mods += tys uys utf xml xpp 
-mods += xtf llio dlbrry n4all n4jre 
-mods += plgn plgncore 
-mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
-mods += scln4a scljre 
+mods += osd que rgstry sdr stkbse 
+mods += stkbch stkcrt stkctn str strng 
+mods += stsfsm tagsbs tht thtsub tol 
+mods += txf tys uys utf xml 
+mods += xpp xtf llio dlbrry n4all 
+mods += n4jre plgn plgncore 
+mods += scla scli sclm scle scll 
+mods += sclr scln4a scljre 
 
 pmods += pllio 
 
@@ -117,7 +117,8 @@ endif
 #############################
 
 ifeq ("$(os)","$(GNULinux)")
-
+# By default, 'CXX' is set to 'g++'.
+	CXX = clang++
 endif
 
 #############################
@@ -384,25 +385,20 @@ endif
 #############################
 		
 all: $(binary)
-ifdef EPEIOS_SRC
-	javac *.java
-else
-	javac src/*.java -d .
-endif
 	rm -rf *.o
 ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20170929"\"
+copt += -DVERSION=\""20210815"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\"""\"
 
-ifndef EPEIOS_SRC
+ifndef Q37_EPEIOS
 	src += :src:src/epeios
 	out = ./
 else
-	src += :$(EPEIOS_SRC)
+	src += :$(Q37_EPEIOS)/stable
 	out = $(dest)
 endif
 
@@ -422,7 +418,7 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
-ifdef EPEIOS_SRC			
+ifdef Q37_EPEIOS			
 	mkdir -p $(out)
 	cp $(binary) $(out)
 endif

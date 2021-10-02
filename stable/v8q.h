@@ -51,7 +51,7 @@ namespace v8q {
 
 	v8::Isolate *GetGlobalIsolate( void );
 
-	inline v8::Isolate *GetIsolate( v8::Isolate *Isolate = NULL )
+	inline v8::Isolate *GetIsolate_( v8::Isolate *Isolate )
 	{
 		if ( Isolate == NULL )
 			return GetGlobalIsolate();
@@ -59,9 +59,9 @@ namespace v8q {
 			return Isolate;
 	}
 
-	inline v8::Local<v8::Context> GetContext( v8::Isolate *Isolate = NULL )
+	inline v8::Local<v8::Context> GetContext_(v8::Isolate *Isolate)
 	{
-		return GetIsolate( Isolate )->GetCurrentContext();
+		return GetIsolate_( Isolate )->GetCurrentContext();
 	}
 
 	template <typename t> inline v8::Local<t> ToLocal(
@@ -69,7 +69,7 @@ namespace v8q {
 		v8::Isolate *Isolate = NULL )
 	{
 		if ( V.IsEmpty() )
-			return v8::Null( GetIsolate( Isolate ) );
+			return v8::Null( GetIsolate_( Isolate ) );
 		else
 			return V.ToLocalChecked();
 	}
@@ -98,7 +98,7 @@ namespace v8q {
 		const char *String,
 		v8::Isolate *Isolate = NULL )
 	{
-		return ToLocal( v8::String::NewFromUtf8( GetIsolate( Isolate ), String, v8::NewStringType::kNormal ) );
+		return ToLocal( v8::String::NewFromUtf8( GetIsolate_( Isolate ), String, v8::NewStringType::kNormal ) );
 	}
 
 	inline v8::Local<v8::String> ToString(
@@ -121,12 +121,12 @@ namespace v8q {
 		v8::Isolate *Isolate = NULL )
 	{
 		sdr::sRow Row = Strings.First();
-		Isolate = GetIsolate( Isolate );
+		Isolate = GetIsolate_( Isolate );
 
 		v8::Local<v8::Array> Array = v8::Array::New( Isolate, Strings.Amount() );
 
 		while ( Row != qNIL ) {
-			if ( !Array->Set( GetContext( Isolate ), *Row, ToString( Strings( Row ), Isolate ) ).FromJust() )
+			if ( !Array->Set( GetContext_( Isolate ), *Row, ToString( Strings( Row ), Isolate ) ).FromJust() )
 				qRFwk();
 
 			Row = Strings.Next( Row );
@@ -235,7 +235,7 @@ namespace v8q {
 		void *Value,
 		v8::Isolate *Isolate = NULL )
 	{
-		Isolate = GetIsolate( Isolate );
+		Isolate = GetIsolate_( Isolate );
 
 		return ToExternal( v8::External::New( Isolate, Value ), Isolate );
 	}
@@ -271,7 +271,7 @@ namespace v8q {
 		const char *Key,
 		v8::Isolate *Isolate = NULL )
 	{
-		Isolate = GetIsolate( Isolate );
+		Isolate = GetIsolate_( Isolate );
 		return ToFunction( Object->Get( Context, ToString( Key, Isolate ) ), Isolate );
 	}
 
@@ -280,7 +280,7 @@ namespace v8q {
 		const char *Key,
 		v8::Isolate *Isolate = NULL )
 	{
-		return GetFunction( GetContext( Isolate ), Object, Key, Isolate );
+		return GetFunction( GetContext_( Isolate ), Object, Key, Isolate );
 	}
 
 	inline v8::Local<v8::Script> ToLocal(
@@ -297,9 +297,9 @@ namespace v8q {
 		const char *Script,
 		v8::Isolate *Isolate = NULL )
 	{
-		Isolate = GetIsolate( Isolate );
+		Isolate = GetIsolate_( Isolate );
 
-		v8::Local<v8::Context> Context = GetContext( Isolate );
+		v8::Local<v8::Context> Context = GetContext_( Isolate );
 		return ToLocal( ToLocal( v8::Script::Compile( Context, ToString( Script, Isolate ) ), Isolate )->Run( Context ), Isolate );
 	}
 
@@ -327,12 +327,12 @@ namespace v8q {
 			bool (v8::Value::*Function)(void) const,
 			v8::Isolate *Isolate = NULL )
 		{
-			Core_.Reset( GetIsolate( Isolate ), Cast_<item>( Value, UndefinedForbidden, Function ) );
+			Core_.Reset( GetIsolate_( Isolate ), Cast_<item>( Value, UndefinedForbidden, Function ) );
 		}
 		v8::Local<item> Get_( v8::Isolate *Isolate ) const
 		{
 			// Do not exists in 'Node.js' v4.
-			// return Core_.Get( GetIsolate( Isolate ) );
+			// return Core_.Get( GetIsolate_( Isolate ) );
 
 			// This is the definition of v8::Persistent<>::Get()' in 'Node.js' >v4.
 			return v8::Local<item>::New( Isolate, Core_ );
@@ -352,14 +352,14 @@ namespace v8q {
 			if ( Core_.IsEmpty() )
 				qRFwk();
 
-			return Get_( GetIsolate( Isolate ) );
+			return Get_( GetIsolate_( Isolate ) );
 		}
 		bso::sBool IsEmpty( v8::Isolate *Isolate = NULL ) const
 		{
 			if ( Core_.IsEmpty() )
 				return true;
 			else {
-				v8::Local<item> Item = Get_( GetIsolate( Isolate ) );
+				v8::Local<item> Item = Get_( GetIsolate_( Isolate ) );
 
 				if ( Item->IsNull() )
 					return true;
@@ -460,7 +460,7 @@ namespace v8q {
 			
 			v8::Local<v8::Function> Function = GetFunction( Core(), Method, Isolate );
 
-			return ToLocal( Function->Call( GetContext( Isolate ), Core(), Argc, Argv ), Isolate );
+			return ToLocal( Function->Call( GetContext_( Isolate ), Core(), Argc, Argv ), Isolate );
 		}
 	public:
 		using value::reset;
@@ -507,8 +507,8 @@ namespace v8q {
 			const char *Key,
 			v8::Isolate *Isolate = NULL )
 		{
-			Isolate = GetIsolate( Isolate );
-			return ToLocal( Core()->Get( GetContext( Isolate ), v8q::ToString( Key, Isolate ) ), Isolate );
+			Isolate = GetIsolate_( Isolate );
+			return ToLocal( Core()->Get( GetContext_( Isolate ), v8q::ToString( Key, Isolate ) ), Isolate );
 		}
 		bso::sBool Set(
 			const char *Key,
@@ -516,8 +516,8 @@ namespace v8q {
 			v8::Isolate *Isolate = NULL,
 			qRPD )
 		{
-			Isolate = GetIsolate( Isolate );
-			if ( !Expose( Core()->Set( GetContext( Isolate ), v8q::ToString( Key, Isolate ), Value ) ) ) {
+			Isolate = GetIsolate_( Isolate );
+			if ( !Expose( Core()->Set( GetContext_( Isolate ), v8q::ToString( Key, Isolate ), Value ) ) ) {
 				if ( qRPU )
 					qRFwk();
 				else
@@ -549,7 +549,7 @@ namespace v8q {
 		{
 			v8::Local<v8::Value> Argv[1 + sizeof...( Args )];
 
-			Isolate = GetIsolate( Isolate );
+			Isolate = GetIsolate_( Isolate );
 
 			Set_( Isolate, Argv, 0, Arg, Args... );
 
@@ -565,7 +565,7 @@ namespace v8q {
 			const char *Method,
 			v8::Isolate *Isolate = NULL ) const
 		{
-			return Launch_( Method, GetIsolate( Isolate ), 0, NULL );
+			return Launch_( Method, GetIsolate_( Isolate ), 0, NULL );
 		}
 		template <typename ...args> void Emit(
 			const char *Event,
@@ -633,7 +633,7 @@ namespace v8q {
 			v8::FunctionCallback Function,
 			v8::Isolate *Isolate = NULL )
 		{
-			Init( v8::FunctionTemplate::New( GetIsolate( Isolate ), Function )->GetFunction() );
+			Init( v8::FunctionTemplate::New( GetIsolate_( Isolate ), Function )->GetFunction( GetContext_(Isolate)) );
 		}
 		v8::Local<v8::Value> Launch(
 			v8::Local<v8::Value> *Argv,
@@ -648,7 +648,7 @@ namespace v8q {
 		{
 			v8::Local<v8::Value> Argv[1 + sizeof...( Args )];
 
-			Set_( GetIsolate( Isolate ), Argv, 0, Arg, Args... );
+			Set_( GetIsolate_( Isolate ), Argv, 0, Arg, Args... );
 
 			return Launch( Argv, 1 + sizeof...( Args ) );
 		}
@@ -718,7 +718,7 @@ namespace v8q {
 			const char *String,
 			v8::Isolate *Isolate = NULL )
 		{
-			Isolate = GetIsolate( Isolate );
+			Isolate = GetIsolate_( Isolate );
 
 			Init( ToString( String, Isolate ), Isolate );
 		}
@@ -735,13 +735,15 @@ namespace v8q {
 		qRE;
 		}
 		// NOT the number of char, but the size of the string in bytes, WITHOUT NULL terminating char.
-		int Size( void ) const
+		int Size( v8::Isolate *Isolate = NULL ) const
 		{
-			return Core()->Utf8Length();
+			return Core()->Utf8Length(GetIsolate_(Isolate));
 		}
-		int Get( char *Buffer ) const
+		int Get(
+			char *Buffer,
+			v8::Isolate *Isolate = NULL) const
 		{
-			return Core()->WriteUtf8( Buffer );
+			return Core()->WriteUtf8(GetIsolate_(Isolate), Buffer);
 		}
 		// Defined at bottom of this file.
 		void Get( str::dString &String );
@@ -785,7 +787,7 @@ namespace v8q {
 			bool Boolean,
 			v8::Isolate *Isolate = NULL )
 		{
-			Isolate = GetIsolate( Isolate );
+			Isolate = GetIsolate_( Isolate );
 			Init( v8::Boolean::New( Isolate, Boolean ), Isolate );
 		}
 		bso::sBool operator *( void )
@@ -832,7 +834,7 @@ namespace v8q {
 			uint32_t Uint32,
 			v8::Isolate *Isolate = NULL )
 		{
-			Isolate = GetIsolate( Isolate );
+			Isolate = GetIsolate_( Isolate );
 			Init( v8::Uint32::New( Isolate, Uint32 ), Isolate );
 		}
 		bso::sBool operator *( void )
@@ -879,7 +881,7 @@ namespace v8q {
 			double Number,
 			v8::Isolate *Isolate = NULL )
 		{
-			Init( v8::Number::New( GetIsolate( Isolate ), Number ) );
+			Init( v8::Number::New( GetIsolate_( Isolate ), Number ) );
 		}
 		double operator *( void )
 		{
@@ -941,8 +943,8 @@ namespace v8q {
 			const type *External,
 			v8::Isolate *Isolate = NULL )
 		{
-			Isolate = GetIsolate( Isolate );
-			Init( v8::External::New( GetIsolate( Isolate ), (void *)External ), Isolate );
+			Isolate = GetIsolate_( Isolate );
+			Init( v8::External::New( GetIsolate_( Isolate ), (void *)External ), Isolate );
 		}
 		type *Value( void ) const
 		{
@@ -963,7 +965,7 @@ namespace v8q {
 			xObject_<value> &Global,
 			v8::Isolate *Isolate = NULL )
 		{
-			Global.Init( v8q::GetContext( Isolate )->Global() );
+			Global.Init( v8q::GetContext_( Isolate )->Global() );
 
 			return Global;
 		}
@@ -975,7 +977,7 @@ namespace v8q {
 		{
 			sLObject Global;
 
-			Isolate = GetIsolate( Isolate );
+			Isolate = GetIsolate_( Isolate );
 
 			Global.Init();
 
@@ -999,7 +1001,7 @@ namespace v8q {
 		{
 			sLObject Console;
 
-			Isolate = GetIsolate( Isolate );
+			Isolate = GetIsolate_( Isolate );
 
 			Console.Init();
 
@@ -1027,7 +1029,7 @@ namespace v8q {
 		{
 			sLObject Process;
 
-			Isolate = GetIsolate( Isolate );
+			Isolate = GetIsolate_( Isolate );
 
 			Process.Init();
 
@@ -1079,6 +1081,19 @@ qRB
 qRR
 qRT
 qRE
+}
+
+// Functions which should not be used internally.
+namespace v8q {
+	inline v8::Local<v8::Context> GetContext(v8::Isolate *Isolate = NULL)
+	{
+		return GetContext_(Isolate);
+	}
+
+	inline v8::Isolate *GetIsolate(v8::Isolate *Isolate = NULL)
+	{
+		return v8q::GetIsolate_(Isolate);
+	}
 }
 
 

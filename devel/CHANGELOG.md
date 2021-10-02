@@ -10,6 +10,9 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-10-02:
+- V8Q: adaptation to changes in *Node.js* current LTS (v14.19.0),
+
 ## 2021-08-21:
 - XDHCMN: special actions *Report* and *Dismiss*,
 
