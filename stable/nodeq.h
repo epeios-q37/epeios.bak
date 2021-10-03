@@ -35,6 +35,13 @@
 #include <node_buffer.h>
 
 namespace nodeq {
+	inline	void ConstFreeCallback_(
+		char* data,
+		void* hint)
+	{
+		// Does nothing, as called for const buffer on stack.
+	}
+	
 	using namespace v8q;
 
 	template <typename object> class xBuffer_
@@ -65,8 +72,8 @@ namespace nodeq {
 			v8::Isolate *Isolate = NULL )
 		{
 			Isolate = v8q::GetIsolate( Isolate );
-			//			object::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, ConstFreeCallback_, NULL ) ) );
-			object::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, NULL, NULL ) ) );
+			object::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, ConstFreeCallback_, NULL ) ) );
+			// object::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, NULL, NULL ) ) );
 		}
 		void Init(
 			const char *Data,

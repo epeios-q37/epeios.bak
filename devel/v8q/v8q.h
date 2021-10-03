@@ -633,13 +633,21 @@ namespace v8q {
 			v8::FunctionCallback Function,
 			v8::Isolate *Isolate = NULL )
 		{
-			Init( v8::FunctionTemplate::New( GetIsolate_( Isolate ), Function )->GetFunction( GetContext_(Isolate)) );
+			v8::Local<v8::Value> LocalBuffer;
+
+			if ( !v8::FunctionTemplate::New( GetIsolate_( Isolate ), Function )->GetFunction( GetContext_(Isolate)).ToLocal(&LocalBuffer) )
+				qRFwk();
+
+			Init( LocalBuffer );
 		}
-		v8::Local<v8::Value> Launch(
+		void Launch(
 			v8::Local<v8::Value> *Argv,
-			int Argc )
+			int Argc,
+			v8::Local<v8::Value> *Return,
+			v8::Isolate *Isolate = NULL )
 		{
-			return Core()->Call( Core(), Argc, Argv );
+			if ( !Core()->Call( GetContext_(Isolate), Core(), Argc, Argv ).ToLocal( Return) )
+				qRFwk();
 		}
 		template <typename arg, typename ...args> v8::Local<v8::Value> Launch(
 			v8::Isolate *Isolate,

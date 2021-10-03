@@ -265,7 +265,8 @@ namespace {
 				if ( !Value->IsInt32() )
 					qRGnr();
 
-				Base_ = v8::Local<v8::Int32>::Cast( Value )->Int32Value();
+				if ( !v8::Local<v8::Int32>::Cast( Value )->Int32Value(v8q::GetContext()).To(&Base_))
+					qRGnr();
 			}
 			int32_t &Expose( void )
 			{
@@ -452,7 +453,7 @@ namespace {
 				if ( Core_.IsEmpty() )
 					*IsEmpty = true;
 				else {
-					Return = Core_.Launch( Argv, Argc );
+					Core_.Launch(Argv, Argc, &Return);
 
 					switch ( ReturnType ) {
 					case n4njs::tVoid:
@@ -542,6 +543,7 @@ namespace {
 		rCallbacks *Callbacks = NULL;
 	qRH;
 		uint32_t Length = 0;
+		v8::Local<v8::Value> LocalBuffer;
 	qRB;
 		Callbacks = new rCallbacks;
 
@@ -558,7 +560,10 @@ namespace {
 			Callbacks->Expose().FillWith( NULL );
 
 			while ( Length-- ) {
-				Callbacks->Expose().Store( GetCallback_( Array->Get( Length ), true ), Length );
+				if ( !Array->Get(v8q::GetContext(), Length).ToLocal(&LocalBuffer) )
+					qRGnr();
+
+				Callbacks->Expose().Store( GetCallback_( LocalBuffer, true ), Length );
 			}
 		}
 	qRR;
@@ -685,6 +690,7 @@ void wrapper::rLauncher::Call( const v8::FunctionCallbackInfo<v8::Value>& Info )
 {
 qRH
 	sCaller_ Caller;
+	bso::sU32 Row = 0;
 qRB
 	if ( Info.Length() < 2 )
 		qRGnr();
@@ -696,7 +702,10 @@ qRB
 
 	Caller.Init( Info );
 
-	rLauncher_::Call( NULL, Index->Uint32Value(), Caller );
+	if ( !Index->Uint32Value(v8q::GetContext()).To(&Row))
+		qRGnr();
+
+	rLauncher_::Call( NULL, Row, Caller );
 
 //	n4allw::GetLauncher().Launch( n4allw::GetFunction( Index->Uint32Value() ), Caller );
 
