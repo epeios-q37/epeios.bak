@@ -205,10 +205,13 @@ namespace {
 			v8::Local<v8::Value> V8Return;
 			v8::Local<v8::String> String;
 			bso::integer_buffer__ IBuffer;
+			v8::Isolate *Isolate = NULL;
 		qRB;
 //			cio::COut << "Script:" << Script << txf::nl << txf::commit;
 
-			V8Return = v8q::Execute( Script.Convert( Buffer ), v8q::GetIsolate() );
+			Isolate = v8q::GetIsolate();
+
+			V8Return = v8q::Execute(Script.Convert( Buffer ), Isolate);
 
 			if ( ReturnedValue != NULL ) {
 				if ( Blocker != NULL) {
@@ -217,15 +220,22 @@ namespace {
 				}
 				if ( !V8Return->IsNull() && !V8Return->IsUndefined() ) {
 					if ( V8Return->IsString() ) {
-						if ( !( String = V8Return->ToString() ).IsEmpty() ) {
-							Buffer.Malloc( String->Utf8Length() + 1 );	// '+ 1' for the NULL termination character.
-							String->WriteUtf8( Buffer );
+						if ( !V8Return->ToString(v8q::GetContext(Isolate)).ToLocal(&String) )
+							qRGnr();
+
+						if ( !String.IsEmpty() ) {
+							Buffer.Malloc(String->Utf8Length(Isolate) + 1);	// '+ 1' for the NULL termination character.
+							String->WriteUtf8(Isolate, Buffer);
 							ReturnedValue->Append(Buffer);
 						}
 					} else if ( V8Return->IsInt32() ) {
-						ReturnedValue->Append( bso::Convert( ( bso::int__ )V8Return->IntegerValue(), IBuffer ) );
+						long int Temp = 0;
+
+						Temp = V8Return->IntegerValue(v8q::GetContext(Isolate)).FromJust();
+
+						ReturnedValue->Append( bso::Convert( (bso::int__ )Temp, IBuffer) );
 					} else if ( V8Return ->IsBoolean() ) {
-						if ( V8Return->ToBoolean()->IsTrue() )
+						if ( V8Return->ToBoolean(Isolate)->IsTrue() )
 							ReturnedValue->Append( "true" );
 						else
 							ReturnedValue->Append( "false" );
@@ -317,14 +327,14 @@ namespace {
 
 //		Session_.Init( Agent_.FetchCallback( Agent_.BaseLanguage( LanguageBuffer_ ), Token, Single_ ) );
 		Session_.Init( *Agent_.FetchCallback() );
-		Session_.Initialize( Single_, LanguageBuffer_, Token, str::Empty ) &&  Broadcaster_.Init(Single_, Token);
+		Session_.Initialize( Single_, LanguageBuffer_, Token, str::Empty ) && (Broadcaster_.Init(Single_, Token) != qNIL);
 		sclm::SetBaseLanguage( str::wString( LanguageBuffer_ ) );
 	qRR;
 	qRT;
 	qRE;
 	}
 
-	void ErrFinal_( v8::Isolate *Isolate = NULL )
+	void ErrFinal_(v8::Isolate *Isolate = NULL)
 	{
 	qRH
 		str::wString Message;

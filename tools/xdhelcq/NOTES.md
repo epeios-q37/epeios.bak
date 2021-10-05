@@ -1,20 +1,21 @@
-# Notes about *XDHELCq*
+# Notes concernant *XDHELCq*
 
-## Running
+## Lancement
 
-### From command-line
+### Directement à partir de la ligne de commande
 
-*Electron* path is `node_modules/.bin/electron`.
+Le chemin vers *Electron* est `node_modules/.bin/electron`.
 
-The module has to be launched as value of the `--module|-m` flag.
+Le module doit être lancé comme valeur de l'option `--module|-m`.
 
-The module must be given <u>with</u> path, or the locale/configuration files will not be found.
+Le module doit être donné <u>avec</u> son chemin, ou sinon les fichiers de locale et de configuration ne seront pas trouvé.
 
-The second argument (third with the `-m|--module` option) must be `index.js`. If not, it's `XDHElcQ.js` which will be used, as it is the one defined as the`main` entry in the `package.json` file, for `require('xdehelcq')` to be working properly.
+Le second (troisième avec l'option `-m|--module`) arguments doit être `index.js`. Dans le cas contraire, c'est `XDHElcQ.js` qui sera utilisé, étant le fichier déclaré dans la section `main` du fichier `package.json` afin que le `require('xdehelcq')` fonctionne correctement.
 
-As last argument, the subdirectory which contains all the file red directly by *Electron*.
+Comme dernier argument, il faut fournir le chemin du répertoire contenant tout les fichiers lus directement par *Electron*.
 
-Example to launch the *Atlas* frontend for *TodoMVC* : `node_modules/.bin/electron index.js -m=h:/bin/xdhqxdh TodoMVC`.
+Exemple du lancement du *frontecnt*  *Atlas* pour *TodoMVC* : `node_modules/.bin/electron index.js -m=h:/bin/xdhqxdh TodoMVC`.
+
 
 ### En utilisant le *debugger* *Code::Blocks*
 
