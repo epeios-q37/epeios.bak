@@ -307,31 +307,35 @@ namespace {
 
 	xdhbrd::rXCallback Broadcaster_;
 
-	void InitializeSession_( const str::dString &Token )	// IF empty, PROD, otherwise DEMO.
+	bso::sBool InitializeSession_( const str::dString &Token )	// IF empty, PROD, otherwise DEMO.
 	{
+	  bso::sBool Return = false;
 	qRH;
 		str::wString ModuleFilename, Identification;
 	qRB;
-		ModuleFilename.Init();
-		sclm::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
-
-		Single_.Init();
-		Global_.Init();
-
 		Identification.Init( NAME_LC " V" VERSION );
 		Identification.Append( " - Node v" NODE_VERSION_STRING "; ABI v" NODE_STRINGIFY( NODE_MODULE_VERSION ) " - " );
 		Identification.Append( "Build " __DATE__ " " __TIME__ " - " );
 		Identification.Append( cpe::GetDescription() );
-		// Library compiled with 'node-gyp', which doesn't put the 'lib' prefix on 'POSIX' systems, hence 'dlbrry::nExtOnly'.
-		Agent_.Init( Global_, xdhcdc::mMonoUser, ModuleFilename, dlbrry::nExtOnly,  Identification.Convert( IdentificationBuffer_ ) );
 
-//		Session_.Init( Agent_.FetchCallback( Agent_.BaseLanguage( LanguageBuffer_ ), Token, Single_ ) );
-		Session_.Init( *Agent_.FetchCallback() );
-		Session_.Initialize( Single_, LanguageBuffer_, Token, str::Empty ) && (Broadcaster_.Init(Single_, Token) != qNIL);
-		sclm::SetBaseLanguage( str::wString( LanguageBuffer_ ) );
+		ModuleFilename.Init();
+		if ( sclm::OGetValue( registry::parameter::ModuleFilename, ModuleFilename ) ) {
+			Single_.Init();
+			Global_.Init();
+
+			// Library compiled with 'node-gyp', which doesn't put the 'lib' prefix on 'POSIX' systems, hence 'dlbrry::nExtOnly'.
+			Agent_.Init( Global_, xdhcdc::mMonoUser, ModuleFilename, dlbrry::nExtOnly,  Identification.Convert( IdentificationBuffer_ ) );
+
+	//		Session_.Init( Agent_.FetchCallback( Agent_.BaseLanguage( LanguageBuffer_ ), Token, Single_ ) );
+			Session_.Init( *Agent_.FetchCallback() );
+			Session_.Initialize( Single_, LanguageBuffer_, Token, str::Empty ) && (Broadcaster_.Init(Single_, Token) != qNIL);
+			sclm::SetBaseLanguage( str::wString( LanguageBuffer_ ) );
+			Return = true;
+		}
 	qRR;
 	qRT;
 	qRE;
+    return Return;
 	}
 
 	void ErrFinal_(v8::Isolate *Isolate = NULL)
@@ -388,7 +392,10 @@ namespace {
 		Token.Init();
 		sclm::OGetValue( registry::parameter::Token, Token );
 
-		InitializeSession_( Token );
+		if ( InitializeSession_( Token ) )
+      Args.GetReturnValue().Set(true);
+    else
+      Args.GetReturnValue().Set(false);
 	qRFR;
 	qRFT;
 	qRFE( ErrFinal_() );
@@ -427,7 +434,11 @@ namespace {
 				sclmisc::GetBaseTranslation( "NoRegisteredComponent", Info );
 		*/
 
+		CPq;
+
 		Agent_.Info( Info );
+
+		CPq;
 
 		String.Init( Info );
 
@@ -606,10 +617,10 @@ void Start(
 	v8::Local<v8::Value> Module,
 	void* priv )
 {
-qRFH
+qRFH;
 	str::wString Location;
 	str::wString Filename;
-qRFB
+qRFB;
 	NODE_SET_METHOD( Exports, "wrapperInfo", GetWrapperInfo_ );
 	NODE_SET_METHOD( Exports, "moduleInfo", GetModuleInfo_ );
 	NODE_SET_METHOD( Exports, "initialize", Initialize_ );
@@ -630,10 +641,10 @@ qRFB
 
 	sclm::Initialize( Rack_, Location, xdhelcq::Info );
 
-	node::AtExit( OnExit_, NULL );
-qRFR
-qRFT
-qRFE( ErrFinal_() )
+//	node::AtExit(NULL, OnExit_, NULL);
+qRFR;
+qRFT;
+qRFE( ErrFinal_() );
 }
 
 NODE_MODULE( xdhelcq, Start );

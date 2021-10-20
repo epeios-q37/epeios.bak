@@ -33,16 +33,16 @@ mods += fil flf flsq flw flx
 mods += fnm ias idsq iof iop 
 mods += lcl lck lst lstbch lstcrt 
 mods += lstctn mns mtk mtx ntvstr 
-mods += que rgstry sdr stkbse stkbch 
-mods += stkcrt stkctn str strng stsfsm 
-mods += tagsbs tht thtsub tol txf 
-mods += tys uys utf xml xpp 
-mods += xtf llio dlbrry n4all n4jre 
-mods += plgn plgncore sck 
+mods += osd que rgstry sdr stkbse 
+mods += stkbch stkcrt stkctn str strng 
+mods += stsfsm tagsbs tht thtsub tol 
+mods += txf tys uys utf xml 
+mods += xpp xtf llio dlbrry n4all 
+mods += n4jre plgn plgncore sck 
 mods += csdbns csdcmn csdmxb csdmxs csdmns 
 mods += csdscb 
-mods += sclargmnt scli sclmisc sclerror scllocale 
-mods += sclrgstry scln4a scljre 
+mods += scla scli sclm scle scll 
+mods += sclr scln4a scljre 
 mods += prtcl proxy 
 mods += registry xdhp 
 
@@ -82,7 +82,7 @@ MacOS=Darwin
 Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
-ifdef EPEIOS_SRC
+ifdef Q37_EPEIOS
  src += :..
  src += :../..
 endif
@@ -125,7 +125,8 @@ endif
 #############################
 
 ifeq ("$(os)","$(GNULinux)")
-
+# By default, 'CXX' is set to 'g++'.
+	CXX = clang++
 endif
 
 #############################
@@ -397,15 +398,15 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20190218"\"
+copt += -DVERSION=\""20210815"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\"""\"
 
-ifndef EPEIOS_SRC
+ifndef Q37_EPEIOS
 	src += :src:src/epeios
 	out = ./
 else
-	src += :$(EPEIOS_SRC)
+	src += :$(Q37_EPEIOS)/stable
 	out = $(dest)
 endif
 
@@ -425,7 +426,7 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
-ifdef EPEIOS_SRC			
+ifdef Q37_EPEIOS			
 	mkdir -p $(out)
 	cp $(binary) $(out)
 endif

@@ -40,7 +40,8 @@ using namespace faaspool;
 
 namespace {
 	qCDEF( char *, ProtocolId_, "9efcf0d1-92a4-4e88-86bf-38ce18ca2894" );
-	qCDEF(csdcmn::sVersion, LastVersion_, 0);
+	qCDEF( csdcmn::sVersion, LastVersion_, 1 );
+	qCDEF( char *, QuitSpecialId_, "Quit" );
 
 	namespace registry_ {
 		namespace parameter {
@@ -68,7 +69,6 @@ namespace {
 
 	// Handling of the connection timeout.
 	namespace connection_timeout_ {
-
 		qROW( Row );	// Connection Timeout row
 
 		namespace {
@@ -209,6 +209,7 @@ namespace faaspool {
 		mtx::rMutex Access;
 		tht::rBlocker Switch;
 		bso::sBool GiveUp;
+		csdcmn::sVersion ProtocolVersion;
 		str::wString
 			IP,
 			Token,
@@ -237,6 +238,7 @@ namespace faaspool {
 			Shareds.reset( P );
 			Access = mtx::Undefined;
 			Switch.reset( P );
+			ProtocolVersion = csdcmn::UnknownVersion;
 			tol::reset(P, IP, Token, Head);
 			GiveUp = false;	// If at 'true', the client is deemed to be disconnected.
 		}
@@ -245,6 +247,7 @@ namespace faaspool {
 			sBRow_ Row,
 			sRow TRow,
 			fdr::rRWDriver &Driver,
+			csdcmn::sVersion ProtocolVersion,
 			const str::dString &IP,
 			const str::dString &Token,
 			const str::dString &Head)
@@ -260,6 +263,7 @@ namespace faaspool {
 			Shareds.Init();
 			Access = mtx::Create();
 			Switch.Init();
+			this->ProtocolVersion = ProtocolVersion;
 			this->IP.Init( IP );
 			this->Token.Init(Token);
 			this->Head.Init(Head);
@@ -495,6 +499,7 @@ namespace faaspool {
 
 	rBackend_ *Create_(
 		fdr::rRWDriver &Driver,
+		csdcmn::sVersion ProtocolVersion,
 		const str::dString &IP,
 		const str::dString &Token,
 		const str::dString &Head )
@@ -521,7 +526,7 @@ namespace faaspool {
 			if ( (Backend = new rBackend_) == NULL )
 				qRAlc();
 
-			Backend->Init(Row, common::GetCallback().Create(Token), Driver, IP, Token, Head);
+			Backend->Init(Row, common::GetCallback().Create(Token), Driver, ProtocolVersion, IP, Token, Head);
 
 			Backends_.Store( Backend, Row );
 		}
@@ -619,34 +624,37 @@ namespace {
 	qRE;
 	}
 
-	void Handshake_( fdr::rRWDriver &Driver )
+	csdcmn::sVersion Handshake_( fdr::rRWDriver &Driver )
 	{
+	  csdcmn::sVersion Version = csdcmn::UnknownVersion;
 	qRH;
 		flw::rDressedRWFlow<> Flow;
 	qRB;
 		Flow.Init( Driver );
 
-		switch ( csdcmn::GetProtocolVersion( ProtocolId_, LastVersion_, Flow ) ) {
-		case LastVersion_:
-			Put_( "", Flow );
-			Notify_( NULL, Flow );
-			Flow.Commit();
-			break;
+		switch ( Version = csdcmn::GetProtocolVersion( ProtocolId_, LastVersion_, Flow ) ) {
 		case csdcmn::UnknownVersion:
 			Put_( "\nUnknown FaaS protocol version!\n", Flow );
 			Flow.Commit();
 			qRGnr();
+			break;
 		case csdcmn::BadProtocol:
 			Put_( "\nUnknown FaaS protocol!\n", Flow );
 			Flow.Commit();
 			qRGnr();
+			break;
 		default:
-			qRUnx();
+		  if ( Version > LastVersion_ )
+        qRUnx();
+			Put_( "", Flow );
+			Notify_( NULL, Flow );
+			Flow.Commit();
 			break;
 		}
 	qRR;
 	qRT;
 	qRE;
+    return Version;
 	}
 
 	const str::dString &BuildURL_(
@@ -700,6 +708,7 @@ namespace {
 
 	rBackend_ *CreateBackend_(
 		fdr::rRWDriver &Driver,
+		csdcmn::sVersion ProtocolVersion,
 		const str::dString &IP )
 	{
 		rBackend_ *Backend = NULL;
@@ -720,7 +729,7 @@ namespace {
 			Get_(Flow, Address);    // Address to which the toolkit has connected.
 			Get_(Flow, Misc);
 
-			if ( (Backend = Create_( Driver, IP, Token, Head )) == NULL ) {
+			if ( ( Backend = Create_( Driver, ProtocolVersion, IP, Token, Head ) ) == NULL ) {
 				ErrorMessage.Init();
 				sclm::GetBaseTranslation( "TokenAlreadyInUse", ErrorMessage, Token );
 				Token.Init();	// To report backend that there is an error.
@@ -884,6 +893,7 @@ namespace {
 	{
 	qRH;
 		sck::sSocket Socket = sck::Undefined;
+		csdcmn::sVersion ProtocolVersion = csdcmn::UnknownVersion;
 		str::wString IP;
 		sck::rRWDriver Driver;
 		rBackend_ *Backend = NULL;
@@ -900,9 +910,9 @@ namespace {
 
 		Driver.Init( Socket, false, fdr::ts_Default );
 
-		Handshake_( Driver );
+		ProtocolVersion = Handshake_( Driver );
 
-		if ( ( Backend = CreateBackend_( Driver, IP ) ) != NULL ) {
+		if ( ( Backend = CreateBackend_(Driver, ProtocolVersion, IP) ) != NULL ) {
 			HandleSwitching_(IP, Backend->Token, Driver, Backend->TRow, Backend->Shareds, Backend->Switch );	// Does not return until disconnection or error.
 		}
 	qRR;
@@ -1022,7 +1032,7 @@ qRB;
 			PutId( upstream::CreationId, Flow );	// To signal to the back-end a new connection.
 			PutId( Shared.Id, Flow );	// The id of the new front-end.
 			Flow.Commit();
-		}  else
+		} else
 			Backend = NULL;
 	}
 qRR;
@@ -1038,8 +1048,14 @@ qRH
 qRB
 	Flow.Init(D_());
 
-	PutId(upstream::ClosingId, Flow);
-	PutId(Shared_.Id, Flow);
+ 	if ( B_().ProtocolVersion < 1 ) {
+    PutId(upstream::DeprecatedClosingId, Flow);
+    PutId(Shared_.Id, Flow);
+	} else {
+    PutId(Shared_.Id, Flow);
+    prtcl::Put(QuitSpecialId_, Flow);  // Empty id.
+    prtcl::Put("", Flow);  // Empty (special) action.
+	}
 
 	Flow.reset();	// Commits and frees the underlying driver, or the below 'Release' will block.
 qRR

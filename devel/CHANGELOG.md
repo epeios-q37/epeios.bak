@@ -10,6 +10,9 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-10-20:
+- modification of the *Faas* protocol handling,
+
 ## 2021-10-02:
 - V8Q: adaptation to changes in *Node.js* current LTS (v14.19.0),
 

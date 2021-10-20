@@ -105,12 +105,14 @@ def worker(userCallback,dom,callbacks):
 		userObject = userCallback(*args)
 	
 	while True:
+		time.sleep(1)
 		[action,id] = dom.getAction()
 
-		if dom.isQuitting():
-			break
-
 		if action == "":
+			if id == "Quit":
+				print( "Quitting !!!")
+				break
+
 			if _is_jupyter():
 				dom.disable_element("XDHStyle")
 			else:

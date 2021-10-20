@@ -69,20 +69,31 @@ def set_supplier(supplier = None):
 	_Supplier.current = supplier
 
 _FAAS_PROTOCOL_LABEL = "9efcf0d1-92a4-4e88-86bf-38ce18ca2894"
-_FAAS_PROTOCOL_VERSION = "0"
+_FAAS_PROTOCOL_VERSION = "1"
 _MAIN_PROTOCOL_LABEL = "bf077e9f-baca-48a1-bd3f-bf5181a78666"
 _MAIN_PROTOCOL_VERSION = "1"
 
 _writeLock = threading.Lock()
-_globalCondition = threading.Condition()
+_readLock = threading.Event()
+
+
+def waitForInstance():
+	_readLock.wait()
+	_readLock.clear()
+
+
+def instanceDataRead():
+	_readLock.set()
+
 
 _url = ""
 
 class Instance:
 	def __init__(self):
-		self.condVar = threading.Condition()
+		# https://github.com/epeios-q37/atlas-python/pull/7 (Condition -> Event)
+		self._readLock = threading.Event()
 		self.handshakeDone = False
-		self.quit = False;
+		self.quit = False
 	def __del__(self):
 		_report(-1, "Quitting " + str(self.id) + "!")
 	def set(self,thread,id):
@@ -96,12 +107,11 @@ class Instance:
 		return False
 	def getId(self):
 		return self.id
-	def wait(self):
-		with self.condVar:
-			self.condVar.wait()
-	def signal(self):
-		with self.condVar:
-			self.condVar.notify()
+	def waitForData(self):
+		self._readLock.wait()
+		self._readLock.clear()
+	def dataAvailable(self):
+		self._readLock.set()
 
 def isTokenEmpty():
 	return not _token or _token[0] == "&"
@@ -252,14 +262,15 @@ def _serve(callback,userCallback,callbacks ):
 				writeString(_MAIN_PROTOCOL_LABEL)
 				writeString(_MAIN_PROTOCOL_VERSION)
 		elif id == -3:	# Value instructing that a session is closed.
+			# DEPRECATED !!!
+			sys.exit("Calling deprecated instance quitting routine !!!")
 			id = readSInt();
 			if not id in _instances:
 				sys.exit("Instance of id '" + str(id) + "' not available for destruction!")
 			instance = _instances.pop(id)
 			instance.quit = True
-			instance.signal();
-			with _globalCondition:
-				_globalCondition.wait()
+			instance.dataAvailable()
+			waitForInstance()
 			instance=None	# Destroys the object.
 			# del _instances[id]	# Seemingly destroy the object and remove the entry too.
 		elif not id in _instances:
@@ -274,10 +285,13 @@ def _serve(callback,userCallback,callbacks ):
 
 			getString()	# Language. Not handled yet.
 		else:
-			_instances[id].signal()
+			_instances[id].dataAvailable()
+			waitForInstance()
 
-			with _globalCondition:
-				_globalCondition.wait()
+			if _instances[id].quit:
+				instance = _instances.pop(id)
+				instance = None	# Destroys the object.
+
 
 def launch(callback, userCallback, callbacks, headContent):
 	global _headContent, _instances
@@ -313,13 +327,9 @@ class DOM_FaaS:
 	def __init__(self, instance):
 		self.instance = instance
 
-	def wait(self):
-		self.instance.wait()
+	def waitForData(self):
+		self.instance.waitForData()
 		
-	def signal(self):
-		with _globalCondition:
-			_globalCondition.notify()
-
 	def _standBy(self):
 		with _writeLock:
 			writeSInt(self.instance.getId())
@@ -331,22 +341,17 @@ class DOM_FaaS:
 		else:
 			self._standBy()
 
-		self.wait()
+		self.waitForData()
 
-		[id,action]=["",""] if self.instance.quit else [getString(),getString()]
+		[id,action] = [getString(),getString()]
 
-		# The below 'isQuitting()' method MUST be called, or the library will hang. 
+		if action == "":
+			if id == "Quit":
+				self.instance.quit = True
+
+		instanceDataRead()
 
 		return [action,id]
-
-	def isQuitting(self):
-		answer = self.instance.quit
-
-		# Below line were in 'getAction()', but, in case of quitting,
-		# 'self.instance' could already be destroyed here.
-		self.signal()
-
-		return answer;
 
 	def call(self, command, type, *args):
 		with _writeLock:
@@ -366,14 +371,14 @@ class DOM_FaaS:
 			writeUInt(XDHqSHRD.RT_VOID)	# To report end of argument list.
 
 		if type == XDHqSHRD.RT_STRING:
-			self.wait()
+			self.waitForData()
 			string = getString()
-			self.signal()
+			instanceDataRead()
 			return string
 		elif type == XDHqSHRD.RT_STRINGS:
-			self.wait()
+			self.ForData()
 			strings = getStrings()
-			self.signal()
+			instanceDataRead()
 			return strings
 		elif type != XDHqSHRD.RT_VOID:
 			sys.exit("Unknown return type !!!")

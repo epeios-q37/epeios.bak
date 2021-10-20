@@ -51,20 +51,29 @@ function initialize(arguments) {
   xdhelcq.initialize(mergedArguments);
 }
 
-const xdhelcq = require(getXdhelcqPath());
-initialize(process.argv);
-
-// console.log( args );
-
 function help() {
-  process.stdout.write(". -m=h:/bin/xdhqxdh <dir>");
+  process.stdout.write("index.js -m=<path_to>/xdh… <app_dir>\n");
   process.exit(-1);
 }
 
+const xdhelcq = require(getXdhelcqPath());
+console.log(xdhelcq.wrapperInfo() );
+
+
+if ( !initialize(process.argv) )
+  help();
+// console.log( xdhelcq.moduleInfo());
+// console.log( xdhelcq.getHead());
+
+console.log( args );
+
+
+/*
 if (args.length < 4)
   help();
 else if (args[args.length - 1][0] == '-')
   help();
+*/
 
 const cdnPath = path.posix.join(args[args.length - 1], '/');
 
@@ -97,8 +106,6 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow)
-// console.log( xdhelcq.moduleInfo());
-// console.log( xdhelcq.getHead());
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

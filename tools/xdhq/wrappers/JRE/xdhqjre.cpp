@@ -51,7 +51,7 @@ namespace {
 		Caller.Get( Input );
 
 		Text.Init();
-		sclmisc::GetBaseTranslation( "Argument", Text, Input );
+		sclm::GetBaseTranslation( "Argument", Text, Input );
 
 		Return = scljre::String( Env, Text );
 	qRR

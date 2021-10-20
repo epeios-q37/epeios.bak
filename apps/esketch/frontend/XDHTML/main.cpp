@@ -75,17 +75,17 @@ namespace {
 		core::rSession &Session )
 	{
 	qRH;
-		str::wString Content;
+		str::wString Value;
 	qRB;
-		Content.Init();
-		Session.GetContent( "Pattern", Content );
+		Value.Init();
+		Session.GetValue( "Pattern", Value );
 
-		if ( Content.IsBlank() )
+		if ( Value.IsBlank() )
             Session.ConfirmT("EmptyPattern");
         else {
-            Session.User.ToUpper( Content );
-            Session.SetContent( "Pattern", Content );
-            Common_.Init(Content);
+            Session.User.ToUpper( Value );
+            Session.SetValue( "Pattern", Value );
+            Common_.Init(Value);
             sclx::BroadcastAction("BroadcastTest", "toto");
         }
 	qRR;
@@ -105,7 +105,7 @@ A( BroadcastTest )
 
     Output.Init();
 
-    Session.SetContent("Output", Common_);
+    Session.SetValue("Output", Common_);
 //	Session.AlertB(str::wString(Id));
 }
 

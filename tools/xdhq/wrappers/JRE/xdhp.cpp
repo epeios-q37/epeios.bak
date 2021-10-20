@@ -23,7 +23,7 @@
 
 #include "proxy.h"
 
-#include "sclargmnt.h"
+#include "scla.h"
 
 #include "csdmns.h"
 #include "csdcmn.h"

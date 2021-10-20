@@ -53,7 +53,7 @@
      },
      {
       "sources": ["<(epeios)/pllio.cpp",       ],
-      "cflags_cc": ["-std=gnu++11", "-fexceptions"],
+      "cflags_cc": ["-std=gnu++14", "-fexceptions"],
      }
     ],
     [

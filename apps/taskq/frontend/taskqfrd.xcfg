@@ -16,8 +16,8 @@
 					</xpp:ifeq>
 					<xpp:ifeq select="packing" value="no">
 						<!--Backend Type="Predefined">LocalHost</Backend-->
-						<Backend Type="Predefined">Embedded</Backend>
-						<!--Backend Type="None"/-->
+						<!--Backend Type="Predefined">Embedded</Backend-->
+						<Backend Type="None"/>
 					</xpp:ifeq>
 				</xpp:bloc>
 			</xpp:ifeq>
@@ -70,7 +70,7 @@
 						<xpp:bloc>tsk/Frontend/</xpp:bloc>
 					</xpp:bloc>
 				</xpp:define>
-				<Project id="No" Alias="NoBackendProject" Type="Embedded">
+				<Project id="No" Alias="NoBackendProject" Type="None">
 					<xpp:expand select="ProjectsRootDir"/>
 					<xpp:bloc>None.xprj</xpp:bloc>
 				</Project>
