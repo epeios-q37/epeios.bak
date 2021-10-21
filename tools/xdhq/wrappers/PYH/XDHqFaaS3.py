@@ -22,12 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import inspect, sys
+import inspect, sys, _thread, time
 from socket import timeout 
 
 def l():
 	frameInfo = inspect.getouterframes(inspect.currentframe())[1]
-	print(frameInfo.filename + ":" + str(frameInfo.lineno))
+	print( "(" + time.strftime("%X") + ") " + frameInfo.filename + ":" + str(frameInfo.lineno))
 
 def _recv(socket,size,bye):
 	buffer = bytes()
@@ -91,4 +91,5 @@ def getString(socket,bye):
 	else:
 		return ""
 
+exitThread = _thread.exit
 

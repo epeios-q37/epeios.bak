@@ -26,7 +26,7 @@ import XDHq, XDHqSHRD
 from threading import Thread, Lock
 import inspect, time, socket, signal, sys, os
 
-from XDHq import set_supplier, get_app_url
+from XDHq import set_supplier, get_app_url, l
 
 if sys.version_info[0] == 2:
 	import __builtin__ as builtins
@@ -108,22 +108,25 @@ def worker(userCallback,dom,callbacks):
 		[action,id] = dom.getAction()
 
 		if action == "":
-			if id == "Quit":
-				print( "Quitting !!!")
-				break
-
 			if _is_jupyter():
 				dom.disable_element("XDHStyle")
 			else:
 				dom.disable_element("XDHStyleJupyter")
 
-		if action == "" or not "_PreProcess" in callbacks or _call(callbacks["_PreProcess"],userObject, dom, id, action):
-			if ( action in callbacks ):
-				if _call(callbacks[action], userObject, dom, id, action ) and "_PostProcess" in callbacks:
-					_call(callbacks["_PostProcess"],userObject, dom, id, action)
-			else:
-				dom.alert("\tDEV ERROR: missing callback for '" + action + "' action!") 
-
+		try:
+			if action == "" or not "_PreProcess" in callbacks or _call(callbacks["_PreProcess"],userObject, dom, id, action):
+				if ( action in callbacks ):
+					if _call(callbacks[action], userObject, dom, id, action ) and "_PostProcess" in callbacks:
+						_call(callbacks["_PostProcess"],userObject, dom, id, action)
+				else:
+					dom.alert("\tDEV ERROR: missing callback for '" + action + "' action!") 
+		except NameError:
+			print("Exiting thread!")
+			l()
+			break
+			l()
+		
+		l()
 	# print("Quitting thread !")
 
 def _callback(userCallback,callbacks,instance):

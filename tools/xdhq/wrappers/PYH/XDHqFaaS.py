@@ -34,6 +34,7 @@ if sys.version_info[0] == 2:
 	_writeString = XDHqFaaS2.writeString
 	_readUInt = XDHqFaaS2.readUInt
 	_getString = XDHqFaaS2.getString
+	_exitThread = XDHqFaaS2.exitThread
 else:
 	import XDHqFaaS3
 	l = XDHqFaaS3.l
@@ -41,6 +42,7 @@ else:
 	_writeString = XDHqFaaS3.writeString
 	_readUInt = XDHqFaaS3.readUInt
 	_getString = XDHqFaaS3.getString
+	_exitThread = XDHqFaaS3.exitThread
 
 _bye = False	# For use in Jupiter notbooks, to quit an application.
 
@@ -95,7 +97,7 @@ class Instance:
 		self.handshakeDone = False
 		self.quit = False
 	def __del__(self):
-		_report("Quitting " + str(self.id) + "!")
+		_report("Inst. " + str(self.id) + " closed!")
 	def set(self,thread,id):
 		self.thread = thread
 		self.id = id
@@ -111,10 +113,9 @@ class Instance:
 		self._readLock.wait()
 		self._readLock.clear()
 		if self.quit:
-			l()
 			instanceDataRead()
 			l()
-			sys.exit("Quitting thread!")
+			_exitThread()
 			l()
 	def dataAvailable(self):
 		self._readLock.set()
@@ -274,14 +275,10 @@ def _serve(callback,userCallback,callbacks ):
 			else:
 				instance = _instances.pop(id)
 				instance.quit = True
-				l()
 				instance.dataAvailable()
-				l()
 				waitForInstance()
-				l()
 				instance = None # Without this, instance will only be destroyed
 												# when 'instance" is set to a new instance.
-				l()
 		elif not id in _instances:
 			message = "Unknown instance of id '" + str(id) + "'!"
 			print(message)
@@ -347,9 +344,7 @@ class DOM_FaaS:
 		else:
 			self._standBy()
 
-		l()
 		self.waitForData()
-		l()
 
 		[id,action] = [getString(),getString()]
 
