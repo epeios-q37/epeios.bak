@@ -105,7 +105,6 @@ def worker(userCallback,dom,callbacks):
 		userObject = userCallback(*args)
 	
 	while True:
-		time.sleep(1)
 		[action,id] = dom.getAction()
 
 		if action == "":

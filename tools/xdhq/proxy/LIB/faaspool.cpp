@@ -40,8 +40,7 @@ using namespace faaspool;
 
 namespace {
 	qCDEF( char *, ProtocolId_, "9efcf0d1-92a4-4e88-86bf-38ce18ca2894" );
-	qCDEF( csdcmn::sVersion, LastVersion_, 1 );
-	qCDEF( char *, QuitSpecialId_, "Quit" );
+	qCDEF( csdcmn::sVersion, LastVersion_, 0 );
 
 	namespace registry_ {
 		namespace parameter {
@@ -845,7 +844,7 @@ namespace {
 				qRGnr();
 
 			switch( Id ) {
-			case UndefinedId:	// Should never happen.
+			case UndefinedId:
 			  Input.Init();
 			  prtcl::Get(Flow, Input);
 
@@ -1048,14 +1047,8 @@ qRH
 qRB
 	Flow.Init(D_());
 
- 	if ( B_().ProtocolVersion < 1 ) {
-    PutId(upstream::DeprecatedClosingId, Flow);
-    PutId(Shared_.Id, Flow);
-	} else {
-    PutId(Shared_.Id, Flow);
-    prtcl::Put(QuitSpecialId_, Flow);  // Empty id.
-    prtcl::Put("", Flow);  // Empty (special) action.
-	}
+  PutId(upstream::ClosingId, Flow);
+  PutId(Shared_.Id, Flow);
 
 	Flow.reset();	// Commits and frees the underlying driver, or the below 'Release' will block.
 qRR

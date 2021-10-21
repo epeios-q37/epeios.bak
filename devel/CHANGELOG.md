@@ -10,8 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-10-21:
+- XDHCMN: [rvrt] 2021-10-20 because it corrupts data exchange between proxy and toolkit,
+
 ## 2021-10-20:
-- modification of the *Faas* protocol handling,
+- XDHCMN: modification of the *Faas* protocol concerninbg the handling of a session ending,
 
 ## 2021-10-02:
 - V8Q: adaptation to changes in *Node.js* current LTS (v14.19.0),

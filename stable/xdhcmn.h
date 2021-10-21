@@ -48,7 +48,7 @@ namespace xdhcmn {
 
 		namespace upstream {
 			qCDEF( sId, CreationId, -2 );
-			qCDEF( sId, DeprecatedClosingId, -3 );  // Deprecated since FaaS protocol version 1.
+			qCDEF( sId, ClosingId, -3 );  // Deprecated since FaaS protocol version 1.
 		}
 
 		namespace downstream {

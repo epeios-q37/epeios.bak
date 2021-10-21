@@ -25,7 +25,7 @@ SOFTWARE.
 import XDHqSHRD
 from XDHqSHRD import getEnv
 
-import inspect, os, socket, sys, threading
+import inspect, os, socket, sys, threading, time
 
 if sys.version_info[0] == 2:
 	import XDHqFaaS2
@@ -69,7 +69,7 @@ def set_supplier(supplier = None):
 	_Supplier.current = supplier
 
 _FAAS_PROTOCOL_LABEL = "9efcf0d1-92a4-4e88-86bf-38ce18ca2894"
-_FAAS_PROTOCOL_VERSION = "1"
+_FAAS_PROTOCOL_VERSION = "0"
 _MAIN_PROTOCOL_LABEL = "bf077e9f-baca-48a1-bd3f-bf5181a78666"
 _MAIN_PROTOCOL_VERSION = "1"
 
@@ -95,7 +95,7 @@ class Instance:
 		self.handshakeDone = False
 		self.quit = False
 	def __del__(self):
-		_report(-1, "Quitting " + str(self.id) + "!")
+		_report("Quitting " + str(self.id) + "!")
 	def set(self,thread,id):
 		self.thread = thread
 		self.id = id
@@ -110,6 +110,12 @@ class Instance:
 	def waitForData(self):
 		self._readLock.wait()
 		self._readLock.clear()
+		if self.quit:
+			l()
+			instanceDataRead()
+			l()
+			sys.exit("Quitting thread!")
+			l()
 	def dataAvailable(self):
 		self._readLock.set()
 
@@ -160,9 +166,9 @@ def _dismiss(id):
 		writeSInt(id)
 		writeString("#Dismiss_1")
 
-def _report(id, message):
+def _report(message):
 	with _writeLock:
-		writeSInt(id)
+		writeSInt(-1)
 		writeString("#Inform_1")
 		writeString(message)
 
@@ -252,7 +258,7 @@ def _serve(callback,userCallback,callbacks ):
 			id = readSInt()  # The id of the new session.
 
 			if id in _instances:
-				_report(id, "Instance of id '" + str(id) + "' exists but should not !")
+				_report("Instance of id '" + str(id) + "' exists but should not !")
 			instance = Instance()
 			instance.set(callback(userCallback, callbacks, instance),id)
 			_instances[id] = instance
@@ -262,20 +268,24 @@ def _serve(callback,userCallback,callbacks ):
 				writeString(_MAIN_PROTOCOL_LABEL)
 				writeString(_MAIN_PROTOCOL_VERSION)
 		elif id == -3:	# Value instructing that a session is closed.
-			# DEPRECATED !!!
-			sys.exit("Calling deprecated instance quitting routine !!!")
 			id = readSInt();
 			if not id in _instances:
-				sys.exit("Instance of id '" + str(id) + "' not available for destruction!")
-			instance = _instances.pop(id)
-			instance.quit = True
-			instance.dataAvailable()
-			waitForInstance()
-			instance=None	# Destroys the object.
-			# del _instances[id]	# Seemingly destroy the object and remove the entry too.
+				_report("Instance of id '" + str(id) + "' not available for destruction!")
+			else:
+				instance = _instances.pop(id)
+				instance.quit = True
+				l()
+				instance.dataAvailable()
+				l()
+				waitForInstance()
+				l()
+				instance = None # Without this, instance will only be destroyed
+												# when 'instance" is set to a new instance.
+				l()
 		elif not id in _instances:
-			print("Unknown instance of id '" + str(id) + "'!")
-			_report(id, "Unknown instance of id '" + str(id) + "'!")
+			message = "Unknown instance of id '" + str(id) + "'!"
+			print(message)
+			_report(message)
 			_dismiss(id)
 		elif not _instances[id].IsHandshakeDone():
 			error = getString()
@@ -287,10 +297,6 @@ def _serve(callback,userCallback,callbacks ):
 		else:
 			_instances[id].dataAvailable()
 			waitForInstance()
-
-			if _instances[id].quit:
-				instance = _instances.pop(id)
-				instance = None	# Destroys the object.
 
 
 def launch(callback, userCallback, callbacks, headContent):
@@ -341,13 +347,11 @@ class DOM_FaaS:
 		else:
 			self._standBy()
 
+		l()
 		self.waitForData()
+		l()
 
 		[id,action] = [getString(),getString()]
-
-		if action == "":
-			if id == "Quit":
-				self.instance.quit = True
 
 		instanceDataRead()
 
@@ -376,7 +380,7 @@ class DOM_FaaS:
 			instanceDataRead()
 			return string
 		elif type == XDHqSHRD.RT_STRINGS:
-			self.ForData()
+			self.waitForData()
 			strings = getStrings()
 			instanceDataRead()
 			return strings
