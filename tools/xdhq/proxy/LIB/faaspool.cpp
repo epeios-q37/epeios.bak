@@ -688,7 +688,7 @@ namespace {
 	}
 
 namespace {
-	template <typename string> void _Log_(
+	template <typename string> void Log_(
 		const str::dString &IP,
 		const str::dString &Token,
 		const string &Message )
@@ -1046,6 +1046,7 @@ qRH
 	flw::rDressedWFlow<> Flow;
 qRB
 	Flow.Init(D_());
+	CPq;
 
   PutId(upstream::ClosingId, Flow);
   PutId(Shared_.Id, Flow);

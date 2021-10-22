@@ -113,21 +113,14 @@ def worker(userCallback,dom,callbacks):
 			else:
 				dom.disable_element("XDHStyleJupyter")
 
-		try:
-			if action == "" or not "_PreProcess" in callbacks or _call(callbacks["_PreProcess"],userObject, dom, id, action):
-				if ( action in callbacks ):
-					if _call(callbacks[action], userObject, dom, id, action ) and "_PostProcess" in callbacks:
-						_call(callbacks["_PostProcess"],userObject, dom, id, action)
-				else:
-					dom.alert("\tDEV ERROR: missing callback for '" + action + "' action!") 
-		except NameError:
-			print("Exiting thread!")
-			l()
-			break
-			l()
-		
-		l()
-	# print("Quitting thread !")
+		if action == "" or not "_PreProcess" in callbacks or _call(callbacks["_PreProcess"],userObject, dom, id, action):
+			if ( action in callbacks ):
+				if _call(callbacks[action], userObject, dom, id, action ) and "_PostProcess" in callbacks:
+					_call(callbacks["_PostProcess"],userObject, dom, id, action)
+			else:
+				dom.alert("\tDEV ERROR: missing callback for '" + action + "' action!") 
+	
+	l() # Exiting thread.
 
 def _callback(userCallback,callbacks,instance):
 	thread = Thread(target=worker, args=(userCallback, XDHq.DOM(instance), callbacks))

@@ -269,6 +269,7 @@ def _serve(callback,userCallback,callbacks ):
 				writeString(_MAIN_PROTOCOL_LABEL)
 				writeString(_MAIN_PROTOCOL_VERSION)
 		elif id == -3:	# Value instructing that a session is closed.
+			l()
 			id = readSInt();
 			if not id in _instances:
 				_report("Instance of id '" + str(id) + "' not available for destruction!")
@@ -276,8 +277,11 @@ def _serve(callback,userCallback,callbacks ):
 				instance = _instances.pop(id)
 				instance.quit = True
 				instance.dataAvailable()
+				l()
 				waitForInstance()
+				l()
 				instance = None # Without this, instance will only be destroyed
+				l()
 												# when 'instance" is set to a new instance.
 		elif not id in _instances:
 			message = "Unknown instance of id '" + str(id) + "'!"
