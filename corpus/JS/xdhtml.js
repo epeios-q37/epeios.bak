@@ -545,8 +545,11 @@ function getContent(elementOrId)	// Deprecated!
 			content =  element.textContent;
 			break;
 		default:
-			content = hasXDHAttribute(element, xdhContent) ? getXDHAttribute(element, xdhContent) :
-				( hasXDHAttribute(element, xdhOldContent) ? getXDHAttribute(element, xdhOldContent) : "" );
+			content = hasXDHAttribute(element, xdhContent)
+								? getXDHAttribute(element, xdhContent)
+								: ( hasXDHAttribute(element, xdhOldContent)
+									  ? getXDHAttribute(element, xdhOldContent)
+										 : element.innerHTML );
 			break;
 	}
 

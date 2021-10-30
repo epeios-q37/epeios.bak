@@ -1119,7 +1119,7 @@ Utile pour afficher le numro de ligne dans un #pragma message (...). */
 // #pragma message(__LOC__ " : Message")
 
 // Checkpoint.
-# define CPq	cio::COut << __FILE__ "(" E_STRING(__LINE__) ")" << txf::nl << txf::commit
+# define CPq	cio::COut << '(' << tol::TUTime() << ") " __FILE__ ":" E_STRING(__LINE__) << txf::nl << txf::commit
 
 
 # define E_AUTO_( Name )	\
@@ -1361,26 +1361,41 @@ namespace tol {
 	bso::size__ GetMemoryUsage( void );
 # endif
 
-#ifndef CPE_F_MT
-	inline const char *Date( void )
+	inline const char *TUDate( void )
 	{
 		static buffer__ Buffer;
 
 		return Date( Buffer );
 	}
 
-	inline const char *Time( void )
+	inline const char *TUTime( void )
 	{
 		static buffer__ Buffer;
 
 		return Time( Buffer );
 	}
 
-	inline const char *DateAndTime( void )
+	inline const char *TUDateAndTime( void )
 	{
 		static buffer__ Buffer;
 
 		return DateAndTime( Buffer );
+	}
+
+#ifndef CPE_F_MT
+	inline const char *Date( void )
+	{
+	  return TUDate();
+	}
+
+	inline const char *Time( void )
+	{
+	  return TUTime();
+	}
+
+	inline const char *DateAndTime( void )
+	{
+	  return TUDateAndTime();
 	}
 #endif
 

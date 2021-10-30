@@ -1,37 +1,41 @@
 """
-To test if a session lopps, if other sessions are blocked.
+To test if a session loops, if other sessions are blocked.
 Answer: No (handled by the JS scripts)
 """
 
+import os, sys
+
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append("../../atlastk")
+
 import atlastk, datetime, time
 
-BODY = """
-<fieldset >
-  <button xdh:onevent="Control">Control</button>
-  <button xdh:onevent="UBlock">Uninterrupted blocking</button>
-  <button xdh:onevent="IBlock">Interrupted blocking</button>
-  <hr/>
-  <fieldset>
-    <output id="Output"/>
-  </fieldset>
-</fieldset>
-"""
+SLEEP_DELAY = 3
 
-def ac_ublock(dom):
-  dom.begin("Output",f"<div>Uninterrupted blocking: {datetime.datetime.now()}</div>")
+def content(label):
+  return f"<div>'{label}': {datetime.datetime.now()}</div>"
+
+def ac_uloop(dom, id):
+  dom.begin("Output",content("while True:"))
   while True:
     pass
 
-def ac_iblock(dom):
+def ac_iloop_b(dom, id):
   while True:
-    dom.begin("Output",f"<div>Interrupted blocking: {datetime.datetime.now()}</div>")
-    time.sleep(3);
+    dom.begin("Output",content("Begin(…)"))
+    time.sleep(SLEEP_DELAY)
+
+def ac_iloop_c(dom, id):
+  while True:
+    dom.set_content("Output",content("SetContent(…)"))
+    time.sleep(SLEEP_DELAY)
 
 CALLBACKS = {
-  "": lambda dom: dom.inner("", BODY),
-  "Control": lambda dom: dom.begin("Output",f"<div>Control: {datetime.datetime.now()}</div>"),
-  "UBlock": ac_ublock,
-  "IBlock": ac_iblock
+  "": lambda dom: dom.inner("", open("Test1.html").read()),
+  "Control": lambda dom, id: dom.begin("Output", content("Control")),
+  "ULoop": ac_uloop,
+  "ILoopB": ac_iloop_b,
+  "ILoopC": ac_iloop_c
 }
 
 atlastk.launch(CALLBACKS)

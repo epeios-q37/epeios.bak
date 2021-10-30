@@ -687,7 +687,6 @@ namespace {
 		return URL;
 	}
 
-namespace {
 	template <typename string> void Log_(
 		const str::dString &IP,
 		const str::dString &Token,
@@ -703,7 +702,6 @@ namespace {
 	qRT;
 	qRE;
 	}
-}
 
 	rBackend_ *CreateBackend_(
 		fdr::rRWDriver &Driver,
@@ -762,59 +760,65 @@ namespace {
 		return Backend;
 	}
 
-	namespace {
-		void BroadcastScript_(
-			flw::rRFlow &Flow,
-			sRow TRow)
-		{
-		qRH
-			str::wString Script;
-		qRB
-			Script.Init();
+  void BroadcastScript_(
+    flw::rRFlow &Flow,
+    sRow TRow)
+  {
+  qRH
+    str::wString Script;
+  qRB
+    Script.Init();
 
-			prtcl::Get(Flow, Script);
+    prtcl::Get(Flow, Script);
 
-			Flow.Dismiss();
+    Flow.Dismiss();
 
-			common::GetCallback().Broadcast(Script, TRow);
-		qRR
-		qRT
-		qRE
-		}
+    common::GetCallback().Broadcast(Script, TRow);
+  qRR
+  qRT
+  qRE
+  }
 
-		void BroadcastAction_(
-			flw::rRFlow &Flow,
-			sRow TRow)
-		{
-		qRH
-			str::wString Action, Id;
-		qRB
-			tol::Init(Action, Id);
+  void BroadcastAction_(
+    flw::rRFlow &Flow,
+    sRow TRow)
+  {
+  qRH
+    str::wString Action, Id;
+  qRB
+    tol::Init(Action, Id);
 
-			prtcl::Get(Flow, Action);
-			prtcl::Get(Flow, Id);
+    prtcl::Get(Flow, Action);
+    prtcl::Get(Flow, Id);
 
-			Flow.Dismiss();
+    Flow.Dismiss();
 
-			xdhdws::BroadcastAction(common::GetCallback(), Action, Id, TRow);
-		qRR
-		qRT
-		qRE
-		}
-	}
+    xdhdws::BroadcastAction(common::GetCallback(), Action, Id, TRow);
+  qRR
+  qRT
+  qRE
+  }
 
-	namespace {
-		void Unblock_(const dShareds_ &Shareds)
-		{
-			sFRow_ Row = Shareds.First();
+  void Unblock_(const dShareds_ &Shareds)
+  {
+    sFRow_ Row = Shareds.First();
 
-			while ( Row != qNIL ) {
-				Shareds(Row)->UnblockAndQuit();
+    while ( Row != qNIL ) {
+      Shareds(Row)->UnblockAndQuit();
 
-				Row = Shareds.Next(Row);
-			}
-		}
-	}
+      Row = Shareds.Next(Row);
+    }
+  }
+
+  void Release_(
+    flw::rWFlow &Flow,
+    sId Id )
+  {
+    PutId(upstream::ClosingId, Flow);
+    PutId(Id, Flow);
+
+    Flow.Commit();
+  }
 
 	void HandleSwitching_(
     const str::dString &IP,
@@ -825,7 +829,7 @@ namespace {
 		tht::rBlocker &Blocker )
 	{
 	qRH;
-		flw::rDressedRFlow<> Flow;
+		flw::rDressedRWFlow<> Flow;
 		sId Id = UndefinedId;
 		bso::sBool IsError = false;
 		str::wString Input;
@@ -864,13 +868,14 @@ namespace {
 				break;
 			default:
 				if ( !Shareds.Exists( Id ) ) {
-					Id = UndefinedId;
-					qRGnr();
+            cio::COut << "> " << Id << " <";
+            CPq;
+            Release_(Flow, Id);
+				} else {
+          Shareds( Id )->UnblockReading();
+
+          Blocker.Wait();	// Waits until all data in flow red.
 				}
-
-				Shareds( Id )->UnblockReading();
-
-				Blocker.Wait();	// Waits until all data in flow red.
 				break;
 			}
 		}
@@ -1048,8 +1053,7 @@ qRB
 	Flow.Init(D_());
 	CPq;
 
-  PutId(upstream::ClosingId, Flow);
-  PutId(Shared_.Id, Flow);
+	::Release_(Flow, Shared_.Id);
 
 	Flow.reset();	// Commits and frees the underlying driver, or the below 'Release' will block.
 qRR

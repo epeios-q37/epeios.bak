@@ -43,6 +43,8 @@ typedef int ssize_t;
 bool sck::Ready_ = true;
 #endif
 
+#include "cio.h"
+
 flw::size__ sck::Read(
 	socket__ Socket,
 	flw::size__ Amount,
@@ -70,6 +72,7 @@ flw::size__ sck::Read(
 		Result = recv( Socket, (cast__)Buffer, (int)Amount, 0 );
 
 		if ( Result == SCK_SOCKET_ERROR ) {
+      CPq;
 			Result = SCK_DISCONNECTED;
 
 			if ( Error() != SCK_ECONNRESET )
@@ -116,6 +119,7 @@ flw::size__ sck::Write(
 
 		if ( Result == SCK_SOCKET_ERROR )
 		{
+		  CPq;
 			Result = SCK_DISCONNECTED;
 
 			if ( Error() != SCK_ECONNRESET )

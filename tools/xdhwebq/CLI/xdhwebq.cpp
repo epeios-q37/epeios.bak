@@ -242,7 +242,6 @@ namespace {
 				fdr::rRWDriver *Driver,
 				void *UP ) override
 			{
-
 				if ( UP == NULL )
 					qRGnr();
 

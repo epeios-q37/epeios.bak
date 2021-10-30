@@ -273,13 +273,12 @@ def _serve(callback,userCallback,callbacks ):
 			id = readSInt();
 			if not id in _instances:
 				_report("Instance of id '" + str(id) + "' not available for destruction!")
+				l()
 			else:
 				instance = _instances.pop(id)
 				instance.quit = True
 				instance.dataAvailable()
-				l()
 				waitForInstance()
-				l()
 				instance = None # Without this, instance will only be destroyed
 				l()
 												# when 'instance" is set to a new instance.
@@ -357,6 +356,14 @@ class DOM_FaaS:
 		return [action,id]
 
 	def call(self, command, type, *args):
+		if self.instance.quit:
+			"""
+			Below function unlocks the main thread,
+			and exits the thread corresponding
+			to the current instance.
+			"""
+			self.waitForData()
+
 		with _writeLock:
 			writeSInt(self.instance.getId())
 			writeString(command)

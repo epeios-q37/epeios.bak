@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-10-28:
+- TOL:
+  - including time in `QCp`,
+  - thread-unsate, without buffer, versions of xurrent date and/or time functions,
+
 ## 2021-10-21:
 - XDHCMN: [rvrt] 2021-10-20 because it corrupts data exchange between proxy and toolkit,
 
