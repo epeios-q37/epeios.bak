@@ -17,6 +17,7 @@ def content(label):
 
 def ac_uloop(dom, id):
   dom.begin("Output",content("while True:"))
+  # Corresponding instance can never be released, even if closed in the browser.
   while True:
     pass
 

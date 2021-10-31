@@ -239,6 +239,7 @@ namespace {
 			const str::dStrings &TagValues,
 			xdhcuc::cSingle &Callback,
 			tht::rBlocker *Blocker = NULL,
+			bso::sBool *SuccessPointer = NULL,
 			str::dString *ReturnValue = NULL)
 		{
 			bso::sBool Success = false;
@@ -249,7 +250,7 @@ namespace {
 
 			GetScript_(ScriptName, TagValues, Script);
 
-			Success = Callback.Process(Script, Blocker, ReturnValue );
+			Success = Callback.Process(Script, Blocker, SuccessPointer, ReturnValue );
 		qRR
 		qRT
 		qRE
@@ -264,7 +265,8 @@ namespace {
 				const str::dStrings &TagValues,
 				xdhcuc::cSingle &Callback,
 				xdhcmn::digest_ &Digest,
-				tht::rBlocker &Blocker )
+				tht::rBlocker &Blocker,
+				bso::sBool *SuccessPointer)
 			{
 				bso::sBool Success = false;
 			qRH
@@ -272,7 +274,7 @@ namespace {
 			qRB
 				RawDigest.Init();
 
-				if ( ( Success = BaseProcess_(ScriptName, TagValues, Callback, &Blocker, &RawDigest) ) ) {
+				if ( ( Success = BaseProcess_(ScriptName, TagValues, Callback, &Blocker, SuccessPointer, &RawDigest) ) ) {
 					Digest.Init();
 					xdhcmn::Split( RawDigest, Digest );
 				}
@@ -353,7 +355,7 @@ namespace {
 					Arguments.Append(IdsTag);
 					Arguments.Append(EventsTag);
 
-					Success = BaseProcess_( ss_::SetEventHandlers, Arguments, Callback);
+					Success = BaseProcess_(ss_::SetEventHandlers, Arguments, Callback);
 				}
 			qRR
 			qRT
@@ -465,7 +467,8 @@ namespace {
 			const char *ScriptName,
 			const str::dStrings &Values,
 			xdhcuc::cSingle &Callback,
-			tht::rBlocker &Blocker )
+			tht::rBlocker &Blocker,
+			bso::sBool *SuccessPointer)
 		{
 			bso::sBool Success = false;
 		qRH
@@ -474,7 +477,7 @@ namespace {
 		qRB
 			Digests.Init();
 
-			if ( ( Success = ExecuteAndGetDigest_(ScriptName, Values, Callback, Digests, Blocker) ) ) {
+			if ( ( Success = ExecuteAndGetDigest_(ScriptName, Values, Callback, Digests, Blocker, SuccessPointer) ) ) {
 				Retriever.Init(Digests);
 
 				tol::Init(EventsDigest, WidgetsDigest);
@@ -482,8 +485,9 @@ namespace {
 				Retriever.GetTable(EventsDigest);
 				Retriever.GetTable(WidgetsDigest);
 
-				if ( ( Success = HandleEvents_(EventsDigest, Callback) ) )
-					Success = HandleWidgets_(WidgetsDigest, Callback);
+				if ( ( Success = HandleEvents_(EventsDigest, Callback) ) ) {
+          Success = HandleWidgets_(WidgetsDigest, Callback);
+				}
 			}
 		qRR
 		qRE
@@ -495,6 +499,7 @@ namespace {
 			struct sShared_ {
 				const char *ScriptName;
 				const str::dStrings *Values;
+				bso::sBool Success;
 				xdhcuc::cSingle *Callback;
 			};
 		}
@@ -505,8 +510,8 @@ namespace {
 		{
 				sShared_ &Shared = *(sShared_ *)UP;
 
-				if ( !HandleLayout_(Shared.ScriptName, *Shared.Values, *Shared.Callback, Blocker.Blocker() ) )
-					qRGnr();
+				if ( !HandleLayout_(Shared.ScriptName, *Shared.Values, *Shared.Callback, Blocker.Blocker(), &Shared.Success ) )
+					qRGnr();  // NOTA: failure handled by launching thread through 'Shared.Success'.
 		}
 
 		bso::sBool HandleLayout_(
@@ -522,6 +527,7 @@ namespace {
 
 			Shared.ScriptName = ScriptName;
 			Shared.Values = &Values;
+			Shared.Success = false;
 			Shared.Callback = &Callback;
 
 			if ( true )
@@ -538,7 +544,7 @@ namespace {
 			if ( ReturnValue != NULL )  // If == NULL, old deprecated behavior : no (dummy) value sent to backend.
         *ReturnValue = str::Empty; // To synchronize calling functions.
 
-			return true;
+			return Shared.Success;
 		}
 
 	}
@@ -568,7 +574,7 @@ namespace {
 		if ( IsEqual_(ScriptName, psn_::HandleLayout) )
 			return HandleLayout_(psn_::HandleLayout, Values, Callback, ReturnValue);
 		else
-			return BaseProcess_(ScriptName, Values, Callback, NULL, ReturnValue);
+			return BaseProcess_(ScriptName, Values, Callback, NULL, NULL, ReturnValue);
 	}
 
 	template <typename ts, typename tl> bso::sBool Process_(
@@ -589,7 +595,7 @@ namespace {
 		Script.Init();
 		SubstituteTags_(str::wString(TaggedScript), TagList, TagValues, Script);
 
-		Success = Callback.Process(Script, NULL, ReturnValue );
+		Success = Callback.Process(Script, NULL, NULL, ReturnValue);
 	qRR
 	qRT
 	qRE

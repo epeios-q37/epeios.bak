@@ -72,6 +72,7 @@ namespace session {
 		virtual bso::sBool XDHCUCProcess(
 			const str::string_ &Script,
 			tht::rBlocker *Blocker,
+			bso::sBool *Success,
 			str::dString *ReturnedValue) override;
 	public:
 		void reset( bso::bool__ P = true )

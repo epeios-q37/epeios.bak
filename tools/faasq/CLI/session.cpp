@@ -30,6 +30,7 @@ using namespace session;
 bso::sBool session::sUpstream_::XDHCUCProcess(
 	const str::string_ &Script,
 	tht::rBlocker *Blocker,
+	bso::sBool *SuccessPointer,
 	str::dString *ReturnedValue )
 {
 	bso::sBool Success = true;
@@ -51,8 +52,13 @@ qRB
 	Proxy.Commit();
 
 	if ( ReturnedValue != NULL) {
-		if ( Blocker != NULL )
+		if ( Blocker != NULL ) {
+      if ( SuccessPointer == NULL )
+        qRGnr();
+
+      *SuccessPointer = Success;
 			Blocker->Unblock();
+		}
 
 		B_().WaitSelf();
 
@@ -62,10 +68,19 @@ qRB
 		B_().UnblockGlobal();
 	} else if ( Blocker != NULL )
 		qRGnr();
+  else if ( SuccessPointer != NULL )
+    qRGnr();
 qRR
 	Success = false;
 	ERRRst();
 qRT
+  if ( Blocker != NULL ) {
+    if ( SuccessPointer == NULL )
+      qRGnr();
+
+    *SuccessPointer = Success;
+    Blocker->Unblock();
+  }
 qRE
 	return Success;
 }

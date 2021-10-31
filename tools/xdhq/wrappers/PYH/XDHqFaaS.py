@@ -97,7 +97,7 @@ class Instance:
 		self.handshakeDone = False
 		self.quit = False
 	def __del__(self):
-		_report("Inst. " + str(self.id) + " closed!")
+		_report("Inst.  #" + str(self.id) + " closed!")
 	def set(self,thread,id):
 		self.thread = thread
 		self.id = id
@@ -114,9 +114,7 @@ class Instance:
 		self._readLock.clear()
 		if self.quit:
 			instanceDataRead()
-			l()
 			_exitThread()
-			l()
 	def dataAvailable(self):
 		self._readLock.set()
 
@@ -269,18 +267,16 @@ def _serve(callback,userCallback,callbacks ):
 				writeString(_MAIN_PROTOCOL_LABEL)
 				writeString(_MAIN_PROTOCOL_VERSION)
 		elif id == -3:	# Value instructing that a session is closed.
-			l()
 			id = readSInt();
+
 			if not id in _instances:
 				_report("Instance of id '" + str(id) + "' not available for destruction!")
-				l()
 			else:
 				instance = _instances.pop(id)
 				instance.quit = True
 				instance.dataAvailable()
 				waitForInstance()
 				instance = None # Without this, instance will only be destroyed
-				l()
 												# when 'instance" is set to a new instance.
 		elif not id in _instances:
 			message = "Unknown instance of id '" + str(id) + "'!"

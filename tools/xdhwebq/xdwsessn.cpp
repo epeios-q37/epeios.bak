@@ -28,6 +28,7 @@ using namespace xdwsessn;
 bso::sBool xdwsessn::rUpstream_::XDHCUCProcess(
 	const str::string_ &Script,
 	tht::rBlocker *Blocker,
+	bso::sBool *SuccessPointer,
 	str::dString *ReturnedValue )
 {
 	bso::sBool Success = true;
@@ -46,22 +47,34 @@ qRFB
 # endif
 	Flow.Commit();
 
-	if ( ReturnedValue != NULL) {
+	if ( ReturnedValue != NULL ) {
 		websck::GetMessage(Flow, *ReturnedValue);
 
     if ( Blocker != NULL) {
+      if ( SuccessPointer == NULL )
+        qRGnr();
+
+      *SuccessPointer = Success;
+
 			Blocker->Unblock();
 			Blocker = NULL;	// To avoid unblocking twice below.
 		}
 	} else if ( Blocker != NULL )
+		qRGnr();
+	else if ( SuccessPointer != NULL )
 		qRGnr();
 
 	Flow.Dismiss();
 qRFR
 	Success = false;
 qRFT
-  if ( Blocker != NULL)
+  if ( Blocker != NULL ) {
+    if ( SuccessPointer == NULL )
+      qRGnr();
+
+    *SuccessPointer = Success;
     Blocker->Unblock();
+  }
 qRFE(sclm::ErrorDefaultHandling())
 	return Success;
 }

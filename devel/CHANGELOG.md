@@ -10,6 +10,10 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-10-31:
+- XDHCUC: introducing the `Success` parameter, needed to fix some loopong issue,
+- XDHDWS: [adpt],
+
 ## 2021-10-28:
 - TOL:
   - including time in `QCp`,

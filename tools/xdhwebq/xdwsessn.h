@@ -41,6 +41,7 @@ namespace xdwsessn {
 		virtual bso::sBool XDHCUCProcess(
 			const str::string_ &Script,
 			tht::rBlocker *Blocker,
+			bso::sBool *Success,
 			str::dString *ReturnedValue ) override;
 	public:
 		void reset( bso::bool__ P = true )
@@ -88,9 +89,10 @@ namespace xdwsessn {
 		bso::sBool Execute(
 			const str::dString &Script,
 			tht::rBlocker *Blocker,
+			bso::sBool *Success,
 			str::dString &ReturnedValue)
 		{
-			return Upstream_.Process(Script, Blocker,&ReturnedValue);
+			return Upstream_.Process(Script, Blocker, Success, &ReturnedValue);
 		}
 		bso::sBool Execute(const str::dString &Script)
 		{

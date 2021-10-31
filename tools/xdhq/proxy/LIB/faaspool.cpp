@@ -868,8 +868,6 @@ namespace {
 				break;
 			default:
 				if ( !Shareds.Exists( Id ) ) {
-            cio::COut << "> " << Id << " <";
-            CPq;
             Release_(Flow, Id);
 				} else {
           Shareds( Id )->UnblockReading();
@@ -1051,7 +1049,6 @@ qRH
 	flw::rDressedWFlow<> Flow;
 qRB
 	Flow.Init(D_());
-	CPq;
 
 	::Release_(Flow, Shared_.Id);
 

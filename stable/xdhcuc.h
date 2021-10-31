@@ -43,6 +43,7 @@ namespace xdhcuc {
 		virtual bso::sBool XDHCUCProcess(
 			const str::dString &Script,
 			tht::rBlocker *Blocker,	// If != NULL, has to be unblocked once the script sent.
+			bso::sBool *Success, // If != NULL, mirrors the return value ; needed when launched in a dedicated thread.
 			str::dString *ReturnedValue ) = 0;	// If == NULL, Blocker should also be NULL.
 
 	public:
@@ -50,9 +51,10 @@ namespace xdhcuc {
 		bso::sBool Process(
 			const str::dString &Script,
 			tht::rBlocker *Blocker = NULL,	// If != 'NULL', has to be unblocked once the script sent.
+			bso::sBool *Success = NULL,
 			str::dString *ReturnValue = NULL)
 		{
-			return XDHCUCProcess(Script, Blocker, ReturnValue);
+			return XDHCUCProcess(Script, Blocker, Success, ReturnValue);
 		}
 
 	};
