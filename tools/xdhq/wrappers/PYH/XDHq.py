@@ -368,3 +368,9 @@ class DOM:
 
 	def scroll_to(self,id):
 		self._dom.call("ScrollTo_1",_VOID,id)
+
+	def debug_log(self,switch=True):
+		self._dom.call("DebugLog_1",_VOID,"true" if switch else "false")
+
+	def log(self,message):
+		self._dom.call("Log_1",_VOID,message)

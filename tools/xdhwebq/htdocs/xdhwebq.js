@@ -17,6 +17,10 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+// Displays some debug log. when uncommented.
+// Can be activated programmatically with 'atlastk.debugLog().
+// var debugLog= true;
+
 var before = 0;
 var cgi = "";
 var session = "";
@@ -59,6 +63,9 @@ var queryInProgress = false;
 var queryQueue = [];
 
 function log(message) {
+	if ( ( typeof debugLog === 'undefined' ) || !debugLog)
+		return;
+
 	if (navigator.userAgent.search("Edge") === -1)	// MS Edge web browser does not like too much log messages...
 		console.log(message);
 }
@@ -77,11 +84,11 @@ var socket;
 function launchEvent(digest) {
 	if (queryInProgress) {
 		if (digest !== queryQueue[queryQueue.length - 1]) {
-			console.log("Queued: ", digest);
+			log("Queued: ", digest);
 			queryQueue.push(digest);
 		}
 	} else {
-		console.log("Sent: ", digest);
+		log("Sent: ", digest);
 		queryInProgress = true;
 		socket.send(digest);
 	}
@@ -122,10 +129,10 @@ function connect(token, id) {
 					socket.send(result);
 			}
 		} else if (queryQueue.length) {
-			console.log("Unqueued:", queryQueue[0]);
+			log("Unqueued:", queryQueue[0]);
 			socket.send(queryQueue.shift());
 		} else {
-			console.log("Standby !");
+			log("Standby !");
 			queryInProgress = false;
 		}
 	};

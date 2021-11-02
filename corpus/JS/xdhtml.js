@@ -138,8 +138,6 @@ function parseXML(string) {
 function getStylesheet(xslName) {
 	var xsltProcessor = new XSLTProcessor();
 
-	//	console.log(xslName);
-
 	if (false ) {
 		xsltProcessor.importStylesheet(parseXML(xslName));
 	} else {
@@ -850,13 +848,10 @@ function insertCSSRule(id, rule, index) {
 
 	rules.insertRule(rule, index);
 
-//	console.log(index);
-
 	return index;
 }
 
 function removeCSSRule(id, index) {
-//	console.log(getCSSRules().cssRules.length + " : " + index);
 	getCSSRules(id).removeRule(index);
 }
 

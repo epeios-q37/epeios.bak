@@ -1,6 +1,5 @@
 """
-To test if a session loops, if other sessions are blocked.
-Answer: No (handled by the JS scripts)
+To test session loops.
 """
 
 import os, sys
@@ -13,7 +12,7 @@ import atlastk, datetime, time
 SLEEP_DELAY = 3
 
 def content(label):
-  return f"<div>'{label}': {datetime.datetime.now()}</div>"
+  return f"<div>'{label}': {datetime.datetime.now().time()}</div>"
 
 def ac_uloop(dom, id):
   dom.begin("Output",content("while True:"))

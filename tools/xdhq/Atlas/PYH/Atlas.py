@@ -113,6 +113,9 @@ def worker(userCallback,dom,callbacks):
 			else:
 				dom.disable_element("XDHStyleJupyter")
 
+			if XDHqSHRD.isDev():
+				dom.debug_log(True)
+
 		if action == "" or not "_PreProcess" in callbacks or _call(callbacks["_PreProcess"],userObject, dom, id, action):
 			if ( action in callbacks ):
 				if _call(callbacks[action], userObject, dom, id, action ) and "_PostProcess" in callbacks:
