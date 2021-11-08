@@ -33,13 +33,13 @@ mods += fil flf flsq flw flx
 mods += fnm ias idsq iof iop 
 mods += lcl lck lst lstbch lstcrt 
 mods += lstctn mns mtk mtx ntvstr 
-mods += que rgstry sdr stkbse stkbch 
-mods += stkcrt stkctn str strng stsfsm 
-mods += tagsbs tht thtsub tol txf 
-mods += tys uys utf xml xpp 
-mods += xtf llio dlbrry plgn plgncore 
-mods += btr idxbtq idxbtr idxque sck 
-mods += sha1 strmrg websck 
+mods += osd que rgstry sdr stkbse 
+mods += stkbch stkcrt stkctn str strng 
+mods += stsfsm tagsbs tht thtsub tol 
+mods += txf tys uys utf xml 
+mods += xpp xtf llio dlbrry plgn 
+mods += plgncore btr idxbtq idxbtr idxque 
+mods += sck sha1 strmrg websck 
 mods += csdbns csdcmn csdscb 
 mods += scla scli sclm scle scll 
 mods += sclr sclt 
@@ -123,7 +123,8 @@ endif
 #############################
 
 ifeq ("$(os)","$(GNULinux)")
-
+# By default, 'CXX' is set to 'g++'.
+	CXX = clang++
 endif
 
 #############################
@@ -383,7 +384,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20210218"\"
+copt += -DVERSION=\""20211031"\"
 copt += -DCOPYRIGHT_YEARS=\""2017"\"
 copt += -DIDENTIFIER=\""effd756a-a901-46e8-939f-3f2a5e7986b0"\"
 
@@ -391,7 +392,7 @@ ifndef Q37_EPEIOS
 	src += :src:src/epeios
 	out = ./
 else
-	src += :$(Q37_EPEIOS)
+	src += :$(Q37_EPEIOS)/stable
 	out = $(dest)
 endif
 

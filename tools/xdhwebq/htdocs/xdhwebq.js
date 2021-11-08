@@ -17,9 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// Displays some debug log. when uncommented.
-// Can be activated programmatically with 'atlastk.debugLog().
-// var debugLog= true;
+// Displays some debug log when uncommented.
+// Can be activated programmatically with 'atlastk.debugLog()'.
+// var debugLog = true;
 
 var before = 0;
 var cgi = "";

@@ -73,7 +73,7 @@ def set_supplier(supplier = None):
 _FAAS_PROTOCOL_LABEL = "9efcf0d1-92a4-4e88-86bf-38ce18ca2894"
 _FAAS_PROTOCOL_VERSION = "0"
 _MAIN_PROTOCOL_LABEL = "bf077e9f-baca-48a1-bd3f-bf5181a78666"
-_MAIN_PROTOCOL_VERSION = "1"
+_MAIN_PROTOCOL_VERSION = "0"
 
 _writeLock = threading.Lock()
 _readLock = threading.Event()
