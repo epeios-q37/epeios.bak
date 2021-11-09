@@ -10,7 +10,7 @@ Concerne le code *Python* <u>et</u> natif.
 
 ### `__main__.py`
 
-En créant, dans le répertoire de l'application, un fichier `__main__.py` contenant juste un `import` du fichier à lancer pour lancer l'application, on peut alors lancer l'application en passant juste le nom du répertoire à la commande `python`.
+En créant, dans le répertoire de l'application, un fichier `__main__.py` contenant juste un `import` du fichier à lancer pour lancer l'application, on peut alors lancer l'application en passant juste le nom du répertoire (avec un `/` final) à la commande `python`.
 
 ### *pipenv*
 
@@ -20,6 +20,28 @@ En créant, dans le répertoire de l'application, un fichier `__main__.py` conte
 ## Publication sur *Replit.com*
 
 Pour garder les stats *Spotlight* de *Replit*, il faut toujours garder le *replit* en cours.
+
+Il peut parfois être plus intéressant de modifier/télécharger directement les fichiers plutôt que de suivre la procédure ci-dessous.
+
+### Nouvelle procédure
+
+**Attention** : procéure rédifée de mémoire ; à valider !
+
+- Si existant, effacer `atlas-python-old` ;
+- *Forker* `atlas-python` vers `atlas-python-old` ;
+- renommer `atlas-python` en `atlas-python-new` ;
+- renommer `atlas-python-old` en `atlas-python` ;
+- aller dans le shell de `atlas-python-new` ;
+- `cd ..` ;
+- `git clone https://github.com/epeios-q37/atlas-python` ;
+- `rm -rf atlas-python-new/*;mv atlas-python/* atlas-python-new/` ;
+- vérifier si `.replit` est identique dans les deux, sinon mettre à jour ;
+- renommer `atlas-python` en `atlas-python-old` ;
+- renommer `atlas-python-new` en `atlas-python`.
+
+### Ancienne procédure
+
+
 
 - Forker le *replit* courant ;
 - renommer le *replit* courant en `atlas-python-new` ;
