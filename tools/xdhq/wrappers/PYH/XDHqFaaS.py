@@ -76,24 +76,26 @@ _MAIN_PROTOCOL_LABEL = "bf077e9f-baca-48a1-bd3f-bf5181a78666"
 _MAIN_PROTOCOL_VERSION = "0"
 
 _writeLock = threading.Lock()
-_readLock = threading.Event()
+
+_readLock = threading.Lock()
+_readLock.acquire()
 
 
-def waitForInstance():
-	_readLock.wait()
-	_readLock.clear()
+def _waitForInstance():
+	_readLock.acquire()
 
 
-def instanceDataRead():
-	_readLock.set()
+def _instanceDataRead():
+	_readLock.release()
 
 
 _url = ""
 
-class Instance:
+class _Instance:
 	def __init__(self):
-		# https://github.com/epeios-q37/atlas-python/pull/7 (Condition -> Event)
-		self._readLock = threading.Event()
+		# https://github.com/epeios-q37/atlas-python/pull/7 (Condition -> Lock )
+		self._readLock = threading.Lock()
+		self._readLock.acquire()
 		self.handshakeDone = False
 		self.quit = False
 	def __del__(self):
@@ -110,13 +112,12 @@ class Instance:
 	def getId(self):
 		return self.id
 	def waitForData(self):
-		self._readLock.wait()
-		self._readLock.clear()
+		self._readLock.acquire()
 		if self.quit:
-			instanceDataRead()
+			_instanceDataRead()
 			_exitThread()
 	def dataAvailable(self):
-		self._readLock.set()
+		self._readLock.release()
 
 def isTokenEmpty():
 	return not _token or _token[0] == "&"
@@ -258,7 +259,7 @@ def _serve(callback,userCallback,callbacks ):
 
 			if id in _instances:
 				_report("Instance of id '" + str(id) + "' exists but should not !")
-			instance = Instance()
+			instance = _Instance()
 			instance.set(callback(userCallback, callbacks, instance),id)
 			_instances[id] = instance
 
@@ -275,7 +276,7 @@ def _serve(callback,userCallback,callbacks ):
 				instance = _instances.pop(id)
 				instance.quit = True
 				instance.dataAvailable()
-				waitForInstance()
+				_waitForInstance()
 				instance = None # Without this, instance will only be destroyed
 												# when 'instance" is set to a new instance.
 		elif not id in _instances:
@@ -292,7 +293,7 @@ def _serve(callback,userCallback,callbacks ):
 			getString()	# Language. Not handled yet.
 		else:
 			_instances[id].dataAvailable()
-			waitForInstance()
+			_waitForInstance()
 
 
 def launch(callback, userCallback, callbacks, headContent):
@@ -329,7 +330,7 @@ class DOM_FaaS:
 	def __init__(self, instance):
 		self.instance = instance
 
-	def waitForData(self):
+	def _waitForData(self):
 		self.instance.waitForData()
 		
 	def _standBy(self):
@@ -343,11 +344,11 @@ class DOM_FaaS:
 		else:
 			self._standBy()
 
-		self.waitForData()
+		self._waitForData()
 
 		[id,action] = [getString(),getString()]
 
-		instanceDataRead()
+		_instanceDataRead()
 
 		return [action,id]
 
@@ -358,7 +359,7 @@ class DOM_FaaS:
 			and exits the thread corresponding
 			to the current instance.
 			"""
-			self.waitForData()
+			self._waitForData()
 
 		with _writeLock:
 			writeSInt(self.instance.getId())
@@ -377,14 +378,14 @@ class DOM_FaaS:
 			writeUInt(XDHqSHRD.RT_VOID)	# To report end of argument list.
 
 		if type == XDHqSHRD.RT_STRING:
-			self.waitForData()
+			self._waitForData()
 			string = getString()
-			instanceDataRead()
+			_instanceDataRead()
 			return string
 		elif type == XDHqSHRD.RT_STRINGS:
-			self.waitForData()
+			self._waitForData()
 			strings = getStrings()
-			instanceDataRead()
+			_instanceDataRead()
 			return strings
 		elif type != XDHqSHRD.RT_VOID:
 			sys.exit("Unknown return type !!!")
