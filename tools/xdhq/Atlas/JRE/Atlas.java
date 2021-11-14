@@ -41,13 +41,7 @@ public abstract class Atlas implements Runnable {
 		info.q37.xdhq.dom.Event event = new info.q37.xdhq.dom.Event();
 		for (;;) {
 			dom.getAction(event);
-
-			if ( dom.isQuitting() ) {	// MUST be called after 'getAction()…',
-										// or the library will hang!
-				break;
-			}
-
-			handle(event.action, event.id );
+			handle(event.action, event.id);
 		}
 		
 		// System.out.println("Quitting thread!");

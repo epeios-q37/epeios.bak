@@ -77,7 +77,7 @@ _MAIN_PROTOCOL_VERSION = "0"
 
 _writeLock = threading.Lock()
 
-_readLock = threading.Lock()
+_readLock = threading.Lock()	# Global read lock.
 _readLock.acquire()
 
 
@@ -94,7 +94,7 @@ _url = ""
 class _Instance:
 	def __init__(self,thread_retriever,id):
 		# https://github.com/epeios-q37/atlas-python/pull/7 (Condition -> Lock )
-		self._readLock = threading.Lock()
+		self._readLock = threading.Lock()	#PEr instance read lock.
 		self._readLock.acquire()
 		self.handshakeDone = False
 		self.quit = False

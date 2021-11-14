@@ -28,6 +28,7 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.locks.*;
+import java.util.concurrent.*;
 import java.awt.Desktop;
 
 public class DOM_FAAS extends DOM_SHRD {
@@ -39,9 +40,8 @@ public class DOM_FAAS extends DOM_SHRD {
 	static private String token = "";
 	static private InputStream input_;
 	static private OutputStream output_;
-	// Both object are to block the switcher.
-	static private Lock lock_ = new ReentrantLock();
-	static private Condition condition_ = lock_.newCondition();
+	// A 'Semaphore' because the locks aer reentrant in Java.
+	static private Semaphore readLock_ = new Semaphore(1);	// Global read lock.
 	static private String FaaSProtocolLabel = "9efcf0d1-92a4-4e88-86bf-38ce18ca2894";
 	static private String FaaSProtocolVersion = "0";
 	static private String mainProtocolLabel = "bf077e9f-baca-48a1-bd3f-bf5181a78666";
@@ -53,11 +53,29 @@ public class DOM_FAAS extends DOM_SHRD {
 	static class Instance_ {
 		private boolean handshakeDone = false;
 		private boolean quit = false;
-		Lock lock = new ReentrantLock();
-		Condition condition = lock.newCondition();
+		Semaphore readLock_ = new Semaphore(1);
 		Object userObject;	// Just to avoid that the GC destroys the object.
 		Instance_( Object object ) {
 			this.userObject = object;
+			try {
+				readLock_.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		public void waitForData() {
+			try {
+				readLock_.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			if (quit) {
+				instanceDataRead_();
+				// _exitThread()
+			}
+		}
+		public void dataAvailable() {
+			readLock_.release();
 		}
 	}
 
@@ -115,6 +133,12 @@ public class DOM_FAAS extends DOM_SHRD {
 
 		if (!"".equals(wPort))
 			wPort = ":" + wPort;
+
+		try {
+			readLock_.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static void writeByte_( byte data) throws Exception {
@@ -269,6 +293,18 @@ public class DOM_FAAS extends DOM_SHRD {
 		}
 	}
 
+	static private void waitForInstance_() {
+		try {
+			readLock_.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	static private void instanceDataRead_() {
+		readLock_.release();
+	}
+
 	private static void serve_(info.q37.xdhq.XDH_SHRD.Callback callback) {
 		try {
 			for (;;) {
@@ -308,15 +344,8 @@ public class DOM_FAAS extends DOM_SHRD {
 						throw new Exception("Instance of id '" + id + "' not available for destruction!");
 
 					instances_.get(id).quit = true;
-
-					instances_.get(id).lock.lock();
-					instances_.get(id).condition.signal();
-					instances_.get(id).lock.unlock();
-
-					lock_.lock();
-					condition_.await();
-					lock_.unlock();
-
+					instances_.get(id).dataAvailable();
+					waitForInstance_();
 					instances_.remove(id);
 				} else if ( !instances_.containsKey( id ) ) {
 						throw new Exception( "Unknown instance of id '" + id + "'!" );
@@ -333,13 +362,8 @@ public class DOM_FAAS extends DOM_SHRD {
 
 						instances_.get(id).handshakeDone = true;
 				} else {
-					instances_.get(id).lock.lock();
-					instances_.get(id).condition.signal();
-					instances_.get(id).lock.unlock();
-
-					lock_.lock();
-					condition_.await();
-					lock_.unlock();
+					instances_.get(id).dataAvailable();
+					waitForInstance_();
 				}
 			}
 		} catch (Exception e) {
@@ -401,15 +425,12 @@ public class DOM_FAAS extends DOM_SHRD {
 				instance = instances_.get(id_);
 			}
 
-			instance.lock.lock();
-			instance.condition.await();
+			instance.waitForData();
 
 			if ( !instance.quit ) {
 				event.id = getString_();
 				event.action = getString_();
 			}
-
-			instance.lock.unlock();
 
 			// Some unlocking is done by below 'isQuitting(…)' method,
 			// which MUST be called or the library will hang! 
@@ -425,9 +446,7 @@ public class DOM_FAAS extends DOM_SHRD {
 		// in case of 'quit' being at 'true', there was
 		// a risk that 'instances_.get(id_)' were already
 		// destroyed, hence an error on above line.
-		lock_.lock();
-		condition_.signal();
-		lock_.unlock();
+		instanceDataRead_();
 
 		return answer;
 	}
@@ -460,29 +479,18 @@ public class DOM_FAAS extends DOM_SHRD {
 			case VOID:
 				break;
 			case STRING:
-				instances_.get(id_).lock.lock();
-				instances_.get(id_).condition.await();
+				instances_.get(id_).waitForData();
 				object = getString_();
-				instances_.get(id_).lock.unlock();
-				lock_.lock();
-				condition_.signal();
-				lock_.unlock();
+				instanceDataRead_();
 				break;
 			case STRINGS:
-				instances_.get(id_).lock.lock();
-				instances_.get(id_).condition.await();
+				instances_.get(id_).waitForData();
 				object = getStrings_();
-				instances_.get(id_).lock.unlock();
-				lock_.lock();
-				condition_.signal();
-				lock_.unlock();
+				instanceDataRead_();
 				break;
 			default:
 				throw new Exception("Unknown return type !!!");
 			}
-
-
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
