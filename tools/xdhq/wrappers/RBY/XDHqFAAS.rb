@@ -276,41 +276,41 @@ module XDHqFAAS
 	end
 	def self.serve(callback, userCallback,callbacks)
 		while true
-	  id = getSInt()
-	  
-		if id == -1 # Should not happen.
-			abort("Received unexpected undefined command id!")
-		elsif id == -2    # Value reporting a new front-end.
-			id = getSInt()  # The id of the new front-end.
+			id = getSInt()
+			
+			if id == -1 # Should not happen.
+				abort("Received unexpected undefined command id!")
+			elsif id == -2    # Value reporting a new front-end.
+				id = getSInt()  # The id of the new front-end.
 
-			if @instances.has_key?(id)
-				abort("Instance of id '#{id}' exists but should not !")
-			end
+				if @instances.has_key?(id)
+					abort("Instance of id '#{id}' exists but should not !")
+				end
 
-			instance = Instance.new
-			instance.set(callback.call(userCallback.call(),callbacks,instance),id)
-			@instances[id]=instance
+				instance = Instance.new
+				instance.set(callback.call(userCallback.call(),callbacks,instance),id)
+				@instances[id]=instance
 
-			@outputMutex.synchronize {
-				writeSInt(id)
-				writeString(@mainProtocolLabel)
-				writeString(@mainProtocolVersion)
-			}
-	  elsif id == -3  # Value reporting the closing of a session.
-		id = getSInt()
+				@outputMutex.synchronize {
+					writeSInt(id)
+					writeString(@mainProtocolLabel)
+					writeString(@mainProtocolVersion)
+				}
+			elsif id == -3  # Value reporting the closing of a session.
+				id = getSInt()
 
-		if !@instances.has_key?(id)
-		  abort("Instance of id '#{id}' not available for destruction!")
-		end
-		
-		@instances[id].setQuitting
-		@instances[id].signal()
+				if !@instances.has_key?(id)
+					abort("Instance of id '#{id}' not available for destruction!")
+				end
+				
+				@instances[id].setQuitting
+				@instances[id].signal()
 
-		@globalMutex.synchronize {
-					@globalCondVar.wait(@globalMutex)
-		}
-		
-	   @instances.delete(id)
+				@globalMutex.synchronize {
+							@globalCondVar.wait(@globalMutex)
+				}
+				
+				@instances.delete(id)
 			elsif !@instances.has_key?(id)
 				abort("Unknown instance of id '#{id}'!")
 			elsif !@instances[id].handshakeDone?

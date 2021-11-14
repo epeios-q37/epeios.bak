@@ -92,17 +92,14 @@ def _instanceDataRead():
 _url = ""
 
 class _Instance:
-	def __init__(self):
+	def __init__(self,thread_retriever,id):
 		# https://github.com/epeios-q37/atlas-python/pull/7 (Condition -> Lock )
 		self._readLock = threading.Lock()
 		self._readLock.acquire()
 		self.handshakeDone = False
 		self.quit = False
-	def __del__(self):
-		_report("Inst.  #" + str(self.id) + " closed!")
-	def set(self,thread,id):
-		self.thread = thread
 		self.id = id
+		self.thread = thread_retriever(self)
 	def IsHandshakeDone(self):
 		if self.handshakeDone:
 			return True
@@ -259,9 +256,7 @@ def _serve(callback,userCallback,callbacks ):
 
 			if id in _instances:
 				_report("Instance of id '" + str(id) + "' exists but should not !")
-			instance = _Instance()
-			instance.set(callback(userCallback, callbacks, instance),id)
-			_instances[id] = instance
+			_instances[id] = _Instance(lambda instance : callback(userCallback, callbacks, instance), id)
 
 			with _writeLock:
 				writeSInt(id)
@@ -280,9 +275,7 @@ def _serve(callback,userCallback,callbacks ):
 				instance = None # Without this, instance will only be destroyed
 												# when 'instance" is set to a new instance.
 		elif not id in _instances:
-			message = "Unknown instance of id '" + str(id) + "'!"
-			print(message)
-			_report(message)
+			_report("Unknown instance of id '" + str(id) + "'!")
 			_dismiss(id)
 		elif not _instances[id].IsHandshakeDone():
 			error = getString()

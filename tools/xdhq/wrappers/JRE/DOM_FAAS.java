@@ -269,7 +269,7 @@ public class DOM_FAAS extends DOM_SHRD {
 		}
 	}
 
-	 private static void serve_(info.q37.xdhq.XDH_SHRD.Callback callback) {
+	private static void serve_(info.q37.xdhq.XDH_SHRD.Callback callback) {
 		try {
 			for (;;) {
 				int id = getSInt_();
