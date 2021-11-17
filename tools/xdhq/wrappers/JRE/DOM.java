@@ -39,19 +39,16 @@ public class DOM {
 	}
 
 	public DOM(MODE mode) {
-		try {
-			switch (mode) {
-			case FAAS:
-				DOM = new info.q37.xdhq.dom.DOM_FAAS();
-				break;
-			case SLFH:
-				DOM = new info.q37.xdhq.dom.DOM_SLFH();
-				break;
-			default:
-				throw new RuntimeException("Unknown mode !!!");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		switch (mode) {
+		case FAAS:
+			DOM = new info.q37.xdhq.dom.DOM_FAAS();
+			break;
+		case SLFH:
+			DOM = new info.q37.xdhq.dom.DOM_SLFH();
+			break;
+		default:
+			System.err.println("Unknown mode !!!");
+			System.exit(1);
 		}
 	}
 

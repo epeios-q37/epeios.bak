@@ -44,7 +44,7 @@ else:
 	_getString = XDHqFaaS3.getString
 	_exitThread = XDHqFaaS3.exitThread
 
-_bye = False	# For use in Jupiter notbooks, to quit an application.
+_bye = False	# For use in Jupiter notebooks, to quit an application.
 
 _DEFAULT_SUPPLIER_LABEL = "auto"
 
@@ -93,8 +93,8 @@ _url = ""
 
 class _Instance:
 	def __init__(self,thread_retriever,id):
-		# https://github.com/epeios-q37/atlas-python/pull/7 (Condition -> Lock )
-		self._readLock = threading.Lock()	#PEr instance read lock.
+		# https://github.com/epeios-q37/atlas-python/pull/7 (Condition -> Lock)
+		self._readLock = threading.Lock()	#Per instance read lock.
 		self._readLock.acquire()
 		self.handshakeDone = False
 		self.quit = False
@@ -256,6 +256,7 @@ def _serve(callback,userCallback,callbacks ):
 
 			if id in _instances:
 				_report("Instance of id '" + str(id) + "' exists but should not !")
+
 			_instances[id] = _Instance(lambda instance : callback(userCallback, callbacks, instance), id)
 
 			with _writeLock:

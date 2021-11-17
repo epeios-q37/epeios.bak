@@ -8,7 +8,7 @@ Le séparateur de l'argument `-cp`  ou `-classpath` ainsi que du contenu de la v
 Pour les autres *OSes*, cela semble être `:` (double-point).
 
 - Pour afficher le fichier et le ligne courante : `System.out.println(Thread.currentThread().getStackTrace()[1]);`
-- Code pour le *catch* : `System.out.println(e.getStackTrace());` 
+- Code pour le *catch* : `System.err.println(e.getStackTrace());` 
 
 <u>**ATTENTION**</u>  : lorsqu'on utilise `-cp` ou `-classpath`, `$CLASSPATH` est ignoré ; en mode développement, il faut simplement donner la classe (exemple  : `java Hello`).
 

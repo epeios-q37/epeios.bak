@@ -32,16 +32,11 @@ import java.nio.file.*;
 public class XDH extends info.q37.jreq.JRE {
 	private static MODE mode_ = MODE.UNDEFINED;
 	static private String dir_;
-	static private String readFile_( String path ) {
+	static private String readFile_( String path ) throws java.io.IOException {
 		String result = null;
-		try {
-			  byte[] encoded = Files.readAllBytes(Paths.get(path));
-			  result = new String(encoded);
-		  } catch ( Exception e) {
-				System.out.println(e.getStackTrace());
-		  }
 
-		  return result;
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(encoded);
 	}
 	public static boolean isDev() {
 		return System.getenv("Q37_EPEIOS") != null;
@@ -56,7 +51,16 @@ public class XDH extends info.q37.jreq.JRE {
 		return getAssetPath_( dir ) + path;
 	}
 	public static String readAsset( String path, String dir ) {
-		return readFile_( getAssetFilename_( path, dir ) );
+		String content = "";
+
+		try {
+			content = readFile_( getAssetFilename_( path, dir ) );
+		} catch (java.io.IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		return content;
 	}
 	static public void launch(info.q37.xdhq.XDH_SHRD.Callback callback,String headContent, MODE mode, String dir ) {
 		mode_ = mode;
@@ -70,7 +74,8 @@ public class XDH extends info.q37.jreq.JRE {
 			XDH_SLFH.launch();
 			break;
 		default:
-			throw new RuntimeException( "Unknown mode !!!");
+			System.err.println( "Unknown mode !!!");
+			System.exit(1);
 		}
 	}
 	static public void broadcastAction(String action, String id) {
@@ -79,9 +84,11 @@ public class XDH extends info.q37.jreq.JRE {
 			XDH_FAAS.broadcastAction(action, id);
 			break;
 		case SLFH:
-			throw new RuntimeException( "To implement !!!");
+			System.err.println( "To implement !!!");
+			System.exit(1);
 		default:
-			throw new RuntimeException( "Unknown mode !!!");
+			System.err.println( "Unknown mode !!!");
+			System.exit(1);
 		}
 	}
 	static public MODE getMode() {

@@ -47,7 +47,7 @@ public class DOM_SLFH extends DOM_SHRD {
 	}
 
 	@Override public boolean isQuitting() {
-		System.out.println("Function in 'DOM_SLFH.java' to implement!!!");
+		System.err.println("Function in 'DOM_SLFH.java' to implement!!!");
 		System.exit(-1);
 		return false;
 	}

@@ -50,6 +50,8 @@ public class DOM_FAAS extends DOM_SHRD {
 	private int id_;
 	private boolean firstLaunch_ =  true;
 
+	static public class ThreadExitingException extends RuntimeException {}
+
 	static class Instance_ {
 		private boolean handshakeDone = false;
 		private boolean quit = false;
@@ -61,6 +63,7 @@ public class DOM_FAAS extends DOM_SHRD {
 				readLock_.acquire();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+				System.exit(1);
 			}
 		}
 		public void waitForData() {
@@ -68,10 +71,11 @@ public class DOM_FAAS extends DOM_SHRD {
 				readLock_.acquire();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+				System.exit(1);
 			}
 			if (quit) {
 				instanceDataRead_();
-				// _exitThread()
+				throw new ThreadExitingException();
 			}
 		}
 		public void dataAvailable() {
@@ -113,7 +117,8 @@ public class DOM_FAAS extends DOM_SHRD {
 			cgi = "xdh_";
 			System.out.println("\tTEST mode !");
 		} else if (!atk.isEmpty() && !"REPLIT".equals(atk) && !"NONE".equals(atk)) {
-			throw new java.lang.RuntimeException("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !");
+			System.err.println("Bad 'ATK' environment variable value : should be 'DEV' or 'TEST' !");
+			System.exit(1);
 		}
 
 		if ( isTokenEmpty_() ) {
@@ -138,14 +143,15 @@ public class DOM_FAAS extends DOM_SHRD {
 			readLock_.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
-	private static void writeByte_( byte data) throws Exception {
+	private static void writeByte_( byte data) throws IOException {
 		output_.write( data );
 	}
 
-	private static void writeUInt_(int value) throws Exception {
+	private static void writeUInt_(int value) throws IOException {
 		byte data[] = new byte[8];
 		int i = 7;
 
@@ -160,19 +166,19 @@ public class DOM_FAAS extends DOM_SHRD {
 		output_.write(data, i, 8 - i);
 	}
 
-	private static void writeSInt_(int value) throws Exception {
+	private static void writeSInt_(int value) throws IOException {
 		writeUInt_( value < 0 ? ( ( -value - 1 ) << 1 ) | 1 : value << 1 );
 	}
 
 
-	private static void writeString_(String string) throws Exception {
+	private static void writeString_(String string) throws IOException {
 		byte bytes[] = string.getBytes();
 
 		writeUInt_(bytes.length);
 		output_.write(bytes);
 	}
 
-	private static void writeStrings_(String[] strings) throws Exception {
+	private static void writeStrings_(String[] strings) throws IOException {
 		int amount = strings.length;
 		int i = 0;
 
@@ -183,16 +189,18 @@ public class DOM_FAAS extends DOM_SHRD {
 		}
 	}
 
-	private static byte getByte_() throws Exception {
+	private static byte getByte_() throws IOException {
 		int data = input_.read();
 
-		if ( data == -1 )
-			throw new Exception( "EOF !!!");
+		if ( data == -1 ) {
+			System.err.println("EOF !!!");
+			System.exit(1);
+		}
 
 		return (byte)data;
 	}
 
-	private static int getUInt_() throws Exception {
+	private static int getUInt_() throws IOException {
 		int datum = input_.read();
 		int value = datum & 0x7f;
 
@@ -205,13 +213,13 @@ public class DOM_FAAS extends DOM_SHRD {
 		return value;
 	}
 
-	private static int getSInt_() throws Exception {
+	private static int getSInt_() throws IOException {
 		int value = getUInt_();
 
 		return ( value & 1 ) != 0? -( ( value >> 1 ) + 1 ) : value >> 1;
 	}
 
-	private static String getString_() throws Exception {
+	private static String getString_() throws IOException {
 		String string = "";
 		int size = getUInt_();
 
@@ -222,7 +230,7 @@ public class DOM_FAAS extends DOM_SHRD {
 		return string;
 	}
 
-	private static String[] getStrings_() throws Exception {
+	private static String[] getStrings_() throws IOException {
 		int amount = getUInt_();
 		int i = 0;
 
@@ -234,7 +242,22 @@ public class DOM_FAAS extends DOM_SHRD {
 		return strings;
 	}
 
-	private static void FaaSHandshake_() throws Exception {
+	private static void dismiss_(int id) throws IOException {
+		synchronized( output_ ) {
+			writeSInt_(id);
+			writeString_("#Dismiss_1");
+		}
+	}
+
+	private static void report_(String message) throws IOException {
+		synchronized( output_ ) {
+			writeSInt_(-1);
+			writeString_("#Report_1");
+			writeString_(message);
+		}
+	}
+
+	private static void FaaSHandshake_() throws IOException {
 		String error, notification;
 
 		writeString_( FaaSProtocolLabel );
@@ -245,7 +268,8 @@ public class DOM_FAAS extends DOM_SHRD {
 		error = getString_();
 
 		if ( !error.isEmpty()) {
-			throw new RuntimeException(error);
+			System.err.println(error);
+			System.exit(1);
 		}
 
 		notification = getString_();
@@ -254,7 +278,7 @@ public class DOM_FAAS extends DOM_SHRD {
 			System.out.println(notification );
 	}
 
-	private static void ignition_() throws Exception {
+	private static void ignition_() throws IOException {
 		writeString_(token);
 		writeString_(info.q37.xdhq.XDH_FAAS.headContent);
 		writeString_(wAddr);
@@ -265,7 +289,8 @@ public class DOM_FAAS extends DOM_SHRD {
 		token = getString_();
 
 		if (isTokenEmpty_()) {
-			throw new RuntimeException( getString_() );
+			System.err.println(getString_());
+			System.exit(1);			
 		}
 		
 		if ( !":0".equals(wPort)) {
@@ -286,7 +311,12 @@ public class DOM_FAAS extends DOM_SHRD {
 			} else if ("NONE".equals(getEnv_("ATK").toUpperCase())) {
 				// Nothing to do.
 			} else if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-				Desktop.getDesktop().browse(new URI(url));
+				try {
+					Desktop.getDesktop().browse(new URI(url));
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
 			} else if (Runtime.getRuntime().exec(new String[] { "which", "xdg-open" }).getInputStream().read() != -1) {
         Runtime.getRuntime().exec(new String[] { "xdg-open", url });	// For KDE based Linux distros.
       }
@@ -298,6 +328,7 @@ public class DOM_FAAS extends DOM_SHRD {
 			readLock_.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
@@ -305,80 +336,85 @@ public class DOM_FAAS extends DOM_SHRD {
 		readLock_.release();
 	}
 
-	private static void serve_(info.q37.xdhq.XDH_SHRD.Callback callback) {
-		try {
-			for (;;) {
-				int id = getSInt_();
+	private static void serve_(info.q37.xdhq.XDH_SHRD.Callback callback) throws IOException {
+		for (;;) {
+			int id = getSInt_();
 
-				if ( id == -1 ) // Should not happen.
-					throw new Exception("Received unexpected undefined command id!");
-				else if ( id == -2 ) {	// New session.
-					id = getSInt_();	// The id of the new session.
+			if ( id == -1 ) {// Should not happen.
+				System.err.println("Received unexpected undefined command id!");
+				System.exit(1);				
+			} else if ( id == -2 ) {	// New session.
+				id = getSInt_();	// The id of the new session.
 
-					if ( instances_.containsKey( id )) {
-						throw new Exception( "Instance of id  '" + id + "' exists but should not !" );
-					}
+				if ( instances_.containsKey( id )) {
+					report_( "Instance of id  '" + id + "' exists but should not !" );
+				}
 
-					synchronized( instances_ ) {
-						Object userObject = callback.callback();	//  from here, 'getAction()' could access the instance before being stored, hence the 'synchronized' .
+				synchronized( instances_ ) {
+					Object userObject = callback.callback();	//  from here, 'getAction()' could access the instance before being stored, hence the 'synchronized' .
 
-						instances_.put( id, new Instance_( userObject ) );
+					instances_.put( id, new Instance_( userObject ) );
 
+					try {
 						Object object1 = userObject.getClass().getField( "dom" ).get(userObject);
 
 						Object object2 = object1.getClass().getMethod( "getDOM", (Class [])null).invoke( object1 );
 					
 						object2.getClass().getMethod( "setId", new Class[]{Integer.class}).invoke( object2, id );
+					} catch (NoSuchFieldException | IllegalAccessException |  NoSuchMethodException | java.lang.reflect.InvocationTargetException e) {
+						e.printStackTrace();
+						System.exit(1);						
 					}
+				}
 
-					synchronized( output_) {
-						writeSInt_( id );
-						writeString_( mainProtocolLabel );
-						writeString_( mainProtocolVersion );
-						output_.flush();
-					}
-				} else if ( id == -3 ) {	// Close session
-					id = getSInt_();
+				synchronized( output_) {
+					writeSInt_( id );
+					writeString_( mainProtocolLabel );
+					writeString_( mainProtocolVersion );
+					output_.flush();
+				}
+			} else if ( id == -3 ) {	// Close session
+				id = getSInt_();
 
-					if ( !instances_.containsKey( id ) )
-						throw new Exception("Instance of id '" + id + "' not available for destruction!");
-
+				if ( !instances_.containsKey( id ) )
+					report_("Instance of id '" + id + "' not available for destruction!");
+				else  {
 					instances_.get(id).quit = true;
 					instances_.get(id).dataAvailable();
 					waitForInstance_();
 					instances_.remove(id);
-				} else if ( !instances_.containsKey( id ) ) {
-						throw new Exception( "Unknown instance of id '" + id + "'!" );
-				} else if ( !instances_.get(id).handshakeDone ) {
-						String error;
-
-						error = getString_();
-
-						if ( !error.isEmpty() ) {
-							throw new Exception( error );
-						}
-					
-						getString_();	// Language. Ignored yet.
-
-						instances_.get(id).handshakeDone = true;
-				} else {
-					instances_.get(id).dataAvailable();
-					waitForInstance_();
 				}
+			} else if ( !instances_.containsKey( id ) ) {
+					report_( "Unknown instance of id '" + id + "'!" );
+					dismiss_(id);
+			} else if ( !instances_.get(id).handshakeDone ) {
+					String error;
+
+					error = getString_();
+
+					if ( !error.isEmpty() ) {
+						System.err.println(error);
+						System.exit(1);				
+					}
+				
+					getString_();	// Language. Ignored yet.
+
+					instances_.get(id).handshakeDone = true;
+			} else {
+				instances_.get(id).dataAvailable();
+				waitForInstance_();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
-	static public void launch(info.q37.xdhq.XDH_SHRD.Callback callback) {
+	static public void launch(info.q37.xdhq.XDH_SHRD.Callback callback)  {
 		try {
 			try {
 				Socket socket = new Socket(pAddr, pPort);
 				input_ = socket.getInputStream();
 				output_ = socket.getOutputStream();
-			} catch (Exception e) {
-				System.out.println("Unable to connect to " + pAddr + ":" + pPort + "!");
+			} catch (UnknownHostException e) {
+				System.err.println("Unable to connect to " + pAddr + ":" + pPort + "!");
 				System.exit(1);
 			}
 
@@ -387,14 +423,14 @@ public class DOM_FAAS extends DOM_SHRD {
 			ignition_();
 
 			serve_(callback);
-
-		} catch (Exception e) {
+			instanceDataRead_();
+ 		} catch (IOException e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
-	static public void broadcastAction(String action, String id)
-	{
+	static public void broadcastAction(String action, String id) {
 		try {
 			synchronized( output_ ) {
 				writeSInt_(-3);
@@ -402,10 +438,11 @@ public class DOM_FAAS extends DOM_SHRD {
 				writeString_(id);
 				output_.flush();
 			}
-		} catch (Exception e) {
+ 		} catch (IOException e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
-	}
+ 	}
 
 	@Override
 	public void getAction(Event event) {
@@ -427,15 +464,13 @@ public class DOM_FAAS extends DOM_SHRD {
 
 			instance.waitForData();
 
-			if ( !instance.quit ) {
-				event.id = getString_();
-				event.action = getString_();
-			}
+			event.id = getString_();
+			event.action = getString_();
 
-			// Some unlocking is done by below 'isQuitting(…)' method,
-			// which MUST be called or the library will hang! 
-		} catch (Exception e) {
+			instanceDataRead_();
+ 		} catch (IOException e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
@@ -489,10 +524,12 @@ public class DOM_FAAS extends DOM_SHRD {
 				instanceDataRead_();
 				break;
 			default:
-				throw new Exception("Unknown return type !!!");
+				System.err.println("Unknown return type !!!");
+				System.exit(1);
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 
 		return object;
