@@ -10,6 +10,10 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-11-18
+- SCLX:  [adpt],
+- XDHDWS: introducing the handling of the API version,
+
 ## 2021-10-31
 - XDHCUC: introducing the `Success` parameter, needed to fix some looping issue,
 - XDHDWS: [adpt],

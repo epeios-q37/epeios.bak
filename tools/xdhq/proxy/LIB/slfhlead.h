@@ -17,24 +17,23 @@
 	along with 'XDHq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef COMMON_INC_
-# define COMMON_INC_
+// SeLF Hosting LEAD
 
-# include "xdhcuc.h"
+#ifndef SLFHLEAD_INC_
+# define SLFHLEAD_INC_
 
 # include "csdmnc.h"
 # include "logq.h"
 
-namespace common {
-	namespace faas {
-		using namespace xdhcmn::faas;
-	}
+namespace slfhlead {
+	bso::sBool InitializeCore(
+			const char *HostService,
+			bso::uint__ PingDelay,
+			sck::duration__ Timeout,
+			csdmnc::cLog *LogCallback = NULL );
 
-	extern logq::rFDriver<> LogDriver;
-
-	void SetCallback(xdhcuc::cGlobal &Callback);
-
-	xdhcuc::cGlobal &GetCallback(void);
+	bso::sBool CoreIsInitialized(void);
+	csdmnc::rCore &Core(void);
 }
 
 #endif

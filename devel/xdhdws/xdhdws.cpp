@@ -42,12 +42,22 @@ namespace psn_ {	// Patched Script Name
 }
 
 namespace {
+  rgstry::rEntry Scripts_("Scripts", sclr::Definitions);
+}
+
+namespace {
+  rgstry::rEntry ScriptsVersion_("@Version", Scripts_);
+}
+
+sScriptsVersion xdhdws::GetScriptsVersion_(void)
+{
+  return sclm::MGetU8(ScriptsVersion_);
+}
+
+namespace {
 	namespace {
 		namespace {
 			namespace {
-				namespace {
-					rgstry::rEntry Scripts_("Scripts", sclr::Definitions);
-				}
 				rgstry::rEntry LooseScript_("Script", Scripts_);
 			}
 

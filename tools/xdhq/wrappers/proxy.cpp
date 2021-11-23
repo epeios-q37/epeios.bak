@@ -21,7 +21,7 @@
 
 #include "prtcl.h"
 
-#include "sclmisc.h"
+#include "sclm.h"
 
 using namespace proxy;
 
@@ -47,7 +47,7 @@ void proxy::Send_(
 	const rArguments &Arguments )
 {
 qRH;
-	qCBUFFERr Buffer;
+	qCBUFFERh Buffer;
 qRB;
 	flw::PutString( Arguments.Command.Convert( Buffer ), Flow );
 	::Send_<str::dStrings>( Arguments.Strings, Flow );
@@ -85,7 +85,9 @@ void proxy::Handshake_(
 qRH;
 	str::wString ErrorMessage;
 qRB;
-	csdcmn::SendProtocol( prtcl::ProtocolId, prtcl::ProtocolVersion, Flow );
+	csdcmn::SendProtocol( prtcl::ProtocolId, prtcl::ProtocolLastVersion, Flow );
+
+#error "Adapt to new protocol (Handling of the script version) !!!"
 
 	Flow.Commit();
 
@@ -93,7 +95,7 @@ qRB;
 	prtcl::Get( Flow, ErrorMessage );
 
 	if ( ErrorMessage.Amount() != 0 ) {
-		sclmisc::ReportAndAbort( ErrorMessage );
+		sclm::ReportAndAbort( ErrorMessage );
 	}
 
 	prtcl::Get( Flow, Language );

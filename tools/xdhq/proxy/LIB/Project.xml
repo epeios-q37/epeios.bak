@@ -58,6 +58,7 @@
 		<Module>common</Module>
 		<Module>faaspool</Module>
 		<Module>registry</Module>
+		<Module>slfhlead</Module>
         <Module>session</Module>
 		<Modules Path="../" Group="Shared">
 			<Module>plugins</Module>

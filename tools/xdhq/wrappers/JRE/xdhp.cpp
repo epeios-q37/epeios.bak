@@ -87,7 +87,12 @@ namespace {
 
 	void Process_( void * )
 	{
+  qRH;
+  qRB;
 		Server_.Process();
+  qRR;
+  qRT;
+  qRE(sclm::ErrorDefaultHandling());
 	}
 }
 
@@ -99,12 +104,12 @@ qRB;
 	tol::Init( Arguments);
 	Caller.Get( Arguments);
 
-	sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
+	scla::FillRegistry( Arguments, scla::faIsArgument, scla::uaReport );
 
 	Processing_.Init(str::wString( "JRE" ) );
-	Server_.Init( sclmisc::MGetU16( registry::parameter::Service ), Processing_ );
+	Server_.Init( sclm::MGetU16( registry::parameter::Service ), Processing_ );
 
-	mtk::RawLaunch( Process_, NULL );
+	mtk::RawLaunch(Process_, NULL, true);
 qRR;
 qRT;
 qRE;
@@ -193,7 +198,7 @@ qRB;
 		Data.FirstCall = false;
 
 	Event.Init( Caller.GetObject() );
-	
+
 	Data.Recv.ReadBegin();
 	Set_( Env, "id", Data.Recv.Id, Event );
 	Set_( Env, "action", Data.Recv.Action, Event );

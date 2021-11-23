@@ -56,10 +56,6 @@ public class DOM {
 		return DOM;
 	}
 
-	public boolean isQuitting() {
-		return DOM.isQuitting();
-	}
-
 	public void getAction(info.q37.xdhq.dom.Event event) {
 		DOM.getAction(event);
 	}

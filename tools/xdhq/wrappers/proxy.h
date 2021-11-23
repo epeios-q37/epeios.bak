@@ -20,15 +20,11 @@
 #ifndef PROXY_INC_
 # define PROXY_INC_
 
-# include "prtcl.h"
-
 # include "csdscb.h"
 # include "flw.h"
 # include "str.h"
 
 namespace proxy {
-	using prtcl::StandBy;
-
 	typedef crt::qCRATEdl( str::dStrings ) dXStrings_;
 	qW( XStrings_ );
 
@@ -296,7 +292,10 @@ namespace proxy {
 					Send_( Flow, Data.Sent.Arguments );
 					Cont = Data.GetReturnType() == tVoid;
 				} else {
-					flw::PutString( StandBy, Flow );
+					flw::PutString( "%Standby", Flow );
+
+#error "Factorize the '%Standby' label definition with 'xdhwebq' (under other)!!!"
+
 					Cont = false;
 				}
 

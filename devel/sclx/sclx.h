@@ -495,15 +495,20 @@ namespace sclx {
 			BackendVisibility_ = bv_Undefined;
 		}
 		qCDTOR( sProxy );
-		void Init(
+		bso::sBool Init(
 			xdhcuc::cSingle &Callback,
 			const scli::sInfo &Info,
-			eXSLFileHandling XSLFileHandling )
+			eXSLFileHandling XSLFileHandling,
+			xdhcmn::sScriptsVersion ScriptsVersion)
 		{
-			Core_.Init(Callback, str::Empty);
+			if ( !Core_.Init(Callback, ScriptsVersion) )
+        return false;
+
 			Info_ = &Info;
 			XSLFileHandling_ = XSLFileHandling;
 			BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.
+
+			return true;
 		}
 		const scli::sInfo &Info( void ) const
 		{
@@ -878,14 +883,17 @@ namespace sclx {
 	protected:
 		bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,
+			xdhcmn::sScriptsVersion ScriptsVersion,
 			const char *Language,
 			const str::dString &Token, // If empty, SlfH session, else token used for the FaaS session.
-			const str::dString &UserID)	override
+			const str::dString &UserId)	override
 		{
 			if ( Token.Amount() )
 				qRFwk();    // Should never be launched in 'FaaS' mode.
 
-			sProxy::Init( Callback, I_(), XSLFileHandling_ );
+			if ( !sProxy::Init(Callback, I_(), XSLFileHandling_, ScriptsVersion) )
+        return false;
+
 			Reporting_.Init( *this, Language );
 			frontend::Init( K_(), Language, Reporting_ );
 

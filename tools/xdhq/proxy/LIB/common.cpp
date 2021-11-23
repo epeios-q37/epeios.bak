@@ -21,39 +21,6 @@
 
 using namespace common;
 
-namespace {
-	csdmnc::rCore Core_;
-	bso::sBool CoreIsInitialized_ = false;
-}
-
-bso::sBool common::InitializeCore(
-		const char *HostService,
-		bso::uint__ PingDelay,
-		sck::duration__ Timeout,
-		csdmnc::cLog *LogCallback)
-{
-		if ( CoreIsInitialized_ )
-			qRFwk();
-
-		if ( Core_.Init(HostService, PingDelay, Timeout, LogCallback) ) {
-			CoreIsInitialized_ = true;
-			return true;
-		} else
-			return false;
-}
-
-bso::sBool common::CoreIsInitialized(void)
-{
-	return CoreIsInitialized_;
-}
-
-csdmnc::rCore &common::Core(void) {
-	if ( !CoreIsInitialized_ )
-		qRGnr();
-
-	return Core_;
-}
-
 logq::rFDriver<> common::LogDriver;
 
 namespace {

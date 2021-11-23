@@ -20,6 +20,7 @@
 #include "session.h"
 
 #include "common.h"
+#include "slfhlead.h"
 
 #include "xdhutl.h"
 
@@ -225,8 +226,8 @@ qRH;
 	csdcmn::sVersion Version = csdcmn::UnknownVersion;
 qRB;
 	if ( Token.Amount() == 0 ) {
-			if ( common::CoreIsInitialized() ) {
-				SlfHDriver_.Init( common::Core(), fdr::ts_Default );
+			if ( slfhlead::CoreIsInitialized() ) {
+				SlfHDriver_.Init( slfhlead::Core(), fdr::ts_Default );
 				Mode_ = mSlfH;
 				Success = true;
 			} else
@@ -271,7 +272,7 @@ qRB;
 		Log_(Id_, IP_, Token.Amount() ? Token : SelfHostingLabel_);	// Avoids above problem, and also string creation.
 #endif
 
-		xdhdws::sProxy::Init(Callback, Token);	// Has to be last, otherwise, if an error occurs, 'Callback' will be freed twice!
+		xdhdws::sProxy::Init(Callback);	// Has to be last, otherwise, if an error occurs, 'Callback' will be freed twice!
 	}
 qRR;
 qRT;

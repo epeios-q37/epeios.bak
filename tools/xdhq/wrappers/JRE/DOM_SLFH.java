@@ -45,10 +45,4 @@ public class DOM_SLFH extends DOM_SHRD {
 	@Override public Object call(String command, Type type, info.q37.xdhq.ARG ...args )  {
 		return XDH_SLFH.call( 5, core, command, type.getValue(), args );
 	}
-
-	@Override public boolean isQuitting() {
-		System.err.println("Function in 'DOM_SLFH.java' to implement!!!");
-		System.exit(-1);
-		return false;
-	}
 }

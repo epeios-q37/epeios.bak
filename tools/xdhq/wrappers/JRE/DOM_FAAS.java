@@ -474,18 +474,6 @@ public class DOM_FAAS extends DOM_SHRD {
 		}
 	}
 
-	@Override public boolean isQuitting() {
-		boolean answer = instances_.get(id_).quit; 
-
-		// Below three line were in 'getAction()', but
-		// in case of 'quit' being at 'true', there was
-		// a risk that 'instances_.get(id_)' were already
-		// destroyed, hence an error on above line.
-		instanceDataRead_();
-
-		return answer;
-	}
-
 	@Override
 	public Object call(String command, Type type, info.q37.xdhq.ARG ...args) {
 		Object object = null;

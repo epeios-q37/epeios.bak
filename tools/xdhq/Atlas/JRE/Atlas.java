@@ -46,7 +46,7 @@ public abstract class Atlas implements Runnable {
 			}
 		} catch (info.q37.xdhq.dom.DOM_FAAS.ThreadExitingException e) {}
 		
-		System.out.println("Quitting thread!");
+		// System.out.println("Quitting thread!");
 	}
 
 	public static boolean isDev() {
