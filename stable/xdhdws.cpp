@@ -49,7 +49,7 @@ namespace {
   rgstry::rEntry ScriptsVersion_("@Version", Scripts_);
 }
 
-sScriptsVersion xdhdws::GetScriptsVersion_(void)
+sScriptsVersion xdhdws::GetScriptsVersion(void)
 {
   return sclm::MGetU8(ScriptsVersion_);
 }

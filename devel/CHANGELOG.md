@@ -10,6 +10,9 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-11-24
+- CSDCMN: adding `GetVersion(…)`
+
 ## 2021-11-18
 - SCLX:  [adpt],
 - XDHDWS: introducing the handling of the API version,

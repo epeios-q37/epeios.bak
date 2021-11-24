@@ -30,7 +30,7 @@
 
 
 namespace prtcl {
-	static qCDEF( char *, ProtocolId, "bf077e9f-baca-48a1-bd3f-bf5181a78666" );
+	static qCDEF( char *, ProtocolId, "22bb5d73-924f-473f-a68a-14f41d8bfa83" );
 	qCDEF( csdcmn::sVersion, ProtocolLastVersion, 0 );
 
 	using csdcmn::Put;

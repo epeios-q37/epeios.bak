@@ -222,8 +222,7 @@ bso::sBool session::rSession::XDHCDCInitialize(
 {
 	bso::sBool Success = false;
 qRH;
-	flw::rDressedRWFlow<> Flow;
-	csdcmn::sVersion Version = csdcmn::UnknownVersion;
+	flw::rDressedWFlow<> Flow;
 qRB;
 	if ( Token.Amount() == 0 ) {
 			if ( slfhlead::CoreIsInitialized() ) {
@@ -241,23 +240,6 @@ qRB;
 
 	if ( Success ) {
 		Flow.Init( D_() );
-
-		Version = csdcmn::GetProtocolVersion( prtcl::ProtocolId, prtcl::ProtocolLastVersion, Flow );
-		Flow.Dismiss();
-
-		switch ( Version ) {
-		case csdcmn::UnknownVersion:
-			ReportErrorToBackend_( "\nUnknown protocol version!\n", Flow );
-			break;
-		case csdcmn::BadProtocol:
-			ReportErrorToBackend_( "\nUnknown protocol!\n", Flow );
-			break;
-		default:
-		  if ( Version > prtcl::ProtocolLastVersion )
-        qRUnx();
-			ReportNoErrorToBackend_( Flow );
-			break;
-		}
 
 		prtcl::Put( Language, Flow );
 		Flow.Commit();

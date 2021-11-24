@@ -49,6 +49,10 @@ namespace csdcmn {
 		sVersion Version,
 		flw::oflow__ &Flow );
 
+	sVersion GetVersion(
+		sVersion LastVersion,	// To avoid, when updating protocol id, to accept version from previous protocol.
+		flw::iflow__ &Flow );	// If 'UndefinedVersion' is returned, then the protocol is not the good one, or the content of the flow is not valid.
+
 	sVersion GetProtocolVersion(
 		const char *Id,
 		sVersion LastVersion,	// To avoid, when updating protocol id, to accept version from previous protocol.

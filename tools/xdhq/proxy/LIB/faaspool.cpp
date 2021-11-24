@@ -646,8 +646,9 @@ namespace {
 		  if ( Version > LastVersion_ )
         qRUnx();
 			Put_( "", Flow );
-			Notify_( NULL, Flow );
+			Notify_(NULL, Flow);
 			Flow.Commit();
+			common::Handshake(Flow);
 			break;
 		}
 	qRR;

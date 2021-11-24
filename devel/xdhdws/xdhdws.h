@@ -43,7 +43,7 @@ namespace xdhdws {
 
 	typedef bso::sU8 sScriptsVersion;
 
-	sScriptsVersion GetScriptsVersion_(void);
+	sScriptsVersion GetScriptsVersion(void);
 
 	class sProxy
 	{
@@ -55,14 +55,9 @@ namespace xdhdws {
 			Callback_ = NULL;
 		}
 		E_CVDTOR( sProxy );
-		bso::sBool Init(
-			xdhcuc::cSingle &Callback,
-			sScriptsVersion UsedScriptsVersion)
+		bso::sBool Init(xdhcuc::cSingle &Callback)
 		{
 			reset();
-
-			if ( UsedScriptsVersion > GetScriptsVersion_() )
-        return false;
 
 			Callback_ = &Callback;
 

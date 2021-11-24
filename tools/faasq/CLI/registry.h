@@ -35,7 +35,7 @@ namespace registry {
                 Service;
         }
 
-         extern rEntry ModuleFilename;
+         extern rEntry _ModuleFilename;
 	}
 
 	namespace definition {

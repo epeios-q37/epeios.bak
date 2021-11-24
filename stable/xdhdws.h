@@ -43,7 +43,7 @@ namespace xdhdws {
 
 	typedef bso::sU8 sScriptsVersion;
 
-	sScriptsVersion GetScriptsVersion_(void);
+	sScriptsVersion GetScriptsVersion(void);
 
 	class sProxy
 	{

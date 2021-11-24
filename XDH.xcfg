@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xpp:bloc xmlns:xpp="http://q37.info/ns/xpp">
   <!-- JS scripts related to XDHTML interfaces -->
+  <xpp:define name="XDHScriptsVersion">
+    <xpp:bloc>0</xpp:bloc>
+  </xpp:define>
   <xpp:define name="XDHScripts">
     <xpp:bloc>
       <!-- All scripts enclosed in following block are of internal use. -->
@@ -305,7 +308,7 @@
     </xpp:bloc>
   </xpp:define>
   <xpp:define name="XDHScriptsEmbedded">
-    <Scripts>
+    <Scripts xpp:attribute="Version,XDHScriptsVersion">
       <xpp:expand select="XDHScripts"/>
     </Scripts>
   </xpp:define>

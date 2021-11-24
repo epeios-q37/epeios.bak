@@ -72,8 +72,13 @@ def set_supplier(supplier = None):
 
 _FAAS_PROTOCOL_LABEL = "9efcf0d1-92a4-4e88-86bf-38ce18ca2894"
 _FAAS_PROTOCOL_VERSION = "0"
-_MAIN_PROTOCOL_LABEL = "bf077e9f-baca-48a1-bd3f-bf5181a78666"
+_MAIN_PROTOCOL_LABEL = "22bb5d73-924f-473f-a68a-14f41d8bfa83"
 _MAIN_PROTOCOL_VERSION = "0"
+_SCRIPTS_VERSION = "0"
+
+_FORBIDDEN_ID = -1
+_CREATION_ID = -2
+_CLOSING_ID = -3
 
 _writeLock = threading.Lock()
 
@@ -96,16 +101,10 @@ class _Instance:
 		# https://github.com/epeios-q37/atlas-python/pull/7 (Condition -> Lock)
 		self._readLock = threading.Lock()	#Per instance read lock.
 		self._readLock.acquire()
-		self.handshakeDone = False
 		self.quit = False
 		self.id = id
 		self.thread = thread_retriever(self)
-	def IsHandshakeDone(self):
-		if self.handshakeDone:
-			return True
-
-		self.handshakeDone = True
-		return False
+		self.language = None
 	def getId(self):
 		return self.id
 	def waitForData(self):
@@ -208,7 +207,7 @@ def _init():
 
 	_socket.settimeout(1)	# In order to quit an application, in Jupyter notebooks.		
 
-def _handshake():
+def _handshakeFaaS():
 	with _writeLock:
 		writeString(_FAAS_PROTOCOL_LABEL)
 		writeString(_FAAS_PROTOCOL_VERSION)
@@ -222,6 +221,21 @@ def _handshake():
 
 	if notification:
 		print(notification)
+
+def _handshakeMain():
+	with _writeLock:
+		writeString(_MAIN_PROTOCOL_LABEL)
+		writeString(_MAIN_PROTOCOL_VERSION)
+		writeString(_SCRIPTS_VERSION)
+
+	error = getString()
+
+	if error:
+		sys.exit(error)
+
+def _handshakes():
+	_handshakeFaaS()
+	_handshakeMain()
 
 def _ignition():
 	global _token, _url
@@ -249,21 +263,16 @@ def _serve(callback,userCallback,callbacks ):
 	while True:
 		id = readSInt()
 		
-		if id == -1:	# Should never happen. 
+		if id == _FORBIDDEN_ID:	# Should never happen. 
 			sys.exit("Received unexpected undefined command id!")
-		if id == -2:    # Value reporting a new session.
+		if id == _CREATION_ID:    # Value reporting a new session.
 			id = readSInt()  # The id of the new session.
 
 			if id in _instances:
 				_report("Instance of id '" + str(id) + "' exists but should not !")
 
 			_instances[id] = _Instance(lambda instance : callback(userCallback, callbacks, instance), id)
-
-			with _writeLock:
-				writeSInt(id)
-				writeString(_MAIN_PROTOCOL_LABEL)
-				writeString(_MAIN_PROTOCOL_VERSION)
-		elif id == -3:	# Value instructing that a session is closed.
+		elif id == _CLOSING_ID:	# Value instructing that a session is closed.
 			id = readSInt();
 
 			if not id in _instances:
@@ -278,16 +287,14 @@ def _serve(callback,userCallback,callbacks ):
 		elif not id in _instances:
 			_report("Unknown instance of id '" + str(id) + "'!")
 			_dismiss(id)
-		elif not _instances[id].IsHandshakeDone():
-			error = getString()
-
-			if error:
-				sys.exit(error)
-
-			getString()	# Language. Not handled yet.
 		else:
-			_instances[id].dataAvailable()
-			_waitForInstance()
+			instance = _instances[id]
+
+			if instance.language is None:
+				instance.language = getString()
+			else:
+				instance.dataAvailable()
+				_waitForInstance()
 
 
 def launch(callback, userCallback, callbacks, headContent):
@@ -303,7 +310,7 @@ def launch(callback, userCallback, callbacks, headContent):
 
 	_init()
 
-	_handshake()
+	_handshakes()
 
 	_ignition()
 

@@ -83,24 +83,6 @@ namespace session {
 #endif
 
 		}
-		void ReportErrorToBackend_(
-			const char *Message,
-			flw::rWFlow &Flow )
-		{
-			if ( Message == NULL )
-				Message = "";
-
-			prtcl::Put( Message, Flow );	// If 'Message' not empty, client will display content and abort.
-
-			if ( Message[0] ) {
-				Flow.Commit();
-				qRGnr();
-			}
-		}
-		void ReportNoErrorToBackend_( flw::rWFlow &Flow )
-		{
-			ReportErrorToBackend_( NULL, Flow );
-		}
 		void Broadcast_(flw::rRFlow &Flow);
 		void BroadcastAction_(flw::rRFlow &Flow);
 		bso::bool__ Launch_(

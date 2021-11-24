@@ -35,6 +35,8 @@ namespace common {
 	void SetCallback(xdhcuc::cGlobal &Callback);
 
 	xdhcuc::cGlobal &GetCallback(void);
+
+	void Handshake(flw::rRWFlow &Flow);
 }
 
 #endif

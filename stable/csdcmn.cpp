@@ -40,6 +40,34 @@ void csdcmn::SendProtocol(
 	Put ( bso::Convert( Version, Buffer ), Flow );
 }
 
+
+sVersion csdcmn::GetVersion(
+	sVersion LastVersion,
+	flw::iflow__ &Flow )
+{
+	sVersion Version = UnknownVersion;
+qRH
+	str::wString RawVersion;
+	sdr::sRow Error = qNIL;
+qRB
+	if ( LastVersion > VersionMax )
+		qRFwk();
+
+  RawVersion.Init();
+  csdcmn::Get( Flow, RawVersion );
+
+  RawVersion.ToNumber( Version, &Error );
+
+  if ( Error != qNIL )
+    Version = BadProtocol;
+  else if ( Version > LastVersion )
+    Version = UnknownVersion;
+qRR
+qRT
+qRE
+	return Version;
+}
+
 sVersion csdcmn::GetProtocolVersion(
 	const char *Label,
 	sVersion LastVersion,
@@ -47,25 +75,13 @@ sVersion csdcmn::GetProtocolVersion(
 {
 	sVersion Version = BadProtocol;
 qRH
-	str::wString Incoming;
-	sdr::sRow Error = qNIL;
+	str::wString IncomingLabel;
 qRB
-	Incoming.Init();
-	csdcmn::Get( Flow, Incoming );	// 'csdcmn::' should not be necessary, but VC++ is confused.
+	IncomingLabel.Init();
+	csdcmn::Get( Flow, IncomingLabel );	// 'csdcmn::' should not be necessary, but VC++ is confused.
 
-	if ( LastVersion > VersionMax )
-		qRFwk();
-
-	if ( Incoming == Label ) {
-		Incoming.Init();
-		csdcmn::Get( Flow, Incoming );
-
-		Incoming.ToNumber( Version, &Error );
-
-		if ( Error != qNIL )
-			Version = BadProtocol;
-		else if ( Version > LastVersion )
-			Version = UnknownVersion;
+	if ( IncomingLabel == Label ) {
+    Version = GetVersion(LastVersion, Flow);
 	}
 qRR
 qRT
