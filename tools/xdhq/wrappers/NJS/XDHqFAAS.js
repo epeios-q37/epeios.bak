@@ -24,7 +24,7 @@ SOFTWARE.
 
 "use strict";
 
-var pAddr = "faas1.q37.info";
+var pAddr = "faas.q37.info";
 var pPort = 53700;
 var wAddr = "";
 var wPort = "";
@@ -81,11 +81,12 @@ const net = require('net');
 const types = shared.types;
 const open = shared.open;
 
-const mainProtocolLabel = "bf077e9f-baca-48a1-bd3f-bf5181a78666";
+const mainProtocolLabel = "22bb5d73-924f-473f-a68a-14f41d8bfa83";
 const mainProtocolVersion = "0";
 
-const faasProtocolLabel = "9efcf0d1-92a4-4e88-86bf-38ce18ca2894";
+const faasProtocolLabel = "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf";
 const faasProtocolVersion = "0";
+const scriptVersion ="0";
 
 var token = getEnv("ATK_TOKEN");
 

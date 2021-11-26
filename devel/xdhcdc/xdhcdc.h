@@ -60,7 +60,7 @@ namespace xdhcdc {
 		virtual bso::bool__ XDHCDCHandle(const char *EventDigest) = 0;
 	public:
 		qCALLBACK( Single );
-		bso::sBool _Initialize(
+		bso::sBool Initialize(
 			xdhcuc::cSingle &Callback,
 			const char *Language,
 			const str::dString &Token,	// If empty, SlfH session, else token used for the FaaS session.

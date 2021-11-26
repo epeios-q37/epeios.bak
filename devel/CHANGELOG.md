@@ -10,6 +10,10 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-11-26
+- XDHCMN: removing thing unrelated to FaaS from `faas` namespace,
+- XDHDWS: [trvl],
+
 ## 2021-11-24
 - CSDCMN: adding `GetVersion(…)`
 

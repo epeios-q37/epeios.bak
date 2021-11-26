@@ -39,7 +39,7 @@ using namespace faaspool;
 #include <time.h>
 
 namespace {
-	qCDEF( char *, ProtocolId_, "9efcf0d1-92a4-4e88-86bf-38ce18ca2894" );
+	qCDEF( char *, ProtocolId_, "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf" );
 	qCDEF( csdcmn::sVersion, LastVersion_, 0 );
 
 	namespace registry_ {
@@ -853,7 +853,7 @@ namespace {
 			  Input.Init();
 			  prtcl::Get(Flow, Input);
 
-				if ( Input != xdhcmn::faas::ScriptNameForInform )
+				if ( Input != xdhcmn::ScriptNameForInform )
           qRGnr();
 
         Input.Init();

@@ -42,6 +42,7 @@ namespace session {
 
 	qMIMICs( bso::sU32, sId_ );	// Assigned per session.
 	qCDEF(sId_, UndefinedId_, bso::U32Max);
+
 	void Release_(
 		sId_ Id,
 		const str::dString &IP);

@@ -70,7 +70,7 @@ def _supply(url):
 def set_supplier(supplier = None):
 	_Supplier.current = supplier
 
-_FAAS_PROTOCOL_LABEL = "9efcf0d1-92a4-4e88-86bf-38ce18ca2894"
+_FAAS_PROTOCOL_LABEL = "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf"
 _FAAS_PROTOCOL_VERSION = "0"
 _MAIN_PROTOCOL_LABEL = "22bb5d73-924f-473f-a68a-14f41d8bfa83"
 _MAIN_PROTOCOL_VERSION = "0"
@@ -170,7 +170,7 @@ def _report(message):
 
 def _init():
 	global _token, _socket, _wAddr, _wPort, _cgi
-	pAddr = "faas1.q37.info"
+	pAddr = "faas.q37.info"
 	pPort = 53700
 	_token = ""
 	_wAddr = ""

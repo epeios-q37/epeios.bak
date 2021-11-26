@@ -360,4 +360,16 @@ public class DOM {
 	public void scrollTo(String id) {
 		DOM.call("ScrollTo_1", Type.VOID, a(id));
 	}
+
+	public void debug_log(boolean switcher) {
+		DOM.call("DebugLog_1", Type.VOID, a(switcher ? "true" : "false"));
+	}
+
+	public void debug_log() {
+			debug_log(true);
+	}
+
+	public void log(String message) {
+		DOM.call("Log_1", Type.VOID, a(message));
+	}
 }

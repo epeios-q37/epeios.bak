@@ -146,7 +146,7 @@ namespace {
 		}
 
 		namespace {
-			void _Ignition_(
+			void Ignition_(
 				fdr::rRWDriver &ProxyDriver,
 				xdhups::rAgent &Agent)
 			{
@@ -193,7 +193,7 @@ namespace {
 			using namespace session;
 
 			namespace {
-				qCDEF( char *, _MainProtocolLabel_, "bf077e9f-baca-48a1-bd3f-bf5181a78666" );
+				qCDEF( char *, MainProtocolLabel_, "bf077e9f-baca-48a1-bd3f-bf5181a78666" );
 				qCDEF(bso::sU8, MainProtocolVersion_, 0);
 			}
 
@@ -391,7 +391,7 @@ namespace {
 		}
 	}
 
-	void _Process_( void )
+	void Process_( void )
 	{
 	qRH;
 		csdbnc::rRWDriver Proxy;

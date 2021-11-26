@@ -25,7 +25,7 @@ Il peut parfois être plus intéressant de modifier/télécharger directement le
 
 ### Nouvelle procédure
 
-**Attention** : procéure rédifée de mémoire ; à valider !
+**Attention** : procédure rédigée de mémoire ; à valider !
 
 - Si existant, effacer `atlas-python-old` ;
 - *Forker* `atlas-python` vers `atlas-python-old` ;

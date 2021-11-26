@@ -287,15 +287,15 @@ qRB;
 
 		if ( !ScriptName.Amount() )
       qRGnr();
-    else if ( ScriptName(ScriptName.First()) == faas_::SpecialScriptNameMarker ) {
-      if ( ScriptName == faas_::ScriptNameForStandBy ) {
+    else if ( ScriptName(ScriptName.First()) == xdhcmn::SpecialScriptNameMarker ) {
+      if ( ScriptName == xdhcmn::ScriptNameForStandBy ) {
         Flow.Dismiss();
         break;
-      } else if ( ScriptName == faas_::ScriptNameForDismiss ) {
+      } else if ( ScriptName == xdhcmn::ScriptNameForDismiss ) {
         Flow.Dismiss();
         Cont = false;
         break;
-      } else if ( ScriptName == faas_::ScriptNameForInform ) {
+      } else if ( ScriptName == xdhcmn::ScriptNameForInform ) {
         Message.Init();
         prtcl::Get(Flow, Message);
         Flow.Dismiss();

@@ -102,13 +102,13 @@ namespace xdhdws {
 		xdhcuc::cGlobal &Callback,
 		const char *Action,
 		const char *Id,
-		faas::sRow FaasRow);
+		faas::sRow FaaSRow);
 
 	void BroadcastAction(
 		xdhcuc::cGlobal &Callback,
 		const str::dString &Action,
 		const str::dString &Id,
-		faas::sRow FaasRow);
+		faas::sRow FaaSRow);
 }
 
 #endif

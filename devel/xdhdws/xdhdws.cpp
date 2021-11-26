@@ -672,7 +672,7 @@ namespace {
 		xdhcuc::cGlobal &Callback,
 		const action &Action,
 		const id &Id,
-		faas::sRow FaasRow)
+		faas::sRow FaaSRow)
 	{
 	qRH
 		str::wString Script;
@@ -680,7 +680,7 @@ namespace {
 		Script.Init();
 		GetBroadcastActionScript_(Action, Id, Script);
 
-		Callback.Broadcast(Script, FaasRow);
+		Callback.Broadcast(Script, FaaSRow);
 	qRR
 	qRT
 	qRE
@@ -691,16 +691,16 @@ void xdhdws::BroadcastAction(
 	xdhcuc::cGlobal &Callback,
 	const char *Action,
 	const char *Id,
-	faas::sRow FaasRow)
+	faas::sRow FaaSRow)
 {
-	BroadcastAction_(Callback, Action, Id, FaasRow);
+	BroadcastAction_(Callback, Action, Id, FaaSRow);
 }
 
 void xdhdws::BroadcastAction(
 	xdhcuc::cGlobal &Callback,
 	const str::dString &Action,
 	const str::dString &Id,
-	faas::sRow FaasRow)
+	faas::sRow FaaSRow)
 {
-	BroadcastAction_(Callback, Action, Id, FaasRow);
+	BroadcastAction_(Callback, Action, Id, FaaSRow);
 }

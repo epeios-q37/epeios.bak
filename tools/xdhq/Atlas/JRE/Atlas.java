@@ -42,6 +42,10 @@ public abstract class Atlas implements Runnable {
 		try {
 			for (;;) {
 				dom.getAction(event);
+
+				if ( "".equals(event.action) && isDev() )
+					dom.debug_log();
+
 				handle(event.action, event.id);
 			}
 		} catch (info.q37.xdhq.dom.DOM_FAAS.ThreadExitingException e) {}

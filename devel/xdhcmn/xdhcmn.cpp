@@ -30,10 +30,10 @@ using namespace xdhcmn;
 
 #define SPECIAL_SCRIPT_NAME_MARKER "#"
 
-qCDEF(char, xdhcmn::faas::SpecialScriptNameMarker, SPECIAL_SCRIPT_NAME_MARKER[0]);
-qCDEF(char *, xdhcmn::faas::ScriptNameForStandBy, SPECIAL_SCRIPT_NAME_MARKER "StandBy_1");
-qCDEF(char *, xdhcmn::faas::ScriptNameForDismiss, SPECIAL_SCRIPT_NAME_MARKER "Dismiss_1");
-qCDEF(char *, xdhcmn::faas::ScriptNameForInform, SPECIAL_SCRIPT_NAME_MARKER "Inform_1");
+qCDEF(char, xdhcmn::SpecialScriptNameMarker, SPECIAL_SCRIPT_NAME_MARKER[0]);
+qCDEF(char *, xdhcmn::ScriptNameForStandBy, SPECIAL_SCRIPT_NAME_MARKER "StandBy_1");
+qCDEF(char *, xdhcmn::ScriptNameForDismiss, SPECIAL_SCRIPT_NAME_MARKER "Dismiss_1");
+qCDEF(char *, xdhcmn::ScriptNameForInform, SPECIAL_SCRIPT_NAME_MARKER "Inform_1");
 
 void xdhcmn::Escape(
     const str::string_ &Source,

@@ -32,7 +32,7 @@ import java.util.concurrent.*;
 import java.awt.Desktop;
 
 public class DOM_FAAS extends DOM_SHRD {
-	static private String pAddr = "faas1.q37.info";
+	static private String pAddr = "faas.q37.info";
 	static private int pPort = 53700;
 	static private String wAddr = "";
 	static private String wPort = "";
@@ -42,10 +42,15 @@ public class DOM_FAAS extends DOM_SHRD {
 	static private OutputStream output_;
 	// A 'Semaphore' because the locks aer reentrant in Java.
 	static private Semaphore readLock_ = new Semaphore(1);	// Global read lock.
-	static private String FaaSProtocolLabel = "9efcf0d1-92a4-4e88-86bf-38ce18ca2894";
-	static private String FaaSProtocolVersion = "0";
-	static private String mainProtocolLabel = "bf077e9f-baca-48a1-bd3f-bf5181a78666";
-	static private String mainProtocolVersion = "0";
+	final static private String FAAS_PROTOCOL_LABEL_ = "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf";
+	final static private String FAAS_PROTOCOL_VERSION_ = "0";
+	final static private String MAIN_PROTOCOL_LABEL_ = "22bb5d73-924f-473f-a68a-14f41d8bfa83";
+	final static private String MAIN_PROTOCOL_VERSION_ = "0";
+	final static private String SCRIPTS_VERSION_ = "0";
+
+	final static private int FORBIDDEN_ID_ = -1;
+	final static private int CREATION_ID_ = -2;
+	final static private int CLOSING_ID_ = -3;
 
 	private int id_;
 	private boolean firstLaunch_ =  true;
@@ -53,9 +58,9 @@ public class DOM_FAAS extends DOM_SHRD {
 	static public class ThreadExitingException extends RuntimeException {}
 
 	static class Instance_ {
-		private boolean handshakeDone = false;
 		private boolean quit = false;
 		Semaphore readLock_ = new Semaphore(1);
+		String language = null;
 		Object userObject;	// Just to avoid that the GC destroys the object.
 		Instance_( Object object ) {
 			this.userObject = object;
@@ -252,16 +257,16 @@ public class DOM_FAAS extends DOM_SHRD {
 	private static void report_(String message) throws IOException {
 		synchronized( output_ ) {
 			writeSInt_(-1);
-			writeString_("#Report_1");
+			writeString_("#Inform_1");
 			writeString_(message);
 		}
 	}
 
-	private static void FaaSHandshake_() throws IOException {
+	private static void handshakeFaaS_() throws IOException {
 		String error, notification;
 
-		writeString_( FaaSProtocolLabel );
-		writeString_( FaaSProtocolVersion );
+		writeString_( FAAS_PROTOCOL_LABEL_ );
+		writeString_( FAAS_PROTOCOL_VERSION_ );
 
 		output_.flush();
 
@@ -276,6 +281,28 @@ public class DOM_FAAS extends DOM_SHRD {
 
 		if ( !notification.isEmpty())
 			System.out.println(notification );
+	}
+
+	private static void handshakeMain_() throws IOException {
+		String error;
+
+		writeString_(MAIN_PROTOCOL_LABEL_);
+		writeString_(MAIN_PROTOCOL_VERSION_);
+		writeString_(SCRIPTS_VERSION_);
+
+		output_.flush();
+
+		error = getString_();
+
+		if ( !error.isEmpty()) {
+			System.err.println(error);
+			System.exit(1);
+		}
+	}
+
+	private static void handshakes_() throws IOException {
+		handshakeFaaS_();
+		handshakeMain_();
 	}
 
 	private static void ignition_() throws IOException {
@@ -340,10 +367,10 @@ public class DOM_FAAS extends DOM_SHRD {
 		for (;;) {
 			int id = getSInt_();
 
-			if ( id == -1 ) {// Should not happen.
+			if ( id == FORBIDDEN_ID_ ) {// Should not happen.
 				System.err.println("Received unexpected undefined command id!");
 				System.exit(1);				
-			} else if ( id == -2 ) {	// New session.
+			} else if ( id == CREATION_ID_ ) {	// New session.
 				id = getSInt_();	// The id of the new session.
 
 				if ( instances_.containsKey( id )) {
@@ -366,14 +393,7 @@ public class DOM_FAAS extends DOM_SHRD {
 						System.exit(1);						
 					}
 				}
-
-				synchronized( output_) {
-					writeSInt_( id );
-					writeString_( mainProtocolLabel );
-					writeString_( mainProtocolVersion );
-					output_.flush();
-				}
-			} else if ( id == -3 ) {	// Close session
+			} else if ( id == CLOSING_ID_ ) {	// Close session
 				id = getSInt_();
 
 				if ( !instances_.containsKey( id ) )
@@ -387,22 +407,15 @@ public class DOM_FAAS extends DOM_SHRD {
 			} else if ( !instances_.containsKey( id ) ) {
 					report_( "Unknown instance of id '" + id + "'!" );
 					dismiss_(id);
-			} else if ( !instances_.get(id).handshakeDone ) {
-					String error;
-
-					error = getString_();
-
-					if ( !error.isEmpty() ) {
-						System.err.println(error);
-						System.exit(1);				
-					}
-				
-					getString_();	// Language. Ignored yet.
-
-					instances_.get(id).handshakeDone = true;
 			} else {
-				instances_.get(id).dataAvailable();
-				waitForInstance_();
+				Instance_ instance = instances_.get(id);
+
+				if ( instance.language == null ) {
+					instance.language = getString_();
+				} else {
+					instance.dataAvailable();
+					waitForInstance_();
+				}
 			}
 		}
 	}
@@ -418,7 +431,7 @@ public class DOM_FAAS extends DOM_SHRD {
 				System.exit(1);
 			}
 
-			FaaSHandshake_();
+			handshakes_();
 
 			ignition_();
 

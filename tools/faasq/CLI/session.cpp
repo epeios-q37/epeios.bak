@@ -116,7 +116,7 @@ qRB
 	// which is the id of the DOM element on which there was 'Action' was applied.
 		csdcmn::Put(Id_, Proxy_);
 
-		csdcmn::Put(faas_::ScriptNameForStandBy, Proxy_);
+		csdcmn::Put(xdhcmn::ScriptNameForStandBy, Proxy_);
 
 		Proxy_.Commit();
 	}

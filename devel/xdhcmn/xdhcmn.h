@@ -55,15 +55,15 @@ namespace xdhcmn {
 			qCDEF( sId, BroadcastScriptId, -2 );
 			qCDEF( sId, BroadcastActionId, -3 );
 		}
-
-		extern const char SpecialScriptNameMarker;
-
-		// Script name with no correspondence in 'XDHScripts.xcfg'.
-		// Is intercepted to do a special action.
-		extern const char *ScriptNameForStandBy;  // Awaiting new action.
-		extern const char *ScriptNameForDismiss;  // Cease handling of this session.
-		extern const char *ScriptNameForInform;  // Sends a report to proxy.
 	}
+
+  extern const char SpecialScriptNameMarker;
+
+  // Script name with no correspondence in 'XDHScripts.xcfg'.
+  // Is intercepted to do a special action.
+  extern const char *ScriptNameForStandBy;  // Awaiting new action.
+  extern const char *ScriptNameForDismiss;  // Cease handling of this session.
+  extern const char *ScriptNameForInform;  // Sends a report to proxy.
 
 	qMIMICs( bso::sU16, sIndex );	// For the 'CSS' rules.
 
