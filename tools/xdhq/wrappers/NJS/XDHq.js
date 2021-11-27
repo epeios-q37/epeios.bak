@@ -31,13 +31,7 @@ const types = shared.types;
 const platforms = shared.platforms;
 const platform = shared.platform;
 const open = shared.open;
-
-function isDev() {
-	if (process.env.Q37_EPEIOS)
-		return true;
-	else
-		return false;
-}
+const isDev = shared.isDev;
 
 function getEpeiosPath() {
 	if (isDev()) {
@@ -168,13 +162,13 @@ class XDH {
 
 		call(this, "HandleLayout_1", types.STRING, variant, id, xml, xsl, callback);
 	}
-	prependLayout(id, html, callback) {	// Depredated!
+	prependLayout(id, html, callback) {	// Deprecated!
 		this.handleLayout_("Prepend", id, html, "", callback);
 	}
-	inner(id, html, callback) {	// Depredated!
+	inner(id, html, callback) {	// Deprecated!
 		this.handleLayout_("Set", id, html, "", callback);
 	}
-	appendLayout(id, html, callback) {	// Depredated!
+	appendLayout(id, html, callback) {	// Deprecated!
 		this.handleLayout_("Append", id, html, "", callback);
 	}
 	handleLayoutXSL_(variant, id, xml, xslFilename, callback) {
@@ -185,13 +179,13 @@ class XDH {
 
 		this.handleLayout_(variant, id, xml, xslURL, callback);
 	}
-	prependLayoutXSL(id, xml, xsl, callback) {	// Depredated!
+	prependLayoutXSL(id, xml, xsl, callback) {	// Deprecated!
 		this.handleLayoutXSL_("Prepend", id, xml, xsl, callback);
 	}
-	setLayoutXSL(id, xml, xsl, callback) {	// Depredated!
+	setLayoutXSL(id, xml, xsl, callback) {	// Deprecated!
 		this.handleLayoutXSL_("Set", id, xml, xsl, callback);
 	}
-	appendLayoutXSL(id, xml, xsl, callback) {	// Depredated!
+	appendLayoutXSL(id, xml, xsl, callback) {	// Deprecated!
 		this.handleLayoutXSL_("Append", id, xml, xsl, callback);
 	}
 	layout_(variant, id, xml, xslOrCallback, callback) {
@@ -366,6 +360,21 @@ class XDH {
 	}
 	scrollTo(id, callback) {
 		call(this, "ScrollTo_1", types.VOID, id, callback);
+	}
+	debugLog(switcher, callback) {
+		if ( switcher === undefined)
+			switcher = true;
+		else if ( typeof(switcher) !== "boolean" ) {
+			if ( callback !== undefined)
+				throw new Error("Bad parameter type!");
+			callback = switcher;
+			switcher = true;
+		}
+
+		call(this, "DebugLog_1", types.VOID, switcher ? "true" : "false" , callback);
+	}
+	log(message, callback) {
+		call(this, "Log_1", types.VOID, message , callback);
 	}
 }
 
