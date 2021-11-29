@@ -52,9 +52,12 @@ namespace {
 		namespace definition {
 			namespace {
 					sclr::rEntry FaaS_("FaaS", sclr::Definitions);
+					sclr::rEntry Notifications_("Notifications", FaaS_);
+					sclr::rEntry LooseNotification_("Notification", Notifications_);
 			}
 
-			sclr::rEntry Notification( "Notification", FaaS_ );
+			sclr::rEntry DefaultNotification( "DefaultNotification", FaaS_ );
+			sclr::rEntry TaggedNotification( RGSTRY_TAGGING_ATTRIBUTE("flavour"), LooseNotification_);
 			sclr::rEntry URL( "URL", FaaS_ );
 		}
 	}
@@ -606,24 +609,26 @@ namespace {
 	}
 
 	void Notify_(
-		const char *Message,
-		flw::rWFlow &Flow )
+		flw::rWFlow &Flow,
+		const str::dString &Flavour)
 	{
 	qRH;
 		str::wString Notification;
 	qRB;
-		Notification.Init( Message );
+		Notification.Init();
 
-		if ( Notification.IsEmpty() )
-			sclm::OGetValue( registry_::definition::Notification, Notification );
+		if (!sclm::OGetValue( rgstry::rTEntry(registry_::definition::TaggedNotification, Flavour), Notification) )
+      sclm::OGetValue(registry_::definition::DefaultNotification, Notification);
 
-		prtcl::Put( Notification, Flow );
+		prtcl::Put(Notification, Flow);
 	qRR;
 	qRT;
 	qRE;
 	}
 
-	csdcmn::sVersion Handshake_( fdr::rRWDriver &Driver )
+	csdcmn::sVersion Handshake_(
+    fdr::rRWDriver &Driver,
+    str::dString &Flavour )
 	{
 	  csdcmn::sVersion Version = csdcmn::UnknownVersion;
 	qRH;
@@ -645,8 +650,9 @@ namespace {
 		default:
 		  if ( Version > LastVersion_ )
         qRUnx();
+      Get_(Flow, Flavour);
 			Put_( "", Flow );
-			Notify_(NULL, Flow);
+			Notify_(Flow, Flavour);
 			Flow.Commit();
 			common::Handshake(Flow);
 			break;
@@ -707,7 +713,8 @@ namespace {
 	rBackend_ *CreateBackend_(
 		fdr::rRWDriver &Driver,
 		csdcmn::sVersion ProtocolVersion,
-		const str::dString &IP )
+		const str::dString &IP,
+		const str::dString &Flavour ) // 'PYH', 'JRE'…
 	{
 		rBackend_ *Backend = NULL;
 	qRH;
@@ -749,7 +756,7 @@ namespace {
 		else {
 			URL.Init();
 			Put_(BuildURL_(Address, str::Empty, Token, URL), Flow);
-			Log_(IP, Token, Misc );
+			Log_(IP, Token, Flavour );
 		}
 	qRR;
 		if ( Backend != NULL )
@@ -897,7 +904,7 @@ namespace {
 	qRH;
 		sck::sSocket Socket = sck::Undefined;
 		csdcmn::sVersion ProtocolVersion = csdcmn::UnknownVersion;
-		str::wString IP;
+		str::wString IP, Flavour;
 		sck::rRWDriver Driver;
 		rBackend_ *Backend = NULL;
 		connection_timeout_::sRow CTRow = qNIL;
@@ -913,9 +920,10 @@ namespace {
 
 		Driver.Init( Socket, false, fdr::ts_Default );
 
-		ProtocolVersion = Handshake_( Driver );
+		Flavour.Init();
+		ProtocolVersion = Handshake_(Driver, Flavour);
 
-		if ( ( Backend = CreateBackend_(Driver, ProtocolVersion, IP) ) != NULL ) {
+		if ( ( Backend = CreateBackend_(Driver, ProtocolVersion, IP, Flavour) ) != NULL ) {
 			HandleSwitching_(IP, Backend->Token, Driver, Backend->TRow, Backend->Shareds, Backend->Switch );	// Does not return until disconnection or error.
 		}
 	qRR;

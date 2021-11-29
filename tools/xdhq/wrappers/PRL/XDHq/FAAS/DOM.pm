@@ -41,15 +41,12 @@ sub new {
     return $self;
 }
 
-sub wait {
-    my $self = shift;
-
-    XDHq::FAAS::Instance::wait($self->{instance});
+sub waitForData_ {
+    XDHq::FAAS::Instance::waitForData(shift->{instance});
 }
 
-sub signal {
-    lock($XDHq::FAAS::SHRD::globalCondition);
-    cond_signal($XDHq::FAAS::SHRD::globalCondition);
+sub instanceDataRead_ {
+    XDHq::FAAS::SHRD::instanceDataRead();
 }
 
 sub getAction {
@@ -65,11 +62,11 @@ sub getAction {
         }
     }
 
-    $self->wait();
+    $self->waitForData_();
 
     my ($id, $action) = $self->{instance}->{quit} ? ("","") : (XDHq::FAAS::SHRD::getString(), XDHq::FAAS::SHRD::getString());
 
-    # $self->signal();  # is deported in the below 'isQuitting' function,
+    # $self->instanceDataRead_();  # is deported in the below 'isQuitting' function,
                         # to avoid the use of the 'instance' object after
                         # destruction, hence 'isQuitting' MUST be called
                         # after calling this function, otherwise the library
@@ -82,7 +79,7 @@ sub isQuitting {
     my $self = shift;
     my $answer = $self->{instance}->{quit};
 
-    $self->signal();
+    $self->instanceDataRead_();
 
     return $answer;
 }
@@ -113,14 +110,14 @@ sub call {
     }
 
     if ($type eq XDHq::SHRD::RT_STRING) {
-        $self->wait();
+        $self->waitForData_();
         my $result = XDHq::FAAS::SHRD::getString();
-        $self->signal();
+        $self->instanceDataRead_();
         return $result;
     } elsif ($type eq XDHq::SHRD::RT_STRINGS) {
-        $self->wait();
+        $self->waitForData_();
         my @result = XDHq::FAAS::SHRD::getStrings();
-        $self->signal();
+        $self->instanceDataRead_();
         return @result;
     } elsif (not ($type eq XDHq::SHRD::RT_VOID)) {
         die("Unknown return type !!!")

@@ -62,8 +62,8 @@ sub _worker {
             last;
         }
 
-        if (($action eq "" ) or not $callbacks->{"_PreProcess"} or $callbacks->{"_PreProcess"}->($userObject,$dom, $id)) {
-            if ( $callbacks->{$action}->($userObject,$dom, $id) and $callbacks->{"_PostProcess"} ) {
+        if (($action eq "" ) or not $callbacks->{"_PreProcess"} or $callbacks->{"_PreProcess"}->($userObject, $dom, $id)) {
+            if ( $callbacks->{$action}->($userObject, $dom, $id) and $callbacks->{"_PostProcess"} ) {
                 $callbacks->{"_PostProcess"}->($userObject,$dom, $id);
             }
         }

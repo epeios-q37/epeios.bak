@@ -26,14 +26,25 @@ package XDHq::FAAS::SHRD;
 
 use threads;
 use threads::shared;
+use Thread::Semaphore;
 
 $XDHq::FAAS::SHRD::socket;
 
 $XDHq::FAAS::SHRD::writeLock;
 share ($XDHq::FAAS::SHRD::writeLock);
 
-$XDHq::FAAS::SHRD::globalCondition;
-share($XDHq::FAAS::SHRD::globalCondition);
+# Using semapĥores, as lockscan not explicitely be released.
+$XDHq::FAAS::SHRD::readLock_ = Thread::Semaphore->new();
+$XDHq::FAAS::SHRD::readLock_->down();
+share($XDHq::FAAS::SHRD::readLock_);
+
+sub waitForInstance {
+    $XDHq::FAAS::SHRD::readLock_->down();
+}
+
+sub instanceDataRead {
+    $XDHq::FAAS::SHRD::readLock_->up();
+}
 
 sub writeUInt {
     my $value = shift;

@@ -106,6 +106,8 @@ void common::Handshake(flw::rRWFlow &Flow)
     HandleScriptsVersion_(Flow);
 
     ReportNoErrorToBackend_( Flow );
+
+    prtcl::Put("", Flow); // No notification yet ; for future use.
     break;
   }
 }

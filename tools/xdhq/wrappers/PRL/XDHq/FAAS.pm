@@ -183,7 +183,7 @@ sub _serve {
                 die("Instance of id '${id}' exists but should not !")
             }
 
-            my $instance : shared = XDHq::FAAS::Instance::new();
+            my $instance : shared = XDHq::FAAS::Instance->new();
 
             XDHq::FAAS::Instance::set($instance, $callback->($userCallback, $callbacks, $instance),$id);
 
@@ -204,10 +204,9 @@ sub _serve {
 
            $instances{$id}->{quit} = XDHq::SHRD::TRUE;
 
-            XDHq::FAAS::Instance::signal($instances{$id});
+            XDHq::FAAS::Instance::dataAvailable($instances{$id});
 
-            lock($XDHq::FAAS::SHRD::globalCondition);
-            cond_wait($XDHq::FAAS::SHRD::globalCondition);
+            XDHq::FAAS::SHRD::waitForInstance();
 
             delete $instances{$id};
         } elsif ( not($instances{$id})) {
@@ -221,10 +220,9 @@ sub _serve {
 
             XDHq::FAAS::SHRD::getString();    # Language. Not handled yet.
         } else {
-            XDHq::FAAS::Instance::signal($instances{$id});
+            XDHq::FAAS::Instance::dataAvailable($instances{$id});
 
-            lock($XDHq::FAAS::SHRD::globalCondition);
-            cond_wait($XDHq::FAAS::SHRD::globalCondition);
+            XDHq::FAAS::SHRD::waitForInstance();
         }
     }
 }

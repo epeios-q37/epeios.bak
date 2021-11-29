@@ -23,7 +23,7 @@
 		<Definitions>
 			<FaaS>
 				<URL>http://%Address%%Service%/xdh.php?_token=%Token%</URL>
-				<Notification>
+				<xpp:define name="CommonNotification">
 					<xpp:cdata>
 ****************************************************************************
      Your application is connected to the free public server. Welcome!
@@ -31,7 +31,20 @@
      EXPRESS OR IMPLIED. THE USE OF THIS SERVICE IS AT YOUR OWN RISK.
 ****************************************************************************
 					</xpp:cdata>
-				</Notification>
+        </xpp:define>
+				<Notifications>
+				  <DefaultNotification>
+				    <xpp:expand select="CommonNotification"/>
+				  </DefaultNotification>
+				  <Notification flavour="PYH"><!-- As an example; can be removed -->
+				    <xpp:expand select="CommonNotification"/>
+				    <!--
+              To add extraneous text, remove cdata in 'CommonNotification',
+              in '<![CDATA[…' or '<xpp:cdata>..</xpp>' form (BUG in XPP library !!!).
+            -->
+            <!--xpp:bloc>PYH addendum</xpp:bloc!-->
+          </Notification>
+        </Notifications>
 			</FaaS>
 			<Plugins target="Token">
 				<xpp:define name="TokenPluginsDir">

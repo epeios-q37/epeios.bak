@@ -211,6 +211,7 @@ def _handshakeFaaS():
 	with _writeLock:
 		writeString(_FAAS_PROTOCOL_LABEL)
 		writeString(_FAAS_PROTOCOL_VERSION)
+		writeString("PYH")
 
 	error = getString()
 
@@ -233,6 +234,11 @@ def _handshakeMain():
 	if error:
 		sys.exit(error)
 
+	notification = getString();
+
+	if notification:
+		print(notification)
+
 def _handshakes():
 	_handshakeFaaS()
 	_handshakeMain()
@@ -242,8 +248,8 @@ def _ignition():
 	with _writeLock:
 		writeString( _token)
 		writeString(_headContent)
-		writeString(_wAddr);
-		writeString("PYH")
+		writeString(_wAddr)
+		writeString("")	# Actually not used; for future use.
 
 	_token = getString()
 
