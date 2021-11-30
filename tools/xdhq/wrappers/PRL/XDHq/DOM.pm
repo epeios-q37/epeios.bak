@@ -63,10 +63,6 @@ sub getAction {
     return shift->{dom}->getAction();
 }
 
-sub isQuitting {
-    return shift->{dom}->isQuitting();
-}
-
 sub _execute {
     return shift->{dom}->call("Execute_1", shift, shift);
 }
@@ -361,6 +357,14 @@ sub nextSibling {
 
 sub scrollTo {
     shift->{dom}->call("ScrollTo_1", XDHq::SHRD::RT_VOID, shift);
+}
+
+sub debugLog {
+    shift->{dom}->call("DebugLog_1", XDHq::SHRD::RT_VOID, shift // 1 ? "true" : "false");
+}
+
+sub log {
+    shift->{dom}->call("Log_1", XDHq::SHRD::RT_VOID, shift);
 }
 
 return XDHq::SHRD::TRUE;

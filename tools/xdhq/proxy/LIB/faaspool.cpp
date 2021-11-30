@@ -56,7 +56,7 @@ namespace {
 					sclr::rEntry LooseNotification_("Notification", Notifications_);
 			}
 
-			sclr::rEntry DefaultNotification( "DefaultNotification", FaaS_ );
+			sclr::rEntry DefaultNotification( "DefaultNotification", Notifications_ );
 			sclr::rEntry TaggedNotification( RGSTRY_TAGGING_ATTRIBUTE("flavour"), LooseNotification_);
 			sclr::rEntry URL( "URL", FaaS_ );
 		}

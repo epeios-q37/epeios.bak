@@ -42,7 +42,7 @@ sub new {
 }
 
 sub waitForData_ {
-    XDHq::FAAS::Instance::waitForData(shift->{instance});
+    shift->{instance}->waitForData();
 }
 
 sub instanceDataRead_ {
@@ -64,24 +64,11 @@ sub getAction {
 
     $self->waitForData_();
 
-    my ($id, $action) = $self->{instance}->{quit} ? ("","") : (XDHq::FAAS::SHRD::getString(), XDHq::FAAS::SHRD::getString());
-
-    # $self->instanceDataRead_();  # is deported in the below 'isQuitting' function,
-                        # to avoid the use of the 'instance' object after
-                        # destruction, hence 'isQuitting' MUST be called
-                        # after calling this function, otherwise the library
-                        # will hang! 
-
-    return ($action,$id);
-}
-
-sub isQuitting {
-    my $self = shift;
-    my $answer = $self->{instance}->{quit};
+    my ($id, $action) = (XDHq::FAAS::SHRD::getString(), XDHq::FAAS::SHRD::getString());
 
     $self->instanceDataRead_();
 
-    return $answer;
+    return ($action,$id);
 }
 
 sub call {

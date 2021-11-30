@@ -43,40 +43,23 @@ sub new {
 
     bless $this, $classe;
 
-    $this->{readLock} = Thread::Semaphore->new();
-    $this->{handshakeDone} = XDHq::SHRD::FALSE;
+    $this->{id} = shift;
 
+    $this->{readLock} = Thread::Semaphore->new();
     $this->{readLock}->down();
 
     return $this;
 }
 
-sub set {
-    my ($self, $thread, $id) = @_;
-
-#    $self->{thread} = $thread;
-    $self->{id} = $id;
-}
-
-sub testAndSetHandshake {
-    my $self = shift;
-
-    if ($self->{handshakeDone}) {
-        return XDHq::SHRD::TRUE;
-    } else {
-        $self->{handshakeDone} = XDHq::SHRD::TRUE;
-        return XDHq::SHRD::FALSE;
-    }
-}
-
-sub getId {
-    my $self = shift;
-
-    return $self->{id};
-}
-
 sub waitForData {
-    shift->{readLock}->down();
+    my $this = shift;
+
+    $this->{readLock}->down();
+
+    if ( $this->{quit} ) {
+        XDHq::FAAS::SHRD::instanceDataRead();
+        threads->exit();
+    }
 }
 
 sub dataAvailable {

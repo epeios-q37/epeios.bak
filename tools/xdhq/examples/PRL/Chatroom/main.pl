@@ -68,6 +68,8 @@ sub acSubmitMessage {
     my ($chatroom, $dom) = @_;
 
 	my $message = $dom->getValue("Message");
+
+    $dom->log($message);
 	
     $dom->setValue("Message", "");
 	$dom->focus("Message");

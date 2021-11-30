@@ -58,8 +58,8 @@ sub _worker {
     while (XDHq::SHRD::TRUE) {
         my ($action, $id) = $dom->getAction();
 
-        if ( $dom->isQuitting() ) {
-            last;
+        if ( ( $action eq "") and XDHq::SHRD::isDev() ) {
+            $dom->debugLog();
         }
 
         if (($action eq "" ) or not $callbacks->{"_PreProcess"} or $callbacks->{"_PreProcess"}->($userObject, $dom, $id)) {
@@ -69,7 +69,7 @@ sub _worker {
         }
     }
 
-   # CORE::say("Quitting thread!");
+   # CORE::say("Quitting thread!"); # The thread quits abruptly, so never go here.
 }
 
 sub _callback {
