@@ -60,10 +60,6 @@ module Atlas
 		while true
 			action, id = dom.getAction()
 
-			if dom.isQuitting?
-				break
-			end
-
 			self.call_(callbacks[action], userObject, dom, id, action)
 		end
 

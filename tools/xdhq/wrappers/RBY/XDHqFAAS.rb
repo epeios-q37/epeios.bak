@@ -28,12 +28,27 @@ module XDHqFAAS
 	require 'socket'
 	require 'pp'
 
+	@readMutex_ = Mutex.new
+	@readCondVar_ = ConditionVariable.new
+
+	def self.waitForInstance_
+		@readMutex_.synchronize {
+			@readCondVar_.wait(@readMutex_)
+		}
+	end
+		
+	def self.instanceDataRead_
+		@readMutex_.synchronize {
+			@readCondVar_.signal
+		}
+	end
+	
 	class Instance
 		def initialize
-			@mutex = Mutex.new
-			@condVar = ConditionVariable.new
-	  @handshakeDone = false
-	  @quit = false
+			@readMutex_ = Mutex.new
+			@readCondVar_ = ConditionVariable.new
+			@handshakeDone = false
+			@quit = false
 		end
 		def set(thread,id)
 			@thread = thread
@@ -47,23 +62,24 @@ module XDHqFAAS
 				return false
 			end
 		end
-		def getId()
+		def getId
 			return @id
-	end
-	def setQuitting
-	  @quit = true
-	end
-	def isQuitting?
-	  return @quit
-	end
-		def wait
-			@mutex.synchronize {
-				@condVar.wait(@mutex)
-			}
 		end
-		def signal
-			@mutex.synchronize {
-				@condVar.signal()
+		def setQuitting
+			@quit = true
+		end
+		def waitForData
+			@readMutex_.synchronize {
+				@readCondVar_.wait(@readMutex_)
+			}
+			if @quit
+				XDHqFAAS::instanceDataRead_()
+				Thread.exit()
+			end	
+		end
+		def dataAvailable
+			@readMutex_.synchronize {
+				@readCondVar_.signal
 			}
 		end
 	end
@@ -85,8 +101,6 @@ module XDHqFAAS
 	@cgi = "xdh"
 
 	@instances = {}
-	@globalMutex = Mutex.new
-	@globalCondVar = ConditionVariable.new
 	@outputMutex = Mutex.new
 	@headContent = ""
 	@token = ""
@@ -103,13 +117,6 @@ module XDHqFAAS
 
 	def self.unlockOutputMutex()
 		@outputMutex.unlock();
-	end
-
-
-	def self.signal()
-		@globalMutex.synchronize {
-			@globalCondVar.signal()
-		}
 	end
 
 	def XDHq::getEnv(name, value = "")
@@ -177,7 +184,7 @@ module XDHqFAAS
 		@socket.write(result.to_s())
 	end
 	def self.writeSInt(value)
-	self.writeUInt( value < 0 ? ( ( -value - 1 ) << 1 ) | 1 : value << 1 )
+		self.writeUInt( value < 0 ? ( ( -value - 1 ) << 1 ) | 1 : value << 1 )
   end
 	def self.writeString(string)
 		writeUInt(string.bytes.length())
@@ -195,19 +202,19 @@ module XDHqFAAS
 	end
 	def self.getUInt
 		byte = getByte()
-	value = byte & 0x7f
+		value = byte & 0x7f
 	
   	while (byte & 0x80) != 0    # For Ruby, 0 == true
 			byte = getByte()
 			value = (value << 7) + (byte & 0x7f)
-	end
+		end
 	
 		return value
 	end
 	def self.getSInt
-	value = getUInt()
-	
-	return ( value & 1 ) != 0 ? -( ( value >> 1 ) + 1 ) : value >> 1
+		value = getUInt()
+		
+		return ( value & 1 ) != 0 ? -( ( value >> 1 ) + 1 ) : value >> 1
   end
 	def self.getString
 		size = getUInt()
@@ -304,11 +311,9 @@ module XDHqFAAS
 				end
 				
 				@instances[id].setQuitting
-				@instances[id].signal()
+				@instances[id].dataAvailable()
 
-				@globalMutex.synchronize {
-							@globalCondVar.wait(@globalMutex)
-				}
+				waitForInstance_()
 				
 				@instances.delete(id)
 			elsif !@instances.has_key?(id)
@@ -322,11 +327,9 @@ module XDHqFAAS
 
 				getString() # Language. Currently ignored.
 			else
-				@instances[id].signal()
+				@instances[id].dataAvailable()
 				
-				@globalMutex.synchronize {
-					@globalCondVar.wait(@globalMutex)
-				}
+				waitForInstance_()
 			end
 		end
 	end
@@ -354,11 +357,8 @@ module XDHqFAAS
 			@instance = instance
 			@firstLaunch = true
 		end
-		def wait()
-			@instance.wait()
-		end
-		def signal()
-			XDHqFAAS::signal()
+		def waitForData_()
+			@instance.waitForData()
 		end
 		def getAction()
 			if @firstLaunch
@@ -369,24 +369,14 @@ module XDHqFAAS
 				XDHqFAAS::writeString("#StandBy_1")
 				XDHqFAAS::unlockOutputMutex()
 			end
-			wait()
+			waitForData_()
 
-			id, action = @instance.isQuitting? ? ["", ""] : [XDHqFAAS::getString(), XDHqFAAS::getString()]
+			id, action = [XDHqFAAS::getString(), XDHqFAAS::getString()]
 
-	  # signal()
-	  # The below 'is_quitting()' method MUST be called, or the library will hang.
+			XDHqFAAS::instanceDataRead_()
 
 			return action,id
-	end
-	def isQuitting?
-	  answer = @instance.isQuitting?
-
-	  # Below line were in 'getAction' above, but, in case of quitting,
-	  # '@instance' could already be destroyed here.
-	  signal()
-
-	  return answer
-	end
+		end
 		def call(command, type, *args)
 			i = 0
 			amount = args.length
@@ -416,14 +406,14 @@ module XDHqFAAS
 			case type
 			when XDHqSHRD::VOID
 			when XDHqSHRD::STRING
-				wait()
+				waitForData_()
 				string = XDHqFAAS::getString()
-				signal()
+				XDHqFAAS::instanceDataRead_()
 				return string
 			when XDHqSHRD::STRINGS
-				wait()
+				waitForData_()
 				strings = XDHqFAAS::getStrings()
-				signal()
+				XDHqFAAS::instanceDataRead_()
 				return strings
 			else
 				abort("Unknown return type !!!")

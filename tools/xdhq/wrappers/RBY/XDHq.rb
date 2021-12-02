@@ -94,10 +94,6 @@ module XDHq
 			return @dom.getAction()
 		end
 
-		def isQuitting?
-			return @dom.isQuitting?
-		end
-
 		private def execute(type, script)
 			return call("Execute_1" ,type, script)
 		end
