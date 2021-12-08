@@ -149,11 +149,11 @@ namespace tht {
 
 			return mtx::TryToLock( Mutex_ );
 		}
-		void Lock( void )
+		bso::sBool Lock( void )
 		{
 			Test_();
 
-			mtx::Lock( Mutex_ );
+			return mtx::Lock( Mutex_ );
 		}
 		void Unlock( void )
 		{
@@ -161,7 +161,7 @@ namespace tht {
 
 			mtx::Unlock( Mutex_ );
 		}
-		// Retruns 'true' if registry was lcoekd.
+		// Retruns 'true' if registry was locked.
 		bso::sBool UnlockIfLocked( void )
 		{
 			if ( mtx::IsLocked(Mutex_) ) {
@@ -198,23 +198,26 @@ namespace tht {
 		{
 			return Core_.IsLocked();
 		}
-		void Lock( void )
+		bso::sBool Lock( void )
 		{
+		  bso::sBool WasNotLocked = true;
 			tht::sTID TID = GetTID();
 
 			if ( Core_.ThreadID != TID ) {
-				Core_.Lock();
+				WasNotLocked = Core_.Lock();
 
 				if ( Core_.ThreadID == Undefined )
 					Core_.ThreadID = TID;
 				else
 					qRFwk();
-			}
+			} // Else was not locked by another thread.
 
 			if ( Counter_ == CounterMax_ )
 				qRLmt();
 
 			Counter_++;
+
+			return WasNotLocked;
 		}
 		void Unlock( void )
 		{

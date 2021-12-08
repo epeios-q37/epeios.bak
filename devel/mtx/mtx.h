@@ -115,8 +115,9 @@ namespace mtx {
 
 			return IsLocked_();
 		}
-		void Lock( void )
+		bso::sBool Lock( void ) // Returns true when the lock was obtained immediately.
 		{
+		  bso::sBool WasNotLocked = false;
 			std::unique_lock<decltype(Mutex_)> Lock( Mutex_ );
 #ifdef MTX__CONTROL
 			if ( IsReleased_() ) {
@@ -125,12 +126,16 @@ namespace mtx {
 			}
 #endif
 			if ( IsDisabled_() )
-				return;
+				return true;
 
 			if ( IsLocked_() )
 				Core_.wait( Lock, [this]() {return State_ == sFree;} );	// third parameter to handle spurious awake.
+      else
+        WasNotLocked = true;
 
 			State_ = sLocked;
+
+			return WasNotLocked;
 		}
 		bso::bool__ TryToLock( tol::sDelay TimeOut )
 		{
@@ -222,7 +227,7 @@ namespace mtx {
 		return Handler->TryToLock( TimeOut );
 	}
 
-	inline void Lock( handler___ Handler )
+	inline bso::sBool Lock( handler___ Handler )
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
@@ -318,7 +323,7 @@ namespace mtx {
 		{
 			return mtx::TryToLock( H_(), TimeOut );
 		}
-		void Lock( void )
+		bso::sBool Lock( void )
 		{
 			return mtx::Lock( H_() );
 		}

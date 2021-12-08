@@ -54,6 +54,7 @@ namespace xdhcdc {
 	protected:
 		virtual bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,
+			tht::rLocker &CallbackLocker, // Avoid destruction of above 'Callback' while being used.
 			const char *Language,
 			const str::dString &Token,	// If empty, SlfH session, else token used for the FaaS session.
 			const str::dString &UserId) = 0;	// Set by user, and sent as 'id' parameter to the connect associated function.
@@ -62,11 +63,12 @@ namespace xdhcdc {
 		qCALLBACK( Single );
 		bso::sBool Initialize(
 			xdhcuc::cSingle &Callback,
+			tht::rLocker &CallbackLocker, // Avoid destruction of above 'Callback' while being used.
 			const char *Language,
 			const str::dString &Token,	// If empty, SlfH session, else token used for the FaaS session.
 			const str::dString &UserId)
 		{
-			return XDHCDCInitialize(Callback, Language, Token, UserId);
+			return XDHCDCInitialize(Callback, CallbackLocker, Language, Token, UserId);
 		}
 		bso::bool__ Handle( const char *EventDigest )
 		{

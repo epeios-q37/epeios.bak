@@ -216,14 +216,15 @@ namespace {
 
 bso::sBool session::rSession::XDHCDCInitialize(
 	xdhcuc::cSingle &Callback,
+			tht::rLocker &CallbackLocker, // Avoid destruction of above 'Callback' while being used.
 	const char *Language,
 	const str::dString &Token,
 	const str::dString &UserId)
 {
 	bso::sBool Success = false;
-qRH;
+qRFH;
 	flw::rDressedWFlow<> Flow;
-qRB;
+qRFB;
 	if ( Token.Amount() == 0 ) {
 			if ( slfhlead::CoreIsInitialized() ) {
 				SlfHDriver_.Init( slfhlead::Core(), fdr::ts_Default );
@@ -254,11 +255,12 @@ qRB;
 		Log_(Id_, IP_, Token.Amount() ? Token : SelfHostingLabel_);	// Avoids above problem, and also string creation.
 #endif
 
-		xdhdws::sProxy::Init(Callback);	// Has to be last, otherwise, if an error occurs, 'Callback' will be freed twice!
+		xdhdws::sProxy::Init(Callback, CallbackLocker);	// Must be last, otherwise, if an error occurs, 'Callback' will be freed twice!
 	}
-qRR;
-qRT;
-qRE;
+qRFR;
+  Success = false;
+qRFT;
+qRFE(sclm::ErrorDefaultHandling());
 	return Success;
 }
 

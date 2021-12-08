@@ -42,10 +42,19 @@ namespace xdhups {
 	class sSession
 	{
 	private:
+	  tht::rLocker Locker_; // Used to avoid th edestruction of below 'Upstream_' while being used.
 		Q37_MRMDF( cDownstream_, C_, Callback_ );
 	public:
 		void reset( bso::bool__ P = true )
 		{
+		  if ( P ) {
+        if ( Callback_ != NULL ) {
+          Locker_.Lock(); // Locked downstream while 'Callback_' being used.
+          Locker_.Unlock();
+        }
+		  }
+
+		  Locker_.reset(P);
 			Callback_ = NULL;
 		}
 		E_CVDTOR( sSession );
@@ -53,6 +62,7 @@ namespace xdhups {
 		{
 			reset();
 
+			Locker_.Init();
 			Callback_ = &Callback;
 		}
 		bso::sBool Initialize(
@@ -61,7 +71,7 @@ namespace xdhups {
 			const str::dString &Token,	// If empty, SlfH session, else token used for the FaaS session.
 			const str::dString &UserId)
 		{
-			return C_().Initialize(Callback, Language, Token, UserId);
+			return C_().Initialize(Callback, Locker_, Language, Token, UserId);
 		}
 		bso::bool__ Handle( const char *EventDigest )
 		{

@@ -57,11 +57,16 @@ module Atlas
 	end
 
 	def Atlas::thread(userObject,dom,callbacks)
+		XDHq::l
 		while true
+			XDHq::l
 			action, id = dom.getAction()
+			XDHq::l
 
 			self.call_(callbacks[action], userObject, dom, id, action)
+			XDHq::l
 		end
+		XDHq::l
 
 		# puts "Quitting thread!"
 	end

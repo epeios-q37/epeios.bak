@@ -28,39 +28,41 @@ module XDHqFAAS
 	require 'socket'
 	require 'pp'
 
-	@readMutex_ = Mutex.new
-	@readCondVar_ = ConditionVariable.new
+	@_readMutex_ = Mutex.new
+	# Staying on conditional variable, because a mutex
+	# can not be locked twice by same thread,
+	# and not be unlocked by another thread.
+	# Also, there are no semaphores in Ruby.
+	@_readCondVar_ = ConditionVariable.new
 
 	def self.waitForInstance_
-		@readMutex_.synchronize {
-			@readCondVar_.wait(@readMutex_)
+		@_readMutex_.synchronize {
+			@_readCondVar_.wait(@_readMutex_)
 		}
 	end
 		
 	def self.instanceDataRead_
-		@readMutex_.synchronize {
-			@readCondVar_.signal
+		@_readMutex_.synchronize {
+			@_readCondVar_.signal
 		}
 	end
 	
 	class Instance
+		attr_accessor :language
+
 		def initialize
 			@readMutex_ = Mutex.new
+	# Staying on conditional variable, because a mutex
+	# can not be locked twice by same thread,
+	# and not be unlocked by another thread.
+	# Also, there are no semaphores in Ruby.
 			@readCondVar_ = ConditionVariable.new
-			@handshakeDone = false
 			@quit = false
+			@language = nil
 		end
 		def set(thread,id)
 			@thread = thread
 			@id = id
-		end
-		def handshakeDone?
-			if @handshakeDone
-				return true
-			else
-				@handshakeDone = true
-				return false
-			end
 		end
 		def getId
 			return @id
@@ -89,35 +91,32 @@ module XDHqFAAS
 		puts "#{caller_infos[0]} - #{caller_infos[1]}"  
 	end
 
-	@FaaSProtocolLabel = "9efcf0d1-92a4-4e88-86bf-38ce18ca2894"
-	@FaaSProtocolVersion = "0"
-	@mainProtocolLabel = "bf077e9f-baca-48a1-bd3f-bf5181a78666"
-	@mainProtocolVersion = "0"
+	@FAAS_PROTOCOL_LABEL_ = "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf"
+	@FAAS_PROTOCOL_VERSION_ = "0"
+	@MAIN_PROTOCOL_LABEL_ = "22bb5d73-924f-473f-a68a-14f41d8bfa83"
+	@MAIN_PROTOCOL_VERSION_ = "0"
+	@SCRIPTS_VERSION_ = "0"
 
-	@pAddr = "faas1.q37.info"
+	@pAddr = "faas.q37.info"
 	@pPort = 53700
 	@wAddr = ""
 	@wPort = ""
 	@cgi = "xdh"
 
 	@instances = {}
-	@outputMutex = Mutex.new
+	@writeMutex = Mutex.new
 	@headContent = ""
 	@token = ""
+
+	def self.getWriteMutex
+		@writeMutex
+	end
 
 	@REPLit = 
 	<<~HEREDOC
 	node -e "require('http').createServer(function (req, res)
 	{res.end(\\"<html><body><iframe style='border-style: none; width: 100%%;height: 100%%' src='https://atlastk.org/repl_it.php?url=%s'></iframe></body></html>\\");process.exit();}).listen(8080)"
 	HEREDOC
-
-	def self.lockOutputMutex()
-		@outputMutex.lock();
-	end
-
-	def self.unlockOutputMutex()
-		@outputMutex.unlock();
-	end
 
 	def XDHq::getEnv(name, value = "")
 		return XDHqSHRD::getEnv(name, value);
@@ -236,10 +235,11 @@ module XDHqFAAS
 
 		return strings
 	end
-	def self.handshake
-		@outputMutex.synchronize {
-			writeString(@FaaSProtocolLabel)
-			writeString(@FaaSProtocolVersion)
+	def self.handshakeFaaS
+		@writeMutex.synchronize {
+			writeString(@FAAS_PROTOCOL_LABEL_)
+			writeString(@FAAS_PROTOCOL_VERSION_)
+			writeString("RBY")
 		}
 
 		error = getString()
@@ -254,12 +254,35 @@ module XDHqFAAS
 			puts(notification)
 		end
 	end
+	def self.handshakeMain
+		@writeMutex.synchronize {
+			writeString(@MAIN_PROTOCOL_LABEL_)
+			writeString(@MAIN_PROTOCOL_VERSION_)
+			writeString(@SCRIPTS_VERSION_)
+		}
+
+		error = getString()
+
+		if !error.empty?()
+			abort error
+		end
+
+		notification = getString()
+
+		if !notification.empty?()
+			puts(notification)
+		end
+	end
+	def self.handshakes
+		handshakeFaaS
+		handshakeMain
+	end
 	def self.ignition
-		@outputMutex.synchronize {
+		@writeMutex.synchronize {
 			writeString(@token)
 			writeString(@headContent)
 			writeString(@wAddr)
-			writeString("RBY")
+			writeString("")	# Currently not used ; for future use.
 		}
 
 		@token = getString()
@@ -288,6 +311,7 @@ module XDHqFAAS
 			if id == -1 # Should not happen.
 				abort("Received unexpected undefined command id!")
 			elsif id == -2    # Value reporting a new front-end.
+				XDHq::l
 				id = getSInt()  # The id of the new front-end.
 
 				if @instances.has_key?(id)
@@ -297,12 +321,6 @@ module XDHqFAAS
 				instance = Instance.new
 				instance.set(callback.call(userCallback.call(),callbacks,instance),id)
 				@instances[id]=instance
-
-				@outputMutex.synchronize {
-					writeSInt(id)
-					writeString(@mainProtocolLabel)
-					writeString(@mainProtocolVersion)
-				}
 			elsif id == -3  # Value reporting the closing of a session.
 				id = getSInt()
 
@@ -318,18 +336,23 @@ module XDHqFAAS
 				@instances.delete(id)
 			elsif !@instances.has_key?(id)
 				abort("Unknown instance of id '#{id}'!")
-			elsif !@instances[id].handshakeDone?
-				error = getString()
-
-				if !error.empty?()
-					abort( error )
-				end
-
-				getString() # Language. Currently ignored.
 			else
-				@instances[id].dataAvailable()
-				
-				waitForInstance_()
+				instance = @instances[id]
+
+				puts instance.language
+
+				if instance.language.nil?
+					XDHq::l
+					instance.language = getString()
+					XDHq::l
+				else
+					XDHq::l
+					instance.dataAvailable()
+					XDHq::l
+					
+					waitForInstance_()
+					XDHq::l
+				end
 			end
 		end
 	end
@@ -337,20 +360,28 @@ module XDHqFAAS
 		Thread::abort_on_exception = true
 		@headContent = headContent
 
-		@socket = TCPSocket.new(@pAddr, @pPort)
+		puts "Connecting to '#{@pAddr}:#{@pPort}'…"
 
-		self.handshake()
+		begin
+			@socket = TCPSocket.new(@pAddr, @pPort)
+		rescue StandardError
+			abort("Unable to connect to '#{@pAddr}:#{@pPort}': #{$!}!")
+		end
+
+		puts "Connected to '#{@pAddr}:#{@pPort}'."
+
+		self.handshakes()
 
 		self.ignition()
 
 		self.serve(callback,userCallback,callbacks)
   end
   def XDHqFAAS::broadcastAction(action,id)
-		XDHqFAAS::lockOutputMutex() # '@outputMutex.synchronize {...}' does not work as '@outputMutex' is not the good one.
-		XDHqFAAS::writeSInt(-3)
-		XDHqFAAS::writeString(action)
-		XDHqFAAS::writeString(id)
-		XDHqFAAS::unlockOutputMutex()   
+		@writeMutex.synchronize {
+			XDHqFAAS::writeSInt(-3)
+			XDHqFAAS::writeString(action)
+			XDHqFAAS::writeString(id)
+	}
   end 
 	class DOM
 		def initialize(instance)
@@ -364,13 +395,15 @@ module XDHqFAAS
 			if @firstLaunch
 				@firstLaunch = false
 			else
-				XDHqFAAS::lockOutputMutex() # '@outputMutex.synchronize {...}' does not work as '@outputMutex' is not the good one.
-				XDHqFAAS::writeSInt(@instance.getId())
-				XDHqFAAS::writeString("#StandBy_1")
-				XDHqFAAS::unlockOutputMutex()
+				XDHqFAAS::writeMutex.synchronize {
+					XDHqFAAS::writeSInt(@instance.getId())
+					XDHqFAAS::writeString("#StandBy_1")
+				}
 			end
-			waitForData_()
 
+			XDHq::l
+			waitForData_()
+			XDHq::l
 			id, action = [XDHqFAAS::getString(), XDHqFAAS::getString()]
 
 			XDHqFAAS::instanceDataRead_()
@@ -381,27 +414,26 @@ module XDHqFAAS
 			i = 0
 			amount = args.length
 			
-			XDHqFAAS::lockOutputMutex() # '@outputMutex.synchronize {...}' does not work as '@outputMutex' is not the good one.
-			XDHqFAAS::writeSInt(@instance.getId())
-			XDHqFAAS::writeString(command)
-			XDHqFAAS::writeUInt(type)
+			XDHqFAAS::getWriteMutex.synchronize {
+				XDHqFAAS::writeSInt(@instance.getId())
+				XDHqFAAS::writeString(command)
+				XDHqFAAS::writeUInt(type)
 
-			while amount != 0    # For Ruby, 0 == true
-				if args[i].is_a?( String )
-					XDHqFAAS::writeUInt(XDHqSHRD::STRING)
-					XDHqFAAS::writeString(args[i])
-				else
-					XDHqFAAS::writeUInt(XDHqSHRD::STRINGS)
-					XDHqFAAS::writeStrings(args[i])
+				while amount != 0    # For Ruby, 0 == true
+					if args[i].is_a?( String )
+						XDHqFAAS::writeUInt(XDHqSHRD::STRING)
+						XDHqFAAS::writeString(args[i])
+					else
+						XDHqFAAS::writeUInt(XDHqSHRD::STRINGS)
+						XDHqFAAS::writeStrings(args[i])
+					end
+
+					i += 1
+					amount -= 1
 				end
 
-				i += 1
-				amount -= 1
-			end
-
-			XDHqFAAS::writeUInt(XDHqSHRD::VOID)
-
-			XDHqFAAS::unlockOutputMutex()
+				XDHqFAAS::writeUInt(XDHqSHRD::VOID)
+			}
 
 			case type
 			when XDHqSHRD::VOID

@@ -48,18 +48,23 @@ namespace xdhdws {
 	class sProxy
 	{
 	private:
+	  Q37_MRMDF( tht::rLocker, L_, Locker_ );
 		Q37_MRMDF( xdhcuc::cSingle, C_, Callback_ );
 	public:
 		void reset( bso::bool__ P = true )
 		{
+		  Locker_ = NULL;
 			Callback_ = NULL;
 		}
 		E_CVDTOR( sProxy );
-		bso::sBool Init(xdhcuc::cSingle &Callback)
+		bso::sBool Init(
+      xdhcuc::cSingle &Callback,
+      tht::rLocker &Locker )
 		{
 			reset();
 
 			Callback_ = &Callback;
+			Locker_ = &Locker;
 
 			return true;
 		}

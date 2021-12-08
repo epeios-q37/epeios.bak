@@ -93,6 +93,7 @@ namespace session {
 	protected:
 		virtual bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,
+			tht::rLocker &CallbackLocker, // Avoid destruction of above 'Callback' while being used.
 			const char *Language,
 			const str::dString &Token,
 			const str::dString &UserId) override;
