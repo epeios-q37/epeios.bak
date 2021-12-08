@@ -477,7 +477,7 @@ namespace {
 			const char *ScriptName,
 			const str::dStrings &Values,
 			xdhcuc::cSingle &Callback,
-			tht::rLocker &CallbackLocker, // Ensure that above 'Callback' is not prematurely destroyed. NOTA: already locked.
+			tht::rLocker &CallbackLocker, // Ensure that above 'Callback' is not prematurely destroyed.
 			tht::rBlocker &ReturnValueBlocker, // Ensure that the potential return value is read before another primitive is launched.
 			bso::sBool *SuccessPointer)
 		{

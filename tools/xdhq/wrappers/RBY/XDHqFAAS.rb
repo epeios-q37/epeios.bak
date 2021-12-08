@@ -311,7 +311,6 @@ module XDHqFAAS
 			if id == -1 # Should not happen.
 				abort("Received unexpected undefined command id!")
 			elsif id == -2    # Value reporting a new front-end.
-				XDHq::l
 				id = getSInt()  # The id of the new front-end.
 
 				if @instances.has_key?(id)
@@ -339,19 +338,12 @@ module XDHqFAAS
 			else
 				instance = @instances[id]
 
-				puts instance.language
-
 				if instance.language.nil?
-					XDHq::l
 					instance.language = getString()
-					XDHq::l
 				else
-					XDHq::l
 					instance.dataAvailable()
-					XDHq::l
 					
 					waitForInstance_()
-					XDHq::l
 				end
 			end
 		end
@@ -395,15 +387,14 @@ module XDHqFAAS
 			if @firstLaunch
 				@firstLaunch = false
 			else
-				XDHqFAAS::writeMutex.synchronize {
+				XDHqFAAS::getWriteMutex.synchronize {
 					XDHqFAAS::writeSInt(@instance.getId())
 					XDHqFAAS::writeString("#StandBy_1")
 				}
 			end
 
-			XDHq::l
 			waitForData_()
-			XDHq::l
+
 			id, action = [XDHqFAAS::getString(), XDHqFAAS::getString()]
 
 			XDHqFAAS::instanceDataRead_()

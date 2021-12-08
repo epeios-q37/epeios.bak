@@ -42,7 +42,7 @@ namespace xdhups {
 	class sSession
 	{
 	private:
-	  tht::rLocker Locker_; // Used to avoid th edestruction of below 'Upstream_' while being used.
+	  tht::rLocker Locker_; // Used to avoid the destruction of below 'Upstream_' while being used.
 		Q37_MRMDF( cDownstream_, C_, Callback_ );
 	public:
 		void reset( bso::bool__ P = true )
