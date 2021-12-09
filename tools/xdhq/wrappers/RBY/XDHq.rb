@@ -348,6 +348,14 @@ module XDHq
 		def scrollTo(id)
 			call("ScrollTo_1", $VOID, id)
 		end
+
+		def debugLog(switch = true)
+			call("DebugLog_1", $VOID, switch ? "true" : false)
+		end
+
+		def log(message)
+			call("Log_1", $VOID, message)
+		end
 	end
 
 	def XDHq::launch(callback,userCallback,callbacks,headContent, dir)

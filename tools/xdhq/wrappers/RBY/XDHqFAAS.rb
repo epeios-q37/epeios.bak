@@ -91,11 +91,15 @@ module XDHqFAAS
 		puts "#{caller_infos[0]} - #{caller_infos[1]}"  
 	end
 
-	@FAAS_PROTOCOL_LABEL_ = "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf"
-	@FAAS_PROTOCOL_VERSION_ = "0"
-	@MAIN_PROTOCOL_LABEL_ = "22bb5d73-924f-473f-a68a-14f41d8bfa83"
-	@MAIN_PROTOCOL_VERSION_ = "0"
-	@SCRIPTS_VERSION_ = "0"
+	FAAS_PROTOCOL_LABEL_ = "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf"
+	FAAS_PROTOCOL_VERSION_ = "0"
+	MAIN_PROTOCOL_LABEL_ = "22bb5d73-924f-473f-a68a-14f41d8bfa83"
+	MAIN_PROTOCOL_VERSION_ = "0"
+	SCRIPTS_VERSION_ = "0"
+
+	FORBIDDEN_ID_ = -1
+	CREATION_ID_ = -2
+	CLOSING_ID_ = -3
 
 	@pAddr = "faas.q37.info"
 	@pPort = 53700
@@ -235,10 +239,23 @@ module XDHqFAAS
 
 		return strings
 	end
+	def self.dismiss(id)
+		@writeMutex.synchronize {
+			writeSInt(id)
+			writeString("#Dismiss_1")	
+		}
+	end
+	def self.report(message)
+		@writeMutex.synchronize {
+			writeSInt(-1)
+			writeString("#Inform_1")	
+			writeString(message)	
+		}
+	end
 	def self.handshakeFaaS
 		@writeMutex.synchronize {
-			writeString(@FAAS_PROTOCOL_LABEL_)
-			writeString(@FAAS_PROTOCOL_VERSION_)
+			writeString(FAAS_PROTOCOL_LABEL_)
+			writeString(FAAS_PROTOCOL_VERSION_)
 			writeString("RBY")
 		}
 
@@ -256,9 +273,9 @@ module XDHqFAAS
 	end
 	def self.handshakeMain
 		@writeMutex.synchronize {
-			writeString(@MAIN_PROTOCOL_LABEL_)
-			writeString(@MAIN_PROTOCOL_VERSION_)
-			writeString(@SCRIPTS_VERSION_)
+			writeString(MAIN_PROTOCOL_LABEL_)
+			writeString(MAIN_PROTOCOL_VERSION_)
+			writeString(SCRIPTS_VERSION_)
 		}
 
 		error = getString()
@@ -308,33 +325,34 @@ module XDHqFAAS
 		while true
 			id = getSInt()
 			
-			if id == -1 # Should not happen.
+			if id == FORBIDDEN_ID_ # Should not happen.
 				abort("Received unexpected undefined command id!")
-			elsif id == -2    # Value reporting a new front-end.
+			elsif id == CREATION_ID_    # Value reporting a new front-end.
 				id = getSInt()  # The id of the new front-end.
 
 				if @instances.has_key?(id)
-					abort("Instance of id '#{id}' exists but should not !")
+					report("Instance of id '#{id}' exists but should not !")
 				end
 
 				instance = Instance.new
 				instance.set(callback.call(userCallback.call(),callbacks,instance),id)
 				@instances[id]=instance
-			elsif id == -3  # Value reporting the closing of a session.
+			elsif id == CLOSING_ID_  # Value reporting the closing of a session.
 				id = getSInt()
 
 				if !@instances.has_key?(id)
-					abort("Instance of id '#{id}' not available for destruction!")
-				end
-				
-				@instances[id].setQuitting
-				@instances[id].dataAvailable()
+					report("Instance of id '#{id}' not available for destruction!")
+				else
+					@instances[id].setQuitting
+					@instances[id].dataAvailable()
 
-				waitForInstance_()
-				
-				@instances.delete(id)
+					waitForInstance_()
+					
+					@instances.delete(id)
+				end
 			elsif !@instances.has_key?(id)
-				abort("Unknown instance of id '#{id}'!")
+				report("Unknown instance of id '#{id}'!")
+				dismiss(id)
 			else
 				instance = @instances[id]
 
