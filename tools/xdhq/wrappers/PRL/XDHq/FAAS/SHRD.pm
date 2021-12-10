@@ -33,7 +33,7 @@ $XDHq::FAAS::SHRD::socket;
 $XDHq::FAAS::SHRD::writeLock;
 share ($XDHq::FAAS::SHRD::writeLock);
 
-# Using semapĥores, as lockscan not explicitely be released.
+# Using semapĥores, as locks can not explicitely be released.
 $XDHq::FAAS::SHRD::readLock_ = Thread::Semaphore->new();
 $XDHq::FAAS::SHRD::readLock_->down();
 share($XDHq::FAAS::SHRD::readLock_);

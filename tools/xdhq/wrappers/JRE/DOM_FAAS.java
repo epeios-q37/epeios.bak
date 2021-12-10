@@ -40,7 +40,7 @@ public class DOM_FAAS extends DOM_SHRD {
 	static private String token = "";
 	static private InputStream input_;
 	static private OutputStream output_;
-	// A 'Semaphore' because the locks aer reentrant in Java.
+	// A 'Semaphore' because there are only reentrant locks in Java.
 	static private Semaphore readLock_ = new Semaphore(1);	// Global read lock.
 	final static private String FAAS_PROTOCOL_LABEL_ = "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf";
 	final static private String FAAS_PROTOCOL_VERSION_ = "0";
@@ -267,6 +267,7 @@ public class DOM_FAAS extends DOM_SHRD {
 
 		writeString_( FAAS_PROTOCOL_LABEL_ );
 		writeString_( FAAS_PROTOCOL_VERSION_ );
+		writeString_("JRE");
 
 		output_.flush();
 
@@ -284,7 +285,7 @@ public class DOM_FAAS extends DOM_SHRD {
 	}
 
 	private static void handshakeMain_() throws IOException {
-		String error;
+		String error, notification;
 
 		writeString_(MAIN_PROTOCOL_LABEL_);
 		writeString_(MAIN_PROTOCOL_VERSION_);
@@ -298,6 +299,11 @@ public class DOM_FAAS extends DOM_SHRD {
 			System.err.println(error);
 			System.exit(1);
 		}
+	
+		notification = getString_();
+
+		if ( !notification.isEmpty())
+			System.out.println(notification );
 	}
 
 	private static void handshakes_() throws IOException {
@@ -309,7 +315,7 @@ public class DOM_FAAS extends DOM_SHRD {
 		writeString_(token);
 		writeString_(info.q37.xdhq.XDH_FAAS.headContent);
 		writeString_(wAddr);
-		writeString_("JRE");
+		writeString_(""); // Currently not used; for future use.
 		
 		output_.flush();
 

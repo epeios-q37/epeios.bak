@@ -161,7 +161,7 @@ namespace tht {
 
 			mtx::Unlock( Mutex_ );
 		}
-		// Retruns 'true' if registry was locked.
+		// Returns 'true' if registry was locked.
 		bso::sBool UnlockIfLocked( void )
 		{
 			if ( mtx::IsLocked(Mutex_) ) {
@@ -175,7 +175,7 @@ namespace tht {
 	typedef bso::sUInt sCounter_;
 	qCDEF( sCounter_, CounterMax_, bso::UIntMax );
 
-	// Ensure that a ressource is only accessed by one thread at a time.
+	// Ensure that a resource is only accessed by one thread at a time.
 	// All consecutive locking from same thread does not lock again.
 	// Unlocking is only effective after be called as much as being locked.
 	class rLocker {
