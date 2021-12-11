@@ -638,6 +638,7 @@ const h = {
 	ERROR_FAAS: 102,
 	NOTIFICATION_FAAS: 103,
 	ERROR_MAIN: 104,
+	NOTIFICATION_MAIN: 105,
 }
 
 function handshakes(feeder, head) {
@@ -646,7 +647,7 @@ function handshakes(feeder, head) {
 		switch( top() ) {
 		case h.HANDSHAKES:
 			pop();
-			socket.write(addString(addString(addString(handleString(token), head === undefined ? "" : head),wAddr),"NJS"));
+			socket.write(addString(addString(addString(handleString(token), head === undefined ? "" : head),wAddr),""));
 			push(i.IGNITION);
 			push(i.TOKEN);
 			push(d.STRING);
@@ -672,8 +673,17 @@ function handshakes(feeder, head) {
 		case h.ERROR_MAIN:
 				if ( string.length )
 					exit_(string);
+
 				pop();
+				push(h.NOTIFICATION_MAIN);
+				push(d.STRING);
 				break;
+		case h.NOTIFICATION_MAIN:
+			if ( string.length )
+				console.log(string);
+
+			pop();
+			break;
 		default:
 			if ( !handleData(feeder) )
 				exit_("Unknown handshake operation!");
@@ -735,7 +745,7 @@ function launch(createCallback, actionCallbacks, head) {
 		push(d.STRING);
 		socket.on('data', (data) => onRead(data, createCallback, actionCallbacks, head));
 		
-		socket.write(addString(handleString(faasProtocolLabel),faasProtocolVersion));
+		socket.write(addString(addString(handleString(faasProtocolLabel),faasProtocolVersion),"NJS"));
 	});	
 }
 

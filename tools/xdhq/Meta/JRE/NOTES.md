@@ -44,3 +44,7 @@ Pour contourner ce problème, lancer avec de la manière suivante :
 - *Windows*  : `.;h:/hg/epeios/tools/jreq/classes/;h:/hg/epeios/tools/xdhq/wrappers/JRE/classes/;h:/hg/epeios/tools/xdhq/Atlas/JRE/classes/`  ;
 
 - *POSIX*  : `.:/home/csimon/epeios/tools/jreq/classes/:/home/csimon/epeios/tools/xdhq/wrappers/JRE/classes/:/home/csimon/epeios/tools/xdhq/Atlas/JRE/classes/`.
+
+## Publication sur *Replit.com*
+
+Voir section correspondante dans le *workspace* dédié à la version *Python*.

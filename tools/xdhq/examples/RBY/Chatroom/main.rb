@@ -129,7 +129,6 @@ def acSubmitMessage(chatroom, dom, id)
 	message = dom.getValue("Message")
 	dom.setValue("Message", "")
 	dom.focus("Message")
-	dom.log(message)
 	chatroom.addMessage(message)
 	chatroom.displayMessages(dom)
 	Atlas.broadcastAction("Update");

@@ -1,5 +1,4 @@
-# Developers/maintainers notes about the *Atlas* toolkit binding for *Node.js*
-
+# Notes concernant la version *Node.js* (*NJS*) du *toolkit* *Atlas*
 
 La publication d'une nouvelle version du *toolkit* *Atlas* pour *Node.js* consiste en deux procédures :
 - publication du paquet *NPM*,
@@ -31,7 +30,7 @@ Dans `RTW/atlas-node`
 - `node examples/Hello/Hello.js` doit fonctionner.
 
 ### Publication
-- `npm publish atlastk/`. (**ATTENTION** : ne pas oublier le `atlastk/` !!!)
+- `npm publish atlastk/` (**ATTENTION** : ne pas oublier le `atlastk/` !!!).
 
 
 ## Publication sur *GitHub*
@@ -51,9 +50,14 @@ Dans `RTW/atlas-node` :
 - `git gui` et contrôler,
 - `RTWCommit`.
 
+
+## Publication sur *Replit.com*
+
+Voir section correspondante dans le *workspace* dédié à la version *Python*.
+
 ---
 
-**Above this line are the old publication procedures.**
+**Above this lines are the old publication procedures.**
 
 ---
 
@@ -179,3 +183,4 @@ Dependencies :
 * Following the installation of all *Atlas* toolkit bindings through *NPM*, the *xdhq* package was renamed to *xdhqnjs*,
 * Because `require('atlas-node')` was to clumsy, the `atlas-node` package was renamed to `atlastk`,
 * `xdhwebqnjs`was first `xdhwebq`.
+

@@ -249,7 +249,7 @@ def _ignition():
 		writeString( _token)
 		writeString(_headContent)
 		writeString(_wAddr)
-		writeString("")	# Actually not used; for future use.
+		writeString("")	# Currently not used; for future use.
 
 	_token = getString()
 

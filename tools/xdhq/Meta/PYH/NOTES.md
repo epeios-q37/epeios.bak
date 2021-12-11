@@ -23,45 +23,34 @@ Pour garder les stats *Spotlight* de *Replit*, il faut toujours garder le *repli
 
 Il peut parfois être plus intéressant de modifier/télécharger directement les fichiers plutôt que de suivre la procédure ci-dessous.
 
-### Nouvelle procédure
+Procédures commune à toutes les versions. Remplacer `<flavour>` par l'identifiant de version (`java`, `node`, `python`…).<u>Ne pas oublier d'éventuellement republier !</u>
 
-**Attention** : procédure rédigée de mémoire ; à valider !
+### Procédure sécurisée
 
-- Si existant, effacer `atlas-python-old` ;
-- *Forker* `atlas-python` vers `atlas-python-old` ;
-- renommer `atlas-python` en `atlas-python-new` ;
-- renommer `atlas-python-old` en `atlas-python` ;
-- aller dans le shell de `atlas-python-new` ;
+
+- Si existant, effacer `atlas-<flavor>-old` ;
+- *Forker* `atlas-<flavor>` vers `atlas-<flavor>-old` ;
+- renommer `atlas-<flavor>` en `atlas-<flavor>-new` ;
+- renommer `atlas-<flavor>-old` en `atlas-<flavor>` ;
+- aller dans le shell de `atlas-<flavor>-new` ;
 - `cd ..` ;
-- `git clone https://github.com/epeios-q37/atlas-python` ;
-- `rm -rf atlas-python-new/*;mv atlas-python/* atlas-python-new/` ;
-- vérifier si `.replit` est identique dans les deux, sinon mettre à jour ;
-- renommer `atlas-python` en `atlas-python-old` ;
-- renommer `atlas-python-new` en `atlas-python`.
+- `git clone https://github.com/epeios-q37/atlas-<flavor>` ;
+- `rm -rf atlas-<flavor>-new/*;mv atlas-<flavor>/* atlas-<flavor>-new/` ;
+- vérifier si `.replit` (et éventuels autres fichiers cachés, à l'exclusion du répertoire `.git`) est identique dans les deux, sinon mettre à jour ;
+- renommer `atlas-<flavor>` en `atlas-<flavor>-old` ;
+- renommer `atlas-<flavor>-new` en `atlas-<flavor>`.
 
-### Ancienne procédure
+### Procédure rapide
 
-
-
-- Forker le *replit* courant ;
-- renommer le *replit* courant en `atlas-python-new` ;
-- renommer le *fork* en `atlas-python` ;
-- mettre à jour les fichiers (on peut utiliser la console, pour faire des `rm …`, par exemple) ;
-- renommer le *fork* en `atlas-python-old` ;
-- renommer en `atlas-python` ;
-- republier sur *Spotlight*.
-
-Il peut parfois être plus intéressant de modifier les fichiers directement.
-
-On peut importer directement un *repository* *GitHub*, mais ce n'est pas la solution actuellement retenue.
-
-- Créer un nouveau projet *Bash* ;
-- déposer le contenu du répertoire `RTW/atlas-python`
-  - avec les fichiers cachés, 
-  - sans le fichier `.directory` ;
-- effacer le fichier `main.sh` ;
-- renommer l'actuel *replit* ;
-- renommer le nouveau en *atlas-python*.
+- aller dans le shell de `atlas-<flavor>` ;
+- `cd ..` ;
+- `mkdir new` ;
+- `cd new` ;
+- `git clone https://github.com/epeios-q37/atlas-<flavor>` ;
+- `rm -rf ../atlas-<flavor>/*;mv atlas-<flavor>/* ../atlas-<flavor>/` ;
+- vérifier si `.replit` (et éventuels autres fichiers cachés, à l'exclusion du répertoire `.git`) est identique dans les deux, sinon mettre à jour ;
+- `cd ..`
+- `rm  -rf new`
 
 ## Publication sur *PyPI*
 
