@@ -80,14 +80,14 @@ function drawSquare(xml, x, y) {
 	xml.putAttribute("xdh:onevent", "Swap");
 	xml.putAttribute("x", x * 100 + 24);
 	xml.putAttribute("y", y * 100 + 24);
-	xml.putAttribute("xlink:href", "#stone");
+	xml.putAttribute("href", "#stone");
 	xml.popTag();
 
 	return xml;
 }
 
 function drawGrid(dom) {
-	let xml = atlas.createXML("g");
+	let xml = atlas.createHTML("g");
 
 	for (let x = 0; x < 4; x++)
 		for (let y = 0; y < 4; y++)
@@ -116,7 +116,7 @@ function setTexts(dom) {
 	dom.inner("Texts", xml);
 }
 
-function swap(dom, source,id) {
+function swap(dom, source, id) {
 	dom.getValue(
 		"t" + source,
 		(value) => dom.setValues({
@@ -154,11 +154,12 @@ function testAndSwap(dom, id) {
 
 function scramble(dom) {
 	drawGrid(dom);
+	return;
 	setTexts(dom);
 	fill(dom);
 }
 
-function acConnect(dom, id) {
+function acConnect(dom) {
 	dom.inner("", readAsset("Main.html"));
 	scramble(dom);
 }
@@ -176,7 +177,7 @@ function main() {
 	const callbacks = {
 		"": acConnect,
 		"Swap": acSwap,
-		"Scramble": (dom,id) => scramble(dom)
+		"Scramble": (dom) => dom.alert("cuocou")
 	};
 
 	atlas.launch(newSession, callbacks, readAsset("Head.html"));

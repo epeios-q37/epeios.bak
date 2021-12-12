@@ -23,10 +23,11 @@ Pour garder les stats *Spotlight* de *Replit*, il faut toujours garder le *repli
 
 Il peut parfois être plus intéressant de modifier/télécharger directement les fichiers plutôt que de suivre la procédure ci-dessous.
 
-Procédures commune à toutes les versions. Remplacer `<flavour>` par l'identifiant de version (`java`, `node`, `python`…).<u>Ne pas oublier d'éventuellement republier !</u>
+Procédures commune à toutes les versions. Remplacer `<flavour>` par l'identifiant de version (`java`, `node`, `python`…).
+
+<u>Ne pas oublier d'éventuellement republier !</u>
 
 ### Procédure sécurisée
-
 
 - Si existant, effacer `atlas-<flavor>-old` ;
 - *Forker* `atlas-<flavor>` vers `atlas-<flavor>-old` ;
@@ -110,6 +111,24 @@ Dans `RTW/atlas-python` :
 Dans `RTW/atlas-python` :
 
 `python3 -m twine upload dist/*`
+
+## Liste des projets ne s'appuyant pas sur *Pypi*
+
+Ces projets embarquent le *toolkit* *Atlas*, généralement pour en simplifier l'installation, et ne s'appuie pas dur le paquet hébergé sur *Pypi*. La commande `ATKAtlasPack` crée le fichier `Atlas.zip` utilisé par ces projets.
+
+**Attention** : mettre à jour le dépôt *GitHub*, ainsi que l'éventuel dépôt *Replit*.
+
+- https://github.com/epeios-q37/atlas-python-stub ;
+- https://github.com/epeios-q37/base-exercise ;
+- https://github.com/epeios-q37/basics-exercises ;
+- https://github.com/epeios-q37/edutk-python ;
+- https://github.com/epeios-q37/hangman-exercises ;
+- https://github.com/epeios-q37/hangman-fr ;
+- https://github.com/epeios-q37/hangman-fr-teacher ;
+- https://github.com/epeios-q37/term2web-python ;
+- https://github.com/epeios-q37/term2web-python-stub ;
+- https://github.com/epeios-q37/tortoise-python ;
+
 
 ## Ressources
 
