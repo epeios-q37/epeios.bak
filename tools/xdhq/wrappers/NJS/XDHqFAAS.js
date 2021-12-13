@@ -430,7 +430,7 @@ function handleLaunch(id, action, actionCallbacks) {
 	if ( instance === undefined)
 		exit_("No instance set!");
 
-	if ( ( action === "" ) && isDev() )
+	if ( false && ( action === "" ) && isDev() )
 		instance.debugLog();
 
 	if ((action === "") || !("_PreProcess" in actionCallbacks) || callCallback(actionCallbacks["_Preprocess"], instance, id, action))
@@ -605,9 +605,10 @@ function ignition(feeder) {
 
 			pop();
 
-			if ( isTokenEmpty() )
+			if ( isTokenEmpty() ) {
 				push(i.ERROR);
-			else {
+				push(d.STRING);
+			} else {
 				push(i.URL);
 				push(d.STRING);
 			}
@@ -629,9 +630,9 @@ function ignition(feeder) {
 	return true;
 }
 
-/*************/
-/* HANDSHAKE */
-/*************/
+/**************/
+/* HANDSHAKES */
+/**************/
 
 const h = {
 	HANDSHAKES: 101,
@@ -765,7 +766,7 @@ function call(instance, command, type) {
 	let data = convertSInt(instance._xdh.id);
 	let amount = arguments.length-1;
     
-    data = Buffer.concat([addString(data,command),convertUInt(type)])
+  data = Buffer.concat([addString(data,command),convertUInt(type)])
 
 //	console.log( Date.now(), " Command: ", command, instance._xdh.id);
 
