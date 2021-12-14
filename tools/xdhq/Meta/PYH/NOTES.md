@@ -43,6 +43,8 @@ Procédures commune à toutes les versions. Remplacer `<flavour>` par l'identifi
 
 ### Procédure rapide
 
+**NOTA** : l'équivalent de la procédure ci-dessous peut être effectué en utilisant le *plugin* de *Replit* (bouton *pull*).
+
 - aller dans le shell de `atlas-<flavor>` ;
 - `cd ..` ;
 - `mkdir new` ;

@@ -18,11 +18,12 @@ La version du wrapper binaire (*C++*) du *toolkit* *Atlas* n'est plus actuelleme
   - le numéro de version dans le fichier `Atlas/package.json`,
   - et éventuellement la description,
 - `ATKNJSRTW` ;
+- dans `RTW/atlas-node` : `npm pack atlastk/`.
+
 
 ### Test
 
-Dans `RTW/atlas-node`
-- `npm pack atlastk/` ;
+Dans `RTW/atlas-node` :
 - remplacer l'entrée `Dependencies/atlastk` dans `package.json` par `atlastk-….tgz` ;
 - `unset Q37_EPEIOS` ;
 - `node examples/Hello/Hello.js` doit échouer ! ;
@@ -30,8 +31,7 @@ Dans `RTW/atlas-node`
 - `node examples/Hello/Hello.js` doit fonctionner.
 
 ### Publication
-- `npm publish atlastk/` (**ATTENTION** : ne pas oublier le `atlastk/` !!!).
-
+- dans `RTW/atlas-node` : `npm publish atlastk/` (**ATTENTION** : ne pas oublier le `atlastk/` !!!).
 
 ## Publication sur *GitHub*
 

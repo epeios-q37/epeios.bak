@@ -430,7 +430,7 @@ function handleLaunch(id, action, actionCallbacks) {
 	if ( instance === undefined)
 		exit_("No instance set!");
 
-	if ( false && ( action === "" ) && isDev() )
+	if ( ( action === "" ) && isDev() )
 		instance.debugLog();
 
 	if ((action === "") || !("_PreProcess" in actionCallbacks) || callCallback(actionCallbacks["_Preprocess"], instance, id, action))
@@ -602,16 +602,14 @@ function ignition(feeder) {
 			break;
 		case i.TOKEN:
 			token = string;
-
 			pop();
 
-			if ( isTokenEmpty() ) {
+			if ( isTokenEmpty() )
 				push(i.ERROR);
-				push(d.STRING);
-			} else {
+			else
 				push(i.URL);
-				push(d.STRING);
-			}
+
+			push(d.STRING);
 			break;
 		case i.ERROR:
 			exit_(string);
