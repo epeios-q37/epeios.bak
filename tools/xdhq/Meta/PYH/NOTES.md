@@ -19,6 +19,8 @@ En créant, dans le répertoire de l'application, un fichier `__main__.py` conte
 
 ## Publication sur *Replit.com*
 
+**Note concernant la démonstration *MatPlotLib*** : En mode *SpotLight*, le serveur *X* est lancé, bien que non utilisé, cachant la console, et donc l'URL pour visualiser cette démo. Effacer la variable d'environnement `ATK` permet d'afficher l'application dans le navigateur embarqué dans *Rplit*, mais il n'y a alors plus moyen d'afficher la console (même en rechargrant le dépôt *Replit*) et donc de lancer une autre démo…
+
 Pour garder les stats *Spotlight* de *Replit*, il faut toujours garder le *replit* en cours.
 
 Il peut parfois être plus intéressant de modifier/télécharger directement les fichiers plutôt que de suivre la procédure ci-dessous.
@@ -26,20 +28,6 @@ Il peut parfois être plus intéressant de modifier/télécharger directement le
 Procédures commune à toutes les versions. Remplacer `<flavour>` par l'identifiant de version (`java`, `node`, `python`…).
 
 <u>Ne pas oublier d'éventuellement republier !</u>
-
-### Procédure sécurisée
-
-- Si existant, effacer `atlas-<flavor>-old` ;
-- *Forker* `atlas-<flavor>` vers `atlas-<flavor>-old` ;
-- renommer `atlas-<flavor>` en `atlas-<flavor>-new` ;
-- renommer `atlas-<flavor>-old` en `atlas-<flavor>` ;
-- aller dans le shell de `atlas-<flavor>-new` ;
-- `cd ..` ;
-- `git clone https://github.com/epeios-q37/atlas-<flavor>` ;
-- `rm -rf atlas-<flavor>-new/*;mv atlas-<flavor>/* atlas-<flavor>-new/` ;
-- vérifier si `.replit` (et éventuels autres fichiers cachés, à l'exclusion du répertoire `.git`) est identique dans les deux, sinon mettre à jour ;
-- renommer `atlas-<flavor>` en `atlas-<flavor>-old` ;
-- renommer `atlas-<flavor>-new` en `atlas-<flavor>`.
 
 ### Procédure rapide
 
@@ -54,6 +42,20 @@ Procédures commune à toutes les versions. Remplacer `<flavour>` par l'identifi
 - vérifier si `.replit` (et éventuels autres fichiers cachés, à l'exclusion du répertoire `.git`) est identique dans les deux, sinon mettre à jour ;
 - `cd ..`
 - `rm  -rf new`
+
+### Procédure sécurisée
+
+- Si existant, effacer `atlas-<flavor>-old` ;
+- *Forker* `atlas-<flavor>` vers `atlas-<flavor>-old` ;
+- renommer `atlas-<flavor>` en `atlas-<flavor>-new` ;
+- renommer `atlas-<flavor>-old` en `atlas-<flavor>` ;
+- aller dans le shell de `atlas-<flavor>-new` ;
+- `cd ..` ;
+- `git clone https://github.com/epeios-q37/atlas-<flavor>` ;
+- `rm -rf atlas-<flavor>-new/*;mv atlas-<flavor>/* atlas-<flavor>-new/` ;
+- vérifier si `.replit` (et éventuels autres fichiers cachés, à l'exclusion du répertoire `.git`) est identique dans les deux, sinon mettre à jour ;
+- renommer `atlas-<flavor>` en `atlas-<flavor>-old` ;
+- renommer `atlas-<flavor>-new` en `atlas-<flavor>`.
 
 ## Publication sur *PyPI*
 
