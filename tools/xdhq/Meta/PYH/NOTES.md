@@ -134,7 +134,16 @@ Ces projets embarquent le *toolkit* *Atlas*, généralement pour en simplifier l
 - https://github.com/epeios-q37/tortoise-python ;
 
 
-## Ressources
+## Publications
+
+### Toutes les versions
+
+Liste des sites sur lesquels le *toolkit* *Atlas* est référencé, toutes version confndues :
+
+- *AlternativeTo* :https://alternativeto.net/software/atlas-toolkit/ ;
+- *Fresh(cod)e* : https://freshcode.club/search?q=atlas
+
+### Version *Python*
 
 Liste des sites faisant références à la version *Python* du *toolkit* *Atlas*
 
