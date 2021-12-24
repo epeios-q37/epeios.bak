@@ -497,11 +497,11 @@ namespace sclx {
 		qCDTOR( sProxy );
 		bso::sBool Init(
 			xdhcuc::cSingle &Callback,
+      tht::rLocker &CallbackLocker, // Avoid destruction of above 'Callback' while being used.
 			const scli::sInfo &Info,
-			eXSLFileHandling XSLFileHandling,
-			xdhcmn::sScriptsVersion ScriptsVersion)
+			eXSLFileHandling XSLFileHandling)
 		{
-			if ( !Core_.Init(Callback, ScriptsVersion) )
+			if ( !Core_.Init(Callback, CallbackLocker) )
         return false;
 
 			Info_ = &Info;
@@ -883,7 +883,7 @@ namespace sclx {
 	protected:
 		bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,
-			xdhcmn::sScriptsVersion ScriptsVersion,
+      tht::rLocker &CallbackLocker, // Avoid destruction of above 'Callback' while being used.
 			const char *Language,
 			const str::dString &Token, // If empty, SlfH session, else token used for the FaaS session.
 			const str::dString &UserId)	override
@@ -891,7 +891,7 @@ namespace sclx {
 			if ( Token.Amount() )
 				qRFwk();    // Should never be launched in 'FaaS' mode.
 
-			if ( !sProxy::Init(Callback, I_(), XSLFileHandling_, ScriptsVersion) )
+			if ( !sProxy::Init(Callback, CallbackLocker, I_(), XSLFileHandling_) )
         return false;
 
 			Reporting_.Init( *this, Language );

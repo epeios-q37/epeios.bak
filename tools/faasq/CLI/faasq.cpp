@@ -85,35 +85,87 @@ namespace {
 
 	namespace {
 		namespace {
-			qCDEF( char *, FaaSProtocolLabel_, "9efcf0d1-92a4-4e88-86bf-38ce18ca2894" );
-			qCDEF(bso::sU8, FaaSProtocolVersion_, 0);
+      namespace {
+        qCDEF( char *, FaaSProtocolLabel_, "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf" );
+        qCDEF( bso::sU8, FaaSProtocolVersion_, 0 );
+      }
+
+      void HandShakeFaas_(flw::rRWFlow &Proxy)
+      {
+      qRH
+        str::wString Message;
+      qRB
+        csdcmn::SendProtocol(FaaSProtocolLabel_, FaaSProtocolVersion_, Proxy);
+        csdcmn::Put("XDH", Proxy);
+        Proxy.Commit();
+
+        Message.Init();
+        csdcmn::Get(Proxy, Message);
+
+        if ( Message.Amount() )
+          sclc::ReportAndAbort(Message);
+
+        Message.Init();
+        csdcmn::Get(Proxy, Message);
+
+        if ( Message.Amount() )
+          cio::COut << Message << txf::nl << txf::commit;
+      qRR
+      qRT
+      qRE
+      }
 		}
 
-		void HandShake_(fdr::rRWDriver &ProxyDriver)
-		{
-		qRH
-			flw::rDressedRWFlow<> Proxy;
-			str::wString Message;
-		qRB
-			Proxy.Init(ProxyDriver);
+    namespace {
+      namespace {
+        qCDEF( char *, MainProtocolLabel_, "22bb5d73-924f-473f-a68a-14f41d8bfa83" );
+        qCDEF( bso::sU8, MainProtocolVersion_, 0 );
+        qCDEF( char *, ScriptsVersion_, "0");  // Should never be upgraded, as 'FaaSq' use only
+                                              // a special very little subset of primitives,
+                                              // which should never be changed.
+                                              // All other primitives are used directly by
+                                              // downstream library.
+      }
 
-			csdcmn::SendProtocol(FaaSProtocolLabel_, FaaSProtocolVersion_, Proxy);
-			Proxy.Commit();
+      void HandShakeMain_(flw::rRWFlow &Proxy)
+      {
+      qRH
+        str::wString Message;
+      qRB
+        csdcmn::SendProtocol(MainProtocolLabel_, MainProtocolVersion_, Proxy);
+        csdcmn::Put(ScriptsVersion_, Proxy);
+        Proxy.Commit();
 
-			Message.Init();
-			csdcmn::Get(Proxy, Message);
+        Message.Init();
+        csdcmn::Get(Proxy, Message);
 
-			if ( Message.Amount() )
-				sclc::ReportAndAbort(Message);
+        if ( Message.Amount() )
+          sclc::ReportAndAbort(Message);
 
-			Message.Init();
-			csdcmn::Get(Proxy, Message);
+        Message.Init();
+        csdcmn::Get(Proxy, Message);
 
-			cio::COut << Message << txf::nl << txf::commit;
-		qRR
-		qRT
-		qRE
+        if ( Message.Amount() )
+          cio::COut << Message << txf::nl << txf::commit;
+      qRR
+      qRT
+      qRE
+      }
 		}
+
+    void HandShakes_(fdr::rRWDriver &ProxyDriver)
+    {
+    qRH
+      flw::rDressedRWFlow<> Proxy;
+    qRB
+      Proxy.Init(ProxyDriver);
+
+      HandShakeFaas_(Proxy);
+      HandShakeMain_(Proxy);
+    qRR
+    qRT
+    qRE
+    }
 	}
 
 	namespace {
@@ -193,11 +245,6 @@ namespace {
 			using namespace session;
 
 			namespace {
-				qCDEF( char *, MainProtocolLabel_, "bf077e9f-baca-48a1-bd3f-bf5181a78666" );
-				qCDEF(bso::sU8, MainProtocolVersion_, 0);
-			}
-
-			namespace {
 				void Routine_(
 					void *UP,
 					mtk::gBlocker &Blocker)
@@ -251,12 +298,9 @@ namespace {
 						if ( Sessions.Append(Session) != Row )
 							qRGnr();
 
-						Session = NULL;
+						mtk::LaunchAndKill(Routine_, Session);
 
-						csdcmn::Put(Id, Proxy);
-						csdcmn::SendProtocol(MainProtocolLabel_, MainProtocolVersion_, Proxy);
-
-						Proxy.Commit();
+            Session = NULL;
 						break;
 					case faas_::upstream::ClosingId:
 						if ( ( Row = Search(csdcmn::Get(Proxy, Id), Ids) ) == qNIL )
@@ -293,18 +337,11 @@ namespace {
 						if ( !Session->Handshaked) {
 							Message.Init();
 
-							csdcmn::Get(Proxy, Message);
-
-							if ( Message.Amount())
-								sclc::ReportAndAbort(Message);
-
 							csdcmn::Get(Proxy, Message);    // Language; not handled yet.
 
 							Proxy.Dismiss();
 
 							Session->Handshaked = true;
-
-							mtk::LaunchAndKill(Routine_, Session);
 						} else {
 							Proxy.Dismiss();
 							Session->Unblock();
@@ -397,7 +434,7 @@ namespace {
 		csdbnc::rRWDriver Proxy;
 	qRB;
 		Initialize_(Proxy);
-		HandShake_(Proxy);
+		HandShakes_(Proxy);
 		Process_(Proxy);
 	qRR;
 	qRT;

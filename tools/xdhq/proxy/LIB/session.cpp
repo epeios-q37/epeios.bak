@@ -216,7 +216,7 @@ namespace {
 
 bso::sBool session::rSession::XDHCDCInitialize(
 	xdhcuc::cSingle &Callback,
-			tht::rLocker &CallbackLocker, // Avoid destruction of above 'Callback' while being used.
+  tht::rLocker &CallbackLocker, // Avoid destruction of above 'Callback' while being used.
 	const char *Language,
 	const str::dString &Token,
 	const str::dString &UserId)

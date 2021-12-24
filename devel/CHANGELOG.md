@@ -10,6 +10,9 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-12-24
+- SCLX: [adpt],
+
 ## 2021-12-08
 - MTX, THT: `Lock()` returns now `true` when it as not alreay locked,
 - XDHDWS: fixing bug callback being desroyed while being used (in another thread),
