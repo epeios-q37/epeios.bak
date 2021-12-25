@@ -2352,6 +2352,11 @@ namespace tol {
 		const str::dString &Name,
 		str::dString &Value );
 
+	// 'false' if env var doesn't exist.
+	bso::sBool GetEnv(
+		const char *Name,
+		str::dString &Value );
+
 	template <typename row, typename container> inline row Search(
 		const str::dString &ID,
 		const container &Container )

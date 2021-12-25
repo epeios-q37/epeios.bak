@@ -212,18 +212,20 @@ namespace {
 				if ( !Agent.GetHead(str::wString(""),Head) )
 					qRGnr();
 
-				csdcmn::Put("", Proxy);
+        Token.Init();
+        if ( tol::GetEnv("ATK_TOKEN", Token) )
+          Token.InsertAt("&");
+
+				csdcmn::Put(Token, Proxy);
 				csdcmn::Put(Head, Proxy);
 				Host.Init();
 				csdcmn::Put(registry::GetWebHost(Host), Proxy);
 				csdcmn::Put("XDH", Proxy);
 				Proxy.Commit();
 
-				Token.Init();
-
 				csdcmn::Get(Proxy, Token);
 
-				if ( !Token.Amount() ) {
+				if ( Token.Amount() == 0 ) {
 					Message.Init();
 					csdcmn::Get(Proxy, Message);
 					sclc::ReportAndAbort(Message);

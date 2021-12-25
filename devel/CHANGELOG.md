@@ -10,6 +10,9 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-12-25
+- TOL: new variant of `GetEnv(…)`,
+
 ## 2021-12-24
 - SCLX: [adpt],
 
