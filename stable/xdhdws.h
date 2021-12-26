@@ -41,79 +41,50 @@ namespace xdhdws {
 		using namespace xdhcmn::faas;
 	}
 
-	typedef bso::sU8 sScriptsVersion;
+	void SetScriptsVersion(xdhcmn::sScriptsVersion ScriptsVersion);
 
-	sScriptsVersion GetScriptsVersion(void);
+	xdhcmn::sScriptsVersion GetScriptsVersion(void);
 
 	class sProxy
 	{
 	private:
-	  Q37_MRMDF( tht::rLocker, L_, Locker_ );
 		Q37_MRMDF( xdhcuc::cSingle, C_, Callback_ );
 	public:
 		void reset( bso::bool__ P = true )
 		{
-		  Locker_ = NULL;
 			Callback_ = NULL;
 		}
 		E_CVDTOR( sProxy );
-		bso::sBool Init(
-      xdhcuc::cSingle &Callback,
-      tht::rLocker &Locker )
+		bso::sBool Init(xdhcuc::cSingle &Callback)
 		{
 			reset();
 
 			Callback_ = &Callback;
-			Locker_ = &Locker;
 
 			return true;
 		}
 		bso::sBool Process(
-			const char *ScriptName,
+			const str::dString &Primitive,
 			const str::dStrings &TagValues,
-			str::dString *ReturnValue = NULL);
+			str::dString *ReturnValue = NULL)
+    {
+      return C_().Process(Primitive, TagValues, ReturnValue);
+    }
 		bso::sBool Process(
-			const str::dString &ScriptName,
+			const char *Primitive,
 			const str::dStrings &TagValues,
-			str::dString *ReturnValue = NULL);
+			str::dString *ReturnValue = NULL)
+    {
+      return Process(str::wString(Primitive), TagValues, ReturnValue);
+    }
 		template <typename string> bso::sBool Process(
-			const string &ScriptName,
+			const string &Primitive,
 			const str::dStrings &TagValues,
 			str::dString &ReturnValue)
 		{
-			return Process(ScriptName, TagValues, &ReturnValue);
-		}
-		bso::sBool Process(
-			const char *TaggedScript,
-			const char *TagList,
-			const str::dStrings &TagValues,
-			str::dString *ReturnValue = NULL);
-		bso::sBool Process(
-			const str::dString &TaggedScript,
-			const char *TagList,
-			const str::dStrings &TagValues,
-			str::dString *ReturnValue = NULL);
-		template <typename string> bso::sBool Process(
-			const string &TaggedScript,
-			const char *TagList,
-			const str::dStrings &TagValues,
-			str::dString &ReturnValue)
-		{
-			return Process(TaggedScript, TagList, TagValues, &ReturnValue);
+			return Process(Primitive, TagValues, &ReturnValue);
 		}
 	};
-
-	void BroadcastAction(
-		xdhcuc::cGlobal &Callback,
-		const char *Action,
-		const char *Id,
-		faas::sRow FaaSRow);
-
-	void BroadcastAction(
-		xdhcuc::cGlobal &Callback,
-		const str::dString &Action,
-		const str::dString &Id,
-		faas::sRow FaaSRow);
 }
 
 #endif

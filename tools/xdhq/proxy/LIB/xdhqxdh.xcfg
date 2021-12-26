@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Configurations xmlns:xpp="http://q37.info/ns/xpp/" >
-	<xpp:expand href="../../../../XDH.xcfg"/>
 	<Configuration target="xdhqxdh">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
@@ -70,7 +69,6 @@
 					</Locale>
 				</Plugin>
 			</Plugins>
-			<xpp:expand select="XDHFull"/>
 		</Definitions>
 		<Locale>
 			<Translations text="TestCommandDescription">

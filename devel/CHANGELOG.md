@@ -10,6 +10,10 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-12-26
+- XDHBRD, XDHCDC, XDHCMN, XDHDWS, XDHUPS: [adpt]:,
+- XDHCUC: upstream handles now primitives, and no more raw scripts,
+
 ## 2021-12-25
 - TOL: new variant of `GetEnv(…)`,
 

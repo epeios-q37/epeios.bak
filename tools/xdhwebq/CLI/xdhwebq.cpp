@@ -155,18 +155,18 @@ namespace {
 				qRB
 					Flow.Init(Driver, websck::mWithTerminator);
 
-					if ( Session.Init(Callback, Driver, "", Token, UserId) ==  qNIL ) {
+					if ( Session.Init(Callback, Driver, "", Token) ==  qNIL ) {
 						Script.Init();
 						sclm::MGetValue(registry::definition::ErrorScript, Script);
 						Session.Execute(Script);
 					// } else if ( Session.Handle(NULL) ) { // Reponses of the connect event were mixed the ones from upcoming events.
 					 } else if ( SendConnectEvent_(Flow) ) {  // To queue upcoming events.
-						while ( true ) {
+            while ( true ) {
 							Digest.Init();
 							if ( !websck::GetMessage(Flow, Digest) )
 								break;
 							Flow.Dismiss();
-							if ( !Session.Handle(Digest.Convert(Buffer)) )
+							if ( !Session.Handle(Digest.Convert(Buffer), UserId) )
 								break;
 							Flow.Write(ss_::standby::Label, ss_::standby::Size);
 							Flow.Commit();
@@ -308,11 +308,35 @@ namespace {
 					return xdhbrd::Remove(Row);
 				}
 				virtual void XDHCUCBroadcast(
-					const str::dString &Script,
+					const str::dString &Action,
+					const str::dString &Id,
 					faas_::sRow Row) override
-				{
-					xdhbrd::Broadcast(Script, Row);
-				}
+        {
+        qRH;
+          str::wString Primitive;
+          str::wStrings TagValues;
+        qRB;
+          tol::Init(Primitive, TagValues);
+
+          xdhups::GetBroadcastPrimitive(Action, Id, Primitive, TagValues);
+
+          xdhbrd::Broadcast(Primitive, TagValues, Row);
+        qRR;
+        qRT;
+        qRE;
+        }
+        virtual void XDHCUCQuitAll(faas_::sRow Row) override
+        {
+        qRH;
+          str::wStrings TagValues;
+        qRB;
+          TagValues.Init();
+
+          xdhbrd::Broadcast(str::wString("@Quit_1"), TagValues, Row);
+        qRR;
+        qRT;
+        qRE;
+        }
 			public:
 				void reset(bso::sBool = true)
 				{}
@@ -342,7 +366,7 @@ namespace {
 
 		Upstream_.Init();
 
-		Agent.Init(Upstream_, xdhcdc::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ));
+		Agent.Init(Upstream_, xdhcdc::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ), xdhups::GetScriptsVersion());
 
 		Callback.Init( Agent );
 

@@ -287,13 +287,14 @@ sCRow xdhbrd::rXCallback::Init(
 }
 
 bso::sBool xdhbrd::rXCallback::Send_(
-    const str::dString &Script,
+    const str::dString &Primitive,
+    const str::dStrings &TagValues,
     hGuardian_ &Guardian)
 {
     Hire_(Guardian, Mutex_);
 
     if ( State_ == sAlive )
-        return C_().Process(Script);
+        return C_().Process(Primitive, TagValues);
     else
         return false;
 }
@@ -331,7 +332,8 @@ namespace {
         struct sData_ {
         public:
             rXCallback *XCallback;
-            const str::dString *Script;
+            const str::dString *Primitive;
+            const str::dStrings *TagValues;
         };
 
         void Routine_(
@@ -341,53 +343,61 @@ namespace {
             sData_ &Data = *(sData_ *)UP;
             rXCallback &XCallback = *Data.XCallback;
         qRH
-            str::wString Script;
+            str::wString Primitive;
+            str::wStrings TagValues;
             hGuardian_ Guardian;
         qRB
-            Script.Init(*Data.Script);
+            Primitive.Init(*Data.Primitive);
+
+            TagValues.Init();
+            TagValues = *Data.TagValues;
 
             Blocker.Release();
 
-            Send_(XCallback, Script, Guardian);
+            Send_(XCallback, Primitive, TagValues, Guardian);
         qRR
         qRT
         qRE
         }
 
         void Broadcast_(
-            const str::dString &Script,
+            const str::dString &Primitive,
+            const str::dStrings &TagValues,
             rXCallback &XCallback )
         {
             sData_ Data;
 
             Data.XCallback = &XCallback;
-            Data.Script = &Script;
+            Data.Primitive = &Primitive;
+            Data.TagValues = &TagValues;
 
             mtk::Launch(Routine_, &Data);
         }
     }
 
     void Broadcast_(
-        const str::dString &Script,
-        const dCRows_ &CRows)
+      const str::dString &Primitive,
+      const str::dStrings &TagValues,
+      const dCRows_ &CRows)
     {
         sdr::sRow Row = CRows.First();
 
         while ( Row != qNIL ) {
-            Broadcast_(Script, FetchXCallback_(CRows(Row)));
+            Broadcast_(Primitive, TagValues, FetchXCallback_(CRows(Row)));
             Row = CRows.Next(Row);
         }
     }
 }
 
 void xdhbrd::Broadcast(
-   const str::dString &Script,
-   sTRow_ TRow)
+  const str::dString &Primitive,
+  const str::dStrings &TagValues,
+  sTRow_ TRow)
 {
 qRH
     hGuardian_ Guardian;
 qRB
-    Broadcast_(Script, FetchXCRows_(TRow).GetCRows(Guardian));
+    Broadcast_(Primitive, TagValues, FetchXCRows_(TRow).GetCRows(Guardian));
 qRR
 qRT
 qRE

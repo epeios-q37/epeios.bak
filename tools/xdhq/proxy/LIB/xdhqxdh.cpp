@@ -123,13 +123,13 @@ namespace {
 			if ( Launcher_ != NULL )
 				qRFwk();
 
-			if ( Launcher_ == NULL ) {
-				Launcher_ = Data.LauncherIdentification();
-				sclm::Initialize( Data.SCLRack(), Data.Localization(), xdhqxdh::Info );
+      Launcher_ = Data.LauncherIdentification();
+      sclm::Initialize( Data.SCLRack(), Data.Localization(), xdhqxdh::Info );
 
-				Initialization_( Data.Mode() );
-				common::SetCallback(Callback);
-			}
+      Initialization_( Data.Mode() );
+      common::SetCallback(Callback);
+
+      xdhdws::SetScriptsVersion(Data.ScriptsVersion());
 		}
 		virtual void XDHCDCBaseLanguage( TOL_CBUFFER___ &Buffer ) override
 		{

@@ -55,7 +55,7 @@ namespace session {
 		eMode_ Mode_;
 		faaspool::rRWDriver FaaSDriver_;
 		csdmnc::rRWDriver SlfHDriver_;
-		str::wString IP_, Token_, UserId_;
+		str::wString IP_, Token_;
 		faas_::sRow TRow_;	// Token row.
 		sId_ Id_;
 		fdr::rRWDriver &D_( void )
@@ -89,15 +89,14 @@ namespace session {
 		bso::bool__ Launch_(
 			const str::dString &Id,
 			const str::dString &Action);
-		bso::sBool Handle_( const char *EventDigest );
 	protected:
 		virtual bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,
-			tht::rLocker &CallbackLocker, // Avoid destruction of above 'Callback' while being used.
 			const char *Language,
-			const str::dString &Token,
-			const str::dString &UserId) override;
-		virtual bso::bool__ XDHCDCHandle( const char *EventDigest ) override;
+			const str::dString &Token) override;
+		virtual bso::bool__ XDHCDCHandle(
+      const str::dString &Id,
+      const str::dString &Action) override;
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -106,7 +105,7 @@ namespace session {
 					Release_(Id_, IP_);
 			}
 
-			tol::reset(P, FaaSDriver_, SlfHDriver_, IP_, Token_, UserId_);
+			tol::reset(P, FaaSDriver_, SlfHDriver_, IP_, Token_);
 			TRow_ = qNIL;
 			Id_ = UndefinedId_;
 			Mode_ = m_Undefined;
@@ -116,7 +115,7 @@ namespace session {
 		bso::sBool Init(void)
 		{
 			tol::reset(FaaSDriver_, SlfHDriver_);
-			tol::Init(IP_, Token_, UserId_);
+			tol::Init(IP_, Token_);
 			TRow_ = qNIL;
 			Id_ = UndefinedId_;
 			Mode_ = m_Undefined;

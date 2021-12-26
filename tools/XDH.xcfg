@@ -30,6 +30,7 @@
 }
 		        ]]>
         </Script>
+		<Script name="@Quit_1" Arguments="">%%Quit</Script>
       </xpp:bloc>
       <!-- All scripts enclosed in following block are public. -->
       <xpp:bloc>

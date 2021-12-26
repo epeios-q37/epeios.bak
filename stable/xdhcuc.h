@@ -37,24 +37,21 @@ namespace xdhcuc {
 	class cSingle
 	{
 	protected:
-		// The value returned by the script has to be stored
+		// The value returned by the primitive has to be stored
 		// in 'ReturnedValue', unless it is equal to 'NULL'.
 		// Returns 'false' when error (mainly lost connection to client).
 		virtual bso::sBool XDHCUCProcess(
-			const str::dString &Script,
-			tht::rBlocker *Blocker,	// If != NULL, has to be unblocked once the script sent.
-			bso::sBool *Success, // If != NULL, mirrors the return value ; needed when launched in a dedicated thread.
+			const str::dString &Primitive,
+      const str::dStrings &TagValues,
 			str::dString *ReturnedValue ) = 0;	// If == NULL, Blocker should also be NULL.
-
 	public:
 		qCALLBACK( Single );
 		bso::sBool Process(
-			const str::dString &Script,
-			tht::rBlocker *Blocker = NULL,	// If != 'NULL', has to be unblocked once the script sent.
-			bso::sBool *Success = NULL,
+			const str::dString &Primitive,
+      const str::dStrings &TagValues,
 			str::dString *ReturnValue = NULL)
 		{
-			return XDHCUCProcess(Script, Blocker, Success, ReturnValue);
+			return XDHCUCProcess(Primitive, TagValues, ReturnValue);
 		}
 
 	};
@@ -68,8 +65,10 @@ namespace xdhcuc {
 	protected:
 		virtual faas_::sRow XDHCUCCreate(const str::dString &Token) = 0;
 		virtual void XDHCUCBroadcast(
-			const str::dString &Script,
+			const str::dString &Action,
+			const str::dString &Id,
 			faas_::sRow Row) = 0;
+		virtual void XDHCUCQuitAll(faas_::sRow Row) = 0;
 		virtual void XDHCUCRemove(faas_::sRow Row) = 0;
 	public:
 		qCALLBACK(Global);
@@ -78,10 +77,15 @@ namespace xdhcuc {
 			return XDHCUCCreate(Token);
 		}
 		void Broadcast(
-			const str::dString &Script,
+			const str::dString &Action,
+			const str::dString &Id,
 			faas_::sRow Row)
 		{
-			return XDHCUCBroadcast(Script, Row);
+			return XDHCUCBroadcast(Action, Id, Row);
+		}
+		void QuitAll(faas_::sRow Row)
+		{
+		  return XDHCUCQuitAll(Row);
 		}
 		void Remove(faas_::sRow Row)
 		{

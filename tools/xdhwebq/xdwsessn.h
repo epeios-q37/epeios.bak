@@ -30,15 +30,15 @@
 namespace xdwsessn {
 	class rSession; // Predeclaration.
 
-	typedef xdhcuc::cSingle cUpstream_;
+	typedef xdhups::cEngine cEngine_;
 
-	class rUpstream_
-	: public cUpstream_
+	class sEngine_
+	: public cEngine_
 	{
 	private:
 		qRMV(fdr::rRWDriver, D_, Driver_);
 	protected:
-		virtual bso::sBool XDHCUCProcess(
+		virtual bso::sBool XDHUPSProcess(
 			const str::string_ &Script,
 			tht::rBlocker *Blocker,
 			bso::sBool *Success,
@@ -48,43 +48,72 @@ namespace xdwsessn {
 		{
 			tol::reset(P, Driver_);
 		}
-		E_CVDTOR( rUpstream_ );
+		E_CVDTOR( sEngine_ );
 		void Init(fdr::rRWDriver &Driver)
 		{
 			Driver_ = &Driver;
 		}
 	};
 
+	typedef xdhcuc::cSingle cUpstream_;
+
+	class sUpstream_
+	: public cUpstream_
+	{
+  private:
+    qRMV(xdhups::rSession, S_, Session_);
+	protected:
+		virtual bso::sBool XDHCUCProcess(
+			const str::string_ &Primitive,
+      const str::dStrings &TagValues,
+			str::dString *ReturnedValue ) override;
+	public:
+		void reset( bso::bool__ = true )
+		{
+		  Session_ = NULL;
+		}
+		E_CVDTOR( sUpstream_ );
+		void Init(xdhups::rSession &Session)
+		{
+		  reset();
+
+		  Session_ = &Session;
+		}
+	};
+
 	class rSession
 	{
 	private:
-		rUpstream_ Upstream_;
+		sUpstream_ Upstream_;
+		sEngine_ Engine_;
 		xdhbrd::rXCallback Broadcaster_;
-		xdhups::sSession Session_;
+		xdhups::rSession Session_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			tol::reset(P, Upstream_, Broadcaster_, Session_ );
+			tol::reset(P, Upstream_, Engine_, Broadcaster_, Session_ );
 		}
 		E_CDTOR( rSession );
 		xdhbrd::sCRow Init(
 			xdhcdc::cSingle &Callback,
 			fdr::rRWDriver &Driver,
 			const char *Language,
-			const str::dString &Token,	// If empty, self-hosting ('SlfH') session, else token used for the FaaS session.
-			const str::dString &UserId )
+			const str::dString &Token)	// If empty, self-hosting ('SlfH') session, else token used for the FaaS session.
 		{
-			Upstream_.Init(Driver);
-			Session_.Init(Callback);
+			Engine_.Init(Driver);
+			Session_.Init(Callback, Engine_);
+			Upstream_.Init(Session_);
 
-      if ( Session_.Initialize(Upstream_, Language, Token, UserId) )
+      if ( Session_.Initialize(Upstream_, Language, Token) )
         return Broadcaster_.Init(Upstream_, Token);
       else
         return qNIL;
 		}
-		bso::sBool Handle( const char *EventDigest )
+		bso::sBool Handle(
+      const char *EventDigest,
+      const str::dString &UserId)
 		{
-			return Session_.Handle(EventDigest);
+			return Session_.Handle(EventDigest, UserId);
 		}
 		bso::sBool Execute(
 			const str::dString &Script,
@@ -92,13 +121,13 @@ namespace xdwsessn {
 			bso::sBool *Success,
 			str::dString &ReturnedValue)
 		{
-			return Upstream_.Process(Script, Blocker, Success, &ReturnedValue);
+			return Engine_.Process(Script, Blocker, Success, &ReturnedValue);
 		}
 		bso::sBool Execute(const str::dString &Script)
 		{
-			return Upstream_.Process(Script);
+			return Engine_.Process(Script);
 		}
-	};
+  };
 }
 
 #endif

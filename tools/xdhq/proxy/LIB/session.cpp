@@ -216,10 +216,8 @@ namespace {
 
 bso::sBool session::rSession::XDHCDCInitialize(
 	xdhcuc::cSingle &Callback,
-  tht::rLocker &CallbackLocker, // Avoid destruction of above 'Callback' while being used.
 	const char *Language,
-	const str::dString &Token,
-	const str::dString &UserId)
+	const str::dString &Token)
 {
 	bso::sBool Success = false;
 qRFH;
@@ -247,7 +245,6 @@ qRFB;
 
 		Id_ = id_store_::Fetch();
 		Token_ = Token;
-		UserId_ = UserId;
 
 #if 0
 		Log_(Id_, IP_, Token.Amount() ? Token : str::wString("SlfH"));	// This one calls wrongly the destructor of 'Token'.
@@ -255,7 +252,7 @@ qRFB;
 		Log_(Id_, IP_, Token.Amount() ? Token : SelfHostingLabel_);	// Avoids above problem, and also string creation.
 #endif
 
-		xdhdws::sProxy::Init(Callback, CallbackLocker);	// Must be last, otherwise, if an error occurs, 'Callback' will be freed twice!
+		xdhdws::sProxy::Init(Callback);	// Must be last, otherwise, if an error occurs, 'Callback' will be freed twice!
 	}
 qRFR;
   Success = false;
@@ -351,30 +348,14 @@ qRE;
 	return Cont;
 }
 
-bso::bool__ session::rSession::Handle_( const char *EventDigest )
-{
-	bso::sBool Cont = true;
-qRH;
-	str::string Id, Action;
-qRB;
-	tol::Init(Id, Action);
-
-	if ( ( EventDigest == NULL ) || ( !EventDigest[0] ) )
-		Cont = Launch_(UserId_, str::Empty);
-	else if ( xdhutl::Extract(str::wString(EventDigest), Id, Action) )
-		Cont = Launch_(Id, Action);
-qRR;
-qRT;
-qRE;
-	return Cont;
-}
-
-bso::bool__ session::rSession::XDHCDCHandle( const char *EventDigest )
+bso::bool__ session::rSession::XDHCDCHandle(
+  const str::dString &Id,
+  const str::dString &Action)
 {
 	bso::sBool Cont = false;
 qRFH;
 qRFB;
-	Cont = Handle_( EventDigest );
+	Cont = Launch_(Id, Action);
 qRFR;
 qRFT;
 qRFE(sclm::ErrorDefaultHandling());

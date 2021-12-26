@@ -34,7 +34,7 @@
 # include "err.h"
 # include "sclm.h"
 
-# define XDHCDC_DATA_VERSION_NUMBER	    "12"
+# define XDHCDC_DATA_VERSION_NUMBER	    "13"
 
 # define XDHCDC_DATA_VERSION		    XDHCDC_DATA_VERSION_NUMBER "-" CPE_AL
 
@@ -54,25 +54,25 @@ namespace xdhcdc {
 	protected:
 		virtual bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,
-			tht::rLocker &CallbackLocker, // Avoid destruction of above 'Callback' while being used.
 			const char *Language,
-			const str::dString &Token,	// If empty, SlfH session, else token used for the FaaS session.
-			const str::dString &UserId) = 0;	// Set by user, and sent as 'id' parameter to the connect associated function.
-		virtual bso::bool__ XDHCDCHandle(const char *EventDigest) = 0;
+			const str::dString &Token) = 0;// If empty, SlfH session, else token used for the FaaS session.
+		virtual bso::bool__ XDHCDCHandle(
+      const str::dString &Id,
+      const str::dString &Action) = 0;
 	public:
 		qCALLBACK( Single );
 		bso::sBool Initialize(
 			xdhcuc::cSingle &Callback,
-			tht::rLocker &CallbackLocker, // Avoid destruction of above 'Callback' while being used.
 			const char *Language,
-			const str::dString &Token,	// If empty, SlfH session, else token used for the FaaS session.
-			const str::dString &UserId)
+			const str::dString &Token)	// If empty, SlfH session, else token used for the FaaS session.
 		{
-			return XDHCDCInitialize(Callback, CallbackLocker, Language, Token, UserId);
+			return XDHCDCInitialize(Callback, Language, Token);
 		}
-		bso::bool__ Handle( const char *EventDigest )
+		bso::bool__ Handle(
+      const str::dString &Id,
+      const str::dString &Action)
 		{
-			return XDHCDCHandle( EventDigest );
+			return XDHCDCHandle(Id, Action);
 		}
 	};
 
@@ -81,33 +81,37 @@ namespace xdhcdc {
 	class sData
 	{
 	private:
-		const char *_Version;	// Always at first position
-		bso::uint__ _Control;	// A value which depends on the content of this structure, for basic compatibility test.
+		const char *Version_;	// Always at first position
+		bso::uint__ Control_;	// A value which depends on the content of this structure, for basic compatibility test.
 		eMode Mode_;
-		const char *_LauncherIdentification;
-		const char *_Localization;
+		const char *LauncherIdentification_;
+		const char *Localization_;
 		sclm::sRack SCLRack_;
+		xdhcmn::sScriptsVersion ScriptsVersion_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_Version = NULL;
-			_Control = 0;
+			Version_ = NULL;
+			Control_ = 0;
 			Mode_ = m_Undefined;
-			_LauncherIdentification = NULL;
-			_Localization = NULL;
+			LauncherIdentification_ = NULL;
+			Localization_ = NULL;
+			ScriptsVersion_ = 0;
 			SCLRack_.reset( P );
 		}
 		E_CDTOR( sData );
 		void Init(
 			eMode Mode,
 			const char *LauncherIdentification,
-			const char *Localization )
+			const char *Localization,
+			xdhcmn::sScriptsVersion ScriptsVersion)
 		{
-			_Version = XDHCDC_DATA_VERSION;
-			_Control = ComputeControl();
+			Version_ = XDHCDC_DATA_VERSION;
+			Control_ = ComputeControl();
 			Mode_ = Mode;
-			_LauncherIdentification = LauncherIdentification;
-			_Localization = Localization;
+			LauncherIdentification_ = LauncherIdentification;
+			Localization_ = Localization;
+			ScriptsVersion_ = ScriptsVersion;
 			SCLRack_.Init();
 		}
 		size_t ComputeControl( void )
@@ -115,8 +119,9 @@ namespace xdhcdc {
 			return sizeof( sData );
 		}
 		qRWDISCLOSEs( sclm::sRack, SCLRack );
-		Q37_PMDF( const char, LauncherIdentification, _LauncherIdentification );
-		Q37_PMDF( const char, Localization, _Localization );
+		Q37_PMDF( const char, LauncherIdentification, LauncherIdentification_ );
+		Q37_PMDF( const char, Localization, Localization_ );
+		qRODISCLOSEs( xdhcmn::sScriptsVersion, ScriptsVersion )
 		qRODISCLOSEs( eMode, Mode );
 	};
 #pragma pack( pop )

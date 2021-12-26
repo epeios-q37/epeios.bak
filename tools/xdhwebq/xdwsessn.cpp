@@ -25,7 +25,7 @@
 
 using namespace xdwsessn;
 
-bso::sBool xdwsessn::rUpstream_::XDHCUCProcess(
+bso::sBool xdwsessn::sEngine_::XDHUPSProcess(
 	const str::string_ &Script,
 	tht::rBlocker *Blocker,
 	bso::sBool *SuccessPointer,
@@ -77,4 +77,12 @@ qRFT
   }
 qRFE(sclm::ErrorDefaultHandling())
 	return Success;
+}
+
+bso::sBool xdwsessn::sUpstream_::XDHCUCProcess(
+	const str::string_ &Primitive,
+	const str::dStrings &TagValues,
+	str::dString *ReturnedValue )
+{
+  return S_().Execute(Primitive, TagValues, ReturnedValue);
 }

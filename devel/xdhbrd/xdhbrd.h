@@ -61,7 +61,8 @@ namespace xdhbrd {
         void Deactivate_(hGuardian_ &Guardian);
         void Remove_(void);
         bso::sBool Send_(
-          const str::dString &Script,
+          const str::dString &Primitive,
+          const str::dStrings &TagValues,
           hGuardian_ &Guardian);
     public:
         void reset(bso::sBool P = true);
@@ -72,23 +73,26 @@ namespace xdhbrd {
             const str::dString &Token);
         friend bso::sBool Send_(
           rXCallback &Callback,
-          const str::dString &Script,
+          const str::dString &Primitive,
+          const str::dStrings &TagValues,
           hGuardian_ &Guardian);
     };
 
     inline bso::sBool Send_(
       rXCallback &Callback,
-      const str::dString &Script,
+      const str::dString &Primitive,
+      const str::dStrings &TagValues,
       hGuardian_ &Guardian)
       {
-        return Callback.Send_(Script, Guardian);
+        return Callback.Send_(Primitive, TagValues, Guardian);
       }
 
     xdhcmn::faas::sRow Create(const str::dString &Token);
 
     void Broadcast(
-        const str::dString &Script,
-        xdhcmn::faas::sRow TRow);
+      const str::dString &Primitive,
+      const str::dStrings &TagValues,
+      xdhcmn::faas::sRow TRow);
 
     void Remove(xdhcmn::faas::sRow TRow);
 }

@@ -52,10 +52,12 @@ namespace xdhcmn {
 		}
 
 		namespace downstream {
-			qCDEF( sId, BroadcastScriptId, -2 );
-			qCDEF( sId, BroadcastActionId, -3 );
+			qCDEF( sId, BroadcastScriptId, -2 );  // Probably obsolete!
+			qCDEF( sId, BroadcastActionId, -3 );  // Even if above removed, DON'T CHANGE VALUE!!!
 		}
 	}
+
+  typedef bso::sU8 sScriptsVersion;
 
   extern const char SpecialScriptNameMarker;
 

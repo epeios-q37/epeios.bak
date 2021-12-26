@@ -316,7 +316,7 @@ namespace faaspool {
 		qRH
 			mtx::rHandle Mutex;
 		qRB
-			common::GetCallback().Broadcast(str::wString("%Quit"), TRow);
+			common::GetCallback().QuitAll(TRow);
 			Mutex.InitAndLock(Mutex_);
 
 			if ( Shareds.Amount() ) {
@@ -775,13 +775,14 @@ namespace {
   qRH
     str::wString Script;
   qRB
+    qRFbd();
     Script.Init();
 
     prtcl::Get(Flow, Script);
 
     Flow.Dismiss();
 
-    common::GetCallback().Broadcast(Script, TRow);
+//    common::GetCallback().Broadcast(Script, TRow);
   qRR
   qRT
   qRE
@@ -801,7 +802,7 @@ namespace {
 
     Flow.Dismiss();
 
-    xdhdws::BroadcastAction(common::GetCallback(), Action, Id, TRow);
+    common::GetCallback().Broadcast(Action, Id, TRow);
   qRR
   qRT
   qRE

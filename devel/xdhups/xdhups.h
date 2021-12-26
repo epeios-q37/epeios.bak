@@ -39,45 +39,90 @@ namespace xdhups {
 
 	typedef xdhcdc::cSingle cDownstream_;
 
-	class sSession
+  xdhcmn::sScriptsVersion GetScriptsVersion(void);
+
+	class cEngine
+	{
+	protected:
+		// The value returned by the script has to be stored
+		// in 'ReturnedValue', unless it is equal to 'NULL'.
+		// Returns 'false' when error (mainly lost connection to client).
+		virtual bso::sBool XDHUPSProcess(
+			const str::dString &Script,
+			tht::rBlocker *Blocker,	// If != NULL, has to be unblocked once the script sent.
+			bso::sBool *Success, // If != NULL, mirrors the return value ; needed when launched in a dedicated thread.
+			str::dString *ReturnedValue ) = 0;	// If == NULL, Blocker should also be NULL.
+	public:
+		qCALLBACK( Engine );
+		bso::sBool Process(
+			const str::dString &Script,
+			tht::rBlocker *Blocker = NULL,	// If != 'NULL', has to be unblocked once the script sent.
+			bso::sBool *Success = NULL,
+			str::dString *ReturnValue = NULL)
+		{
+			return XDHUPSProcess(Script, Blocker, Success, ReturnValue);
+		}
+	};
+
+	class rSession
 	{
 	private:
 	  tht::rLocker Locker_; // Used to avoid the destruction of below 'Upstream_' while being used.
-		Q37_MRMDF( cDownstream_, C_, Callback_ );
+		Q37_MRMDF( cDownstream_, D_, DownstreamCallback_ );
+		Q37_MRMDF( cEngine, E_, EngineCallback_ );
+		bso::sBool IsInitialized_( void ) const
+		{
+		  if ( ( DownstreamCallback_ == NULL ) != ( EngineCallback_ == NULL ) )
+        qRFwk();
+
+      return DownstreamCallback_ != NULL;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 		  if ( P ) {
-        if ( Callback_ != NULL ) {
+        if ( IsInitialized_() ) {
           Locker_.Lock(); // Locked downstream while 'Callback_' being used.
           Locker_.Unlock();
         }
 		  }
 
 		  Locker_.reset(P);
-			Callback_ = NULL;
+			DownstreamCallback_ = NULL;
+			EngineCallback_ = NULL;
 		}
-		E_CVDTOR( sSession );
-		void Init( cDownstream_ &Callback )
+		E_CVDTOR( rSession );
+		void Init(
+      cDownstream_ &DownstreamCallback,
+      cEngine &EngineCallback )
 		{
 			reset();
 
 			Locker_.Init();
-			Callback_ = &Callback;
+			DownstreamCallback_ = &DownstreamCallback;
+			EngineCallback_ = &EngineCallback;
 		}
 		bso::sBool Initialize(
 			xdhcuc::cSingle &Callback,
 			const char *Language,
-			const str::dString &Token,	// If empty, SlfH session, else token used for the FaaS session.
-			const str::dString &UserId)
+			const str::dString &Token)	// If empty, SlfH session, else token used for the FaaS session.
 		{
-			return C_().Initialize(Callback, Locker_, Language, Token, UserId);
+			return D_().Initialize(Callback, Language, Token);
 		}
-		bso::bool__ Handle( const char *EventDigest )
-		{
-			return C_().Handle(EventDigest);
-		}
-	};
+		bso::bool__ Handle(
+      const char *EventDigest,
+      const str::dString &UserID);
+		bso::sBool Execute(
+      const str::dString &Primitive,
+      const str::dStrings &TagValues,
+      str::dString *ReturnedValue);
+  };
+
+  void GetBroadcastPrimitive(
+    const str::dString &Action,
+    const str::dString &Id,
+    str::dString &Primitive,
+    str::dStrings &TagValues);
 
 	class rAgent
 	{
@@ -97,7 +142,8 @@ namespace xdhups {
 			xdhcdc::eMode Mode,
 			const str::string_ &ModuleFileName,
 			dlbrry::eNormalization Normalization,	// Usually 'dlbrry::n_Default', except when used for 'Node.js' (set to 'dlbrry::nExtOnly').
-			const char *Identification );
+			const char *Identification,
+			xdhcmn::sScriptsVersion ScriptsVersion);
 		cDownstream_ *FetchCallback()
 		{
 			return C_().FetchCallback();
@@ -132,6 +178,7 @@ namespace xdhups {
 		// Deprecated.
 		bso::sBool IsValid(const str::dString &Token);
 	};
+
 }
 
 #endif
