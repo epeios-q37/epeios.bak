@@ -120,20 +120,17 @@ namespace {
       namespace {
         qCDEF( char *, MainProtocolLabel_, "22bb5d73-924f-473f-a68a-14f41d8bfa83" );
         qCDEF( bso::sU8, MainProtocolVersion_, 0 );
-        qCDEF( char *, ScriptsVersion_, "0");  // Should never be upgraded, as 'FaaSq' use only
-                                              // a special very little subset of primitives,
-                                              // which should never be changed.
-                                              // All other primitives are used directly by
-                                              // downstream library.
       }
 
-      void HandShakeMain_(flw::rRWFlow &Proxy)
+      void HandShakeMain_(
+        flw::rRWFlow &Proxy,
+        const xdhcmn::sScriptsVersion &ScriptsVersion)
       {
       qRH
         str::wString Message;
       qRB
         csdcmn::SendProtocol(MainProtocolLabel_, MainProtocolVersion_, Proxy);
-        csdcmn::Put(ScriptsVersion_, Proxy);
+        csdcmn::Put(ScriptsVersion, Proxy);
         Proxy.Commit();
 
         Message.Init();
@@ -153,7 +150,9 @@ namespace {
       }
 		}
 
-    void HandShakes_(fdr::rRWDriver &ProxyDriver)
+    void HandShakes_(
+      fdr::rRWDriver &ProxyDriver,
+      const xdhcmn::sScriptsVersion &ScriptsVersion)
     {
     qRH
       flw::rDressedRWFlow<> Proxy;
@@ -161,7 +160,7 @@ namespace {
       Proxy.Init(ProxyDriver);
 
       HandShakeFaas_(Proxy);
-      HandShakeMain_(Proxy);
+      HandShakeMain_(Proxy, ScriptsVersion);
     qRR
     qRT
     qRE
@@ -175,9 +174,10 @@ namespace {
 
 		namespace {
 			namespace {
-				void Initialize_(
+				void _Initialize_(
 						xdhcuc::cGlobal &Upstream,
-						xdhups::rAgent &Agent)
+						xdhups::rAgent &Agent,
+						xdhcmn::sScriptsVersion &ScriptsVersion)
 				{
 				qRH
 					str::wString Identification, ModuleFilename;
@@ -189,7 +189,7 @@ namespace {
 					ModuleFilename.Init();
 					sclm::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
 
-					Agent.Init(Upstream, xdhcdc::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ) );
+					Agent.Init(Upstream, xdhcdc::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert(Buffer), ScriptsVersion);
 				qRR
 				qRT
 				qRE
@@ -374,7 +374,8 @@ namespace {
 					return qNIL;    // To avoid a warning.
 				}
 				virtual void XDHCUCBroadcast(
-					const str::dString &Script,
+					const str::dString &Id,
+					const str::dString &Action,
 					const faas_::sRow TRow) override
 					{
 					qRH
@@ -385,16 +386,18 @@ namespace {
 
 						Proxy.Init(P_());
 
-						csdcmn::Put(faas_::downstream::BroadcastScriptId, Proxy);
-						csdcmn::Put(Script, Proxy);
-
-					//    csdcmn::Put(TRow, Proxy);    // 'TRow', when relevant (FaaS mode), is only handled by the 'xdhqxdh' tool.
-
+						csdcmn::Put((bso::sS8)-3, Proxy);
+						csdcmn::Put(Id, Proxy);
+						csdcmn::Put(Action, Proxy);
 						Proxy.Commit();
 					qRR
 					qRT
 					qRE
 				}
+        virtual void XDHCUCQuitAll(faas_::sRow Row) override
+        {
+          // Nothing to do. Needed actions will be do upstream.
+        }
 				virtual void XDHCUCRemove(faas_::sRow) override
 				{
 					qRGnr();
@@ -418,9 +421,10 @@ namespace {
 		qRH
 			xdhups::rAgent Agent;
 			sUpstream_ Upstream;
+			xdhcmn::sScriptsVersion ScriptsVersion = 0;
 		qRB
 			Upstream.Init(ProxyDriver);
-			Initialize_(Upstream, Agent);
+			Initialize_(Upstream, Agent, ScriptsVersion);
 
 			Ignition_(ProxyDriver, Agent);
 			Handle_(ProxyDriver, Agent);

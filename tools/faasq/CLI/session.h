@@ -70,9 +70,8 @@ namespace session {
 		faas_::sId Id_;
 	protected:
 		virtual bso::sBool XDHCUCProcess(
-			const str::string_ &Script,
-			tht::rBlocker *Blocker,
-			bso::sBool *Success,
+			const str::string_ &Primitive,
+			const str::dStrings &TagValues,
 			str::dString *ReturnedValue) override;
 	public:
 		void reset( bso::bool__ P = true )
@@ -100,7 +99,7 @@ namespace session {
 		sUpstream_ Upstream_;
 		qRMV(xdhups::rAgent, A_, Agent_);
 		qRMV( xdhcdc::cSingle, C_, Callback_);
-		xdhups::sSession Session_;
+		xdhups::sEventSession Session_;
 		rBlockers_ Blockers_;
 		faas_::sId Id_;
 	public:
@@ -134,7 +133,7 @@ namespace session {
 			Proxy_.Init(ProxyDriver);
 			Session_.Init(C_());
 			Upstream_.Init(ProxyDriver, Id, Blockers_);
-			Session_.Initialize(Upstream_, "", str::Empty, str::Empty);
+			Session_.Initialize(Upstream_, "", str::Empty);
 			Handshaked = false;
 			Quit = false;
 			Blockers_.Init(Global);

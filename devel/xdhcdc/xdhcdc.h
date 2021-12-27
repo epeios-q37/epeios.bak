@@ -87,7 +87,7 @@ namespace xdhcdc {
 		const char *LauncherIdentification_;
 		const char *Localization_;
 		sclm::sRack SCLRack_;
-		xdhcmn::sScriptsVersion ScriptsVersion_;
+		xdhcmn::sPrimitivesVersion PrimitivesVersion_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -96,7 +96,7 @@ namespace xdhcdc {
 			Mode_ = m_Undefined;
 			LauncherIdentification_ = NULL;
 			Localization_ = NULL;
-			ScriptsVersion_ = 0;
+			PrimitivesVersion_ = 0;
 			SCLRack_.reset( P );
 		}
 		E_CDTOR( sData );
@@ -104,14 +104,14 @@ namespace xdhcdc {
 			eMode Mode,
 			const char *LauncherIdentification,
 			const char *Localization,
-			xdhcmn::sScriptsVersion ScriptsVersion)
+			const xdhcmn::sPrimitivesVersion &PrimitivesVersion)
 		{
 			Version_ = XDHCDC_DATA_VERSION;
 			Control_ = ComputeControl();
 			Mode_ = Mode;
 			LauncherIdentification_ = LauncherIdentification;
 			Localization_ = Localization;
-			ScriptsVersion_ = ScriptsVersion;
+			PrimitivesVersion_ = PrimitivesVersion;
 			SCLRack_.Init();
 		}
 		size_t ComputeControl( void )
@@ -121,7 +121,7 @@ namespace xdhcdc {
 		qRWDISCLOSEs( sclm::sRack, SCLRack );
 		Q37_PMDF( const char, LauncherIdentification, LauncherIdentification_ );
 		Q37_PMDF( const char, Localization, Localization_ );
-		qRODISCLOSEs( xdhcmn::sScriptsVersion, ScriptsVersion )
+		qRODISCLOSEs( xdhcmn::sPrimitivesVersion, PrimitivesVersion )
 		qRODISCLOSEs( eMode, Mode );
 	};
 #pragma pack( pop )

@@ -65,11 +65,11 @@ namespace {
 	}
 }
 
-void sclx::BroadcastAction(
-	const char *Action,
-	const char *Id)
+void sclx::Broadcast(
+	const str::dString &Action,
+	const str::dString &Id)
 {
-	xdhdws::BroadcastAction(GetUpstream_(), Action, Id, qNIL);
+  GetUpstream_().Broadcast(Action, Id, qNIL);
 }
 
 

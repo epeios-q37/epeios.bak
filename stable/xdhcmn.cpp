@@ -22,9 +22,9 @@
 #include "xdhcmn.h"
 
 /******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
+/* do not modify anything above this limit */
+/*			  unless specified			 */
+/*******************************************/
 
 using namespace xdhcmn;
 
@@ -36,15 +36,15 @@ qCDEF(char *, xdhcmn::ScriptNameForDismiss, SPECIAL_SCRIPT_NAME_MARKER "Dismiss_
 qCDEF(char *, xdhcmn::ScriptNameForInform, SPECIAL_SCRIPT_NAME_MARKER "Inform_1");
 
 void xdhcmn::Escape(
-    const str::string_ &Source,
-    str::string_ &Target,
+	const str::string_ &Source,
+	str::string_ &Target,
 	bso::char__ Delimiter,
 	bso::char__ EscapeChar )
 {
-    sdr::row__ Row = Source.First();
+	sdr::row__ Row = Source.First();
 	bso::char__ C = 0;
 
-    while ( Row != qNIL ) {
+	while ( Row != qNIL ) {
 		switch ( C = Source( Row ) ) {
 #if 0
 		case 7:
@@ -100,8 +100,8 @@ void xdhcmn::Escape(
 			break;
 		}
 
-        Row = Source.Next( Row );
-    }
+		Row = Source.Next( Row );
+	}
 }
 
 const str::dString &xdhcmn::Escape(
@@ -127,10 +127,10 @@ void xdhcmn::FlatMerge(
 	str::dString &Merged,
 	bso::sBool AsJSArray )
 {
-qRH
+qRH;
 	sdr::row__ Row = qNIL;
 	str::wString Escaped;
-qRB
+qRB;
 	Row = Splitted.First();
 
 	if ( AsJSArray )
@@ -154,9 +154,9 @@ qRB
 
 	if ( AsJSArray )
 		Merged.Append( " ]" );
-qRR
-qRT
-qRE
+qRR;
+qRT;
+qRE;
 }
 
 void xdhcmn::FlatSplit(
@@ -179,7 +179,7 @@ qRB;
 				Char = 8;
 				break;
 			case 't':
-				Char = '9';
+				Char = 9;
 				break;
 			case 'n':
 				Char = 10;

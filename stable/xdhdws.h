@@ -41,9 +41,9 @@ namespace xdhdws {
 		using namespace xdhcmn::faas;
 	}
 
-	void SetScriptsVersion(xdhcmn::sScriptsVersion ScriptsVersion);
+	void SetPrimitivesVersion(xdhcmn::sPrimitivesVersion PrimitivesVersion);
 
-	xdhcmn::sScriptsVersion GetScriptsVersion(void);
+	xdhcmn::sPrimitivesVersion GetPrimitivesVersion(void);
 
 	class sProxy
 	{

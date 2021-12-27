@@ -10,8 +10,13 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-12-27
+- SCLX, XDHCDC : [adpt],
+- XDHCMN: fixing typo,
+- XDHUPS: splitting to simplify use with *FaaSq*,
+
 ## 2021-12-26
-- XDHBRD, XDHCDC, XDHCMN, XDHDWS, XDHUPS: [adpt]:,
+- XDHBRD, XDHCDC, XDHCMN, XDHDWS, XDHUPS: [adpt],
 - XDHCUC: upstream handles now primitives, and no more raw scripts,
 
 ## 2021-12-25

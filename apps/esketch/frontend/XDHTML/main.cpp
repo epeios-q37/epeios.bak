@@ -86,7 +86,7 @@ namespace {
             Session.User.ToUpper( Value );
             Session.SetValue( "Pattern", Value );
             Common_.Init(Value);
-            sclx::BroadcastAction("BroadcastTest", "toto");
+            sclx::Broadcast(str::wString("BroadcastTest"), str::wString("toto"));
         }
 	qRR;
 	qRT;

@@ -72,7 +72,7 @@ namespace {
 
   void HandleScriptsVersion_(flw::rRWFlow &Flow)
   {
-    switch( csdcmn::GetVersion(xdhdws::GetScriptsVersion(), Flow) ) {
+    switch( csdcmn::GetVersion(xdhdws::GetPrimitivesVersion(), Flow) ) {
     case csdcmn::UnknownVersion:
       ReportErrorToBackend_( "\nUnknown scripts version!\n", Flow );
       break;

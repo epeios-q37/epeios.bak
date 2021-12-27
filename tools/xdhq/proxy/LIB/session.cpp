@@ -71,6 +71,7 @@ namespace {
 		tVoid,
 		tString,
 		tStrings,
+		tFaaSqRelated,  // Only used with 'FaaSq'. IF MODIFIED, SEE 'session.cpp' FROM 'FaaSq'.
 		t_amount,
 		t_Undefined
 	};
@@ -86,10 +87,11 @@ namespace {
 		return (eType_)Type;
 	}
 
-	void GetParameters_(
+	bso::sBool GetParameters_(
 		flw::rRFlow &Flow,
 		str::wStrings &Parameters )
 	{
+		bso::sBool IsFaaSq= false;
 	qRH
 		str::wString Value;
 		str::wStrings Values;
@@ -116,6 +118,13 @@ namespace {
 				Parameters.Append(Value);
 
 				break;
+      case tFaaSqRelated:
+        Value.Init();
+        prtcl::Get(Flow, Value);
+        xdhcmn::FlatSplit(Value, Parameters);
+        IsFaaSq = true;
+        Continue = false;
+        break;
 			default:
 				qRGnr();
 				break;
@@ -124,6 +133,7 @@ namespace {
 	qRR
 	qRE
 	qRT
+    return IsFaaSq;
 	}
 }
 
@@ -271,6 +281,7 @@ qRH;
 	str::wString ScriptName, ReturnValue, Message;
 	eType_ ReturnType = t_Undefined;
 	str::wStrings Parameters, SplitedReturnValue;
+	bso::sBool IsFaaSq = false; // Set to true if backand id 'FaaSq'.
 qRB;
 	Flow.Init(D_());
 
@@ -305,7 +316,7 @@ qRB;
 			ReturnType = GetType_( Flow );
 
 			Parameters.Init();
-			GetParameters_(Flow, Parameters);
+			IsFaaSq = GetParameters_(Flow, Parameters);
 
 			Flow.Dismiss();
 
@@ -326,15 +337,24 @@ qRB;
 			case tVoid:
 				break;
 			case tString:
+			  if ( IsFaaSq )
+          qRGnr();
 				prtcl::Put(ReturnValue, Flow);
 				Flow.Commit();
 				break;
 			case tStrings:
+			  if ( IsFaaSq )
+          qRGnr();
 				SplitedReturnValue.Init();
 				xdhcmn::FlatSplit(ReturnValue,SplitedReturnValue);
 				prtcl::Put(SplitedReturnValue, Flow);
 				Flow.Commit();
 				break;
+      case tFaaSqRelated:
+ 			  if ( !IsFaaSq )
+          qRGnr();
+				prtcl::Put(ReturnValue, Flow);
+				Flow.Commit();
 			default:
 				qRGnr();
 				break;

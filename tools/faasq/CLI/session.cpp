@@ -25,12 +25,16 @@
 
 using namespace session;
 
+namespace {
+  // MUST MATCH VALUE OF 'rType::tFaaSqRelated' IN 'session.cpp' FROM 'XDHqXDH'.
+  qCDEF(bso::sU8, FaaSqRelatedValue_, 3);
+}
+
 // #define LOG cio::COut << __LOC__ << tol::DateAndTime(DT) << txf::nl << txf::commit;
 
 bso::sBool session::sUpstream_::XDHCUCProcess(
-	const str::string_ &Script,
-	tht::rBlocker *Blocker,
-	bso::sBool *SuccessPointer,
+	const str::string_ &Primitive,
+	const str::dStrings &TagValues,
 	str::dString *ReturnedValue )
 {
 	bso::sBool Success = true;
@@ -40,47 +44,20 @@ qRB
 	Proxy.Init(P_());
 
 	csdcmn::Put(Id_, Proxy);
-	csdcmn::Put("Execute_1", Proxy);
-
-//    cio::COut << ">>>>>>>" << txf::tab << "'" << Script <<"'" << txf::tab << (int)Id_ << txf::nl << txf::commit;
-
-	csdcmn::Put((bso::sU8)(ReturnedValue == NULL ? 0 : 1), Proxy);
-	csdcmn::Put((bso::sU8)1,Proxy);
-	csdcmn::Put(Script, Proxy);
-	csdcmn::Put((bso::sU8)0, Proxy);
-
+	csdcmn::Put(Primitive, Proxy);
+	csdcmn::Put(FaaSqRelatedValue_, Proxy);
+	csdcmn::Put(TagValues, Proxy);
+	csdcmn::Put((bso::sU8)(ReturnedValue == NULL ? 0 : FaaSqRelatedValue_), Proxy);
 	Proxy.Commit();
 
 	if ( ReturnedValue != NULL) {
-		if ( Blocker != NULL ) {
-      if ( SuccessPointer == NULL )
-        qRGnr();
-
-      *SuccessPointer = Success;
-			Blocker->Unblock();
-		}
-
-		B_().WaitSelf();
-
 		csdcmn::Get(Proxy, *ReturnedValue);
 		Proxy.Dismiss();
-
-		B_().UnblockGlobal();
-	} else if ( Blocker != NULL )
-		qRGnr();
-  else if ( SuccessPointer != NULL )
-    qRGnr();
+	}
 qRR
 	Success = false;
 	ERRRst();
 qRT
-  if ( Blocker != NULL ) {
-    if ( SuccessPointer == NULL )
-      qRGnr();
-
-    *SuccessPointer = Success;
-    Blocker->Unblock();
-  }
 qRE
 	return Success;
 }
@@ -110,7 +87,7 @@ qRB
 		Digest.Init();
 		xdhutl::BuildPseudoDigest(Id, Action, Digest);
 
-		Session_.Handle(Digest.Convert(Buffer));
+		Session_.Handle(Digest.Convert(Buffer), str::Empty);
 
 	// 'Id_' is the session id and must not be confused with the local variable 'Id',
 	// which is the id of the DOM element on which there was 'Action' was applied.

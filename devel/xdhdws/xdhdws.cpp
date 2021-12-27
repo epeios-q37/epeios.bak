@@ -24,15 +24,15 @@
 using namespace xdhdws;
 
 namespace {
-  xdhcmn::sScriptsVersion ScriptsVersion_ = 0;
+  xdhcmn::sPrimitivesVersion PrimitivesVersion_ = 0;
 }
 
-void xdhdws::SetScriptsVersion(xdhcmn::sScriptsVersion ScriptsVersion)
+void xdhdws::SetPrimitivesVersion(xdhcmn::sPrimitivesVersion PrimitivesVersion)
 {
-  ScriptsVersion_ = ScriptsVersion;
+  PrimitivesVersion_ = PrimitivesVersion;
 }
 
-xdhcmn::sScriptsVersion xdhdws::GetScriptsVersion(void)
+xdhcmn::sPrimitivesVersion xdhdws::GetPrimitivesVersion(void)
 {
-  return ScriptsVersion_;
+  return PrimitivesVersion_;
 }

@@ -39,7 +39,7 @@ namespace xdhups {
 
 	typedef xdhcdc::cSingle cDownstream_;
 
-  xdhcmn::sScriptsVersion GetScriptsVersion(void);
+  xdhcmn::sPrimitivesVersion GetPrimitivesVersion(void);
 
 	class cEngine
 	{
@@ -64,32 +64,75 @@ namespace xdhups {
 		}
 	};
 
-	class rSession
+	class rPrimitiveSession
 	{
 	private:
-	  tht::rLocker Locker_; // Used to avoid the destruction of below 'Upstream_' while being used.
-		Q37_MRMDF( cDownstream_, D_, DownstreamCallback_ );
-		Q37_MRMDF( cEngine, E_, EngineCallback_ );
-		bso::sBool IsInitialized_( void ) const
-		{
-		  if ( ( DownstreamCallback_ == NULL ) != ( EngineCallback_ == NULL ) )
-        qRFwk();
-
-      return DownstreamCallback_ != NULL;
-		}
+	  tht::rLocker Locker_; // Used to avoid the destruction of below 'Callback_' while being used.
+		Q37_MRMDF( cEngine, C_, Callback_ );
 	public:
 		void reset( bso::bool__ P = true )
 		{
 		  if ( P ) {
-        if ( IsInitialized_() ) {
+        if ( Callback_ != NULL ) {
           Locker_.Lock(); // Locked downstream while 'Callback_' being used.
           Locker_.Unlock();
         }
 		  }
 
 		  Locker_.reset(P);
-			DownstreamCallback_ = NULL;
-			EngineCallback_ = NULL;
+			Callback_ = NULL;
+		}
+		E_CVDTOR( rPrimitiveSession );
+		void Init( cEngine &Callback )
+		{
+			reset();
+
+			Locker_.Init();
+			Callback_ = &Callback;
+		}
+		bso::sBool Execute(
+      const str::dString &Primitive,
+      const str::dStrings &TagValues,
+      str::dString *ReturnedValue);
+  };
+
+	class sEventSession
+	{
+	private:
+		Q37_MRMDF( cDownstream_, C_, Callback_ );
+	public:
+		void reset( bso::bool__ = true )
+		{
+			Callback_ = NULL;
+		}
+		E_CVDTOR( sEventSession );
+		void Init(cDownstream_ &Callback)
+		{
+			reset();
+
+			Callback_ = &Callback;
+		}
+		bso::sBool Initialize(
+			xdhcuc::cSingle &Callback,
+			const char *Language,
+			const str::dString &Token)	// If empty, SlfH session, else token used for the FaaS session.
+		{
+			return C_().Initialize(Callback, Language, Token);
+		}
+		bso::bool__ Handle(
+      const char *EventDigest,
+      const str::dString &UserID);
+  };
+
+	class rSession
+	: public sEventSession,
+	  public rPrimitiveSession
+	{
+	public:
+		void reset( bso::bool__ P = true )
+		{
+      sEventSession::reset(P);
+      rPrimitiveSession::reset(P);
 		}
 		E_CVDTOR( rSession );
 		void Init(
@@ -98,24 +141,9 @@ namespace xdhups {
 		{
 			reset();
 
-			Locker_.Init();
-			DownstreamCallback_ = &DownstreamCallback;
-			EngineCallback_ = &EngineCallback;
+			sEventSession::Init(DownstreamCallback);
+			rPrimitiveSession::Init(EngineCallback);
 		}
-		bso::sBool Initialize(
-			xdhcuc::cSingle &Callback,
-			const char *Language,
-			const str::dString &Token)	// If empty, SlfH session, else token used for the FaaS session.
-		{
-			return D_().Initialize(Callback, Language, Token);
-		}
-		bso::bool__ Handle(
-      const char *EventDigest,
-      const str::dString &UserID);
-		bso::sBool Execute(
-      const str::dString &Primitive,
-      const str::dStrings &TagValues,
-      str::dString *ReturnedValue);
   };
 
   void GetBroadcastPrimitive(
@@ -143,7 +171,7 @@ namespace xdhups {
 			const str::string_ &ModuleFileName,
 			dlbrry::eNormalization Normalization,	// Usually 'dlbrry::n_Default', except when used for 'Node.js' (set to 'dlbrry::nExtOnly').
 			const char *Identification,
-			xdhcmn::sScriptsVersion ScriptsVersion);
+			const xdhcmn::sPrimitivesVersion &PrimitivesVersion);
 		cDownstream_ *FetchCallback()
 		{
 			return C_().FetchCallback();

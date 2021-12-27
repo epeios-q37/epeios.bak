@@ -65,7 +65,6 @@
 					</XSLFile>
 				</XMLFiles>
 			</xpp:bloc>
-			<xpp:expand select="XDHFull"/>
 		</Definitions>
 		<Locale>
 			<xpp:expand select="Locale"/>

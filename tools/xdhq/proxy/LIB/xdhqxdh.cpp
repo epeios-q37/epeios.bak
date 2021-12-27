@@ -129,7 +129,7 @@ namespace {
       Initialization_( Data.Mode() );
       common::SetCallback(Callback);
 
-      xdhdws::SetScriptsVersion(Data.ScriptsVersion());
+      xdhdws::SetPrimitivesVersion(Data.PrimitivesVersion());
 		}
 		virtual void XDHCDCBaseLanguage( TOL_CBUFFER___ &Buffer ) override
 		{

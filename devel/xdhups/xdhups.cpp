@@ -51,7 +51,7 @@ namespace {
   rgstry::rEntry ScriptsVersion_("@Version", Scripts_);
 }
 
-xdhcmn::sScriptsVersion xdhups::GetScriptsVersion(void)
+xdhcmn::sPrimitivesVersion xdhups::GetPrimitivesVersion(void)
 {
   return sclm::MGetU8(ScriptsVersion_);
 }
@@ -591,7 +591,7 @@ namespace {
 	}
 }
 
-bso::bool__ xdhups::rSession::Handle(
+bso::bool__ xdhups::sEventSession::Handle(
   const char *EventDigest,
   const str::dString &UserId)
 {
@@ -602,21 +602,21 @@ qRB;
 	tol::Init(Id, Action);
 
 	if ( ( EventDigest == NULL ) || ( !EventDigest[0] ) )
-		Cont = D_().Handle(UserId, str::Empty);
+		Cont = C_().Handle(UserId, str::Empty);
 	else if ( xdhutl::Extract(str::wString(EventDigest), Id, Action) )
-		Cont = D_().Handle(Id, Action);
+		Cont = C_().Handle(Id, Action);
 qRR;
 qRT;
 qRE;
 	return Cont;
 }
 
-bso::sBool xdhups::rSession::Execute(
+bso::sBool xdhups::rPrimitiveSession::Execute(
   const str::dString &Primitive,
   const str::dStrings &TagValues,
   str::dString *ReturnedValue)
 {
-    return Process_(Primitive, TagValues, E_(), Locker_, ReturnedValue);
+  return Process_(Primitive, TagValues, C_(), Locker_, ReturnedValue);
 }
 
 namespace {
@@ -648,7 +648,7 @@ bso::bool__ xdhups::rAgent::Init(
 	const str::string_ &ModuleFileName,
 	dlbrry::eNormalization Normalization,
 	const char *Identification,
-  xdhcmn::sScriptsVersion ScriptsVersion)
+  const xdhcmn::sPrimitivesVersion &PrimitivesVersion)
 {
 	bso::bool__ Success = false;
 qRH
@@ -657,7 +657,7 @@ qRH
 	TOL_CBUFFER___ Buffer;
 qRB
 	Location.Init();
-	Data.Init(Mode, Identification, fnm::GetLocation( ModuleFileName, Location ).UTF8( Buffer ), ScriptsVersion );
+	Data.Init(Mode, Identification, fnm::GetLocation( ModuleFileName, Location ).UTF8( Buffer ), PrimitivesVersion );
 
 	Library_.Init( ModuleFileName, Normalization );
 

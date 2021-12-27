@@ -358,22 +358,6 @@ namespace sclx {
 		qRT
 			return Buffer;
 		}
-		template <typename ...args> void Process_(
-			const char *TaggedScript,
-			const char *TagList,
-			str::dString *Result,
-			const args &...Args )
-		{
-		qRH
-			str::wStrings Values;
-		qRB
-			Values.Init();
-			Fill_(Values, Args...);
-			Core_.Process(TaggedScript, TagList, Values, Result);
-		qRR
-		qRE
-		qRT
-		}
 		template <typename ...args> const str::dString &Process_(
 			const char *TaggedScript,
 			const char *TagList,
@@ -497,11 +481,10 @@ namespace sclx {
 		qCDTOR( sProxy );
 		bso::sBool Init(
 			xdhcuc::cSingle &Callback,
-      tht::rLocker &CallbackLocker, // Avoid destruction of above 'Callback' while being used.
 			const scli::sInfo &Info,
 			eXSLFileHandling XSLFileHandling)
 		{
-			if ( !Core_.Init(Callback, CallbackLocker) )
+			if ( !Core_.Init(Callback) )
         return false;
 
 			Info_ = &Info;
@@ -860,9 +843,9 @@ namespace sclx {
 		}
 	};
 
-	void BroadcastAction(
-		const char *Action,
-		const char *Id);
+	void Broadcast(
+		const str::dString &Action,
+		const str::dString &Id);
 
 	template <typename session> class rCore;
 
@@ -883,15 +866,13 @@ namespace sclx {
 	protected:
 		bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,
-      tht::rLocker &CallbackLocker, // Avoid destruction of above 'Callback' while being used.
 			const char *Language,
-			const str::dString &Token, // If empty, SlfH session, else token used for the FaaS session.
-			const str::dString &UserId)	override
+			const str::dString &Token) override// If empty, SlfH session, else token used for the FaaS session.
 		{
 			if ( Token.Amount() )
 				qRFwk();    // Should never be launched in 'FaaS' mode.
 
-			if ( !sProxy::Init(Callback, CallbackLocker, I_(), XSLFileHandling_) )
+			if ( !sProxy::Init(Callback, I_(), XSLFileHandling_) )
         return false;
 
 			Reporting_.Init( *this, Language );
@@ -899,20 +880,14 @@ namespace sclx {
 
 			return true;
 		}
-		bso::bool__ XDHCDCHandle(const char *EventDigest) override
+		bso::bool__ XDHCDCHandle(
+      const str::dString &Id,
+      const str::dString &Action) override
 		{
 			bso::sBool Cont = false;
 		qRH;
-			str::wString Id, Action;
 			qCBUFFERh BId, BAction;
 		qRB;
-			tol::Init(Id, Action);
-
-			if ( ( EventDigest != NULL ) && (EventDigest[0] ) ) {
-				if ( !xdhutl::Extract(str::wString(EventDigest), Id, Action) )
-					qRFwk();
-			}
-
 			Cont = C_().Launch(*this, Id.Convert(BId), Action.Convert(BAction));
 		qRR;
 		qRT;
