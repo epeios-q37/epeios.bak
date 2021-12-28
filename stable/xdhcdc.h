@@ -87,7 +87,6 @@ namespace xdhcdc {
 		const char *LauncherIdentification_;
 		const char *Localization_;
 		sclm::sRack SCLRack_;
-		xdhcmn::sPrimitivesVersion PrimitivesVersion_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -96,22 +95,19 @@ namespace xdhcdc {
 			Mode_ = m_Undefined;
 			LauncherIdentification_ = NULL;
 			Localization_ = NULL;
-			PrimitivesVersion_ = 0;
 			SCLRack_.reset( P );
 		}
 		E_CDTOR( sData );
 		void Init(
 			eMode Mode,
 			const char *LauncherIdentification,
-			const char *Localization,
-			const xdhcmn::sPrimitivesVersion &PrimitivesVersion)
+			const char *Localization)
 		{
 			Version_ = XDHCDC_DATA_VERSION;
 			Control_ = ComputeControl();
 			Mode_ = Mode;
 			LauncherIdentification_ = LauncherIdentification;
 			Localization_ = Localization;
-			PrimitivesVersion_ = PrimitivesVersion;
 			SCLRack_.Init();
 		}
 		size_t ComputeControl( void )
@@ -121,7 +117,6 @@ namespace xdhcdc {
 		qRWDISCLOSEs( sclm::sRack, SCLRack );
 		Q37_PMDF( const char, LauncherIdentification, LauncherIdentification_ );
 		Q37_PMDF( const char, Localization, Localization_ );
-		qRODISCLOSEs( xdhcmn::sPrimitivesVersion, PrimitivesVersion )
 		qRODISCLOSEs( eMode, Mode );
 	};
 #pragma pack( pop )
@@ -129,7 +124,7 @@ namespace xdhcdc {
 	class cGlobal
 	{
 	protected:
-		virtual void XDHCDCInitialize(
+		virtual xdhcmn::sScriptsVersion XDHCDCInitialize(
 			const sData &Data,
 			xdhcuc::cGlobal &Callback) = 0;
 		virtual void XDHCDCBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
@@ -145,7 +140,7 @@ namespace xdhcdc {
 			qRPD ) = 0;
 	public:
 		qCALLBACK( Global )
-		void Initialize(
+		xdhcmn::sScriptsVersion Initialize(
 			const sData &Data,
 			xdhcuc::cGlobal &Callback)
 		{

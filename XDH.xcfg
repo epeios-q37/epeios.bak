@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp">
+  <xpp:define name="XDHScriptsVersion">
+    <xpp:bloc>0</xpp:bloc>
+  </xpp:define>
+</xpp:bloc>

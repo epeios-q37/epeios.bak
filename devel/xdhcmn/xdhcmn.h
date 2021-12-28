@@ -57,7 +57,7 @@ namespace xdhcmn {
 		}
 	}
 
-  typedef bso::sU8 sPrimitivesVersion;
+  typedef bso::sU8 sScriptsVersion;
 
   extern const char SpecialScriptNameMarker;
 

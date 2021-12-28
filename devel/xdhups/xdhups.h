@@ -39,7 +39,7 @@ namespace xdhups {
 
 	typedef xdhcdc::cSingle cDownstream_;
 
-  xdhcmn::sPrimitivesVersion GetPrimitivesVersion(void);
+  xdhcmn::sScriptsVersion GetScriptsVersion(void);
 
 	class cEngine
 	{
@@ -170,8 +170,7 @@ namespace xdhups {
 			xdhcdc::eMode Mode,
 			const str::string_ &ModuleFileName,
 			dlbrry::eNormalization Normalization,	// Usually 'dlbrry::n_Default', except when used for 'Node.js' (set to 'dlbrry::nExtOnly').
-			const char *Identification,
-			const xdhcmn::sPrimitivesVersion &PrimitivesVersion);
+			const char *Identification);
 		cDownstream_ *FetchCallback()
 		{
 			return C_().FetchCallback();

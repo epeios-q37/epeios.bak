@@ -22,17 +22,3 @@
 #include "xdhdws.h"
 
 using namespace xdhdws;
-
-namespace {
-  xdhcmn::sPrimitivesVersion PrimitivesVersion_ = 0;
-}
-
-void xdhdws::SetPrimitivesVersion(xdhcmn::sPrimitivesVersion PrimitivesVersion)
-{
-  PrimitivesVersion_ = PrimitivesVersion;
-}
-
-xdhcmn::sPrimitivesVersion xdhdws::GetPrimitivesVersion(void)
-{
-  return PrimitivesVersion_;
-}

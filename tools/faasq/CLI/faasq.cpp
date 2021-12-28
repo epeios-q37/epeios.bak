@@ -122,15 +122,14 @@ namespace {
         qCDEF( bso::sU8, MainProtocolVersion_, 0 );
       }
 
-      void HandShakeMain_(
-        flw::rRWFlow &Proxy,
-        const xdhcmn::sScriptsVersion &ScriptsVersion)
+      void HandShakeMain_(flw::rRWFlow &Proxy)
       {
       qRH
         str::wString Message;
+        bso::pInt Buffer;
       qRB
         csdcmn::SendProtocol(MainProtocolLabel_, MainProtocolVersion_, Proxy);
-        csdcmn::Put(ScriptsVersion, Proxy);
+        csdcmn::Put(bso::Convert(xdhups::GetScriptsVersion(), Buffer), Proxy);
         Proxy.Commit();
 
         Message.Init();
@@ -150,9 +149,7 @@ namespace {
       }
 		}
 
-    void HandShakes_(
-      fdr::rRWDriver &ProxyDriver,
-      const xdhcmn::sScriptsVersion &ScriptsVersion)
+    void HandShakes_(fdr::rRWDriver &ProxyDriver)
     {
     qRH
       flw::rDressedRWFlow<> Proxy;
@@ -160,7 +157,7 @@ namespace {
       Proxy.Init(ProxyDriver);
 
       HandShakeFaas_(Proxy);
-      HandShakeMain_(Proxy, ScriptsVersion);
+      HandShakeMain_(Proxy);
     qRR
     qRT
     qRE
@@ -174,10 +171,9 @@ namespace {
 
 		namespace {
 			namespace {
-				void _Initialize_(
+				void Initialize_(
 						xdhcuc::cGlobal &Upstream,
-						xdhups::rAgent &Agent,
-						xdhcmn::sScriptsVersion &ScriptsVersion)
+						xdhups::rAgent &Agent)
 				{
 				qRH
 					str::wString Identification, ModuleFilename;
@@ -189,7 +185,8 @@ namespace {
 					ModuleFilename.Init();
 					sclm::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
 
-					Agent.Init(Upstream, xdhcdc::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert(Buffer), ScriptsVersion);
+					if ( !Agent.Init(Upstream, xdhcdc::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert(Buffer)) )
+            qRGnr();
 				qRR
 				qRT
 				qRE
@@ -421,10 +418,9 @@ namespace {
 		qRH
 			xdhups::rAgent Agent;
 			sUpstream_ Upstream;
-			xdhcmn::sScriptsVersion ScriptsVersion = 0;
 		qRB
 			Upstream.Init(ProxyDriver);
-			Initialize_(Upstream, Agent, ScriptsVersion);
+			Initialize_(Upstream, Agent);
 
 			Ignition_(ProxyDriver, Agent);
 			Handle_(ProxyDriver, Agent);

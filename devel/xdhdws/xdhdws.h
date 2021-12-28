@@ -41,10 +41,6 @@ namespace xdhdws {
 		using namespace xdhcmn::faas;
 	}
 
-	void SetPrimitivesVersion(xdhcmn::sPrimitivesVersion PrimitivesVersion);
-
-	xdhcmn::sPrimitivesVersion GetPrimitivesVersion(void);
-
 	class sProxy
 	{
 	private:

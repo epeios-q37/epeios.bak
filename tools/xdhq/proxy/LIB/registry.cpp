@@ -25,3 +25,9 @@ rEntry registry::parameter::HostService( "HostService", sclr::Parameters );
 rEntry registry::parameter::FaaS( "FaaS", sclr::Parameters );
 rEntry registry::parameter::faas::Service( "Service", registry::parameter::FaaS );
 
+namespace {
+  rEntry XDHTML_("XDHTML", sclr::Definitions);
+}
+
+rEntry registry::definition::XDHTMLScriptsVersion("@ScriptsVersion", XDHTML_);
+

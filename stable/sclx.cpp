@@ -32,6 +32,14 @@ namespace {
 		rEntry XMLFiles_( "XMLFiles", sclr::Definitions );
 		rEntry UntaggedXSLFile_( "XSLFile", XMLFiles_ );
 	}
+
+	namespace {
+	  namespace {
+	    rEntry XDHTML_("XDHTML", sclr::Definitions);
+	  }
+
+	  rEntry XDHTMLScriptsVersion_("@ScriptsVersion", XDHTML_);
+	}
 }
 
 rgstry::rEntry registry::definition::HeadFile( "HeadFile", sclr::Definitions );
@@ -87,7 +95,7 @@ namespace {
 	: public cDownstream_
 	{
 	protected:
-		virtual void XDHCDCInitialize(
+		virtual xdhcmn::sScriptsVersion XDHCDCInitialize(
 			const xdhcdc::sData &Data,
 			xdhcuc::cGlobal &Upstream) override
 		{
@@ -102,7 +110,9 @@ namespace {
 			Launcher_ = Data.LauncherIdentification();
 			sclm::Initialize( Data.SCLRack(), Data.Localization(), SCLXInfo() );
 
-			SCLXInitialization( Data.Mode() );
+			SCLXInitialization(Data.Mode());
+
+			return sclm::MGetU8(XDHTMLScriptsVersion_);
 		}
 		virtual void XDHCDCBaseLanguage( TOL_CBUFFER___ &Buffer ) override
 		{
@@ -281,6 +291,7 @@ qRB
 	CloseText.Init();
 	scll::GetTranslation( SCLX_NAME "_CloseText", Language, CloseText );
 
+	qRVct();  // 'PrettyAlert_1' n'existe pas, mais l'erreur n'est pas affichée correctement ; à investiguer.
 	Process_("PrettyAlert_1", NULL, XML, XSL, Title, CloseText );
 qRR
 qRT

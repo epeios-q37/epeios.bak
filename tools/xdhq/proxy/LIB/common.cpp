@@ -19,6 +19,8 @@
 
 #include "common.h"
 
+#include "registry.h"
+
 #include "prtcl.h"
 
 #include "xdhdws.h"
@@ -72,7 +74,7 @@ namespace {
 
   void HandleScriptsVersion_(flw::rRWFlow &Flow)
   {
-    switch( csdcmn::GetVersion(xdhdws::GetPrimitivesVersion(), Flow) ) {
+    switch( csdcmn::GetVersion(sclm::MGetU8(registry::definition::XDHTMLScriptsVersion), Flow) ) {
     case csdcmn::UnknownVersion:
       ReportErrorToBackend_( "\nUnknown scripts version!\n", Flow );
       break;

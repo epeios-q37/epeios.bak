@@ -3,25 +3,26 @@
 	<Configuration target="faasq">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
-        <xpp:expand href="../../../CLI.xcfg"/>
-        <Setups Default="faas">
-            <Setup id="faas">
-                <Proxy>
-                    <Host>faas.q37.info</Host>
-                </Proxy>
-            </Setup>
-            <Setup id="faas-2">
-                <Proxy>
-                    <Host>faas-2.q37.info</Host>
-                </Proxy>
-            </Setup>
-            <Setup id="localhost">
-                <Proxy>
-                    <Host>localhost</Host>
-                </Proxy>
-            </Setup>
-        </Setups>
-		<Parameters>
+    <xpp:expand href="../../../CLI.xcfg"/>
+    <xpp:expand href="../../../XDH.xcfg"/>
+    <Setups Default="faas">
+        <Setup id="faas">
+            <Proxy>
+                <Host>faas.q37.info</Host>
+            </Proxy>
+        </Setup>
+        <Setup id="faas-2">
+            <Proxy>
+                <Host>faas-2.q37.info</Host>
+            </Proxy>
+        </Setup>
+        <Setup id="localhost">
+            <Proxy>
+                <Host>localhost</Host>
+            </Proxy>
+        </Setup>
+    </Setups>
+		<Parameters Setup="localhost">
 			<Language>fr</Language>
 			<Command>Process</Command>
 			<Proxy>
@@ -29,6 +30,7 @@
 			</Proxy>
 		</Parameters>
 		<Definitions>
+		  <Scripts xpp:attribute="Version,XDHScriptsVersion"/>
 		</Definitions>
 		<Locale>
 			<xpp:expand select="CLI_Locale"/>

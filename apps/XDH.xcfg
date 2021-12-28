@@ -2,6 +2,7 @@
 <!-- For the XDHTML-based interfaces (based on 'SCLXDHTML'). -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<xpp:expand href="FRD.xcfg"/>
+	<xpp:expand href="../XDH.xcfg"/>
 	<xpp:define name="XDH_Parameters">
 		<xpp:bloc>
 			<xpp:expand select="FRD_Parameters"/>
@@ -13,6 +14,7 @@
 	<xpp:define name="XDH_Definitions">
 		<xpp:bloc>
 			<xpp:expand select="FRD_Definitions"/>
+			<XDHTML xpp:attribute="ScriptsVersion,XDHScriptsVersion"/>
 			<Scripts>
 				<Script name="PrettyAlert_1" Arguments="XML,XSL,Title,CloseText">
         			<![CDATA[

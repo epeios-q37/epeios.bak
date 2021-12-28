@@ -51,7 +51,7 @@ namespace {
   rgstry::rEntry ScriptsVersion_("@Version", Scripts_);
 }
 
-xdhcmn::sPrimitivesVersion xdhups::GetPrimitivesVersion(void)
+xdhcmn::sScriptsVersion xdhups::GetScriptsVersion(void)
 {
   return sclm::MGetU8(ScriptsVersion_);
 }
@@ -647,8 +647,7 @@ bso::bool__ xdhups::rAgent::Init(
 	xdhcdc::eMode Mode,
 	const str::string_ &ModuleFileName,
 	dlbrry::eNormalization Normalization,
-	const char *Identification,
-  const xdhcmn::sPrimitivesVersion &PrimitivesVersion)
+	const char *Identification)
 {
 	bso::bool__ Success = false;
 qRH
@@ -657,7 +656,7 @@ qRH
 	TOL_CBUFFER___ Buffer;
 qRB
 	Location.Init();
-	Data.Init(Mode, Identification, fnm::GetLocation( ModuleFileName, Location ).UTF8( Buffer ), PrimitivesVersion );
+	Data.Init(Mode, Identification, fnm::GetLocation(ModuleFileName, Location).UTF8(Buffer));
 
 	Library_.Init( ModuleFileName, Normalization );
 
@@ -669,9 +668,10 @@ qRB
 		if ( Callback_ == NULL )
 			qRFwk();
 
-		Callback_->Initialize(Data, Upstream);
+		if ( GetScriptsVersion() < Callback_->Initialize(Data, Upstream) )
+      qRFwk();
 
-		Success = true;
+    Success = true;
 	}
 qRR
 qRT

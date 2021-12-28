@@ -116,7 +116,7 @@ namespace {
 	: public cDownstream_
 	{
 	protected:
-		virtual void XDHCDCInitialize(
+		virtual xdhcmn::sScriptsVersion XDHCDCInitialize(
 			const xdhcdc::sData &Data,
 			xdhcuc::cGlobal &Callback) override
 		{
@@ -129,7 +129,7 @@ namespace {
       Initialization_( Data.Mode() );
       common::SetCallback(Callback);
 
-      xdhdws::SetPrimitivesVersion(Data.PrimitivesVersion());
+      return sclm::MGetU8(registry::definition::XDHTMLScriptsVersion);
 		}
 		virtual void XDHCDCBaseLanguage( TOL_CBUFFER___ &Buffer ) override
 		{

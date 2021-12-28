@@ -366,7 +366,8 @@ namespace {
 
 		Upstream_.Init();
 
-		Agent.Init(Upstream_, xdhcdc::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert( Buffer ), xdhups::GetPrimitivesVersion());
+		if ( !Agent.Init(Upstream_, xdhcdc::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert(Buffer)) )
+      qRGnr();
 
 		Callback.Init( Agent );
 
