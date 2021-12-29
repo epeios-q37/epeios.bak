@@ -40,14 +40,18 @@ bso::sBool session::sUpstream_::XDHCUCProcess(
 	bso::sBool Success = true;
 qRH
 	flw::rDressedRWFlow<> Proxy;
+	str::wString MergedValues;
 qRB
+  MergedValues.Init();
+  xdhcmn::FlatMerge(TagValues, MergedValues, false);
+
 	Proxy.Init(P_());
 
 	csdcmn::Put(Id_, Proxy);
 	csdcmn::Put(Primitive, Proxy);
-	csdcmn::Put(FaaSqRelatedValue_, Proxy);
-	csdcmn::Put(TagValues, Proxy);
 	csdcmn::Put((bso::sU8)(ReturnedValue == NULL ? 0 : FaaSqRelatedValue_), Proxy);
+	csdcmn::Put(FaaSqRelatedValue_, Proxy);
+	csdcmn::Put(MergedValues, Proxy);
 	Proxy.Commit();
 
 	if ( ReturnedValue != NULL) {

@@ -553,8 +553,12 @@ namespace {
 			The settings of event handler and widget handler is done asynchronously and should be achieved before next command.
 			*/
 
+
+// Useless, as, if 'ReturnValue' != NULL, '*ReturnValue' is already an empty string.
+#if 0
 			if ( ReturnValue != NULL )  // If == NULL, old deprecated behavior : no (dummy) value sent to backend.
         *ReturnValue = str::Empty; // To synchronize calling functions.
+#endif
 
 			return Shared.Success;
 		}

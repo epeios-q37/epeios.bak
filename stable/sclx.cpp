@@ -531,8 +531,9 @@ void sclx::sProxy::HandleLayout_(
 	bso::char__ Marker)
 {
 qRH;
-	str::wString XSL;
+	str::wString XSL, Dummy;
 qRB;
+  tol::Init(XSL, Dummy);
 	XSL.Init();
 
 	HandleXSL_(XSLFilename, Target, XSLFileHandling_, Registry, Marker, XSL);

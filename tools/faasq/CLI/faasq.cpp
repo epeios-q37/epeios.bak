@@ -337,7 +337,6 @@ namespace {
 							Message.Init();
 
 							csdcmn::Get(Proxy, Message);    // Language; not handled yet.
-
 							Proxy.Dismiss();
 
 							Session->Handshaked = true;
