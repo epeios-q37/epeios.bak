@@ -55,8 +55,10 @@ qRB
 	Proxy.Commit();
 
 	if ( ReturnedValue != NULL) {
+ 		B_().WaitSelf();
 		csdcmn::Get(Proxy, *ReturnedValue);
 		Proxy.Dismiss();
+		B_().UnblockGlobal();
 	}
 qRR
 	Success = false;
@@ -96,7 +98,6 @@ qRB
 	// 'Id_' is the session id and must not be confused with the local variable 'Id',
 	// which is the id of the DOM element on which there was 'Action' was applied.
 		csdcmn::Put(Id_, Proxy_);
-
 		csdcmn::Put(xdhcmn::ScriptNameForStandBy, Proxy_);
 
 		Proxy_.Commit();
