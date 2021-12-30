@@ -24,6 +24,8 @@ SOFTWARE.
 
 "use strict";
 
+const version = "0.13";
+
 var pAddr = "faas.q37.info";
 var pPort = 53700;
 var wAddr = "";
@@ -744,7 +746,7 @@ function launch(createCallback, actionCallbacks, head) {
 		push(d.STRING);
 		socket.on('data', (data) => onRead(data, createCallback, actionCallbacks, head));
 		
-		socket.write(addString(addString(handleString(faasProtocolLabel),faasProtocolVersion),"NJS"));
+		socket.write(addString(addString(handleString(faasProtocolLabel),faasProtocolVersion),"NJS " + version));
 	});	
 }
 

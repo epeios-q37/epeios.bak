@@ -35,9 +35,9 @@ use threads::shared;
 use strict;
 
 use constant {
+    VERSION_ => "0.13",
     FAAS_PROTOCOL_LABEL_ => "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf",
     FAAS_PROTOCOL_VERSION_ => "0",
-    FLAVOUR_ => "PRL",
     MAIN_PROTOCOL_LABEL_ => "22bb5d73-924f-473f-a68a-14f41d8bfa83",
     MAIN_PROTOCOL_VERSION_ => "0",
     SCRIPTS_VERSION_ => "0",
@@ -129,7 +129,7 @@ sub _init {
 sub _handshakeFaaS {
     XDHq::FAAS::SHRD::writeString(FAAS_PROTOCOL_LABEL_);
     XDHq::FAAS::SHRD::writeString(FAAS_PROTOCOL_VERSION_);
-    XDHq::FAAS::SHRD::writeString(FLAVOUR_);
+    XDHq::FAAS::SHRD::writeString("PRL " . VERSION_);
 
     my $error = XDHq::FAAS::SHRD::getString();
 

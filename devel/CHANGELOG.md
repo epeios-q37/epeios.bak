@@ -10,6 +10,9 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-12-30
+- SCLX: [stdz],
+
 ## 2021-12-28
 - SCLX, XDHCMN, XDHCDC, XDHDWS, XDHUPS: chaging handling of scripts version,
 

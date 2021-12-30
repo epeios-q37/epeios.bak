@@ -43,6 +43,8 @@ using cio::CErr;
 using cio::COut;
 using cio::CIn;
 
+#define VERSION_ "0.13"
+
 SCLI_DEF( faasq, NAME_LC, NAME_MC );
 
 const scli::sInfo &sclt::SCLTInfo( void )
@@ -96,7 +98,7 @@ namespace {
         str::wString Message;
       qRB
         csdcmn::SendProtocol(FaaSProtocolLabel_, FaaSProtocolVersion_, Proxy);
-        csdcmn::Put("XDH", Proxy);
+        csdcmn::Put("XDH " VERSION_, Proxy);
         Proxy.Commit();
 
         Message.Init();
@@ -217,7 +219,7 @@ namespace {
 				csdcmn::Put(Head, Proxy);
 				Host.Init();
 				csdcmn::Put(registry::GetWebHost(Host), Proxy);
-				csdcmn::Put("XDH", Proxy);
+				csdcmn::Put("", Proxy); // Currently not used; for future use.
 				Proxy.Commit();
 
 				csdcmn::Get(Proxy, Token);
@@ -254,9 +256,37 @@ namespace {
 
 					Session.Launch();
 				}
+
+				void Report_(
+          faas_::sId Id,
+          const char *MessageLabel,
+          flw::rWFlow &Proxy)
+        {
+        qRH;
+          str::wString Translation;
+        qRB;
+          Translation.Init();
+          sclm::GetBaseTranslation(MessageLabel, Translation, Id);
+
+				  csdcmn::Put((bso::sS8)-1, Proxy);
+				  csdcmn::Put("#Inform_1", Proxy);
+				  csdcmn::Put(Translation, Proxy);
+        qRR;
+        qRT;
+        qRE;
+        }
+
+        void Dismiss_(
+           faas_::sId Id,
+           flw::rWFlow &Proxy)
+         {
+            csdcmn::Put(Id, Proxy);
+            csdcmn::Put("#Dismiss_1", Proxy);
+         }
 			}
 
-			void Handle_(
+
+;			void Handle_(
 				fdr::rRWDriver &ProxyDriver,
 				xdhups::rAgent &Agent)
 			{
@@ -282,8 +312,10 @@ namespace {
 						qRFwk();
 						break;
 					case faas_::upstream::CreationId:
-						if ( Search(csdcmn::Get(Proxy, Id), Ids) != qNIL )
-							sclc::ReportAndAbort("IdShouldNotExists", Id);
+						if ( Search(csdcmn::Get(Proxy, Id), Ids) != qNIL ) {
+							Report_(Id, "IdShouldNotExists", Proxy);
+							Proxy.Commit();
+						}
 
 						Proxy.Dismiss();
 
@@ -302,48 +334,53 @@ namespace {
             Session = NULL;
 						break;
 					case faas_::upstream::ClosingId:
-						if ( ( Row = Search(csdcmn::Get(Proxy, Id), Ids) ) == qNIL )
-							qRGnr();
-
 						Proxy.Dismiss();
 
-						Session = Sessions(Row);
+            if ( ( Row = Search(csdcmn::Get(Proxy, Id), Ids) ) == qNIL ) {
+                Report_(Id, "IdNotAvailableForDestruction", Proxy);
+                Proxy.Commit();
+            } else {
+              Session = Sessions(Row);
 
-						if ( Session == NULL )
-							qRGnr();
+              if ( Session == NULL )
+                qRGnr();
 
-						Session->Quit = true;
-						Session->Unblock();
-						Blocker.Wait();
+              Session->Quit = true;
+              Session->Unblock();
+              Blocker.Wait();
 
-						delete Session;
+              delete Session;
 
-						Session = NULL;
+              Session = NULL;
 
-						Sessions.Remove(Row);
-						Ids.Remove(Row);
-
+              Sessions.Remove(Row);
+              Ids.Remove(Row);
+            }
 						break;
 					default:
-						if ( ( Row = Search(Id, Ids) ) == qNIL )
-							qRGnr();
-
-						Session = Sessions(Row);
-
-						if ( Session == NULL )
-							qRGnr();
-
-						if ( !Session->Handshaked) {
-							Message.Init();
-
-							csdcmn::Get(Proxy, Message);    // Language; not handled yet.
-							Proxy.Dismiss();
-
-							Session->Handshaked = true;
+						if ( ( Row = Search(Id, Ids) ) == qNIL ) {
+                Report_(Id, "UnknowInstanceOfId", Proxy);
+                Dismiss_(Id, Proxy);
+                Proxy.Commit();
+                Proxy.Dismiss();
 						} else {
-							Proxy.Dismiss();
-							Session->Unblock();
-							Blocker.Wait();
+              Session = Sessions(Row);
+
+              if ( Session == NULL )
+                qRGnr();
+
+              if ( !Session->Handshaked) {
+                Message.Init();
+
+                csdcmn::Get(Proxy, Message);    // Language; not handled yet.
+                Proxy.Dismiss();
+
+                Session->Handshaked = true;
+              } else {
+                Proxy.Dismiss();
+                Session->Unblock();
+                Blocker.Wait();
+              }
 						}
 						break;
 					}

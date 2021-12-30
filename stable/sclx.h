@@ -1115,7 +1115,7 @@ namespace sclx {
 			TOL_CBUFFER___ Buffer;
 		qRB;
 			if ( ( Action == NULL ) || ( *Action == 0 ) ) {
-				Session.SetAttribute( "", "data-xdh-onevents", "(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)" );
+				Session.SetAttribute( "", "xdh:onevents", "(keypress|About|SC+a)(keypress|Q37Refresh|SC+r)" );
 				Action = ONS_();
 			}
 

@@ -28,6 +28,8 @@ module XDHqFAAS
 	require 'socket'
 	require 'pp'
 
+	VERSION_ = "0.13"
+
 	@_readMutex_ = Mutex.new
 	# Staying on conditional variable, because a mutex
 	# can not be locked twice by same thread,
@@ -256,7 +258,7 @@ module XDHqFAAS
 		@writeMutex.synchronize {
 			writeString(FAAS_PROTOCOL_LABEL_)
 			writeString(FAAS_PROTOCOL_VERSION_)
-			writeString("RBY")
+			writeString("RBY " + VERSION_)
 		}
 
 		error = getString()

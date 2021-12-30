@@ -41,11 +41,7 @@ void sclx::SCLXInitialization( xdhcdc::eMode Mode )
 qRH
 	sclf::rBackendFeatures Features;
 qRB
-
-		cio::COut << getpid() << txf::nl << txf::commit;
-
-
-	core::Core.Init( Mode );
+  core::Core.Init( Mode );
 
 	if ( Mode == xdhcdc::mMultiUser ) {
 		Features.Init();
@@ -64,11 +60,7 @@ xdhcdc::cSingle *sclx::SCLXFetchCallback(void)
 	if ( Session == NULL )
 		qRGnr();
 
-		cio::COut << ">>>>>> " << getpid() << txf::nl << txf::commit;
-
 	Session->Init(core::Kernel(), core::Core, esketchxdh::Info);
-
-//	Session->Connect();
 
 	return Session;
 }

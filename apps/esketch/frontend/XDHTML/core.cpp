@@ -117,9 +117,7 @@ qRH
 	fblfrd::incompatibility_informations IncompatibilityInformations;
 	sclf::rBackendFeatures Features;
 qRB
-		cio::COut << "C: " << getpid() << txf::nl << txf::commit;
-
-	if ( Mode == xdhcdc::mMonoUser ) {
+  if ( Mode == xdhcdc::mMonoUser ) {
 		Features.Init();
 		if ( FromUI )
 			sclx::login::GetBackendFeatures(Session, Features);

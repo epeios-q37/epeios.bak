@@ -538,7 +538,7 @@ qRB;
 
 	HandleXSL_(XSLFilename, Target, XSLFileHandling_, Registry, Marker, XSL);
 
-	Process_("HandleLayout_1", NULL, Variant, Id, XML, XSL);
+	Process_("HandleLayout_1", &Dummy, Variant, Id, XML, XSL);
 qRR;
 qRT;
 qRE;

@@ -32,6 +32,7 @@ import java.util.concurrent.*;
 import java.awt.Desktop;
 
 public class DOM_FAAS extends DOM_SHRD {
+	final static private String VERSION_ = "0.13";
 	static private String pAddr = "faas.q37.info";
 	static private int pPort = 53700;
 	static private String wAddr = "";
@@ -265,9 +266,9 @@ public class DOM_FAAS extends DOM_SHRD {
 	private static void handshakeFaaS_() throws IOException {
 		String error, notification;
 
-		writeString_( FAAS_PROTOCOL_LABEL_ );
-		writeString_( FAAS_PROTOCOL_VERSION_ );
-		writeString_("JRE");
+		writeString_(FAAS_PROTOCOL_LABEL_);
+		writeString_(FAAS_PROTOCOL_VERSION_);
+		writeString_("JRE " + VERSION_);
 
 		output_.flush();
 

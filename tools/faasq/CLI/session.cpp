@@ -27,10 +27,8 @@ using namespace session;
 
 namespace {
   // MUST MATCH VALUE OF 'rType::tFaaSqRelated' IN 'session.cpp' FROM 'XDHqXDH'.
-  qCDEF(bso::sU8, FaaSqRelatedValue_, 3);
+  qCDEF(bso::sU8, FaaSqRelatedType_, 3);
 }
-
-// #define LOG cio::COut << __LOC__ << tol::DateAndTime(DT) << txf::nl << txf::commit;
 
 bso::sBool session::sUpstream_::XDHCUCProcess(
 	const str::string_ &Primitive,
@@ -49,8 +47,8 @@ qRB
 
 	csdcmn::Put(Id_, Proxy);
 	csdcmn::Put(Primitive, Proxy);
-	csdcmn::Put((bso::sU8)(ReturnedValue == NULL ? 0 : FaaSqRelatedValue_), Proxy);
-	csdcmn::Put(FaaSqRelatedValue_, Proxy);
+	csdcmn::Put((bso::sU8)(ReturnedValue == NULL ? 0 : FaaSqRelatedType_), Proxy);
+	csdcmn::Put(FaaSqRelatedType_, Proxy);
 	csdcmn::Put(MergedValues, Proxy);
 	Proxy.Commit();
 
