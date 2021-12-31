@@ -491,6 +491,9 @@ namespace sclx {
 			XSLFileHandling_ = XSLFileHandling;
 			BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.
 
+			if ( tol::IsDev() )
+        DebugLog();
+
 			return true;
 		}
 		const scli::sInfo &Info( void ) const
@@ -526,9 +529,13 @@ namespace sclx {
 		{
 			Process_(TaggedScript, TagList, Result, Args...);
 		}
-		void Log( const str::dString &Message )
+		void DebugLog(bso::sBool Switch = true)
 		{
-			qRLmt();
+			Process_("DebugLog_1", NULL, Switch ? "true" : "false");
+		}
+		template <typename s> void Log( const s &Message )
+		{
+			Process_("Log_1", NULL, Message);
 		}
 		// The basic alert, without use of 'JQuery' based widget.
 		void AlertB( const str::dString & Message );

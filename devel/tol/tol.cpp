@@ -265,7 +265,33 @@ qRE
 
 namespace {
   namespace {
-    tht::rLocker EnvLocker_;
+    namespace {
+      tht::rLocker EnvLocker_;
+
+      ntvstr::sChar *TUGetEnv_(const ntvstr::sChar *Name)
+      {
+   #ifdef CPE_S_WIN
+        return _wgetenv( Name );
+    #elif defined( CPE_S_POSIX )
+        return getenv( Name );
+    #else
+    #  error
+    #endif
+      }
+    }
+
+    bso::sBool EnvExists_(const ntvstr::sChar *Name)
+    {
+      bso::sBool Exists = false;
+
+      EnvLocker_.Lock();
+
+      Exists = TUGetEnv_(Name) != NULL;
+
+      EnvLocker_.Unlock();
+
+      return Exists;
+    }
 
     bso::sBool GetEnv_(
       const ntvstr::sChar *Name,
@@ -275,13 +301,7 @@ namespace {
 
       EnvLocker_.Lock();
 
-  #ifdef CPE_S_WIN
-      Result = _wgetenv( Name );
-  #elif defined( CPE_S_POSIX )
-      Result = getenv( Name );
-  #else
-  #  error
-  #endif
+      Result = TUGetEnv_(Name);
 
       if ( Result != NULL )
         Value.Init( Result );
@@ -290,6 +310,21 @@ namespace {
 
       return Result != NULL;
     }
+  }
+
+  template <typename sc> bso::sBool EnvExists_(const sc &Name)
+  {
+    bso::sBool Found = false;
+  qRH
+    ntvstr::rString NativeName;
+  qRB
+    NativeName.Init( Name );
+
+    Found =  EnvExists_(NativeName.Internal());
+  qRR
+  qRT
+  qRE
+    return Found;
   }
 
   template <typename sc> bso::sBool GetEnv_(
@@ -312,7 +347,16 @@ namespace {
   qRE
     return Found;
   }
+}
 
+bso::sBool tol::EnvExists(const str::dString &Name)
+{
+  return EnvExists_(Name);
+}
+
+bso::sBool tol::EnvExists(const char *Name)
+{
+  return EnvExists_(Name);
 }
 
 bso::sBool tol::GetEnv(

@@ -10,6 +10,10 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2021-12-31
+- SCLX: adding log features,
+- TOL: improving environment variables handling,
+
 ## 2021-12-30
 - SCLX: [stdz],
 

@@ -86,7 +86,7 @@ namespace {
             Session.User.ToUpper( Value );
             Session.SetValue( "Pattern", Value );
             Common_.Init(Value);
-            sclx::Broadcast(str::wString("BroadcastTest"), str::wString("toto"));
+            sclx::Broadcast(str::wString("BroadcastTest"), str::wString("This is a broadcast id!"));
         }
 	qRR;
 	qRT;
@@ -106,6 +106,7 @@ A( BroadcastTest )
     Output.Init();
 
     Session.SetValue("Output", Common_);
+    Session.Log(Id);
 //	Session.AlertB(str::wString(Id));
 }
 
