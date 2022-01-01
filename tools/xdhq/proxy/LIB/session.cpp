@@ -22,8 +22,6 @@
 #include "common.h"
 #include "slfhlead.h"
 
-#include "xdhutl.h"
-
 #include "mtk.h"
 
 using namespace session;

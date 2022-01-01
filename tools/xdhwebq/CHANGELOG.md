@@ -1,7 +1,10 @@
 # *XDHWebQ* *CHANGELOG*
 
+## 2022-01-01
+- handling primitives,
+
 ## 2021-12-10
-- fixing bug callback deleted while being used,## 2020-12-13
+- fixing bug callback deleted while being used,
 
 ## 2020-12-13
 - introducing user id to differentiate sessions,

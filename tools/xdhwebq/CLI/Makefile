@@ -44,6 +44,7 @@ mods += csdbns csdcmn csdscb
 mods += scla scli sclm scle scll 
 mods += sclr sclt 
 mods += xdhbrd xdhcdc xdhcmn xdhcuc xdhups 
+mods += xdhutl 
 mods += xdwsessn xdwrgstry 
 mods += registry 
 
@@ -384,7 +385,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20211208"\"
+copt += -DVERSION=\""20211231"\"
 copt += -DCOPYRIGHT_YEARS=\""2017"\"
 copt += -DIDENTIFIER=\""effd756a-a901-46e8-939f-3f2a5e7986b0"\"
 
