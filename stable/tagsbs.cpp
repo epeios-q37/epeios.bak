@@ -27,7 +27,9 @@
 
 using namespace tagsbs;
 
-E_CDEF( indice__, Limit, 9 );
+namespace {
+  E_CDEF( sIndice, Limit_, 9 );
+}
 
 bso::bool__ tagsbs::SubstituteShortTag(
 	flw::iflow__ &IFlow,
@@ -38,7 +40,7 @@ bso::bool__ tagsbs::SubstituteShortTag(
 {
 	bso::bool__ Success = false;
 qRH
-	str::strings Values;
+	str::wStrings Values;
 	indice__ Counter = 1;
 	str::string Tag;
 qRB
@@ -51,7 +53,7 @@ qRB
 	Tag.Append(TagMarker);
 	Tag.Append('0' );
 
-	while ( Counter <= Limit ) {
+	while ( Counter <= Limit_ ) {
 		if ( Counter != Indice ) {
 			Tag.Store( Counter + '0', Tag.Last() );
 			Values.Append( Tag );
@@ -121,7 +123,7 @@ bso::bool__ tagsbs::SubstituteLongTag(
 {
 	bso::bool__ Success = false;
 qRH
-	str::strings Tags, Values;
+	str::wStrings Tags, Values;
 qRB
 	Tags.Init();
 	Tags.Append( Tag ) ;
@@ -145,7 +147,7 @@ tol::E_XROW tagsbs::SubstituteLongTag(
 {
 	sdr::row__ Row = qNIL;
 qRH
-	str::strings Tags, Values;
+	str::wStrings Tags, Values;
 qRB
 	Tags.Init();
 	Tags.Append( Tag ) ;
@@ -182,30 +184,33 @@ qRE
 }
 
 static void MergeValues_(
-	short_tags_callback__ &Callback,
+	cShortTags &Callback,
 	str::string_ &MergedValues )
 {
 qRH
-	str::string Value;
+	str::wString Value;
 	indice__ Indice = 0;
+	flx::rStringWFlow Flow;
 qRB
-
 	Value.Init();
+	Flow.Init(Value);
 
-	while ( ( Indice <= Limit ) && ( !Callback.GetTagValue( Indice, Value ) ) )
+	while ( ( Indice <= Limit_ ) && ( !Callback.HandleTag(Indice, Flow) ) )
 		Indice++;
 
-	if ( Indice <= Limit ) {
+  Flow.Commit();
+
+	if ( Indice <= Limit_ ) {
 		MergedValues.Append( "(" );
 		MergedValues.Append( '\'' );
 		MergedValues.Append( Value );
 		MergedValues.Append( '\'' );
 		Indice++;
 
-
-
-		while ( Indice <= Limit ) {
-			if ( Callback.GetTagValue(Indice, Value) ) {
+		while ( Indice <= Limit_ ) {
+      Value.Init();
+			if ( Callback.HandleTag(Indice, Flow) ) {
+			  Flow.Commit();
 				MergedValues.Append( " ,'" );
 				MergedValues.Append( Value );
 				MergedValues.Append( '\'' );
@@ -224,13 +229,13 @@ qRE
 
 bso::bool__ tagsbs::SubstituteShortTags(
 	flw::iflow__ &IFlow,
-	short_tags_callback__ &Callback,
+	cShortTags &Callback,
 	flw::oflow__ &OFlow,
 	char TagMarker )
 {
 	bso::bool__ Success = true;
 qRH
-	str::string Tag, Value, MergedValues;
+	str::string Tag, MergedValues;
 	bso::char__ C = 0;
 qRB
 	MergedValues.Init();
@@ -245,15 +250,12 @@ qRB
 					C -= '0';
 
 					if ( C == 0 )
-						MergedValues.WriteToFlow( OFlow, false );
+						MergedValues.WriteToFlow(OFlow, false);
 					else {
-						Value.Init();
-						if ( !Callback.GetTagValue( C, Value ) ) {
+						if ( !Callback.HandleTag(C, OFlow) ) {
 							Success = false;
 							break;
 						}
-
-						Value.WriteToFlow( OFlow, false );
 					}
 				} else if ( C == TagMarker )  {
 					OFlow.Put( TagMarker );
@@ -266,7 +268,7 @@ qRB
 				break;
 			}
 		} else
-			OFlow.Put( IFlow.Get() );
+			OFlow.Put(IFlow.Get());
 	}
 qRR
 qRT
@@ -276,7 +278,7 @@ qRE
 
 tol::E_XROW tagsbs::SubstituteShortTags(
 	const str::string_ &String,
-	short_tags_callback__ &Callback,
+	cShortTags &Callback,
 	str::string_ &Result,
 	char TagMarker )
 {
@@ -298,7 +300,7 @@ qRE
 
 tol::E_XROW  tagsbs::SubstituteShortTags(
 	str::string_ &String,
-	short_tags_callback__ &Callback,
+	cShortTags &Callback,
 	char TagMarker )
 {
 	sdr::row__ Row = qNIL;
@@ -319,46 +321,45 @@ qRE
 
 /// 'namespace {...}' parce que sinon VC++ 12 se mlange les pinceaux...
 namespace {
-	class shorts_callback___
-	: public short_tags_callback__
+	class sShortTagsCallback_
+	: public cShortTags
 	{
+  private:
+    qCRMV(str::dStrings, V_, Values_)
 	protected:
-		virtual bso::bool__ TAGSBSGetTagValue(
+		virtual bso::bool__ TAGSBSHandleTag(
 			indice__ Indice,
-			str::string_ &Value )
+			flw::rWFlow &Output) override
 		{
 			sdr::row__ Row = Indice - 1;
 
-			if ( !Values->Exists( Row ) )
+			if ( !V_().Exists( Row ) )
 				return false;
 
-			Values->Recall( Row, Value );
+      V_()(Row).WriteToFlow(Output, false);
 
 			return true;
 		}
 	public:
-		const str::strings_ *Values;
 		void reset( bso::bool__ P = true )
 		{
-			short_tags_callback__::reset( P );
-			Values = NULL;
+			Values_ = NULL;
 		}
-		E_CVDTOR( shorts_callback___ );
-		void Init( const str::strings_ &Values )
+		E_CVDTOR( sShortTagsCallback_ );
+		void Init(const str::dStrings &Values)
 		{
-			short_tags_callback__::Init();
-			this->Values = &Values;
+			Values_ = &Values;
 		}
 	};
 }
 
 bso::bool__ tagsbs::SubstituteShortTags(
 	flw::iflow__ &IFlow,
-	const str::strings_ &Values,
+	const str::dStrings &Values,
 	flw::oflow__ &OFlow,
 	const char TagMarker )
 {
-	shorts_callback___ Callback;
+	sShortTagsCallback_ Callback;
 
 	Callback.Init( Values );
 
@@ -367,11 +368,11 @@ bso::bool__ tagsbs::SubstituteShortTags(
 
 tol::E_XROW tagsbs::SubstituteShortTags(
 	const str::string_ &String,
-	const str::strings_ &Values,
+	const str::dStrings &Values,
 	str::string_ &Result,
 	const char TagMarker )
 {
-	shorts_callback___ Callback;
+	sShortTagsCallback_ Callback;
 
 	Callback.Init( Values );
 
@@ -380,7 +381,7 @@ tol::E_XROW tagsbs::SubstituteShortTags(
 
 tol::E_XROW  tagsbs::SubstituteShortTags(
 	str::string_ &String,
-	const str::strings_ &Values,
+	const str::dStrings &Values,
 	char TagMarker )
 {
 	sdr::row__ Row = qNIL;
@@ -400,17 +401,17 @@ qRE
 
 namespace {
     class rGetTagsCallback_
-    : public cLongTagCallback
+    : public cLongTags
     {
     protected:
-  		virtual bso::bool__ TAGSBSGetTagValue(
-			const str::string_ &Tag,
-			str::string_ &Value ) override
+  		virtual bso::bool__ TAGSBSHandleTag(
+        const str::dString &Tag,
+        flw::rWFlow &) override
 			{
-                if ( str::Search(Tag,Tags) == qNIL)
-                    Tags.Append(Tag);
+        if ( str::Search(Tag,Tags) == qNIL)
+            Tags.Append(Tag);
 
-                return true;
+        return true;
 			}
     public:
         str::wStrings Tags;
@@ -500,30 +501,26 @@ static bso::bool__ GetTag_(
 
 bso::bool__ tagsbs::SubstituteLongTags(
 	flw::iflow__ &IFlow,
-	long_tags_callback__ &Callback,
+	cLongTags &Callback,
 	flw::oflow__ &OFlow,
 	char Marker )
 {
 	bso::bool__ Success = true;
 qRH
-	str::string Tag, Value;
+	str::wString Tag;
 qRB
 	while ( !IFlow.EndOfFlow() ) {
 		if ( IFlow.View() == Marker ) {
 			Tag.Init();
-			if ( GetTag_( IFlow, Tag, Marker ) ) {
-
-				Value.Init();
-				if ( !Callback.GetTagValue( Tag, Value ) ) {
+			if ( GetTag_(IFlow, Tag, Marker) ) {
+				if ( !Callback.HandleTag(Tag, OFlow) ) {
 					Success = false;
 					break;
 				}
-
-				Value.WriteToFlow( OFlow, false );
 			} else
-				OFlow.Put( Marker );
+				OFlow.Put(Marker);
 		} else
-			OFlow.Put( IFlow.Get() );
+			OFlow.Put(IFlow.Get());
 	}
 qRR
 qRT
@@ -533,7 +530,7 @@ qRE
 
 tol::E_XROW tagsbs::SubstituteLongTags(
 	const str::string_ &String,
-	long_tags_callback__ &Callback,
+	cLongTags &Callback,
 	str::string_ &Result,
 	char TagMarker )
 {
@@ -555,7 +552,7 @@ qRE
 
 tol::E_XROW tagsbs::SubstituteLongTags(
 	str::string_ &String,
-	long_tags_callback__ &Callback,
+	cLongTags &Callback,
 	char TagMarker )
 {
 	sdr::row__ Row = qNIL;
@@ -574,7 +571,7 @@ qRE
 }
 
 static void FillAutomat_(
-	const str::strings_ &Tags,
+	const str::dStrings &Tags,
 	stsfsm::automat_ &Automat )
 {
 	sdr::row__ Row = Tags.First();
@@ -588,13 +585,15 @@ static void FillAutomat_(
 
 /// 'namespace {...}' parce que sinon VC++ 12 se mlange les pinceaux...
 namespace {
-	class longs_callback___
-	: public long_tags_callback__
+	class rLongTagsCallback_
+	: public cLongTags
 	{
+  private:
+    qCRMV(str::dStrings, V_, Values_);
 	protected:
-		virtual bso::bool__ TAGSBSGetTagValue(
+		virtual bso::bool__ TAGSBSHandleTag(
 			const str::string_ &Tag,
-			str::string_ &Value )
+			flw::rWFlow &Output) override
 		{
 			stsfsm::parser__ Parser;
 			sdr::row__ Row = qNIL;
@@ -608,30 +607,27 @@ namespace {
 
 			Row = Parser.GetId();
 
-			if ( !Values->Exists( Row ) )
+			if ( !V_().Exists( Row ) )
 				qRFwk();
 
-			Values->Recall( Row, Value );
+			V_()(Row).WriteToFlow(Output, false);
 
 			return true;
 		}
 	public:
 		stsfsm::automat Automat;
-		const str::strings_ *Values;
 		str::string BadTag;
 		void reset( bso::bool__ P = true )
 		{
-			long_tags_callback__::reset( P );
 			Automat.reset( P );
-			Values = NULL;
+			Values_ = NULL;
 			BadTag.reset( P );
 		}
-		E_CVDTOR( longs_callback___ );
-		void Init( const str::strings_ &Values )
+		E_CVDTOR( rLongTagsCallback_ );
+		void Init( const str::dStrings &Values )
 		{
-			long_tags_callback__::Init();
 			Automat.Init();
-			this->Values = &Values;
+			Values_ = &Values;
 			BadTag.Init();
 		}
 	};
@@ -639,14 +635,14 @@ namespace {
 
 bso::bool__ tagsbs::SubstituteLongTags(
 	flw::iflow__ &IFlow,
-	const str::strings_ &Tags,
-	const str::strings_ &Values,
+	const str::dStrings &Tags,
+	const str::dStrings &Values,
 	flw::oflow__ &OFlow,
 	char TagMarker )
 {
 	bso::bool__ Success = false;
 qRH
-	longs_callback___ Callback;
+	rLongTagsCallback_ Callback;
 qRB
 	if ( Tags.Amount() != Values.Amount() )
 		qRFwk();
@@ -668,14 +664,14 @@ qRE
 
 tol::E_XROW tagsbs::SubstituteLongTags(
 	const str::string_ &String,
-	const str::strings_ &Tags,
-	const str::strings_ &Values,
+	const str::dStrings &Tags,
+	const str::dStrings &Values,
 	str::string_ &Result,
 	char TagMarker )
 {
 	sdr::row__ Row = qNIL;
 qRH
-	longs_callback___ Callback;
+  rLongTagsCallback_ Callback;
 qRB
 	if ( Tags.Amount() != Values.Amount() )
 		qRFwk();
@@ -693,8 +689,8 @@ qRE
 
 tol::E_XROW tagsbs::SubstituteLongTags(
 	str::string_ &String,
-	const str::strings_ &Tags,
-	const str::strings_ &Values,
+	const str::dStrings &Tags,
+	const str::dStrings &Values,
 	char TagMarker )
 {
 	sdr::row__ Row = qNIL;

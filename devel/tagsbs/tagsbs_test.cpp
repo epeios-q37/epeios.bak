@@ -44,7 +44,7 @@ int main( int argc, char *argv[] )
 	int ExitValue = EXIT_SUCCESS;
 qRFH
 qRFB
-	COut << "Test of library " << TAGSBS_NAME << ' ' << __DATE__" "__TIME__"\n";
+COut << "Test of library " << TAGSBS_NAME << ' ' << __DATE__" "__TIME__"\n";
 
 	Generic( argc, argv );
 qRFR

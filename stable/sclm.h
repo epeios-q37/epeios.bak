@@ -551,6 +551,30 @@ namespace sclm {
 		return sclr::MGetValue( GetRegistry(), Entry, Buffer );
 	}
 
+	inline bso::sBool OGetChar(
+    const rgstry::sTEntry &Entry,
+    bso::sChar &Char)
+  {
+    return sclr::OGetChar(GetRegistry(), Entry, Char);
+  }
+
+	inline bso::sChar OGetChar(const rgstry::sTEntry &Entry)
+  {
+    return sclr::OGetChar(GetRegistry(), Entry);
+  }
+
+	inline void MGetChar(
+    const rgstry::sTEntry &Entry,
+    bso::sChar &Char)
+  {
+    return sclr::MGetChar(GetRegistry(), Entry, Char);
+  }
+
+	inline bso::sChar MGetChar(const rgstry::sTEntry &Entry)
+  {
+    return sclr::MGetChar(GetRegistry(), Entry);
+  }
+
 	inline bso::bool__ BGetBoolean(
 		const rgstry::tentry__ &Entry,
 		bso::sBool &Result,

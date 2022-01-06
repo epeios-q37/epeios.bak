@@ -206,7 +206,7 @@ namespace rgstry {
 		const char *_RawPath;
 		mutable str::string _Path;
 	protected:
-		virtual tagsbs::short_tags_callback__ *RGSTRYGetTagSubstitutionCallback( void ) const
+		virtual tagsbs::cShortTags *RGSTRYGetTagSubstitutionCallback( void ) const
 		{
 			return NULL;
 		}

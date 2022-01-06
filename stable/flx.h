@@ -1464,9 +1464,9 @@ namespace flx {
 		}
 	};
 
-	typedef _exec_flow___<flw::standalone_iflow__<>, exec_iflow_driver___> exec_iflow__;
+	typedef _exec_flow___<flw::standalone_iflow__<>, exec_iflow_driver___> exec_iflow___;
 
-	typedef _exec_flow___<flw::standalone_oflow__<>, exec_oflow_driver___> exec_oflow__;
+	typedef _exec_flow___<flw::standalone_oflow__<>, exec_oflow_driver___> exec_oflow___;
 }
 
 /***************/
@@ -2088,6 +2088,12 @@ namespace flx {
 			return rASync_::Init( Relay_, Driver );
 		}
 	};
+
+	typedef exec_iflow_driver___ rExecRDriver;
+	typedef exec_oflow_driver___ rExecWDriver;
+
+	typedef exec_iflow___ rExecRFlow;
+	typedef exec_oflow___ rExecWFlow;
 
 	extern fdr::rRDriver &VoidRDriver;
 	extern fdr::rWDriver &VoidWDriver;

@@ -397,7 +397,7 @@ const str::string_ &lcl::locale_::GetTranslation_(
 	str::string_ &Translation ) const
 {
 qRH
-	str::strings Tags;
+	str::wStrings Tags;
 	str::string Value, Intermediate;
 	TOL_CBUFFER___ Buffer;
 qRB

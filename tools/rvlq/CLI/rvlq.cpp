@@ -40,6 +40,18 @@ using cio::CIn;
 
 SCLI_DEF( rvlq, NAME_LC, NAME_MC );
 
+//Type of substitution
+qENUM(Type) {
+  tText,
+  tFile,
+  tCommand,
+  t_amount,
+  t_Undefined
+};
+
+typedef bch::qBUNCHdl(eType) dTypes;
+qW(Types);
+
 const scli::sInfo &sclt::SCLTInfo( void )
 {
 	return rvlq::Info;
@@ -66,7 +78,7 @@ namespace {
 		Input.Init(InputDriver);
 		Output.Init(OutputDriver);
 
-		if ( !tagsbs::SubstituteLongTags(Input, Tags, Values, Output, '@') )
+		if ( !tagsbs::SubstituteLongTags(Input, Tags, Values, Output, sclm::MGetChar(registry::parameter::TagDelimiter)) )
 			qRGnr();
 	qRR;
 	qRT;
@@ -104,7 +116,7 @@ namespace {
 
 		txmtbl::GetTable(TFlow, Table);
 
-		Table.Purge('#');
+		Table.Purge(sclm::MGetChar(registry::parameter::CommentMarker));
 	qRR;
 	qRT;
 	qRE;
@@ -130,36 +142,65 @@ namespace {
 	qRE;
 	}
 
-	void GetValue_(
-		const str::dString &RawValue,
-		bso::sChar StringDelimiter,
-		bso::sChar FileDelimiter,
+	void FillWithCommandResult_(
+		const str::dString &Command,
 		str::dString &Value)
 	{
+	qRH;
+		flx::rExecRDriver RDriver;
+		flx::rStringWDriver WDriver;
+	qRB;
+		if ( Command.Amount() == 0 )
+			qRGnr();
+
+		RDriver.Init(Command);
+		WDriver.Init(Value);
+
+		fdr::Copy(RDriver, WDriver);
+	qRR;
+	qRT;
+	qRE;
+	}
+
+	eType GetTagDefinition_(
+		const str::dString &RawValue,
+		bso::sChar TextMarker,
+		bso::sChar FileMarker,
+		bso::sChar CommandMarker,
+		str::dString &Definition)
+	{
+	  eType Type = t_Undefined;
 	qRH;
 		str::wString Buffer;
 	qRB;
 		if ( RawValue.Amount() != 0 ) {
 			char Marker = RawValue(RawValue.First());
 
-			if ( ( Marker == StringDelimiter ) || ( Marker == FileDelimiter ) ) {
+			if ( ( Marker == TextMarker ) || ( Marker == FileMarker ) || ( Marker == CommandMarker ) ) {
 				Buffer.Init();
 
 				if ( RawValue.Amount() > 1 )
 					Buffer.Append(RawValue, RawValue.Next(RawValue.First() ), RawValue.Last());
 
-				if ( Marker == StringDelimiter )
-					Value = Buffer;
-				else if ( Marker == FileDelimiter )
-					FillWithFileContent_(Buffer, Value);
+				if ( Marker == TextMarker )
+					Type = tText;
+				else if ( Marker == FileMarker )
+					Type = tFile;
+				else if ( Marker == CommandMarker )
+					Type = tCommand;
 				else
 					qRGnr();
-			} else
-				Value.Append(RawValue);
+
+        Definition.Append(Buffer);
+			} else {
+			  Type = tText;
+				Definition.Append(RawValue);
+			}
 		}
 	qRR;
 	qRT;
 	qRE;
+    return Type;
 	}
 
 	bso::bool__ TestTag_( const str::dString &Tag )
@@ -186,13 +227,13 @@ namespace {
 	void Add_(
 		const txmtbl::dLine &Line,
 		str::dStrings &Tags,
-		str::dStrings &Values)
+		dTypes &Types,
+		str::dStrings &Definitions)
 	{
 	qRH;
 		sdr::sRow Row = qNIL;
-		str::wString Tag, Value;
+		str::wString Tag,Definition;
 	qRB;
-		cio::COut	<< Line << txf::nl << txf::commit;
 		if( Line.Amount() != 2 )
 			qRGnr();
 
@@ -206,36 +247,38 @@ namespace {
 		if ( !TestTag_( Tag ) )
 			qRGnr();
 
-		Value.Init();
-		GetValue_(Line(Row), '&', '%', Value);
+		Definition.Init();
+		Types.Append( GetTagDefinition_(Line(Row), sclm::MGetChar(registry::parameter::TextMarker), sclm::MGetChar(registry::parameter::FileMarker),  sclm::MGetChar(registry::parameter::CommandMarker), Definition));
 
-		if ( Tags.Append(Tag) != Values.Append(Value) )
+		if ( Tags.Append(Tag) != Definitions.Append(Definition) )
 			qRGnr();
 	qRR;
 	qRT;
 	qRE;
 	}
 
-	void GetTagsAndValues_(
+	void GetTagsAndDefinitions_(
 		txmtbl::dTable &Table,
 		str::dStrings &Tags,
-		str::dStrings &Values)
+		dTypes &Types,
+		str::dStrings &Definitions)
 	{
 		sdr::sRow Row = qNIL;
 
 		Row = Table.First();
 
 		while ( Row != qNIL ) {
-			Add_(Table(Row), Tags, Values);
+			Add_(Table(Row), Tags, Types, Definitions);
 
 			Row = Table.Next(Row);
 		}
 	}
 
-	void GetTagsAndValues_(
+	void GetTagsAndDefinitions_(
 		fdr::rRDriver &TagsDriver,
 		str::dStrings &Tags,
-		str::dStrings &Values)
+		dTypes &Types,
+		str::dStrings &Definitions)
 	{
 	qRH;
 		txmtbl::wTable Table;
@@ -244,22 +287,22 @@ namespace {
 
 		GetTagsTable_(TagsDriver, Table);
 
-		cio::COut << Table << txf::nl << txf::nl << txf::commit;
-
-		GetTagsAndValues_(Table, Tags, Values);
+		GetTagsAndDefinitions_(Table, Tags, Types, Definitions);
 	qRR;
 	qRT;
 	qRE;
 	}
-	void GetTagsAndValues_(
+
+	void GetTagsAndDefinitions_(
 		const str::dString &TagsFilename,
 		str::dStrings &Tags,
+		dTypes &Types,
 		str::dStrings &Values)
 	{
 	qRH;
 		sclm::rRDriverRack Input;
 	qRB;
-		GetTagsAndValues_(Input.Init(TagsFilename), Tags, Values);
+		GetTagsAndDefinitions_(Input.Init(TagsFilename), Tags, Types, Values);
 	qRR;
 		Input.HandleError();
 	qRT;
@@ -272,13 +315,20 @@ namespace {
 		const str::dString &OutputFilename)
 	{
 	qRH
-		str::wStrings Tags, Values;
+		str::wStrings Tags, Definitions;
+		wTypes Types;
 	qRB
-		tol::Init(Tags, Values);
+		tol::Init(Tags, Types, Definitions);
 
-		GetTagsAndValues_(TagsFilename, Tags, Values);
+		GetTagsAndDefinitions_(TagsFilename, Tags, Types, Definitions);
 
-		Reveal_(Tags, Values, InputFilename, OutputFilename);
+		if ( Tags.Amount() != Types.Amount() )
+      qRGnr();
+
+    if ( Tags.Amount() != Definitions.Amount() )
+      qRGnr();
+
+		Reveal_(Tags, Types, Definitions, InputFilename, OutputFilename);
 	qRR
 	qRT
 	qRE

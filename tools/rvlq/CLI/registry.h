@@ -33,10 +33,11 @@ namespace registry {
 			Tags,
 			Input,
 			Output,
-			Delimiter,
+			TagDelimiter,
 			CommentMarker,
 			TextMarker,
-			FileMarker;
+			FileMarker,
+			CommandMarker;
 	}
 
 	namespace definition {

@@ -490,7 +490,7 @@ qRE
 	return Type;
 }
 
-typedef tagsbs::long_tags_callback__ ltcallback_;
+typedef tagsbs::cLongTags ltcallback_;
 
 class attribute_value_substitution_callback
 : public ltcallback_
@@ -499,16 +499,27 @@ private:
 	qCRMV( _variables_, V_, Variables_ );
 	qCRMV( fnm::name___, S_, SelfPath_ );
 protected:
-	virtual bso::bool__ TAGSBSGetTagValue(
+	virtual bso::bool__ TAGSBSHandleTag(
 		const str::string_ &Tag,
-		str::string_ &Value ) override
-	{
-		return GetValue_(V_(), Tag, S_(), Value );
-	}
+		flw::rWFlow &Output) override
+		{
+		  bso::sBool Found = false;
+		qRH;
+		  str::wString Value;
+		qRB;
+      Value.Init();
+
+      // '( ( … ) ) ' to avoid warning.
+      if ( ( Found = GetValue_(V_(), Tag, S_(), Value) ) )
+        Value.WriteToFlow(Output,false);
+		qRR;
+		qRT;
+		qRE;
+      return Found;
+		}
 public:
 	void reset( bso::bool__ P = true )
 	{
-		ltcallback_::reset( P );
 		Variables_ = NULL;
 		SelfPath_ = NULL;
 
@@ -518,7 +529,6 @@ public:
 		const _variables_ &Variables,
 		const fnm::name___ &SelfPath )
 	{
-		ltcallback_::Init();
 		Variables_ = &Variables;
 		SelfPath_ = &SelfPath;
 	}

@@ -84,62 +84,54 @@ namespace tagsbs {
 		const str::string_ &Value,
 		char TagMarker = DefaultTagMarker );
 
-	class short_tags_callback__
+	class cShortTags
 	{
 	protected:
-		virtual bso::bool__ TAGSBSGetTagValue(
+		virtual bso::bool__ TAGSBSHandleTag(
 			indice__ Indice,
-			str::string_ &Value ) = 0;
+			flw::rWFlow &Output ) = 0;
 	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standardisation.
-		}
-		E_CVDTOR( short_tags_callback__ )
-		void Init( void )
-		{
-			// Standadisation.
-		}
-		bso::bool__ GetTagValue(
+		qCALLBACK(ShortTags);
+		bso::bool__ HandleTag(
 			indice__ Indice,
-			str::string_ &Value )
+			flw::rWFlow &Output )
 		{
-			return TAGSBSGetTagValue( Indice, Value );
+			return TAGSBSHandleTag( Indice, Output );
 		}
 	};
 
 	bso::bool__ SubstituteShortTags(
 		flw::iflow__ &IFlow,
-		short_tags_callback__ &Callback,
+		cShortTags &Callback,
 		flw::oflow__ &OFlow,
 		char TagMarker = DefaultTagMarker );
 
-	tol::E_XROW  SubstituteShortTags(
+	tol::E_XROW SubstituteShortTags(
 		const str::string_ &String,
-		short_tags_callback__ &Callback,
-		str::string_ &Result,
+		cShortTags &Callback,
+		str::dString &Result,
 		char TagMarker = DefaultTagMarker );
 
-	tol::E_XROW  SubstituteShortTags(
+	tol::E_XROW SubstituteShortTags(
 		str::string_ &String,
-		short_tags_callback__ &Callback,
+		cShortTags &Callback,
 		char TagMarker = DefaultTagMarker );
 
 	bso::bool__ SubstituteShortTags(
 		flw::iflow__ &IFlow,
-		const str::strings_ &Values,
+		const str::dStrings &Values,
 		flw::oflow__ &OFlow,
 		char TagMarker = DefaultTagMarker );
 
 	tol::E_XROW  SubstituteShortTags(
 		const str::string_ &String,
-		const str::strings_ &Values,
+		const str::dStrings &Values,
 		str::string_ &Result,
 		char TagMarker = DefaultTagMarker );
 
 	tol::E_XROW  SubstituteShortTags(
 		str::string_ &String,
-		const str::strings_ &Values,
+		const str::dStrings &Values,
 		char TagMarker = DefaultTagMarker );
 
     void GetLongTags(
@@ -152,80 +144,72 @@ namespace tagsbs {
         str::dStrings &Tags,
 		bso::sChar TagMarker = DefaultTagMarker );
 
-	class long_tags_callback__
+	class cLongTags
 	{
 	protected:
-        // Return false for unexpected tag. Aborts then
-        // the substitution and reports failre to caller.
-		virtual bso::bool__ TAGSBSGetTagValue(
-			const str::string_ &Tag,
-			str::string_ &Value ) = 0;
+    // Returns false for unexpected tag. Aborts then
+    // the substitution and reports failure to caller.
+		virtual bso::bool__ TAGSBSHandleTag(
+      const str::string_ &Tag,
+			flw::rWFlow &Output) = 0;
 	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standardisation.
-		}
-		E_CVDTOR( long_tags_callback__ )
-		void Init( void )
-		{
-			// Standadisation.
-		}
-		bso::bool__ GetTagValue(
+		qCALLBACK( LongTags );
+		bso::bool__ HandleTag(
 			const str::string_ &Tag,
-			str::string_ &Value )
+			flw::rWFlow &Output)
 		{
-			return TAGSBSGetTagValue( Tag, Value );
+			return TAGSBSHandleTag(Tag, Output);
 		}
 	};
 
 	// '%TagName%", en prenant '%' comme marqueur.
 	bso::bool__ SubstituteLongTags(
 		flw::iflow__ &IFlow,
-		long_tags_callback__ &Callback,
+		cLongTags &Callback,
 		flw::oflow__ &OFlow,
 		char TagMarker = DefaultTagMarker);	// Si la valeur retourne != 'qNIL', elle indique la position problmatique dans la chane.
 
 	// '%TagName%", en prenant '%' comme marqueur.
 	tol::E_XROW SubstituteLongTags(
 		const str::string_ &String,
-		long_tags_callback__ &Callback,
+		cLongTags &Callback,
 		str::string_ &Result,
 		char TagMarker = DefaultTagMarker);	// Si la valeur retourne != 'qNIL', elle indique la position problmatique dans la chane.
 
 	tol::E_XROW SubstituteLongTags(
 		str::string_ &String,
-		long_tags_callback__ &Callback,
+		cLongTags &Callback,
 		char TagMarker = DefaultTagMarker);	// Si la valeur retourne != 'qNIL', elle indique la position problmatique dans la chane.
 
 	bso::bool__ SubstituteLongTags(
 		flw::iflow__ &IFlow,
-		const str::strings_ &Tags,
-		const str::strings_ &Values,
+		const str::dStrings &Tags,
+		const str::dStrings &Values,
 		flw::oflow__ &OFlow,
 		char TagMarker = DefaultTagMarker);// Si la valeur retourne != 'qNIL', elle indique la position problmatique dans la chane.
 
 	tol::E_XROW SubstituteLongTags(
 		const str::string_ &String,
-		const str::strings_ &Tags,
-		const str::strings_ &Values,
+		const str::dStrings &Tags,
+		const str::dStrings &Values,
 		str::string_ &Result,
 		char TagMarker = DefaultTagMarker);// Si la valeur retourne != 'qNIL', elle indique la position problmatique dans la chane.
 
 	tol::E_XROW SubstituteLongTags(
 		str::string_ &String,
-		const str::strings_ &Tags,
-		const str::strings_ &Values,
+		const str::dStrings &Tags,
+		const str::dStrings &Values,
 		char TagMarker = DefaultTagMarker);// Si la valeur retourne != 'qNIL', elle indique la position problmatique dans la chane.
 
 	class tvalues_	// Tagged values.
 	{
 	public:
 		struct s {
-			str::strings_::s
+			str::dStrings::s
 				Tags,
 				Values;
 		};
-		str::strings_
+		str::dStrings
 			Tags,
 			Values;
 		tvalues_( s &S )
@@ -327,7 +311,6 @@ namespace tagsbs {
 	typedef tvalues_ dTaggedValues;
 	qW( TaggedValues );
 	typedef indice__ sIndice;
-	typedef long_tags_callback__ cLongTagCallback;
 }
 
 #endif

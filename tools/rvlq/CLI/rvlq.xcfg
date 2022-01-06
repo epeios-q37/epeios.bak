@@ -8,6 +8,8 @@
 			<Language>fr</Language>
 			<Command>Reveal</Command>
 			<!-- Default command -->
+			<Markers Comment="#" Text="&amp;" File="%" Command="@"/>
+			<Delimiters Tag="$"/>
 		</Parameters>
 		<Definitions>
 		</Definitions>

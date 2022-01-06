@@ -1782,7 +1782,7 @@ const str::string_ &rgstry::entry___::_GetPath(
 {
 qRH
 	str::string Buffer;
-	tagsbs::short_tags_callback__ *TagSubstitutionCallback = NULL;
+	tagsbs::cShortTags *TagSubstitutionCallback = NULL;
 qRB
 	Buffer.Init( _Path );
 

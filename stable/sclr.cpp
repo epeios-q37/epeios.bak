@@ -669,6 +669,31 @@ qRE
 	return Buffer;
 }
 
+bso::sBool sclr::OGetChar(
+  const registry_ &Registry,
+  const rgstry::tentry__ &Entry,
+  bso::sChar &Char)
+{
+  bso::sBool Found = false;
+qRH;
+  str::wString Value;
+qRB;
+  Value.Init();
+
+  // '( (…) ) ' to avoid warning.
+  if ( ( Found = OGetValue(Registry, Entry, Value) ) ) {
+    if ( Value.Amount() != 1 )
+      ReportBadOrNoValueForEntryErrorAndAbort(Entry);
+    else
+      Char = Value(Value.First());
+  }
+
+qRR;
+qRT;
+qRE;
+  return Found;
+}
+
 static tol::extended_boolean__ GetBoolean_( const str::string_ &Value )
 {
 	tol::xbool__ Boolean = tol::xb_Undefined;

@@ -1263,17 +1263,22 @@ const str::string_ &scla::GetCommand( str::string_ &Command )
 	return MGetValue( Command_, Command );
 }
 
-typedef tagsbs::long_tags_callback__ _callback__;
+typedef tagsbs::cLongTags cTags_;
 
 namespace {
-	class callback__
-	: public _callback__
+	class sTags_
+	: public cTags_
 	{
 	protected:
-		bso::bool__ TAGSBSGetTagValue(
+		bso::bool__ TAGSBSHandleTag(
 			const str::string_ &Tag,
-			str::string_ &Value )
-		{
+			flw::rWFlow &Output ) override
+    {
+    qRH;
+      str::wString Value;
+    qRB;
+      Value.Init();
+
 			switch ( IdentifyArgument_( Tag ) ) {
 			case tCommand:
 				qRFwk();
@@ -1294,17 +1299,21 @@ namespace {
 				break;
 			}
 
-			return true;
-		}
+      Value.WriteToFlow(Output, false);
+    qRR;
+    qRT;
+    qRE;
+      return true;
+    }
 	public:
-		void reset( bso::bool__ P = true )
+		void reset( bso::bool__ = true )
 		{
-			_callback__::reset(  P );
+			// Standardization.
 		}
-		E_CDTOR( callback__ );
+		E_CDTOR( sTags_ );
 		void Init( void )
 		{
-			_callback__::Init();
+			// Standardization.
 		}
 	};
 }
@@ -1328,7 +1337,7 @@ qRH
 		&Translation = Dummy,
 		&Usage = Dummy;
 	bso::bool__ DefaultOne = false;
-	callback__ Callback;
+	sTags_ Callback;
 qRB
 	Value.Init();
 	GetValue_( Id, Value );

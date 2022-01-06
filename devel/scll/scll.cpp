@@ -200,23 +200,26 @@ qRE
 
 // Bien que dfinit dans un '.cpp', et propre  ce '.cpp', VC++ se mlange les pinceaux avec le 'callback__' dfinit dans 'sclxhtml.cpp', d'o le 'namespace'.
 namespace {
-	typedef tagsbs::long_tags_callback__ _callback__;
+	typedef tagsbs::cLongTags cTagsCallback_;
 
-	class callback__
-	: public _callback__
+	class sTagsCallback_
+	: public cTagsCallback_
 	{
 	private:
 		char _Marker;
 		const char *_Language;
 	protected:
-		virtual bso::bool__ TAGSBSGetTagValue(
+		virtual bso::bool__ TAGSBSHandleTag(
 			const str::string_ &Tag,
-			str::string_ &Value ) override
+			flw::rWFlow &Output) override
 		{
 		qRH
 			TOL_CBUFFER___ Buffer;
+			str::wString Value;
 		qRB
+      Value.Init();
 			Locale_().GetTranslation( Tag.Convert(Buffer), _Language, Value );
+			Value.WriteToFlow(Output, false);
 		qRR
 		qRT
 		qRE
@@ -227,16 +230,14 @@ namespace {
 		{
 			_Marker = 0;
 			_Language = NULL;
-			_callback__::reset( P );
 		}
-		E_CVDTOR( callback__ );
+		E_CVDTOR( sTagsCallback_ );
 		void Init(
 			char Marker,
 			const char *Language )
 		{
 			_Marker = Marker;
 			_Language = Language;
-			_callback__::Init();
 		}
 	};
 
@@ -429,7 +430,7 @@ void scll::TranslateTags(
 	const char *Language,
 	char Marker )
 {
-	callback__ Callback;
+	sTagsCallback_ Callback;
 
 	Callback.Init( Marker, Language );
 
@@ -442,7 +443,7 @@ void scll::TranslateTags(
 	str::string_ &Out,
 	char Marker )
 {
-	callback__ Callback;
+	sTagsCallback_ Callback;
 
 	Callback.Init( Marker, Language );
 

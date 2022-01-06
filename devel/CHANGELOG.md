@@ -10,6 +10,18 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2022-01-06
+- LCL, RGSTRY, SCLA, SCLI, XPP: [adpt],
+- SCLM, SXLR: adding char related functions,
+- TAGSBS:
+  - [stdz],
+  - callbacks handles now flow, so the substitutions are done on-the-fly, reducing memory footprint,
+
+## 2022-01-05
+- FLX:
+  - fixing typo,
+  - [stdz],
+
 ## 2021-12-31
 - SCLX: adding log features,
 - TOL: improving environment variables handling,

@@ -298,6 +298,44 @@ namespace sclr {
         return true;
     }
 
+    // 'Char' untouched if not found.
+    bso::sBool OGetChar(
+      const registry_ &Registry,
+      const rgstry::tentry__ &Entry,
+      bso::sChar &Char);
+
+    // Returns 0 if not found.
+    inline bso::sChar OGetChar(
+      const registry_ &Registry,
+      const rgstry::tentry__ &Entry)
+    {
+      bso::sChar Char = 0;
+
+      OGetChar(Registry, Entry, Char);
+
+      return Char;
+    }
+
+    inline void MGetChar(
+      const registry_ &Registry,
+      const rgstry::tentry__ &Entry,
+      bso::sChar &Char)
+    {
+      if ( !OGetChar(Registry, Entry, Char) )
+        ReportBadOrNoValueForEntryErrorAndAbort(Entry);
+    }
+
+    inline bso::sChar MGetChar(
+      const registry_ &Registry,
+      const rgstry::tentry__ &Entry)
+    {
+      bso::sChar Char = 0;
+
+      MGetChar(Registry, Entry, Char);
+
+      return Char;
+    }
+
     bso::bool__ BGetBoolean(
 			const registry_ &Registry,
 			const rgstry::tentry__ &Entry,

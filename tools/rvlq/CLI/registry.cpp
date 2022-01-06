@@ -26,3 +26,17 @@ using namespace registry;
  rEntry registry::parameter::Input( "Input", sclr::Parameters );
  rEntry registry::parameter::Output( "Output", sclr::Parameters );
 
+namespace {
+  rEntry Delimiters_("Delimiters", sclr::Parameters);
+}
+
+rEntry registry::parameter::TagDelimiter("@Tag", Delimiters_);
+
+namespace {
+   rEntry Markers_("Markers", sclr::Parameters);
+}
+
+rEntry registry::parameter::CommentMarker("@Comment", Markers_);
+rEntry registry::parameter::TextMarker("@Text", Markers_);
+rEntry registry::parameter::FileMarker("@File", Markers_);
+rEntry registry::parameter::CommandMarker("@Command", Markers_);
