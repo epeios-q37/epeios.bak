@@ -32,14 +32,11 @@ static inline bso::bool__ HandleEscape_(
 {
 	bso::bool__ Retry = false;
 	xtf::error__ Error = xtf::e_NoError;
-	xtf::utf__ UTF;
-
-	UTF.Init();
 
 	if ( Flow.EndOfFlow( Error ) )
 		qRFwk();
-		
-	switch( C = Flow.Get( UTF ) ) {
+
+	switch( C = Flow.Get() ) {
 	case 'n':
 		C = '\n';
 		break;
@@ -54,15 +51,15 @@ static inline bso::bool__ HandleEscape_(
 		break;
 	case '\n':
 		if ( !( EOX = Flow.EndOfFlow( Error ) ) ) {
-			if ( Flow.View( UTF ) == '\r' )
-				Flow.Get( UTF );
+			if ( Flow.View() == '\r' )
+				Flow.Get();
 			Retry = true;
 		}
 		break;
 	case '\r':
 		if ( !( EOX = Flow.EndOfFlow( Error ) ) ) {
-			if ( Flow.View( UTF ) == '\n' )
-				Flow.Get( UTF );
+			if ( Flow.View() == '\n' )
+				Flow.Get();
 			Retry = true;
 		}
 		break;
@@ -77,7 +74,7 @@ static inline bso::bool__ HandleEscape_(
 
 	if ( Error != xtf::e_NoError )
 		qRFwk();
-	
+
 	return Retry;
 }
 
@@ -86,45 +83,46 @@ static inline bso::bool__ IsNotEndOfCell_(
 	separator__ Separator,
 	escape__ Escape,
 	bso::bool__ &EOX,
-	bso::char__ &C )
+	bso::char__ &C,
+	xtf::sUTF *UTF = NULL)
 {
 	bso::bool__ Loop = false;
 	xtf::error__ Error = xtf::e_NoError;
-	xtf::utf__ UTF;
+	xtf::sUTF TempUTF;
 
-	UTF.Init();
-
-	if ( !( EOX = Flow.EndOfFlow( Error ) ) )
-		do {		
-			if ( ( C = Flow.Get( UTF ) ) == Escape )
-				Loop = HandleEscape_( Flow, Separator, Escape, EOX, C );
+	if ( !( EOX = Flow.EndOfFlow( Error ) ) ) {
+		do {
+      TempUTF.Init();
+			if ( ( C = Flow.Get( TempUTF ) ) == Escape )
+				Loop = HandleEscape_( Flow, Separator, Escape, EOX, ((bso::sChar *)TempUTF.Data)[0] );
 			else
 				Loop = false;
 		} while ( Loop );
-		
+
+		if ( UTF != NULL )
+      *UTF = TempUTF;
+	}
+
 	if ( Error != xtf::e_NoError )
 		qRFwk();
 
 	return !EOX && ( C != Separator ) && ( C != '\n' ) && ( C != '\r' );
 }
 
-static inline txmtbl::delimiter GetDelimiter_( 
+static inline txmtbl::delimiter GetDelimiter_(
 	xtf::extended_text_iflow__ &Flow,
 	separator__ Separator,
 	bso::bool__ EOX,
 	bso::char__ C )
 {
 	xtf::error__ Error = xtf::e_NoError;
-	xtf::utf__ UTF;
-
-	UTF.Init();
 
 	if ( EOX )
 		return txmtbl::dEOF;
 	else if ( C == '\n' )
 	{
-		if ( !Flow.EndOfFlow( Error ) && ( Flow.View( UTF ) == '\r' ) )
-			Flow.Get( UTF );
+		if ( !Flow.EndOfFlow( Error ) && ( Flow.View() == '\r' ) )
+			Flow.Get();
 
 		if ( Error != xtf::e_NoError )
 			qRFwk();
@@ -133,8 +131,8 @@ static inline txmtbl::delimiter GetDelimiter_(
 	}
 	else if ( C == '\r' )
 	{
-		if ( !Flow.EndOfFlow( Error ) && ( Flow.View( UTF ) == '\n' ) )
-			Flow.Get( UTF );
+		if ( !Flow.EndOfFlow( Error ) && ( Flow.View() == '\n' ) )
+			Flow.Get();
 
 		if ( Error != xtf::e_NoError )
 			qRFwk();
@@ -146,7 +144,7 @@ static inline txmtbl::delimiter GetDelimiter_(
 	else
 	{
 		qRFwk();
-		return txmtbl::dUnknow;
+		return txmtbl::d_Undefined;
 	}
 }
 
@@ -156,14 +154,19 @@ txmtbl::delimiter txmtbl::GetCell(
 	separator__ Separator,
 	escape__ Escape )
 {
-	bso::char__ C = 0;
 	bso::bool__ EOX = false;
+	bso::char__ C = 0;
+	xtf::sUTF UTF;
 
 	Cell.Location( Flow.Position().Column );
 
-	while( IsNotEndOfCell_( Flow, Separator, Escape, EOX, C ) ) 
-		Cell.Append( C );
-	
+	UTF.Init();
+
+	while( IsNotEndOfCell_( Flow, Separator, Escape, EOX, C, &UTF ) ) {
+		Cell.Append( (const bso::sChar *)UTF.Data, UTF.Size );
+		UTF.Init();
+	}
+
 	return GetDelimiter_( Flow, Separator, EOX, C );
 }
 
@@ -172,10 +175,10 @@ txmtbl::delimiter txmtbl::SkipCell(
 	separator__ Separator,
 	escape__ Escape )
 {
-	bso::char__ C = 0;
 	bso::bool__ EOX = false;
+	bso::sChar C = 0;
 
-	while( IsNotEndOfCell_( Flow, Separator, Escape, EOX,C ) );
+	while( IsNotEndOfCell_( Flow, Separator, Escape, EOX, C ) );
 
 	return GetDelimiter_( Flow, Separator, EOX, C );
 }
@@ -244,7 +247,7 @@ qRB
 
 		Current = Next( Current );
 	}
-	
+
 	Erase_( Stack );
 qRR
 qRT
@@ -398,7 +401,7 @@ qRE
 	return Amount;
 }
 
-static inline bool IsCommentary_(
+static inline bool IsComment_(
 	const cell_ &Cell,
 	bso::char__ Marker )
 {
@@ -409,7 +412,7 @@ amount__ line_::RemoveComment( bso::char__ Marker )
 {
 	sdr::row__ Position = First();
 
-	while( ( Position != qNIL ) && !IsCommentary_( Get( Position ), Marker ) )
+	while( ( Position != qNIL ) && !IsComment_( Get( Position ), Marker ) )
 		Position = Next( Position );
 
 	if ( Position != qNIL )

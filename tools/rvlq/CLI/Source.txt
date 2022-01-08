@@ -1,0 +1,7 @@
+Text 1: $text1$
+Text 2: $text2$
+Text 3: $text3$
+Text 4: $text4$
+Text 2 again: $text2$
+File content : $file$
+Command output : $command$

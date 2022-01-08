@@ -65,37 +65,138 @@ namespace {
 		COut << txf::pad << "Build : " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 	}
 
+	namespace {
+    namespace {
+      typedef tagsbs::cLongTagsRow cTags_;
+
+      void FillWithFileContent_(
+        const str::dString &Filename,
+        flw::rWFlow &Output)
+      {
+      qRH;
+        flf::rRFlow TagContent;
+      qRB;
+        if ( Filename.Amount() == 0 )
+          qRGnr();
+
+        TagContent.Init(Filename);
+
+        flw::Copy(TagContent, Output);
+      qRR;
+      qRT;
+      qRE;
+      }
+
+      void FillWithCommandResult_(
+        const str::dString &Command,
+        flw::rWFlow &Output)
+      {
+      qRH;
+        flx::rExecRFlow TagContent;
+      qRB;
+        if ( Command.Amount() == 0 )
+          qRGnr();
+
+        TagContent.Init(Command);
+
+        flw::Copy(TagContent, Output);
+      qRR;
+      qRT;
+      qRE;
+      }
+    }
+
+    class sCallback_
+    : public cTags_
+    {
+    private:
+      qCRMV(dTypes, T_, Types_);
+      qCRMV(str::dStrings, D_, Definitions_);
+    protected:
+      virtual bso::bool__ TAGSBSHandleTag(
+        sdr::sRow TagRow,
+        flw::rWFlow &Output) override
+      {
+        if ( !T_().Exists(TagRow) )
+          qRGnr();
+
+        if ( !D_().Exists(TagRow) )
+          qRGnr();
+
+        switch( T_()(TagRow) ) {
+        case tText:
+          D_()(TagRow).WriteToFlow(Output, false);
+          break;
+        case tFile:
+          FillWithFileContent_( D_()(TagRow), Output);
+          break;
+        case tCommand:
+          FillWithCommandResult_( D_()(TagRow), Output);
+          break;
+        default:
+          qRGnr();
+          break;
+        }
+
+        return true;
+      }
+    public:
+      void reset(bso::sBool = true)
+      {
+        Types_ = NULL;
+        Definitions_ = NULL;
+      }
+      qCVDTOR(sCallback_);
+      void Init(
+        const dTypes &Types,
+        const str::dStrings &Definitions)
+      {
+        Types_ = &Types;
+        Definitions_ = &Definitions;
+      }
+    };
+	}
+
 	void Reveal_(
-		const str::dStrings &Tags,
-		const str::dStrings &Values,
 		fdr::rRDriver &InputDriver,
+		const str::dStrings &Tags,
+		const dTypes &Types,
+		const str::dStrings &Definitions,
 		fdr::rWDriver &OutputDriver)
 	{
 	qRH;
 		flw::rDressedRFlow<> Input;
+		xtf::sRFlow XFlow;
 		flw::rDressedWFlow<> Output;
+		sCallback_ Callback;
 	qRB;
 		Input.Init(InputDriver);
+		XFlow.Init(Input, utf::f_Default);
 		Output.Init(OutputDriver);
 
-		if ( !tagsbs::SubstituteLongTags(Input, Tags, Values, Output, sclm::MGetChar(registry::parameter::TagDelimiter)) )
-			qRGnr();
+		Callback.Init(Types, Definitions);
+
+		if ( !tagsbs::SubstituteLongTags(XFlow, Tags, Callback, Output, sclm::MGetChar(registry::parameter::TagDelimiter)) ) {
+      xtf::sPos Pos = XFlow.Position();
+      sclm::ReportAndAbort("ErrorAt", Pos.Line, Pos.Column);
+		}
 	qRR;
 	qRT;
 	qRE;
 	}
 
 	void Reveal_(
-		const str::dStrings &Tags,
-		const str::dStrings &Values,
 		const str::dString &InputFilename,
+		const str::dStrings &Tags,
+		const dTypes &Types,
+		const str::dStrings &Definitionss,
 		const str::dString &OutputFilename)
 	{
 	qRH;
 		sclm::rRDriverRack Input;
 		sclm::rWDriverRack Output;
 	qRB;
-		Reveal_(Tags, Values, Input.Init(InputFilename), Output.Init(OutputFilename) );
+		Reveal_(Input.Init(InputFilename), Tags, Types, Definitionss, Output.Init(OutputFilename) );
 	qRR;
 		Input.HandleError();
 		Output.HandleError();
@@ -117,46 +218,6 @@ namespace {
 		txmtbl::GetTable(TFlow, Table);
 
 		Table.Purge(sclm::MGetChar(registry::parameter::CommentMarker));
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void FillWithFileContent_(
-		const str::dString &Filename,
-		str::dString &Value)
-	{
-	qRH;
-		flf::rRDriver FDriver;
-		flx::rStringWDriver SDriver;
-	qRB;
-		if ( Filename.Amount() == 0 )
-			qRGnr();
-
-		FDriver.Init(Filename);
-		SDriver.Init(Value);
-
-		fdr::Copy(FDriver, SDriver);
-	qRR;
-	qRT;
-	qRE;
-	}
-
-	void FillWithCommandResult_(
-		const str::dString &Command,
-		str::dString &Value)
-	{
-	qRH;
-		flx::rExecRDriver RDriver;
-		flx::rStringWDriver WDriver;
-	qRB;
-		if ( Command.Amount() == 0 )
-			qRGnr();
-
-		RDriver.Init(Command);
-		WDriver.Init(Value);
-
-		fdr::Copy(RDriver, WDriver);
 	qRR;
 	qRT;
 	qRE;
@@ -234,8 +295,8 @@ namespace {
 		sdr::sRow Row = qNIL;
 		str::wString Tag,Definition;
 	qRB;
-		if( Line.Amount() != 2 )
-			qRGnr();
+		if ( Line.Amount() != 2 )
+      sclm::ReportAndAbort("ErrorAtLineInTags", Line.Location());
 
 		Row = Line.First();
 
@@ -310,8 +371,8 @@ namespace {
 	}
 
 	void Reveal_(
-		const str::dString &TagsFilename,
 		const str::dString &InputFilename,
+		const str::dString &TagsFilename,
 		const str::dString &OutputFilename)
 	{
 	qRH
@@ -328,7 +389,7 @@ namespace {
     if ( Tags.Amount() != Definitions.Amount() )
       qRGnr();
 
-		Reveal_(Tags, Types, Definitions, InputFilename, OutputFilename);
+		Reveal_(InputFilename, Tags, Types, Definitions, OutputFilename);
 	qRR
 	qRT
 	qRE
@@ -345,8 +406,7 @@ namespace {
 		sclm::OGetValue(registry::parameter::Input, Input);
 		sclm::OGetValue(registry::parameter::Output, Output);
 
-		Reveal_(Tags, Input, Output);
-
+		Reveal_(Input, Tags, Output);
 	qRR;
 	qRT;
 	qRE;

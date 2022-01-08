@@ -6,7 +6,7 @@
   <xpp:expand href="../../../CLI.xcfg"/>
 		<Parameters>
 			<Language>fr</Language>
-			<Command>Reveal</Command>
+			<Command>Process</Command>
 			<!-- Default command -->
 			<Markers Comment="#" Text="&amp;" File="%" Command="@"/>
 			<Delimiters Tag="$"/>
@@ -16,9 +16,9 @@
 		<Locale>
 			<xpp:expand select="CLI_Locale"/>
 			<!-- Commands -->
-			<Translations text="TestCommandDescription">
-				<Translation language="fr">Commande de test.</Translation>
-				<Translation language="en">Test command.</Translation>
+			<Translations text="ProcessCommandDescription">
+				<Translation language="fr">Lancement de la substitution.</Translation>
+				<Translation language="en">Launch substitution.</Translation>
 			</Translations>
 			<!-- Flags -->
 			<Translations text="TestFlagDescription">
@@ -26,36 +26,63 @@
 				<Translation language="en">test flag.</Translation>
 			</Translations>
 			<!-- Option descriptions -->
-			<Translations text="TestOptionDescription">
-				<Translation language="fr">option de test.</Translation>
-				<Translation language="en">test option.</Translation>
+			<Translations text="TagDelimiterOptionDescription">
+				<Translation language="fr">Delimiteur de balise</Translation>
+				<Translation language="en">Tag delimiter.</Translation>
+			</Translations>
+			<Translations text="TextMarkerOptionDescription">
+				<Translation language="fr">Marqueur de texte</Translation>
+				<Translation language="en">Text marker</Translation>
+			</Translations>
+			<Translations text="FileMarkerOptionDescription">
+				<Translation language="fr">Marqueur de fichier</Translation>
+				<Translation language="en">File marker</Translation>
+			</Translations>
+			<Translations text="Command MarkerOptionDescription">
+				<Translation language="fr">Marqueur de commande</Translation>
+				<Translation language="en">Command marker</Translation>
 			</Translations>
 			<!-- Option labels -->
-			<Translations text="TestOptionLabel">
-				<Translation language="fr">option (fr)</Translation>
-				<Translation language="en">option (en)</Translation>
+			<Translations text="TagDelimiterOptionLabel">
+				<Translation language="fr">délimiteur</Translation>
+				<Translation language="en">delimiter</Translation>
+			</Translations>
+			<Translations text="TextMarkerOptionLabel">
+				<Translation language="fr">mt</Translation>
+				<Translation language="en">tm</Translation>
+			</Translations>
+			<Translations text="FileMarkerOptionLabel">
+				<Translation language="fr">mf</Translation>
+				<Translation language="en">fm</Translation>
+			</Translations>
+			<Translations text="CommandMarkerOptionLabel">
+				<Translation language="fr">mc</Translation>
+				<Translation language="en">cm</Translation>
 			</Translations>
 			<!-- Argument descriptions -->
-			<Translations text="TestArgumentDescription">
-				<Translation language="fr">argument de test.</Translation>
-				<Translation language="en">test argument.</Translation>
+			<Translations text="TagsArgumentDescription">
+				<Translation language="fr">Fichier des balises.</Translation>
+				<Translation language="en">Tags file.</Translation>
 			</Translations>
 			<!-- Argument labels -->
-			<Translations text="TestArgumentLabel">
-				<Translation language="fr">argument (fr)</Translation>
-				<Translation language="en">argument (en)</Translation>
+			<Translations text="TagsArgumentLabel">
+				<Translation language="fr">balises</Translation>
+				<Translation language="en">tags</Translation>
 			</Translations>
 		</Locale>
 		<Arguments>
 			<xpp:expand select="CLI_Arguments"/>
 			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %TestArgument%"/>
+			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="[%TagDelimiterOption%] [%TextMarkerOption%] [%FileMarkerOption%] [%CommandMarkerOption%] %TagsArgument%"/>
 			<!-- Fanaux : 'Path', mais pas de 'Value'. -->
 			<Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
 			<!-- Options : 'Path' ET 'Value'. -->
-			<Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
+			<Argument id="TagDelimiterOption" Description="TagDelimiterOptionDescription" long="delimiter" short="d" Path="Delimiters/@Tag" Label="TagDelimiterOptionLabel"/>
+			<Argument id="TextMarkerOption" Description="TextMarkerOptionDescription" long="text-marker" short="t" Path="Markers/@Text" Label="TextMarkerOptionLabel"/>
+			<Argument id="FileMarkerOption" Description="FileMarkerOptionDescription" long="file-marker" short="f" Path="Markers/@File" Label="FileMarkerOptionLabel"/>
+			<Argument id="CommandMarkerOption" Description="CommandMarkerOptionDescription" long="command-marker" short="c" Path="Markers/@Command" Label="CommandMarkerOptionLabel"/>
 			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
-			<Argument id="TestArgument" Description="TestArgumentDescription" Path="Test" Label="TestArgumentLabel"/>
+			<Argument id="TagsArgument" Description="TagsArgumentDescription" Path="Tags" Label="TagsArgumentLabel"/>
 			<!-- Affectations des arguments libres-->
 			<Layouts>
 				<Layout command="Test">

@@ -200,7 +200,7 @@ qRE
 
 // Bien que dfinit dans un '.cpp', et propre  ce '.cpp', VC++ se mlange les pinceaux avec le 'callback__' dfinit dans 'sclxhtml.cpp', d'o le 'namespace'.
 namespace {
-	typedef tagsbs::cLongTags cTagsCallback_;
+	typedef tagsbs::cLongTagsString cTagsCallback_;
 
 	class sTagsCallback_
 	: public cTagsCallback_

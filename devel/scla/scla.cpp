@@ -1263,7 +1263,7 @@ const str::string_ &scla::GetCommand( str::string_ &Command )
 	return MGetValue( Command_, Command );
 }
 
-typedef tagsbs::cLongTags cTags_;
+typedef tagsbs::cLongTagsString cTags_;
 
 namespace {
 	class sTags_

@@ -490,7 +490,7 @@ qRE
 	return Type;
 }
 
-typedef tagsbs::cLongTags ltcallback_;
+typedef tagsbs::cLongTagsString ltcallback_;
 
 class attribute_value_substitution_callback
 : public ltcallback_

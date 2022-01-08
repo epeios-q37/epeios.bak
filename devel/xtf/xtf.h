@@ -79,8 +79,7 @@ namespace xtf {
 		return NULL;	// Pour viter un 'Warning'.
 	}
 
-	struct utf__
-	{
+	struct utf__ {
 		fdr::byte__ Data[5];
 		bso::u8__ Size;
 		bso::sBool Eaten;
@@ -219,22 +218,22 @@ namespace xtf {
 			_Position.Line++;
 			_Position.Column = 0;
 		}
-        bomhdl::byte_order_marker__ _GetBOM( void )
+		bomhdl::byte_order_marker__ _GetBOM( void )
 		{
 # if 0
 			fdr::byte__ BOMBuffer[BOM_SIZE_MAX];
 			fdr::size__ Size = _F().View( sizeof( BOMBuffer ), BOMBuffer );
-            bomhdl::byte_order_marker__ BOM = bomhdl::DetectBOM( BOMBuffer, Size );	// Si != 'bomhdl::bom_UnknownOrNone', 'Size' contient au retour la taille du 'BOM'.
+			bomhdl::byte_order_marker__ BOM = bomhdl::DetectBOM( BOMBuffer, Size );	// Si != 'bomhdl::bom_UnknownOrNone', 'Size' contient au retour la taille du 'BOM'.
 
-            if ( BOM != bomhdl::bom_UnknownOrNone )
+			if ( BOM != bomhdl::bom_UnknownOrNone )
 				_F().Skip( Size );
 
 			return BOM;
 # else
 			fdr::size__ Size = 0;
-            bomhdl::byte_order_marker__ BOM = bomhdl::DetectBOM( _Feeder, Size );	// Si != 'bomhdl::bom_UnknownOrNone', 'Size' contient au retour la taille du 'BOM'.
+			bomhdl::byte_order_marker__ BOM = bomhdl::DetectBOM( _Feeder, Size );	// Si != 'bomhdl::bom_UnknownOrNone', 'Size' contient au retour la taille du 'BOM'.
 
-            if ( BOM != bomhdl::bom_UnknownOrNone )
+			if ( BOM != bomhdl::bom_UnknownOrNone )
 				_F().Skip( Size );
 
 			return BOM;
@@ -242,50 +241,49 @@ namespace xtf {
 		}
 		utf::format__ _HandleFormat(
 			utf::format__ ExpectedFormat,
-            bomhdl::byte_order_marker__ BOM )
+			bomhdl::byte_order_marker__ BOM )
 		{
 			switch ( ExpectedFormat ) {
 			case utf::f_Guess:
-                if ( BOM == bomhdl::bomUTF_8 )
+				if ( BOM == bomhdl::bomUTF_8 )
 					ExpectedFormat = utf::fUTF_8;
-                else if ( BOM != bomhdl::bom_UnknownOrNone ) {
+				else if ( BOM != bomhdl::bom_UnknownOrNone ) {
 					_Error = eUnexpectedEncoding;
 					ExpectedFormat = utf::f_Undefined;
 				}
 				break;
 			case utf::fANSI:
-                if ( BOM != bomhdl::bom_UnknownOrNone )
-				{
+				if ( BOM != bomhdl::bom_UnknownOrNone ) {
 					_Error = eUnexpectedEncoding;
 					ExpectedFormat = utf::f_Undefined;
 				}
 				break;
 			case utf::fUTF_8:
-                if ( ( BOM != bomhdl::bom_UnknownOrNone ) && ( BOM != bomhdl::bomUTF_8 ) ) {
+				if ( ( BOM != bomhdl::bom_UnknownOrNone ) && ( BOM != bomhdl::bomUTF_8 ) ) {
 					_Error = eUnexpectedEncoding;
 					ExpectedFormat = utf::f_Undefined;
 				}
 				break;
 			case utf::fUTF_16_BE:
-                if ( BOM != bomhdl::bomUTF_16_BE ) {
+				if ( BOM != bomhdl::bomUTF_16_BE ) {
 					_Error = eUnexpectedEncoding;
 					ExpectedFormat = utf::f_Undefined;
 				}
 				break;
 			case utf::fUTF_16_LE:
-                if ( BOM != bomhdl::bomUTF_16_LE ) {
+				if ( BOM != bomhdl::bomUTF_16_LE ) {
 					_Error = eUnexpectedEncoding;
 					ExpectedFormat = utf::f_Undefined;
 				}
 				break;
 			case utf::fUTF_32_BE:
-                if ( BOM != bomhdl::bomUTF_32_BE ) {
+				if ( BOM != bomhdl::bomUTF_32_BE ) {
 					_Error = eUnexpectedEncoding;
 					ExpectedFormat = utf::f_Undefined;
 				}
 				break;
 			case utf::fUTF_32_LE:
-                if ( BOM != bomhdl::bomUTF_32_LE ) {
+				if ( BOM != bomhdl::bomUTF_32_LE ) {
 					_Error = eUnexpectedEncoding;
 					ExpectedFormat = utf::f_Undefined;
 				}
@@ -301,13 +299,13 @@ namespace xtf {
 		bso::bool__ _PrefetchUTF( bso::sBool Eat )
 		{
 			if ( _UTF.Size == 0 ) {
-/*				bso::size__ Size = _F().View( sizeof( _UTF.Data ), _UTF.Data );
+				/*				bso::size__ Size = _F().View( sizeof( _UTF.Data ), _UTF.Data );
 
-				if ( Size == 0  ) {
-					_UTF.Size = 0;
-					return false;
-				}
-*/
+								if ( Size == 0  ) {
+									_UTF.Size = 0;
+									return false;
+								}
+				*/
 				_Feeder.Reset();
 
 				_UTF.Size = _UTFHandler.Handle( _Feeder );
@@ -337,7 +335,7 @@ namespace xtf {
 	public:
 		void reset( bool P = true )
 		{
-            NLWasRegular_ = false;
+			NLWasRegular_ = false;
 			_Position.reset( P );
 			_Position.Line = _Position.Column = 1;
 			_Flow = NULL;
@@ -354,12 +352,12 @@ namespace xtf {
 			Init( IFlow, Format, Position );
 		}
 		//f Initialization with 'Flow'..
-        bomhdl::byte_order_marker__ Init(
+		bomhdl::byte_order_marker__ Init(
 			flw::iflow__ &IFlow,
 			utf::format__ Format,
 			pos__ Position = pos__( 1, 0 ) )
 		{
-            NLWasRegular_ = false;
+			NLWasRegular_ = false;
 			_Position.Init( Position );
 			_Flow = NULL;
 			_Flow = &IFlow;
@@ -368,7 +366,7 @@ namespace xtf {
 			_Feeder.Init( IFlow );
 			_UTF.Init();
 
-            bomhdl::byte_order_marker__ BOM = _GetBOM();
+			bomhdl::byte_order_marker__ BOM = _GetBOM();
 
 			if ( ( Format = _HandleFormat( Format, BOM ) ) != utf::f_Undefined )
 				if ( !_UTFHandler.Init( Format ) )
@@ -378,8 +376,8 @@ namespace xtf {
 		}
 		//f Extract and return next character in flow.
 		flw::byte__ Get(
-            utf__ *UTF = NULL,
-            bso::sBool KeepDualNL = true )
+			utf__ *UTF = NULL,
+			bso::sBool KeepDualNL = true )
 		{
 			if ( !_PrefetchUTF( true ) )
 				qRFwk();
@@ -392,41 +390,41 @@ namespace xtf {
 			flw::byte__ C = _UTF.Data[0];
 
 			if (C == '\n') {
-                if ( NLWasRegular_ ) {
-                    _NewLineAdjust();
-                    NLWasRegular_ = false;
-                } else if ( !_F().EndOfFlow() && (_F().View() == '\r') ) {
-                    if ( KeepDualNL ) {
-                        NLWasRegular_ = true;
-                        _NewCharAdjust();
-                    } else {
-                        _F().Skip();
-                        _NewLineAdjust();
-                    }
-                } else
-                    _NewLineAdjust();
+				if ( NLWasRegular_ ) {
+					_NewLineAdjust();
+					NLWasRegular_ = false;
+				} else if ( !_F().EndOfFlow() && (_F().View() == '\r') ) {
+					if ( KeepDualNL ) {
+						NLWasRegular_ = true;
+						_NewCharAdjust();
+					} else {
+						_F().Skip();
+						_NewLineAdjust();
+					}
+				} else
+					_NewLineAdjust();
 			} else if (C == '\r') {
-                if ( NLWasRegular_ ) {
-                    _NewLineAdjust();
-                    NLWasRegular_ = false;
-                } else if ( !_F().EndOfFlow() && (_F().View() == '\n') ) {
-                    if ( KeepDualNL ) {
-                        NLWasRegular_ = true;
-                        _NewCharAdjust();
-                    } else {
-                        _F().Skip();
-                        _NewLineAdjust();
-                    }
-                } else
-                    _NewLineAdjust();
-            } else
-                _NewCharAdjust();
+				if ( NLWasRegular_ ) {
+					_NewLineAdjust();
+					NLWasRegular_ = false;
+				} else if ( !_F().EndOfFlow() && (_F().View() == '\n') ) {
+					if ( KeepDualNL ) {
+						NLWasRegular_ = true;
+						_NewCharAdjust();
+					} else {
+						_F().Skip();
+						_NewLineAdjust();
+					}
+				} else
+					_NewLineAdjust();
+			} else
+				_NewCharAdjust();
 
 			return C;
 		}
 		flw::byte__ Get(
-            utf__ &UTF,
-            bso::sBool KeepDualNL = true )
+			utf__ &UTF,
+			bso::sBool KeepDualNL = true )
 		{
 			return Get( &UTF, KeepDualNL );
 		}
@@ -471,7 +469,8 @@ namespace xtf {
 			return View( &UTF );
 		}
 		bso::bool__ EndOfFlow( error__ *Error = NULL )	// If returning 'true' and there is an error and 'Error' != NULL,
-		{                                               // 'Error' contains then the error.s
+		{
+			// 'Error' contains then the error.s
 			if ( _Error == e_NoError ) {
 				if ( _UTF.Size != 0 )
 					return false;
@@ -539,6 +538,7 @@ namespace xtf {
 namespace xtf {
 	typedef extended_text_iflow__ sRFlow;
 	typedef pos__ sPos;
+	typedef utf__ sUTF;
 }
 
 

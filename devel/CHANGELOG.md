@@ -10,6 +10,19 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2022-01-08
+- SCLA, SCLL, XPP: [adpt],
+- TAGSBS:
+  - [cont],
+  - limiting tag label to ASCCII letters, digits and '_'.
+- TXMTBL: fixing UTF issue,
+
+## 2022-01-07
+- XTF: [stdz],
+- TAGSBS:
+  - using 'xtf' flow insted of 'flw' one,
+  - new callback,
+
 ## 2022-01-06
 - LCL, RGSTRY, SCLA, SCLI, XPP: [adpt],
 - SCLM, SXLR: adding char related functions,

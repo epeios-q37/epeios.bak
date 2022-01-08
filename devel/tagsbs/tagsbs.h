@@ -32,6 +32,7 @@
 # include "flw.h"
 # include "str.h"
 # include "sdr.h"
+# include "xtf.h"
 
 /**************/
 /**** OLD *****/
@@ -42,15 +43,13 @@ namespace tagsbs {
 
 	typedef bso::u8__ indice__;
 
-	// '%1', '%2'... (en supposant '%' comme marqueur).
 	bso::bool__ SubstituteShortTag(
-		flw::iflow__ &IFlow,
+		xtf::sRFlow &Input,
 		indice__ Indice,
 		const str::string_ &Value,
-		flw::oflow__ &OFlow,
+		flw::oflow__ &Output,
 		char TagMarker = DefaultTagMarker );
 
-	// '%1', '%2'... (en supposant '%' comme marqueur).
 	tol::E_XROW SubstituteShortTag(
 		const str::string_ &String,
 		indice__ Indice,
@@ -65,10 +64,10 @@ namespace tagsbs {
 		char TagMarker = DefaultTagMarker );
 
 	bso::bool__ SubstituteLongTag(
-		flw::iflow__ &IFlow,
+		xtf::sRFlow &Input,
 		const str::string_ &Tag,
 		const str::string_ &Value,
-		flw::oflow__ &OFlow,
+		flw::oflow__ &Output,
 		char TagMarker = DefaultTagMarker );
 
 	tol::E_XROW SubstituteLongTag(
@@ -101,7 +100,7 @@ namespace tagsbs {
 	};
 
 	bso::bool__ SubstituteShortTags(
-		flw::iflow__ &IFlow,
+		xtf::sRFlow &Input,
 		cShortTags &Callback,
 		flw::oflow__ &OFlow,
 		char TagMarker = DefaultTagMarker );
@@ -118,9 +117,9 @@ namespace tagsbs {
 		char TagMarker = DefaultTagMarker );
 
 	bso::bool__ SubstituteShortTags(
-		flw::iflow__ &IFlow,
+		xtf::sRFlow &Input,
 		const str::dStrings &Values,
-		flw::oflow__ &OFlow,
+		flw::oflow__ &Output,
 		char TagMarker = DefaultTagMarker );
 
 	tol::E_XROW  SubstituteShortTags(
@@ -134,17 +133,17 @@ namespace tagsbs {
 		const str::dStrings &Values,
 		char TagMarker = DefaultTagMarker );
 
-    void GetLongTags(
-        flw::rRFlow &Flow,
-        str::dStrings &Tags,
-		bso::sChar TagMarker = DefaultTagMarker );
+  void GetLongTags(
+    xtf::sRFlow &Flow,
+    str::dStrings &Tags,
+    bso::sChar TagMarker = DefaultTagMarker );
 
-    void GetLongTags(
-        const str::dString &String,
-        str::dStrings &Tags,
-		bso::sChar TagMarker = DefaultTagMarker );
+  void GetLongTags(
+    const str::dString &String,
+    str::dStrings &Tags,
+    bso::sChar TagMarker = DefaultTagMarker );
 
-	class cLongTags
+	class cLongTagsString
 	{
 	protected:
     // Returns false for unexpected tag. Aborts then
@@ -153,7 +152,7 @@ namespace tagsbs {
       const str::string_ &Tag,
 			flw::rWFlow &Output) = 0;
 	public:
-		qCALLBACK( LongTags );
+		qCALLBACK( LongTagsString );
 		bso::bool__ HandleTag(
 			const str::string_ &Tag,
 			flw::rWFlow &Output)
@@ -162,27 +161,64 @@ namespace tagsbs {
 		}
 	};
 
-	// '%TagName%", en prenant '%' comme marqueur.
 	bso::bool__ SubstituteLongTags(
-		flw::iflow__ &IFlow,
-		cLongTags &Callback,
+		xtf::sRFlow& Input,
+		cLongTagsString &Callback,
 		flw::oflow__ &OFlow,
-		char TagMarker = DefaultTagMarker);	// Si la valeur retourne != 'qNIL', elle indique la position problmatique dans la chane.
+		char TagMarker = DefaultTagMarker);
 
 	// '%TagName%", en prenant '%' comme marqueur.
 	tol::E_XROW SubstituteLongTags(
 		const str::string_ &String,
-		cLongTags &Callback,
+		cLongTagsString &Callback,
 		str::string_ &Result,
 		char TagMarker = DefaultTagMarker);	// Si la valeur retourne != 'qNIL', elle indique la position problmatique dans la chane.
 
 	tol::E_XROW SubstituteLongTags(
 		str::string_ &String,
-		cLongTags &Callback,
+		cLongTagsString &Callback,
+		char TagMarker = DefaultTagMarker);	// Si la valeur retourne != 'qNIL', elle indique la position problmatique dans la chane.
+
+ 	class cLongTagsRow
+	{
+	protected:
+    // Returns false for unexpected tag. Aborts then
+    // the substitution and reports failure to caller.
+		virtual bso::bool__ TAGSBSHandleTag(
+      sdr::sRow TagRow,
+			flw::rWFlow &Output) = 0;
+	public:
+		qCALLBACK( LongTagsRow );
+		bso::bool__ HandleTag(
+			sdr::sRow TagRow,
+			flw::rWFlow &Output)
+		{
+			return TAGSBSHandleTag(TagRow, Output);
+		}
+	};
+
+	bso::bool__ SubstituteLongTags(
+		xtf::sRFlow &Input,
+		const str::dStrings &Tags,
+		cLongTagsRow &Callback,
+		flw::oflow__ &OFlow,
+		char TagMarker = DefaultTagMarker);// Si la valeur retourne != 'qNIL', elle indique la position problmatique dans la chane.
+
+	tol::E_XROW SubstituteLongTags(
+		const str::string_ &String,
+		const str::dStrings &Tags,
+		cLongTagsRow &Callback,
+		str::string_ &Result,
+		char TagMarker = DefaultTagMarker);	// Si la valeur retourne != 'qNIL', elle indique la position problmatique dans la chane.
+
+	tol::E_XROW SubstituteLongTags(
+		str::string_ &String,
+		const str::dStrings &Tags,
+		cLongTagsRow &Callback,
 		char TagMarker = DefaultTagMarker);	// Si la valeur retourne != 'qNIL', elle indique la position problmatique dans la chane.
 
 	bso::bool__ SubstituteLongTags(
-		flw::iflow__ &IFlow,
+		xtf::sRFlow &Input,
 		const str::dStrings &Tags,
 		const str::dStrings &Values,
 		flw::oflow__ &OFlow,
@@ -277,12 +313,12 @@ namespace tagsbs {
 	E_AUTO( tvalues );
 
 	inline bso::bool__ SubstituteLongTags(
-		flw::iflow__ &IFlow,
+		xtf::sRFlow &Input,
 		const tvalues_ &TaggedValues,
-		flw::oflow__ &OFlow,
+		flw::oflow__ &Output,
 		char TagMarker = DefaultTagMarker )
 	{
-		return SubstituteLongTags( IFlow, TaggedValues.Tags, TaggedValues.Values, OFlow, TagMarker );
+		return SubstituteLongTags(Input, TaggedValues.Tags, TaggedValues.Values, Output, TagMarker);
 	}
 
 	inline tol::E_XROW SubstituteLongTags(
@@ -310,6 +346,7 @@ namespace tagsbs {
 namespace tagsbs {
 	typedef tvalues_ dTaggedValues;
 	qW( TaggedValues );
+
 	typedef indice__ sIndice;
 }
 

@@ -50,8 +50,8 @@ namespace txmtbl {
 		dSeparator,
 		//i End of flow
 		dEOF,
-		//i Unknow delimiter.
-		dUnknow
+		d_amount,
+		d_Undefined
 	};
 
 	//t An amount of cell or of line.
@@ -59,7 +59,7 @@ namespace txmtbl {
 
 	//d The default cell separator character.
 	#define TXMTBL_DEFAULT_CELL_SEPARATOR	'\t'
-	
+
 	//d The default escape character.
 	#define TXMTBL_DEFAULT_ESCAPE_CHARACTER	'\\'
 
@@ -85,8 +85,8 @@ namespace txmtbl {
 			location__ Location;
 		} &S_;
 		cell_( s &S )
-		: S_( S ),
-		  str::string_( S )
+		: str::string_( S ),
+		  S_( S )
 		{}
 		void reset( bso::bool__ P = true )
 		{
@@ -163,8 +163,8 @@ namespace txmtbl {
 			location__ Location;
 		} &S_;
 		line_( s &S )
-		: S_( S ),
-		  ctn::E_MCONTAINER_( cell_ )( S )
+		: ctn::E_MCONTAINER_( cell_ )( S ),
+		  S_( S )
 		{}
 		void reset( bool P = true )
 		{
@@ -381,7 +381,7 @@ namespace txmtbl {
 txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &Flow,
 	const txmtbl::line_ &Line );
-	
+
 txf::text_oflow__ &operator <<(
 		txf::text_oflow__ &Flot,
 		const txmtbl::table_ &Table );
