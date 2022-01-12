@@ -10,6 +10,9 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2022-01-12
+- DTFPTB: fixing typo,
+
 ## 2022-01-08
 - SCLA, SCLL, XPP: [adpt],
 - TAGSBS:

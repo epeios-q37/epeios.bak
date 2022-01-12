@@ -1,9 +1,10 @@
-text1		Simple text.
+text1		&Simple text
 text2		Text on 2 lines in the tags file, \
-but displayed on one line thanks to the '\\' before the newline.
+but displayed on one line thanks to the '\\' before the newline
 
 # A comment.
 text3		Text on one line in the tags file,\nbut displayed on 2 lines thanks to '\\n'.
-text4		Text with a tabulation here :>\t< thanks to '\\t'.
+text4		Text with a tabulation here:>\t< thanks to '\\t'
+text5		and another simple texte
 file		%File.txt
 command		@echo -n Current date and time: `date`

@@ -86,25 +86,26 @@
 		</Files>
 		<File Path="../" Pack="No">xdhwebq.xcfg</File>
 		<File Path="../../" Pack="No">XDH.xcfg</File>
-        <Files RTW=".">
-            <File>README.md</File>
-            <File>Makefile</File>
-            <Files Path="../">
-                <File>CHANGELOG.md</File>
-            </Files>
-        </Files>
+		<Files RTW=".">
+			<File>README.md</File>
+			<File>Makefile</File>
+			<Files Path="../">
+				<File>CHANGELOG.md</File>
+			</Files>
+		</Files>
 	</Files>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
 	</PreprocessorDefinitions>
 	<Misc>
-	    <CB>
-	        <Arguments>
-	            <xpp:cdata>
-                    <Option parameters='--#Project=Testing.xprj' />
-                    <!--Option host_application="/media/csimon/H/bin/xdhwebq" /-->
-                    <Option run_host_application_in_terminal="1" />
-	            </xpp:cdata>
-	        </Arguments>
-	    </CB>
-	</Misc></Project>
+		<CB>
+			<Arguments>
+				<xpp:cdata>
+					<Option parameters='--#Project=Testing.xprj' />
+					<!--Option host_application="/media/csimon/H/bin/xdhwebq" /-->
+					<Option run_host_application_in_terminal="1" />
+				</xpp:cdata>
+			</Arguments>
+		</CB>
+	</Misc>
+</Project>

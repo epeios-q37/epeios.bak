@@ -21,72 +21,60 @@
 				<Translation language="en">Launch substitution.</Translation>
 			</Translations>
 			<!-- Flags -->
-			<Translations text="TestFlagDescription">
-				<Translation language="fr">fanion de test.</Translation>
-				<Translation language="en">test flag.</Translation>
-			</Translations>
 			<!-- Option descriptions -->
 			<Translations text="TagDelimiterOptionDescription">
 				<Translation language="fr">Delimiteur de balise</Translation>
 				<Translation language="en">Tag delimiter.</Translation>
-			</Translations>
-			<Translations text="TextMarkerOptionDescription">
-				<Translation language="fr">Marqueur de texte</Translation>
-				<Translation language="en">Text marker</Translation>
-			</Translations>
-			<Translations text="FileMarkerOptionDescription">
-				<Translation language="fr">Marqueur de fichier</Translation>
-				<Translation language="en">File marker</Translation>
-			</Translations>
-			<Translations text="Command MarkerOptionDescription">
-				<Translation language="fr">Marqueur de commande</Translation>
-				<Translation language="en">Command marker</Translation>
 			</Translations>
 			<!-- Option labels -->
 			<Translations text="TagDelimiterOptionLabel">
 				<Translation language="fr">délimiteur</Translation>
 				<Translation language="en">delimiter</Translation>
 			</Translations>
-			<Translations text="TextMarkerOptionLabel">
-				<Translation language="fr">mt</Translation>
-				<Translation language="en">tm</Translation>
-			</Translations>
-			<Translations text="FileMarkerOptionLabel">
-				<Translation language="fr">mf</Translation>
-				<Translation language="en">fm</Translation>
-			</Translations>
-			<Translations text="CommandMarkerOptionLabel">
-				<Translation language="fr">mc</Translation>
-				<Translation language="en">cm</Translation>
-			</Translations>
 			<!-- Argument descriptions -->
 			<Translations text="TagsArgumentDescription">
 				<Translation language="fr">Fichier des balises.</Translation>
 				<Translation language="en">Tags file.</Translation>
+			</Translations>
+			<Translations text="InputArgumentDescription">
+				<Translation language="fr">Nom du fichier d'entrée (utilisation de l'entrée standard si absent).</Translation>
+				<Translation language="en">Input file name (use of standard input if missing).</Translation>
+			</Translations>
+			<Translations text="OutputArgumentDescription">
+				<Translation language="fr">Nom du fichier de sortie (utilisation de la sortie standard si absent).</Translation>
+				<Translation language="en">Output file name (use of standard output if missing).</Translation>
 			</Translations>
 			<!-- Argument labels -->
 			<Translations text="TagsArgumentLabel">
 				<Translation language="fr">balises</Translation>
 				<Translation language="en">tags</Translation>
 			</Translations>
+			<Translations text="InputArgumentLabel">
+				<Translation language="fr">in</Translation>
+				<Translation language="en">in</Translation>
+			</Translations>
+			<Translations text="OutputArgumentLabel">
+				<Translation language="fr">out</Translation>
+				<Translation language="en">out</Translation>
+			</Translations>
 		</Locale>
 		<Arguments>
 			<xpp:expand select="CLI_Arguments"/>
 			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="[%TagDelimiterOption%] [%TextMarkerOption%] [%FileMarkerOption%] [%CommandMarkerOption%] %TagsArgument%"/>
+			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="[%TagDelimiterOption%] %TagsArgument% [%InputArgument% [%OutputArgument%]]"/>
 			<!-- Fanaux : 'Path', mais pas de 'Value'. -->
-			<Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
 			<!-- Options : 'Path' ET 'Value'. -->
 			<Argument id="TagDelimiterOption" Description="TagDelimiterOptionDescription" long="delimiter" short="d" Path="Delimiters/@Tag" Label="TagDelimiterOptionLabel"/>
-			<Argument id="TextMarkerOption" Description="TextMarkerOptionDescription" long="text-marker" short="t" Path="Markers/@Text" Label="TextMarkerOptionLabel"/>
-			<Argument id="FileMarkerOption" Description="FileMarkerOptionDescription" long="file-marker" short="f" Path="Markers/@File" Label="FileMarkerOptionLabel"/>
-			<Argument id="CommandMarkerOption" Description="CommandMarkerOptionDescription" long="command-marker" short="c" Path="Markers/@Command" Label="CommandMarkerOptionLabel"/>
 			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
 			<Argument id="TagsArgument" Description="TagsArgumentDescription" Path="Tags" Label="TagsArgumentLabel"/>
+			<Argument id="InputArgument" Description="InputArgumentDescription" Path="Input" Label="InputArgumentLabel"/>
+			<Argument id="OutputArgument" Description="OutputArgumentDescription" Path="Output" Label="OutputArgumentLabel"/>
 			<!-- Affectations des arguments libres-->
 			<Layouts>
-				<Layout command="Test">
-					<Link index="0" Target="TestArgument"/>
+				<Layout command="Process">
+					<Link index="0" Target="TagsArgument"/>
+					<Link index="1" Target="InputArgument"/>
+					<Link index="2" Target="OutputArgument"/>
 				</Layout>
 			</Layouts>
 		</Arguments>

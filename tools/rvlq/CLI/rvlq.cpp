@@ -395,7 +395,7 @@ namespace {
 	qRE
 	}
 
-	void Reveal_( void )
+	void Process_( void )
 	{
 	qRH;
 		str::wString Tags, Input, Output;
@@ -428,7 +428,7 @@ qRB;
 		PrintHeader_();
 	else if ( Command == "License" )
 		epsmsc::PrintLicense( NAME_MC );
-	C( Reveal );
+	C( Process );
 	else
 		qRGnr();
 

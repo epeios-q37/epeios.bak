@@ -112,14 +112,14 @@ namespace dtfptb {
 		bso::size__ Size,
 		flw::rWFlow &Flow )
 	{
-		_FPutInt( Size, sizeof( Size ), Flow );
+		FPutInt_( Size, sizeof( Size ), Flow );
 	}
 
 	template <typename fd> inline bso::size__ FGet(
 		fd &FD,
 		bso::size__ &Size )
 	{
-		return Size = _FGetInt( FD, sizeof( Size ) );
+		return Size = FGetInt_( FD, sizeof( Size ) );
 	}
 # endif
 
@@ -166,14 +166,14 @@ namespace dtfptb {
 		flw::iflow__ &Flow,
 		bso::size__ &Size )
 	{
-		return Size = _VGetUHuge( Flow, BSO_SIZE_MAX );
+		return Size = VGetUHuge_(Flow, BSO_SIZE_MAX, NULL);
 	}
 
 	inline void VPut(
 		bso::size__ Size,
 		flw::oflow__ &Flow )
 	{
-		_VPutUHuge( Size, Flow );
+		VPutUHuge_(Size, Flow);
 	}
 # endif
 

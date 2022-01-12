@@ -31,8 +31,21 @@
 		</Modules>
 		<Module>registry</Module>
 	</Modules>
-	<Files/>
-    <RTW>
-        <Dir>rvlq-cli</Dir>
-    </RTW>
+	<Files>
+		<Files RTW="./">
+			<File>README.md</File>
+			<File>Makefile</File>
+			<Files Path="../">
+				<File>CHANGELOG.md</File>
+			</Files>
+			<Files RTW="test/">
+				<File>Source.txt</File>
+				<File>Tags.txt</File>
+				<File>File.txt</File>
+			</Files>			</Files>
+
+		</Files>
+
+	<RTW Folder="rvlq-cli">
+	</RTW>
 </Project>
