@@ -7,6 +7,14 @@
 		<Translation language="fr">Substitutions de balises.</Translation>
 		<Translation language="en">Tag substitutions</Translation>
 	</Translations>
+	<Translations text="ErrorInSourceAt">
+		<Translation language="fr">Erreur à la ligne %1 colonne %2 dans le flux d'entrée.</Translation>
+		<Translation language="en">Error at line %1 column %2 in the input flow.</Translation>
+	</Translations>
+	<Translations text="ErrorInTagsAt">
+		<Translation language="fr">Erreur à la ligne %1 dans la définition des balises.</Translation>
+		<Translation language="en">Error at line %1 in the tags definition.</Translation>
+	</Translations>
 	<!--
 	<Translations text="">
 		<Translation language="fr"></Translation>

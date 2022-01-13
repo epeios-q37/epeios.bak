@@ -70,16 +70,22 @@ namespace {
       typedef tagsbs::cLongTagsRow cTags_;
 
       void FillWithFileContent_(
-        const str::dString &Filename,
+        const fnm::rName &Path,
+        const str::dString &BaseFilename,
         flw::rWFlow &Output)
       {
       qRH;
         flf::rRFlow TagContent;
+        ntvstr::rString Filename;
       qRB;
-        if ( Filename.Amount() == 0 )
+        if ( BaseFilename.Amount() == 0 )
           qRGnr();
 
-        TagContent.Init(Filename);
+        Filename.Init();
+        fnm::BuildPath(Path, BaseFilename, "", Filename);
+
+        if ( !TagContent.Init(Filename,qRPU) )
+          sclm::ReportFileOpeningErrorAndAbort(Filename);
 
         flw::Copy(TagContent, Output);
       qRR;
@@ -112,6 +118,7 @@ namespace {
     private:
       qCRMV(dTypes, T_, Types_);
       qCRMV(str::dStrings, D_, Definitions_);
+      fnm::rName Path_;
     protected:
       virtual bso::bool__ TAGSBSHandleTag(
         sdr::sRow TagRow,
@@ -128,10 +135,10 @@ namespace {
           D_()(TagRow).WriteToFlow(Output, false);
           break;
         case tFile:
-          FillWithFileContent_( D_()(TagRow), Output);
+          FillWithFileContent_(Path_, D_()(TagRow), Output);
           break;
         case tCommand:
-          FillWithCommandResult_( D_()(TagRow), Output);
+          FillWithCommandResult_(D_()(TagRow), Output);
           break;
         default:
           qRGnr();
@@ -141,18 +148,21 @@ namespace {
         return true;
       }
     public:
-      void reset(bso::sBool = true)
+      void reset(bso::sBool P = true)
       {
         Types_ = NULL;
         Definitions_ = NULL;
+        Path_.reset(P);
       }
       qCVDTOR(sCallback_);
       void Init(
         const dTypes &Types,
-        const str::dStrings &Definitions)
+        const str::dStrings &Definitions,
+        const fnm::rName &Path)
       {
         Types_ = &Types;
         Definitions_ = &Definitions;
+        Path_.Init(Path);
       }
     };
 	}
@@ -162,6 +172,7 @@ namespace {
 		const str::dStrings &Tags,
 		const dTypes &Types,
 		const str::dStrings &Definitions,
+		const fnm::rName &Path,
 		fdr::rWDriver &OutputDriver)
 	{
 	qRH;
@@ -174,11 +185,11 @@ namespace {
 		XFlow.Init(Input, utf::f_Default);
 		Output.Init(OutputDriver);
 
-		Callback.Init(Types, Definitions);
+		Callback.Init(Types, Definitions, Path);
 
 		if ( !tagsbs::SubstituteLongTags(XFlow, Tags, Callback, Output, sclm::MGetChar(registry::parameter::TagDelimiter)) ) {
       xtf::sPos Pos = XFlow.Position();
-      sclm::ReportAndAbort("ErrorAt", Pos.Line, Pos.Column);
+      sclm::ReportAndAbort("ErrorInSourceAt", Pos.Line, Pos.Column);
 		}
 	qRR;
 	qRT;
@@ -189,14 +200,15 @@ namespace {
 		const str::dString &InputFilename,
 		const str::dStrings &Tags,
 		const dTypes &Types,
-		const str::dStrings &Definitionss,
+		const str::dStrings &Definitions,
+		const fnm::rName &Path,
 		const str::dString &OutputFilename)
 	{
 	qRH;
 		sclm::rRDriverRack Input;
 		sclm::rWDriverRack Output;
 	qRB;
-		Reveal_(Input.Init(InputFilename), Tags, Types, Definitionss, Output.Init(OutputFilename) );
+		Reveal_(Input.Init(InputFilename), Tags, Types, Definitions, Path, Output.Init(OutputFilename) );
 	qRR;
 		Input.HandleError();
 		Output.HandleError();
@@ -296,7 +308,7 @@ namespace {
 		str::wString Tag,Definition;
 	qRB;
 		if ( Line.Amount() != 2 )
-      sclm::ReportAndAbort("ErrorAtLineInTags", Line.Location());
+      sclm::ReportAndAbort("ErrorInTagsAt", Line.Location());
 
 		Row = Line.First();
 
@@ -378,6 +390,7 @@ namespace {
 	qRH
 		str::wStrings Tags, Definitions;
 		wTypes Types;
+		fnm::rName Path;
 	qRB
 		tol::Init(Tags, Types, Definitions);
 
@@ -389,7 +402,8 @@ namespace {
     if ( Tags.Amount() != Definitions.Amount() )
       qRGnr();
 
-		Reveal_(InputFilename, Tags, Types, Definitions, OutputFilename);
+    Path.Init();
+		Reveal_(InputFilename, Tags, Types, Definitions, sclm::OGetBoolean(registry::parameter::UseCurrentDir, false) ? Path : fnm::GetLocation(TagsFilename, Path), OutputFilename);
 	qRR
 	qRT
 	qRE

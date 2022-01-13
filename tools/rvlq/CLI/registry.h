@@ -34,6 +34,7 @@ namespace registry {
 			Input,
 			Output,
 			TagDelimiter,
+			UseCurrentDir,
 			CommentMarker,
 			TextMarker,
 			FileMarker,

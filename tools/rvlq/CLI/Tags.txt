@@ -8,3 +8,4 @@ text4		Text with a tabulation here:>\t< thanks to '\\t'
 text5		and another simple texte
 file		%File.txt
 command		@echo -n Current date and time: `date`
+coucou		%/home/csimon/coucou.txt

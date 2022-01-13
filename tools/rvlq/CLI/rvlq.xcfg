@@ -15,23 +15,23 @@
 		</Definitions>
 		<Locale>
 			<xpp:expand select="CLI_Locale"/>
+			<!-- Descriptions -->
 			<!-- Commands -->
 			<Translations text="ProcessCommandDescription">
 				<Translation language="fr">Lancement de la substitution.</Translation>
 				<Translation language="en">Launch substitution.</Translation>
 			</Translations>
 			<!-- Flags -->
-			<!-- Option descriptions -->
+			<Translations text="UseCurrentDirFlagDescription">
+				<Translation language="fr">Utilisation du répertoire courant au lieu de celui où se situe le fichier des balises.</Translation>
+				<Translation language="en">Use of the current dir instead of the tags file one.</Translation>
+			</Translations>
+			<!-- Option -->
 			<Translations text="TagDelimiterOptionDescription">
 				<Translation language="fr">Delimiteur de balise</Translation>
 				<Translation language="en">Tag delimiter.</Translation>
 			</Translations>
-			<!-- Option labels -->
-			<Translations text="TagDelimiterOptionLabel">
-				<Translation language="fr">délimiteur</Translation>
-				<Translation language="en">delimiter</Translation>
-			</Translations>
-			<!-- Argument descriptions -->
+			<!-- Arguments -->
 			<Translations text="TagsArgumentDescription">
 				<Translation language="fr">Fichier des balises.</Translation>
 				<Translation language="en">Tags file.</Translation>
@@ -44,9 +44,15 @@
 				<Translation language="fr">Nom du fichier de sortie (utilisation de la sortie standard si absent).</Translation>
 				<Translation language="en">Output file name (use of standard output if missing).</Translation>
 			</Translations>
-			<!-- Argument labels -->
+			<!-- Labels -->
+			<!-- Options -->
+			<Translations text="TagDelimiterOptionLabel">
+				<Translation language="fr">delimiter</Translation>
+				<Translation language="en">delimiter</Translation>
+			</Translations>
+			<!-- Argument descriptions -->
 			<Translations text="TagsArgumentLabel">
-				<Translation language="fr">balises</Translation>
+				<Translation language="fr">tags</Translation>
 				<Translation language="en">tags</Translation>
 			</Translations>
 			<Translations text="InputArgumentLabel">
@@ -61,9 +67,10 @@
 		<Arguments>
 			<xpp:expand select="CLI_Arguments"/>
 			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="[%TagDelimiterOption%] %TagsArgument% [%InputArgument% [%OutputArgument%]]"/>
+			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="[%TagDelimiterOption%] [%UseCurrentDirFlag%] %TagsArgument% [%InputArgument% [%OutputArgument%]]"/>
 			<!-- Fanaux : 'Path', mais pas de 'Value'. -->
-			<!-- Options : 'Path' ET 'Value'. -->
+			<Argument id="UseCurrentDirFlag" Description="UseCurrentDirFlagDescription" long="use-current-dir" Path="@UseCurrentDir" Value="Yes"/>
+ 			<!-- Options : 'Path' ET 'Value'. -->
 			<Argument id="TagDelimiterOption" Description="TagDelimiterOptionDescription" long="delimiter" short="d" Path="Delimiters/@Tag" Label="TagDelimiterOptionLabel"/>
 			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
 			<Argument id="TagsArgument" Description="TagsArgumentDescription" Path="Tags" Label="TagsArgumentLabel"/>

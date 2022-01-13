@@ -22,9 +22,10 @@
 
 using namespace registry;
 
- rEntry registry::parameter::Tags( "Tags", sclr::Parameters );
- rEntry registry::parameter::Input( "Input", sclr::Parameters );
- rEntry registry::parameter::Output( "Output", sclr::Parameters );
+rEntry registry::parameter::UseCurrentDir("@UseCurrentDir", sclr::Parameters);
+rEntry registry::parameter::Tags( "Tags", sclr::Parameters );
+rEntry registry::parameter::Input( "Input", sclr::Parameters );
+rEntry registry::parameter::Output( "Output", sclr::Parameters );
 
 namespace {
   rEntry Delimiters_("Delimiters", sclr::Parameters);

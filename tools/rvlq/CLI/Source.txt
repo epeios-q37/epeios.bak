@@ -5,3 +5,4 @@ Text 4: $text4$
 Text 1 again followed by text 5: $text1$, $text5$
 File content: $file$
 Command output: $command$
+coucou: $coucou$

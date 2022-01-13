@@ -528,22 +528,19 @@ bso::bool__ tagsbs::SubstituteLongTags(
 	flw::oflow__ &Output,
 	char Marker )
 {
-	bso::bool__ Success = false;;
+	bso::sBool Error = false;
 qRH
 	str::wString Tag;
 	xtf::sUTF UTF;
-	bso::sBool Error = false;
 qRB
-	while ( !Input.EndOfFlow() ) {
+	while ( !Input.EndOfFlow() && !Error ) {
 		if ( Input.View() == Marker ) {
 			Tag.Init();
 			if ( GetTag_(Input, Tag, Marker, Error) ) {
 				if ( !Callback.HandleTag(Tag, Output) ) {
-					break;
+					Error = true;
 				}
-			} else if ( Error )
-        break;
-      else
+			} else if ( !Error )
 				Output.Put(Marker);
 		} else {
 		  UTF.Init();
@@ -551,12 +548,10 @@ qRB
 			Output.Write(UTF.Data, UTF.Size);
 		}
 	}
-
-	Success = !Error && Input.EndOfFlow();
 qRR
 qRT
 qRE
-	return Success;
+	return !Error;
 }
 
 tol::E_XROW tagsbs::SubstituteLongTags(

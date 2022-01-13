@@ -10,6 +10,9 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2022-01-13
+- TAGSBS: fixing unknown tag not detected issue when at the vary end of the input flow,
+
 ## 2022-01-12
 - DTFPTB: fixing typo,
 
