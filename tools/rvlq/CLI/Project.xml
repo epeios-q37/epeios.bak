@@ -45,7 +45,7 @@
 			</Files>			</Files>
 
 		</Files>
-
 	<RTW Folder="rvlq-cli">
+		<CI Parameters="test/Tags.txt test/Source.txt"/>
 	</RTW>
 </Project>
