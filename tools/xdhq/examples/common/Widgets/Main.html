@@ -71,11 +71,11 @@ callbacks = {
   <fieldset>
     <p>How to contact you:</p>
     <div>
-      <input type="radio" id="rdEmail" name="rdContact" value="Email" xdh:onevent="rdSelect">
+      <input type="radio" name="rdContact" value="Email" xdh:onevent="rdSelect">
       <label for="rdEmail">Email</label>
-      <input type="radio" id="rdPhone" name="rdContact" value="Phone" xdh:onevent="rdSelect">
+      <input type="radio" name="rdContact" value="Phone" xdh:onevent="rdSelect">
       <label for="rdPhone">Phone</label>
-      <input type="radio" id="rdMail" name="rdContact" value="Mail" xdh:onevent="rdSelect">
+      <input type="radio" name="rdContact" value="Mail" xdh:onevent="rdSelect">
       <label for="rdMail">Mail (post)</label>
     </div>
     <p></p>
@@ -94,7 +94,7 @@ callbacks = {
   <pre class="lang-python">
 callbacks = {
   "rdSelect": lambda dom, id: dom.set_value("rdOutput", dom.get_value(id)),
-  "rdSubmit": lambda dom, id: dom.alert(f'Selected method: "{dom.get_value(id)}"' ),
+  "rdSubmit": lambda dom, id: dom.alert(f'Selected method: "{dom.get_value(id)}"'),
 } </pre>
 </fieldset>
 <fieldset class="hidden" id="datalist">

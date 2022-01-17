@@ -1,6 +1,6 @@
 # rvlq-cli
 
-[![MacOS](https://github.com/epeios-q37/rvlq-cli/actions/workflows/MacOS.yml/badge.svg)](https://github.com/epeios-q37/rvlq-cli/actions/workflows/MacOS.yml) [![MacOS](https://github.com/epeios-q37/rvlq-cli/actions/workflows/MacOS.yml/badge.svg)](https://github.com/epeios-q37/rvlq-cli/actions/workflows/MacOS.yml) [![Windows](https://github.com/epeios-q37/rvlq-cli/actions/workflows/Windows.yml/badge.svg)](https://github.com/epeios-q37/rvlq-cli/actions/workflows/Windows.yml)
+[![MacOS](https://github.com/epeios-q37/rvlq-cli/actions/workflows/MacOS.yml/badge.svg)](https://github.com/epeios-q37/rvlq-cli/actions/workflows/MacOS.yml) [![Ubuntu](https://github.com/epeios-q37/rvlq-cli/actions/workflows/Ubuntu.yml/badge.svg)](https://github.com/epeios-q37/rvlq-cli/actions/workflows/Ubuntu.yml) [![Windows](https://github.com/epeios-q37/rvlq-cli/actions/workflows/Windows.yml/badge.svg)](https://github.com/epeios-q37/rvlq-cli/actions/workflows/Windows.yml)
 
 *RVLq* replaces tags with text, file content or command output.
 

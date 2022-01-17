@@ -1,5 +1,5 @@
 """
-To test session loops.
+Session loops.
 """
 
 import os, sys

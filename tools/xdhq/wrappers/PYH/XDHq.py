@@ -108,7 +108,7 @@ class DOM:
 		return self._dom.call("Execute_1" ,type,script)
 
 	def execute_void(self,script):
-		return self._dom.call("Execute_1" ,_VOID,script)
+		self._dom.call("Execute_1" ,_VOID,script)
 
 	def execute_string(self,script):
 		return self._dom.call("Execute_1" ,_STRING,script)

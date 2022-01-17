@@ -1,5 +1,5 @@
 """
-To test JS console log stuff.
+JS console log stuff.
 """
 
 import os, sys
