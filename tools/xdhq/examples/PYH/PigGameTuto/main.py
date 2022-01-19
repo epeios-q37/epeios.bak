@@ -264,8 +264,6 @@ def ac_hold(user, dom):
 
   dom.disable_elements(PLAY_BUTTONS) 
 
-#  dom.raw_send("%Quit")
-
   if user.player == 0:
     become_player(user, dom)
   elif user.player != current:

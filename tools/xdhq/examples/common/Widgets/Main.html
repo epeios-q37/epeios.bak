@@ -39,13 +39,13 @@ callbacks = {
   <fieldset>
     <div>
       <p>Specify the type of vehicle you own:</p>
-      <input type="checkbox" id="cbBicycle" xdh:onevent="cbSelect">
+      <input type="checkbox" id="cbBicycle" xdh:onevent="cbSelect"/>
       <label for="cbBicycle">Bicycle</label>
       <br />
-      <input type="checkbox" id="cbCar" xdh:onevent="cbSelect">
+      <input type="checkbox" id="cbCar" xdh:onevent="cbSelect"/>
       <label for="cbCar">Car</label>
       <br />
-      <input type="checkbox" id="cbPirogue" xdh:onevent="cbSelect">
+      <input type="checkbox" id="cbPirogue" xdh:onevent="cbSelect"/>
       <label for="cbPirogue">Pirogue</label>
     </div>
     <p></p>
@@ -71,12 +71,9 @@ callbacks = {
   <fieldset>
     <p>How to contact you:</p>
     <div>
-      <input type="radio" name="rdContact" value="Email" xdh:onevent="rdSelect">
-      <label for="rdEmail">Email</label>
-      <input type="radio" name="rdContact" value="Phone" xdh:onevent="rdSelect">
-      <label for="rdPhone">Phone</label>
-      <input type="radio" name="rdContact" value="Mail" xdh:onevent="rdSelect">
-      <label for="rdMail">Mail (post)</label>
+      <label><input type="radio" name="rdContact" value="Email" xdh:onevent="rdSelect"/><span>Email</span></label>
+      <label><input type="radio" name="rdContact" value="Phone" xdh:onevent="rdSelect"/><span>Phone</span></label>
+      <label><input type="radio" name="rdContact" value="Mail" xdh:onevent="rdSelect"/><span>Mail (post)</span></label>
     </div>
     <p></p>
     <div>

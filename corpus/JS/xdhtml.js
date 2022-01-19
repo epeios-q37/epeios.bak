@@ -353,6 +353,10 @@ function setContent(idOrElement, content) {
 	}
 }
 
+function getCheckedRadio(element) {
+	return document.querySelector('input[name="' + getXDHAttribute(element,  xdhRadio) + '"]:checked');
+}
+
 function setValue(idOrElement, value) {
 	var element = getElement(idOrElement);
 
@@ -364,7 +368,10 @@ function setValue(idOrElement, value) {
 				switch (element.getAttribute("type")) {
 					case "checkbox":
 					case "radio":
-						element.checked = value.toLowerCase().trim() === 'true';
+						if ( element.hasAttribute("value") )
+							element.value = value;
+						else
+							element.checked = value.toLowerCase().trim() === 'true';
 						break;
 					default:
 						element.value = value;
@@ -375,8 +382,18 @@ function setValue(idOrElement, value) {
 				element.value = value;
 				break;
 			default:
-				element.innerHTML = value;
-				// throw tagName + ": content setting not handled !";
+				if ( hasXDHAttribute( element, xdhRadio ) ) {
+					if ( value === "" ) {
+						let checked = getCheckedRadio(element);
+						if ( checked )
+							checked.checked = false;	
+					} else {
+						let radio = document.querySelector('input[name="' + getXDHAttribute(element,  xdhRadio) + '"][value="' + value + '"]');
+						if ( radio )
+							radio.checked = true;
+					}
+				}	else
+					element.innerHTML = value;
 				break;
 		}
 
@@ -580,7 +597,7 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 			break;
 		case "SELECT":
 			if (element.selectedIndex != -1)
-				value =  element.options[element.selectedIndex].value;
+				value = element.options[element.selectedIndex].value;
 			break;
 		case "OPTION":
 			value =  element.value;
@@ -591,7 +608,8 @@ function getValue(elementOrId)	// Returns the value of element of id 'id'.
 			break;
 		default:
 			if ( hasXDHAttribute( element, xdhRadio ) ) {
-				if ( checked = document.querySelector('input[name="' + getXDHAttribute(element,  xdhRadio) + '"]:checked'))
+				let checked = getCheckedRadio(element);
+				if ( checked )
 					value = checked.value;
 			}	else
 				value = element.innerHTML;

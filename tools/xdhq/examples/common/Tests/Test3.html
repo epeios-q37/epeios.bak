@@ -1,13 +1,21 @@
 <p>How to contact you:</p>
-<div>
-  <input type="radio" name="rdContact" value="Email" xdh:onevent="rdSelect">
-  <label for="rdEmail">Email</label>
-  <input type="radio" name="rdContact" value="Phone" xdh:onevent="rdSelect">
-  <label for="rdPhone">Phone</label>
-  <input type="radio" name="rdContact" value="Mail" xdh:onevent="rdSelect">
-  <label for="rdMail">Mail (post)</label>
+<div id="rdContact" xdh:radio="rdContact">
+  <label>
+    <input type="radio" name="rdContact" value="Email" xdh:onevent="rdSelect">
+    <span>Email</span>
+  </label>
+  <span>&nbsp;</span>
+  <label>
+    <input type="radio" name="rdContact" value="Phone" xdh:onevent="rdSelect">
+    <span>Phone</span>
+  </label>
+  <span>&nbsp;</span>
+  <label>
+    <input type="radio" name="rdContact" value="Mail" xdh:onevent="rdSelect">
+    <span>Mail (post)</span>
+</label>
 </div>
-<p></p>
+<p/>
 <div>
   <span>Selected contact method: </span>
   <output id="rdOutput">
@@ -16,10 +24,11 @@
 </div>
 <p></p>
 <div>
-  <button xdh:onevent="rdSubmit" xdh:radio="rdContact">Submit</button>
+  <button xdh:onevent="rdSubmit">Submit</button>
 </div>
 <select xdh:onevent="rdCheck">
   <option selected="" disabled="">Select radio-button to check</option>
+  <option value="">None</option>
   <option value="Email">Email</option>
   <option value="Phone">Phone</option>
   <option value="Mail">Mail (post)</option>  
