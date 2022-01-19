@@ -381,6 +381,15 @@ function setValue(idOrElement, value) {
 			case "TEXTAREA":
 				element.value = value;
 				break;
+			case "SELECT":
+				if ( value === "" )
+					element.selectedIndex = -1;
+				else {
+					let option = element.querySelector('option[value="' + value + '"]');
+					if ( option )
+						element.selectedIndex = option.index;
+				}
+				break;
 			default:
 				if ( hasXDHAttribute( element, xdhRadio ) ) {
 					if ( value === "" ) {
