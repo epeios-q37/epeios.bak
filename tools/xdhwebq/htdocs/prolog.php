@@ -30,8 +30,8 @@ $out = str_replace(array("\r", "\n", "\t"), '',<<<MLS
 			<script src="xdhtml.js"></script>
 			<script src="xdhwebq.js"></script>
 			<!-- Below both scripts are for PROD environment. -->
-			<script src="xdhtml_20211210.js"></script>
-			<script src="xdhwebq_20211210.js"></script>
+			<script src="xdhtml_20220120.js"></script>
+			<script src="xdhwebq_20220120.js"></script>
 			<script data-goatcounter="https://faas.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>			
 			<style id="XDHStyle">
 				.xdh_style {
