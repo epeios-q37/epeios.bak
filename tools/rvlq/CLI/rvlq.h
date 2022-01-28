@@ -26,7 +26,7 @@
 # define NAME_MC			"RVLq"
 # define NAME_UC			"RVLQ"
 # define NAME_LC			"rvlq"
-# define WEBSITE_URL		"http://q37.info/tools/rvlq/"
+# define WEBSITE_URL		"https://q37.info/s/3zhxvhdx"
 # define AUTHOR_NAME		"Claude SIMON"
 # define AUTHOR_CONTACT		"http://q37.info/contact/"
 # define OWNER_NAME			"Claude SIMON"

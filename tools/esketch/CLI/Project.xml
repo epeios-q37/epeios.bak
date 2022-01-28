@@ -31,7 +31,11 @@
 		<Module>registry</Module>
 	</Modules>
 	<Files/>
-    <RTW>
-        <Dir>esketch-cli</Dir>
-    </RTW>
+	<RTW Folder="esketch-cli">
+	  <!--
+      If '@Parameters'' empty, launching 'help' and 'version' GitHub actions job, but not 'test'.
+      If '@Parameters' absent no ''help', 'version' nor 'test' GitHub action jobs launched.
+    -->
+		<CI Parameters=""/>
+	</RTW>
 </Project>

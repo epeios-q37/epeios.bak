@@ -5,7 +5,7 @@
 		<xpp:expand value-of="q37.xpp"/>
   <xpp:expand href="../../../CLI.xcfg"/>
 		<Parameters>
-			<Language>fr</Language>
+			<Language>en</Language>
 			<Command>Process</Command>
 			<!-- Default command -->
 			<Markers Comment="#" Text="&amp;" File="%" Command="@"/>
