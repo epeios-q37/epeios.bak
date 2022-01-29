@@ -32,7 +32,7 @@ namespace rncrtn {
 
 namespace rnc {
 	inline bso::sBool GetNumber(
-		xtf::sIFlow &Flow,
+		xtf::sRFlow &Flow,
 		mthrtn::dRational &Number )
 	{
 		if ( !Flow.EndOfFlow() ) {

@@ -73,7 +73,7 @@ namespace rnc{
 	using rncflt::dFloat;
 
 	inline bso::sBool GetNumber(
-		xtf::sIFlow &Flow,
+		xtf::sRFlow &Flow,
 		str::dString &Number )
 	{
 		if ( Flow.EndOfFlow() )
@@ -105,7 +105,7 @@ namespace rnc{
 	}
 
 	inline bso::sBool GetNumber(
-		xtf::sIFlow &Flow,
+		xtf::sRFlow &Flow,
 		rncflt::dFloat &Number )
 	{
 		bso::sBool Success = false;

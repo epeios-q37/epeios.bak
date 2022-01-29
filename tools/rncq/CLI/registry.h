@@ -20,13 +20,13 @@
 #ifndef REGISTRY_INC_
 # define REGISTRY_INC_
 
-# include "sclrgstry.h"
+# include "sclr.h"
 
 namespace registry {
-	using namespace sclrgstry;
+	using namespace sclr;
 
 	namespace parameter {
-		using namespace sclrgstry::parameter;
+		using namespace sclr::parameter;
 
 		extern rEntry Expression;	// Expression to evaluate.
 		extern rEntry RPN;			// It 'true', expression is in RPN.
@@ -35,7 +35,7 @@ namespace registry {
 	}
 
 	namespace definition {
-		using namespace sclrgstry::definition;
+		using namespace sclr::definition;
 	}
 }
 

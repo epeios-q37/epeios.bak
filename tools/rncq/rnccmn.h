@@ -31,7 +31,7 @@ namespace rnccmn {
 	typedef stkbch::qBSTACKdl( bso::sChar ) dOperators;
 	qW( Operators );
 
-	inline void SkipSpaces( xtf::sIFlow &Flow )
+	inline void SkipSpaces( xtf::sRFlow &Flow )
 	{
 		while ( !Flow.EndOfFlow() && ( Flow.View() == ' ' ) )
 			Flow.Get();
@@ -45,39 +45,38 @@ namespace rnccmn {
 	qRH
 		wnumber Op1, Op2, Result;
 	qRB
-		if ( Numbers.Amount() < 2 )
-			qRReturn;
+		if ( Numbers.Amount() >= 2 ) {
+      Op1.Init();
+      Op2.Init();
 
-		Op1.Init();
-		Op2.Init();
+      Result.Init();
 
-		Result.Init();
+      Numbers.Pop( Op2 );
+      Numbers.Pop( Op1 );
 
-		Numbers.Pop( Op2 );
-		Numbers.Pop( Op1 );
+      switch ( Operator ) {
+      case '+':
+        rnc::Add( Op1, Op2, Result );
+        break;
+      case '-':
+        rnc::Sub( Op1, Op2, Result );
+        break;
+      case '*':
+      case 'x':
+      case 'X':
+        rnc::Mul( Op1, Op2, Result );
+        break;
+      case ':':
+      case '/':
+        rnc::Div( Op1, Op2, Result );
+        break;
+      default:
+        Success = false;
+        break;
+      }
 
-		switch ( Operator ) {
-		case '+':
-			rnc::Add( Op1, Op2, Result );
-			break;
-		case '-':
-			rnc::Sub( Op1, Op2, Result );
-			break;
-		case '*':
-		case 'x':
-		case 'X':
-			rnc::Mul( Op1, Op2, Result );
-			break;
-		case ':':
-		case '/':
-			rnc::Div( Op1, Op2, Result );
-			break;
-		default:
-			Success = false;
-			break;
+      Numbers.Push( Result );
 		}
-
-		Numbers.Push( Result );
 	qRR
 	qRT
 	qRE

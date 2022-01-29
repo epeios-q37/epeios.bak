@@ -37,7 +37,7 @@ namespace rncalg {
 	}
 
 	template <typename dnumber, typename wnumber, typename dnumbers, typename wnumbers> bso::sBool Evaluate(
-		xtf::sIFlow &Flow,
+ 		xtf::sRFlow &Flow,
 		dnumber &Result )
 	{
 		bso::sBool Success = false;
@@ -53,39 +53,37 @@ namespace rncalg {
 		Operators.Init();
 
 		Number.Init();
-		if ( !rnc::GetNumber( Flow, Number ) )
-			qRReturn;
-		Numbers.Push( Number );
 
-		rnccmn::SkipSpaces( Flow );
+		if ( rnc::GetNumber( Flow, Number ) ) {
+      Numbers.Push( Number );
 
-		while ( !Flow.EndOfFlow() ) {
-			Operator = Flow.Get();
-			Operators.Push( Operator );
+      rnccmn::SkipSpaces( Flow );
 
-			rnccmn::SkipSpaces( Flow );
+      while ( !Flow.EndOfFlow() ) {
+        Operator = Flow.Get();
+        Operators.Push( Operator );
 
-			Number.Init();
-			if ( !rnc::GetNumber( Flow, Number ) )
-				qRReturn;
-			Numbers.Push( Number );
+        rnccmn::SkipSpaces( Flow );
 
-			rnccmn::SkipSpaces( Flow );
+        Number.Init();
 
-			if ( !Handle_<dnumber, wnumber, dnumbers>( Numbers, Operators ) )
-				qRReturn;
+        if ( !rnc::GetNumber( Flow, Number ) )
+          break;
+
+        Numbers.Push( Number );
+
+        rnccmn::SkipSpaces( Flow );
+
+        if ( !Handle_<dnumber, wnumber, dnumbers>( Numbers, Operators ) )
+          break;
+      }
+
+      if ( Flow.EndOfFlow() && ( Numbers.Amount() == 1 ) && ( Operators.Amount() == 0 ) ) {
+        Numbers.Pop( Result );
+
+        Success = true;
+      }
 		}
-
-		if ( Numbers.Amount() != 1 )
-			qRReturn;
-
-		if ( Operators.Amount() != 0 )
-			qRReturn;
-
-
-		Numbers.Pop( Result );
-
-		Success = true;
 	qRR
 	qRT
 	qRE

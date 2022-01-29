@@ -28,7 +28,7 @@ namespace rncrpn {
 	using rnccmn::wOperators;
 
 	template <typename dnumber, typename wnumber, typename dnumbers, typename wnumbers> bso::sBool Evaluate(
-		xtf::sIFlow &Flow,
+		xtf::sRFlow &Flow,
 		dnumber &Result )
 	{
 		bso::sBool Success = false;
@@ -45,38 +45,36 @@ namespace rncrpn {
 
 		Number.Init();
 
-		if ( !rnc::GetNumber( Flow, Number ) )
-			qRReturn;
+		if ( rnc::GetNumber( Flow, Number ) ) {
+      Numbers.Push( Number );
 
-		Numbers.Push( Number );
+      rnccmn::SkipSpaces( Flow );
 
-		rnccmn::SkipSpaces( Flow );
+      while ( !Flow.EndOfFlow() ) {
+        if ( isdigit( Flow.View() ) ) {
+          Number.Init();
+          if ( !rnc::GetNumber( Flow, Number ) )
+            break;
+          Numbers.Push( Number );
 
-		while ( !Flow.EndOfFlow() ) {
-			if ( isdigit( Flow.View() ) ) {
-				Number.Init();
-				if ( !rnc::GetNumber( Flow, Number ) )
-					qRReturn;
-				Numbers.Push( Number );
+          rnccmn::SkipSpaces( Flow );
 
-				rnccmn::SkipSpaces( Flow );
+        } else {
+          Operator = Flow.Get();
 
-			} else {
-				Operator = Flow.Get();
+          if ( !rnccmn::Handle<wnumber, dnumbers>( Numbers, Operator ) )
+            break;
 
-				if ( !rnccmn::Handle<wnumber, dnumbers>( Numbers, Operator ) )
-					qRReturn;
+          rnccmn::SkipSpaces( Flow );
+        }
+      }
 
-				rnccmn::SkipSpaces( Flow );
-			}
+      if ( Flow.EndOfFlow() && ( Numbers.Amount() == 1 ) ) {
+        Numbers.Pop( Result );
+
+        Success = true;
+      }
 		}
-
-		if ( Numbers.Amount() != 1 )
-			qRReturn;
-
-		Numbers.Pop( Result );
-
-		Success = true;
 	qRR
 	qRT
 	qRE

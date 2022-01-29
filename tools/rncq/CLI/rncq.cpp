@@ -26,9 +26,9 @@
 #include "rncflt.h"
 #include "rncrtn.h"
 
-#include "scltool.h"
-#include "sclerror.h"
-#include "sclmisc.h"
+#include "sclt.h"
+#include "scle.h"
+#include "sclm.h"
 
 #include "err.h"
 #include "cio.h"
@@ -38,6 +38,13 @@
 #include "flf.h"
 #include "mthrtn.h"
 #include "stkcrt.h"
+
+SCLI_DEF( rncq, NAME_LC, NAME_MC );
+
+const scli::sInfo &sclt::SCLTInfo( void )
+{
+	return rncq::Info;
+}
 
 using cio::CErr;
 using cio::COut;
@@ -60,14 +67,14 @@ namespace {
 #undef D
 		}
 
-# define REPORT( m )	sclmisc::ReportAndAbort( message_::m )
+# define REPORT( m )	sclm::ReportAndAbort( message_::m )
 
 		namespace {
 			template <typename dnumber, typename wnumber, typename dnumbers, typename wnumbers> bso::sBool Evaluate_(
-				xtf::sIFlow &Flow,
+				xtf::sRFlow &Flow,
 				dnumber &Number )
 			{
-				if ( sclmisc::BGetBoolean( registry::parameter::RPN ) )
+				if ( sclm::MGetBoolean( registry::parameter::RPN ) )
 					return rncrpn::Evaluate<dnumber, wnumber, dnumbers, wnumbers>( Flow, Number );
 				else
 					return rncalg::Evaluate<dnumber, wnumber, dnumbers, wnumbers>( Flow, Number );
@@ -76,7 +83,7 @@ namespace {
 
 		namespace rational_ {
 			bso::sBool Evaluate(
-				xtf::sIFlow &IFlow,
+				xtf::sRFlow &IFlow,
 				txf::sWFlow &OFlow )
 			{
 				bso::sBool Success = false;
@@ -88,7 +95,7 @@ namespace {
 				if ( ( Success = Evaluate_<mthrtn::dRational, mthrtn::wRational, rncrtn::dRationals, rncrtn::wRationals>( IFlow, Result ) ) ) {	// '( ( ... ) )' to avoid a warning by 'clang'.
 					Result.Simplify();
 
-					if ( sclmisc::BGetBoolean( registry::parameter::ToFloat ) )
+					if ( sclm::MGetBoolean( registry::parameter::ToFloat ) )
 						rncflt::Print( Result.GetLongFloat(), OFlow );
 					else
 						OFlow << Result.N << " / " << Result.D << txf::nl;
@@ -102,7 +109,7 @@ namespace {
 
 		namespace float_ {
 			bso::sBool Evaluate(
-				xtf::sIFlow &IFlow,
+				xtf::sRFlow &IFlow,
 				txf::sWFlow &OFlow )
 			{
 				bso::sBool Success = false;
@@ -126,13 +133,13 @@ namespace {
 		{
 		qRH
 			flx::sStringIFlow SFlow;
-			xtf::sIFlow XFlow;
+			xtf::sRFlow XFlow;
 			bso::sBool Success = false;
 		qRB
 			SFlow.Init( Expression );
 			XFlow.Init( SFlow, utf::f_Guess );
 
-			if ( sclmisc::BGetBoolean( registry::parameter::UseFloat ) )
+			if ( sclm::MGetBoolean( registry::parameter::UseFloat ) )
 				Success = float_::Evaluate( XFlow, cio::COut );
 			else
 				Success = rational_::Evaluate( XFlow, Flow );
@@ -151,7 +158,7 @@ namespace {
 		str::wString Expression;
 	qRB
 		Expression.Init();
-		sclmisc::MGetValue( registry::parameter::Expression, Expression );
+		sclm::MGetValue( registry::parameter::Expression, Expression );
 
 		Evaluate_( Expression, cio::COut );
 
@@ -166,9 +173,9 @@ namespace {
 	else if ( Command == #name )\
 		name##_()
 
-int scltool::SCLTOOLMain(
+int sclt::SCLTMain(
 	const str::dString &Command,
-	const scltool::fOddities &Oddities )
+	const sclt::fOddities &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;
 qRH
@@ -187,7 +194,3 @@ qRT
 qRE
 	return ExitValue;
 }
-
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;
-

@@ -1,70 +1,72 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Configurations xmlns:xpp="http://q37.info/ns/xpp/" >
-	<Configuration target="rncq">
-		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
-		<xpp:expand value-of="q37.xpp"/>
-  <xpp:expand href="../../../TOL.xcfg"/>
-		<Parameters>
-			<Language>en</Language>
-			<Command>Evaluate</Command>
-   <Float>No</Float>
-			<!-- Default command -->
-		</Parameters>
-		<Definitions>
-		</Definitions>
-		<Locale>
-			<xpp:expand select="TOL_Locale"/>
-			<Translations text="EvaluateCommandDescription">
-				<Translation language="fr">Evalue une expression.</Translation>
-				<Translation language="en">Evaluate an expression.</Translation>
-			</Translations>
-   <Translations text="RPNFlagDescription">
-    <Translation language="fr">Expression est en RPN.</Translation>
-    <Translation language="en">Expression is in RPN.</Translation>
-   </Translations>
-   <Translations text="ToFloatFlagDescription">
-    <Translation language="fr">Convertit le résultat en 'float'.</Translation>
-    <Translation language="en">Convert the result in 'float'.</Translation>
-   </Translations>
-   <Translations text="UseFloatFlagDescription">
-    <Translation language="fr">Utilise le type 'float' pour calculer l'expression.</Translation>
-    <Translation language="en">Uses the 'float' type to calculate the expression.</Translation>
-   </Translations>
-   <Translations text="TestOptionDescription">
-				<Translation language="fr">option de test.</Translation>
-				<Translation language="en">test option.</Translation>
-			</Translations>
-			<Translations text="TestOptionLabel">
-				<Translation language="fr">option (fr)</Translation>
-				<Translation language="en">option (en)</Translation>
-			</Translations>
-			<Translations text="ExpressionArgumentDescription">
-				<Translation language="fr">Expression à évaluer.</Translation>
-				<Translation language="en">Expression to evaluate.</Translation>
-			</Translations>
-			<Translations text="ExpressionArgumentLabel">
-				<Translation language="fr">expression</Translation>
-				<Translation language="en">expression</Translation>
-			</Translations>
-		</Locale>
-		<Arguments>
-			<xpp:expand select="TOL_Arguments"/>
-   <!-- Commands : no 'Path' (implicitly equal to 'Parameters/Command'), nor 'Value'. -->
-   <Argument id="EvaluateCommand" Description="EvaluateCommandDescription" long="evaluate" Value="Evaluate" Usage="[%RPNFlag%] [%ToFloatFlag%|%UseFloatFlag%] %ExpressionArgument%"/>
-   <!-- Flag : 'Path' AND 'Value'. -->
-   <Argument id="ToFloatFlag" Description="ToFloatFlagDescription" long="to-float" Path="ToFloat" Value="true"/>
-   <Argument id="UseFloatFlag" Description="UseFloatFlagDescription" long="use-float" Path="UseFloat" Value="true"/>
-   <Argument id="RPNFlag" Description="RPNFlagDescription" long="rpn" Path="RPN" Value="true"/>
-   <!-- Option : 'Path', but NO 'Value'. -->
-   <!--Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/-->
-   <!-- Free arguments : 'Path', but NO 'Value' (NOR 'short', NOR 'long'). -->
-   <Argument id="ExpressionArgument" Description="ExpressionArgumentDescription" Path="Expression" Label="ExpressionArgumentLabel"/>
-   <!-- Affectations of the free arguments. -->
-   <Layouts>
-				<Layout command="Evaluate">
-					<Link index="0" Target="ExpressionArgument"/>
-				</Layout>
-			</Layouts>
-		</Arguments>
-	</Configuration>
+<Configurations xmlns:xpp="http://q37.info/ns/xpp/">
+  <Configuration target="rncq">
+    <xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+    <xpp:expand value-of="q37.xpp"/>
+    <xpp:expand href="../../../CLI.xcfg"/>
+    <Parameters>
+      <Language>en</Language>
+      <Command>Evaluate</Command>
+      <UseFloat>No</UseFloat>
+      <ToFloat>False</ToFloat>
+      <RPN>False</RPN>
+      <!-- Default command -->
+    </Parameters>
+    <Definitions>
+    </Definitions>
+    <Locale>
+      <xpp:expand select="CLI_Locale"/>
+      <Translations text="EvaluateCommandDescription">
+        <Translation language="fr">Evalue une expression.</Translation>
+        <Translation language="en">Evaluate an expression.</Translation>
+      </Translations>
+      <Translations text="RPNFlagDescription">
+        <Translation language="fr">Expression est en RPN.</Translation>
+        <Translation language="en">Expression is in RPN.</Translation>
+      </Translations>
+      <Translations text="ToFloatFlagDescription">
+        <Translation language="fr">Convertit le résultat en 'float'.</Translation>
+        <Translation language="en">Convert the result in 'float'.</Translation>
+      </Translations>
+      <Translations text="UseFloatFlagDescription">
+        <Translation language="fr">Utilise le type 'float' pour calculer l'expression.</Translation>
+        <Translation language="en">Uses the 'float' type to calculate the expression.</Translation>
+      </Translations>
+      <Translations text="TestOptionDescription">
+        <Translation language="fr">option de test.</Translation>
+        <Translation language="en">test option.</Translation>
+      </Translations>
+      <Translations text="TestOptionLabel">
+        <Translation language="fr">option (fr)</Translation>
+        <Translation language="en">option (en)</Translation>
+      </Translations>
+      <Translations text="ExpressionArgumentDescription">
+        <Translation language="fr">Expression à évaluer.</Translation>
+        <Translation language="en">Expression to evaluate.</Translation>
+      </Translations>
+      <Translations text="ExpressionArgumentLabel">
+        <Translation language="fr">expression</Translation>
+        <Translation language="en">expression</Translation>
+      </Translations>
+    </Locale>
+    <Arguments>
+      <xpp:expand select="CLI_Arguments"/>
+      <!-- Commands : no 'Path' (implicitly equal to 'Parameters/Command'), nor 'Value'. -->
+      <Argument id="EvaluateCommand" Description="EvaluateCommandDescription" long="evaluate" Value="Evaluate" Usage="[%RPNFlag%] [%ToFloatFlag%|%UseFloatFlag%] %ExpressionArgument%"/>
+      <!-- Flag : 'Path' AND 'Value'. -->
+      <Argument id="ToFloatFlag" Description="ToFloatFlagDescription" long="to-float" Path="ToFloat" Value="true"/>
+      <Argument id="UseFloatFlag" Description="UseFloatFlagDescription" long="use-float" Path="UseFloat" Value="true"/>
+      <Argument id="RPNFlag" Description="RPNFlagDescription" long="rpn" Path="RPN" Value="true"/>
+      <!-- Option : 'Path', but NO 'Value'. -->
+      <!--Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/-->
+      <!-- Free arguments : 'Path', but NO 'Value' (NOR 'short', NOR 'long'). -->
+      <Argument id="ExpressionArgument" Description="ExpressionArgumentDescription" Path="Expression" Label="ExpressionArgumentLabel"/>
+      <!-- Affectations of the free arguments. -->
+      <Layouts>
+        <Layout command="Evaluate">
+          <Link index="0" Target="ExpressionArgument"/>
+        </Layout>
+      </Layouts>
+    </Arguments>
+  </Configuration>
 </Configurations>
