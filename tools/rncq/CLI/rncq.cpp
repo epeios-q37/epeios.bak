@@ -128,16 +128,16 @@ namespace {
 		}
 
 		void Evaluate_(
-			const str::dString &Expression,
+			fdr::rRDriver &RDriver,
 			txf::sWFlow &Flow )
 		{
 		qRH
-			flx::sStringIFlow SFlow;
+      flw::rDressedRFlow<> RFlow;
 			xtf::sRFlow XFlow;
 			bso::sBool Success = false;
 		qRB
-			SFlow.Init( Expression );
-			XFlow.Init( SFlow, utf::f_Guess );
+      RFlow.Init(RDriver);
+			XFlow.Init( RFlow, utf::f_Guess );
 
 			if ( sclm::MGetBoolean( registry::parameter::UseFloat ) )
 				Success = float_::Evaluate( XFlow, cio::COut );
@@ -152,17 +152,28 @@ namespace {
 		}
 	}
 
+	void Evaluate_( const str::dString &InputFilename )
+	{
+	qRH
+    sclm::rRDriverRack Input;
+	qRB
+		Evaluate_(Input.Init(InputFilename), cio::COut);
+
+		cio::COut.Commit();
+	qRR
+	qRT
+	qRE
+	}
+
 	void Evaluate_( void )
 	{
 	qRH
-		str::wString Expression;
+		str::wString InputFilename;
 	qRB
-		Expression.Init();
-		sclm::MGetValue( registry::parameter::Expression, Expression );
+		InputFilename.Init();
+		sclm::OGetValue( registry::parameter::Input, InputFilename );
 
-		Evaluate_( Expression, cio::COut );
-
-		cio::COut.Commit();
+		Evaluate_(InputFilename);
 	qRR
 	qRT
 	qRE

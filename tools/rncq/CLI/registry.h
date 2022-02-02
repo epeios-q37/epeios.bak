@@ -28,7 +28,7 @@ namespace registry {
 	namespace parameter {
 		using namespace sclr::parameter;
 
-		extern rEntry Expression;	// Expression to evaluate.
+		extern rEntry Input;
 		extern rEntry RPN;			// It 'true', expression is in RPN.
 		extern rEntry ToFloat;		// It 'true', the result is converted to float.
 		extern rEntry UseFloat;		// if 'true', calculation are made using floats.

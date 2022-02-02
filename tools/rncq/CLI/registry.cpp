@@ -21,7 +21,7 @@
 
 using namespace registry;
 
-rEntry registry::parameter::Expression( "Expression", sclr::Parameters );
+rEntry registry::parameter::Input( "Input", sclr::Parameters );
 rEntry registry::parameter::RPN( "RPN", sclr::Parameters );
 rEntry registry::parameter::ToFloat( "ToFloat", sclr::Parameters );
 rEntry registry::parameter::UseFloat( "UseFloat", sclr::Parameters );
