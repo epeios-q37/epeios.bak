@@ -8,6 +8,8 @@
 
 *RVLq* is a command-line tool which replaces tags, mostly in a file, with text, content of a file or the output of a command.
 
+More information about *RVLq* : <https://q37.info/s/3zhxvhdx>.
+
 ## Example
 
 A source file, named `Source.txt`, which contains tags, delimited by `$`:
@@ -54,6 +56,3 @@ Command output: Text issued by the echo command
 
 <!-- Ici se termine la partie copiée de la page du site epeios.q37.info -->
 
-## Resources
-
-More information about *RVLq* : <https://q37.info/s/3zhxvhdx>.

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xpp:bloc xmlns:xpp="http://epeios.q37.info/ns/xpp">
+  <Configuration xmlns:xpp="http://epeios.q37.info/ns/xpp">
+    <xpp:set name="OS" value="Windows"/>
+    <xpp:expand href="Common.xml"/>
+  </Configuration>
+</xpp:bloc>

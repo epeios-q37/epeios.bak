@@ -5,7 +5,7 @@
 	<xpp:expand select="epeios.xlcl"/>
 	<Translations text="ProgramDescription">
 		<Translation language="fr">Substitutions de balises.</Translation>
-		<Translation language="en">Tag substitutions</Translation>
+		<Translation language="en">Tag substitutions.</Translation>
 	</Translations>
 	<Translations text="ErrorInSourceAt">
 		<Translation language="fr">Erreur à la ligne %1 colonne %2 dans le flux d'entrée.</Translation>

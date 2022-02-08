@@ -47,9 +47,11 @@
 	</Files>
   <RTW Folder="rvlq-cli">
 	  <!--
-      If '@Parameters'' empty, launching 'help' and 'version' GitHub actions job, but not 'test'.
-      If '@Parameters' absent no ''help', 'version' nor 'test' GitHub action jobs launched.
+      If 'Parameters'' empty, launching 'help' and 'version' GitHub actions job, but not 'test'.
+      If 'Parameters' absent no ''help', 'version' nor 'test' GitHub action jobs launched.
     -->
-		<CI Parameters="test/Tags.txt test/Source.txt"/>
+		<CI>
+			<Parameters>test/Tags.txt test/Source.txt</Parameters>
+		</CI>
 	</RTW>
 </Project>

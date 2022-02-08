@@ -32,26 +32,28 @@
 	</Modules>
 	<SourceDirs>
 	</SourceDirs>
- <RTW>
-  <Dir>xppq-cli</Dir>
- </RTW>
- <Packing>
-		<WikiFiles>
-			<File Dir="computing/epeios/tools/" Desc="general description of xppq" Oddity="IsHome">xppq</File>
-			<File Dir="computing/epeios/tools/xppq/" Desc="the preprocessor directives">Directives</File>
-			<File Dir="computing/epeios/tools/xppq/" Desc="the user manual">Manual</File>
-			<File Dir="computing/epeios/" Desc="compilation instructions">Compilation</File>
-			<File Dir="computing/epeios/tools/" Desc="general configuration instructions">Configuration</File>
-		</WikiFiles>
-	</Packing>
-	<Doc>
-		<File Dir="computing/epeios/tools/" Name="xppq" Desc="general description of xppq" IsHome="yes"/>
-		<File Dir="computing/epeios/tools/xppq/" Name="Directives" Desc="the preprocessor directives"/>
-		<File Dir="computing/epeios/tools/xppq/" Name="Manual" Desc="the user manual"/>
-		<File Dir="computing/epeios/" Name="Compilation" Desc="compilation instructions"/>
-		<File Dir="computing/epeios/tools/" Name="Configuration" Desc="general configuration instructions"/>
-	</Doc>
- <PreprocessorDefinitions>
-		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
-	</PreprocessorDefinitions>
+	<Files>
+		<Files RTW="./">
+			<File>README.md</File>
+			<File>Makefile</File>
+			<Files Path="../">
+				<File>CHANGELOG.md</File>
+			</Files>
+			<Files RTW="test/">
+				<File>Common.xml</File>
+				<File>POSIX.xml</File>
+				<File>Windows.xml</File>
+			</Files>
+    </Files>
+	</Files>
+  <RTW Folder="xppq-cli">
+	  <!--
+      If '@Parameters'' empty, launching 'help' and 'version' GitHub actions job, but not 'test'.
+      If '@Parameters' absent no ''help', 'version' nor 'test' GitHub action jobs launched.
+    -->
+		<CI>
+		  <Parameters target="POSIX">test/POSIX.xml</Parameters>
+		  <Parameters target="Windows">test/Windows.xml</Parameters>
+		</CI>
+	</RTW>
 </Project>

@@ -25,12 +25,12 @@
 # define NAME_MC			"XPPq"
 # define NAME_LC			"xppq"
 # define NAME_UC			"XPPQ"
-# define WEBSITE_URL		"http://q37.info/"
+# define WEBSITE_URL		"https://q37.info/s/kmpr3nzp"
 # define AUTHOR_NAME		"Claude SIMON"
 # define AUTHOR_CONTACT		"http://q37.info/contact/"
 # define OWNER_NAME			"Claude SIMON"
 # define OWNER_CONTACT		"http://q37.info/contact/"
-# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
+# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
 
 SCLI_DEC( xppq )
 

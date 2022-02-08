@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xpp:bloc xmlns:xpp="http://epeios.q37.info/ns/xpp">
+  <xpp:define name="POSIX_URL">
+    <xpp:bloc>get.posixcertified.ieee.org/</xpp:bloc>
+  </xpp:define>
+  <xpp:define name="WindowsURL">
+    <xpp:bloc>windows.com</xpp:bloc>
+  </xpp:define>
+  <xpp:define name="POSIX">
+    <xpp:bloc>
+      <xpp:define name="Directory">
+        <xpp:bloc>/home/dupond/</xpp:bloc>
+      </xpp:define>
+      <xpp:define name="RootURL">
+        <xpp:expand select="POSIX_URL"/>
+      </xpp:define>
+    </xpp:bloc>
+  </xpp:define>
+  <xpp:define name="Windows">
+    <xpp:bloc>
+      <xpp:define name="Directory">
+        <xpp:bloc>c:\Documents\Dupond\</xpp:bloc>
+      </xpp:define>
+      <xpp:define name="RootURL">
+        <xpp:expand select="WindowsURL"/>
+      </xpp:define>
+    </xpp:bloc>
+  </xpp:define>
+  <xpp:define name="File">
+    <xpp:bloc>
+      <xpp:expand select="Directory"/>
+      <xpp:expand select="FileName"/>
+    </xpp:bloc>
+  </xpp:define>
+  <xpp:ifeq select="OS" value="POSIX">
+    <xpp:expand select="POSIX"/>
+  </xpp:ifeq>
+  <xpp:ifeq select="OS" value="Windows">
+    <xpp:expand select="Windows"/>
+  </xpp:ifeq>
+  <SomeFile>
+    <xpp:define name="FileName">
+      <xpp:bloc>SomeFile</xpp:bloc>
+    </xpp:define>
+    <xpp:expand select="File"/>
+  </SomeFile>
+  <OtherFile>
+    <xpp:define name="FileName">
+      <xpp:bloc>OtherFile</xpp:bloc>
+    </xpp:define>
+    <xpp:expand select="File"/>
+  </OtherFile>
+  <SomeURL>
+    <xpp:bloc>http://</xpp:bloc>
+    <xpp:expand select="RootURL"/>
+  </SomeURL>
+</xpp:bloc>
