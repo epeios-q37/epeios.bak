@@ -55,7 +55,7 @@ namespace {
 			if ( Isolate != NULL ) {
 				v8::HandleScope scope( Isolate );
 				Isolate->ThrowException( v8::Exception::Error( v8q::ToString( Buffer ) ) );
-			} else 
+			} else
 #endif
 			{
 				qRH
@@ -111,6 +111,7 @@ namespace {
 				break;
 			case bExitAndDelete:
 				delete Work->Callbacks;
+				/* fall through */  // To avoid a warning.
 			case bExitOnly:
 				delete Work;
 				break;

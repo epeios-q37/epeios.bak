@@ -15,11 +15,12 @@
     "host": "https://github.com"
   },
   "dependencies": {
+    "@mapbox/node-pre-gyp": "^1.0.8",
     "node": "^8.2.1",
     "node-pre-gyp": "^0.6.39"
   },
   "devDependencies": {
-    "aws-sdk": "^2.327.0"
+    "aws-sdk": "^2.1073.0"
   },
   "scripts": {
     "preinstall": "npm install node-pre-gyp",

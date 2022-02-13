@@ -1,18 +1,22 @@
 # Notes pour le développeur
 
+***ATTENTION*** :
+- ne pas installer *node[-pre]-gyp* à partir du gestionnaire de paquets, mais avec *npm* !
+- installer *@mapbox/node-pre-gyp* et non plus *node-pre-gyp* tout seul !
+
 ## Différences entre `node-gyp` et `node-pre-gyp` (observation partielle)
 
 Les deux ont la même fonction.
 
 `node-pre-gyp` prend en compte une certaine section `binary`  dans `package.json`, section qui est ignorée par `node-gyp`.
 
-Typiquement, appeler `node-gyp configure` avec un `package.json` destiné à `node-pre_gyp`  va génèrer l'erreur `Undefined variable module_name in binding.gyp while trying to load binding.gyp`.
+Typiquement, appeler `node-gyp configure` avec un `package.json` destiné à `node-pre-gyp`  va générer l'erreur `Undefined variable module_name in binding.gyp while trying to load binding.gyp`.
 
-Un `node-gyp build` aprés un `node-pre-gyp configure` fonctionne.
+Un `node-gyp build` après un `node-pre-gyp configure` fonctionne.
 
-Au final, inutile d'installer `node-gyp` ; installer `node-pre-gyp` suffit.
+Au final, inutile d'installer `node-gyp` ; installer `node-pre-gyp` suffit (inexact avec la version *@mapbox/…*).
 
-NOTA: aprés installation respective, `node-gyp` et `node-pre-gyp` se situe dans le répertoire `node_modules/.bin/`.
+NOTA: après installation respective, `node-gyp` et `node-pre-gyp` se situe dans le répertoire `node_modules/.bin/`.
 
 ## Installation
 
