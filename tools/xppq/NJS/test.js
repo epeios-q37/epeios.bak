@@ -75,9 +75,10 @@ function indent(level) {
 }
 
 function callback(token, tag, attribute, value) {
+    console.log("Yo!");
     switch (token) {
     case xppq.tokens.ERROR:
-        throw("ERROR :'" + value + "'\n");
+        throw new Error("ERROR :'" + value + "'\n");
         break;
     case xppq.tokens.DONE:
         process.stdout.write(out);
@@ -105,7 +106,7 @@ function callback(token, tag, attribute, value) {
         write(":'" + tag + "'\n");
         break;
     default:
-        throw ("Unknown token !!!");
+        throw new Error("Unknown token !!!");
         break;
     }
 }
@@ -124,7 +125,7 @@ function getStream() {
         return fs.createReadStream( __dirname + '/demo.xml' );
         break;
     default:
-        throw ("Bad input type...");
+        throw new Error("Bad input type...");
         break;
     }
 }
@@ -141,7 +142,7 @@ function test( id ) {
         getStream().pipe(process.stdout);
         break;
     case 1:
-        console.log("Console.\n");
+        console.log("Outputting to natively console.\n");
         xppq.basic(getStream());
         break;
     case 2:

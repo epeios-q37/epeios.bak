@@ -46,20 +46,20 @@ module.exports.returnArgument = (text) => { return njsq._call( xppq, 0, text ) }
 
 const stream = require('stream');
 
-function onReadable(stream, onData, onEnd) {
+function onReadable(flow, onData, onEnd) {
     var chunk;
 
-/*    if ( ( chunk = stream.read() ) != null )
-        do njsq._call(xppq,onRead, stream, chunk);
-        while ( ( chunk = stream.read() ) != null);
+/*    if ( ( chunk = flow.read() ) != null )
+        do njsq._call(xppq,onRead, flow, chunk);
+        while ( ( chunk = flow.read() ) != null);
     else
-        njsq._call(xppq,onEnd, stream);
+        njsq._call(xppq,onEnd, flow);
 */
 
-     if ( ( chunk = stream.read() ) != null )
-     	njsq._call(xppq, onData, stream, chunk);
+     if ( ( chunk = flow.read() ) != null )
+     	njsq._call(xppq, onData, flow, chunk);
      else
-     	njsq._call(xppq, onEnd, stream);
+     	njsq._call(xppq, onEnd, flow);
 }
 
 var modes = {
@@ -67,28 +67,28 @@ var modes = {
     DATA_END: 1
 };
 
-function overload( mode, stream, onData, onEnd )
+function overload( mode, flow, onData, onEnd )
 {
     if ( mode == modes.READABLE )
-        stream.on('readable', () => onReadable(stream, onData, onEnd) );
+        flow.on('readable', () => onReadable(flow, onData, onEnd) );
     else if ( mode == modes.DATA_END ) {
-    	stream.on('data', (chunk) => { njsq._call(xppq, onData, stream, chunk); process.stdout.write(""); });
+    	flow.on('data', (chunk) => { njsq._call(xppq, onData, flow, chunk); process.stdout.write(""); });
 			// The 'process.stdout.write("")' will do nothing, but the parser hangs
 			// when parsing the preprocessor output if missing.
-    	stream.on('end', () => njsq._call(xppq, onEnd, stream));
+        flow.on('end', () => njsq._call(xppq, onEnd, flow));
     } else
-        throw "Unknown mode..."
+        throw new Error("Unknown mode...");
 }
 
 class Stream extends stream.Readable {
     _read(size) {
     	njsq._call(xppq, 6, this);
-//        this.push(null);
+        this.push(null);
     }
-    constructor(stream, options) {
+    constructor(flow, options) {
         super(options);
-        overload( modes.READABLE, stream, 4, 5);
-        njsq._call(xppq, 7, stream, this);
+        overload( modes.READABLE, flow, 4, 5);
+        njsq._call(xppq, 7, flow, this);
     }
 }
 
@@ -105,6 +105,6 @@ var tokens = {
 module.exports.componentInfo = () => njsq._componentInfo(xppq);
 module.exports.wrapperInfo = () => njsq._wrapperInfo();
 module.exports.Stream = Stream;
-module.exports.basic = (stream) => { overload(modes.DATA_END, stream, 8, 9) };
-module.exports.parse = (stream, callback) => { overload(modes.READABLE, stream, 1, 2); njsq._call(xppq, 3, stream, callback) };
+module.exports.basic = (flow) => { overload(modes.DATA_END, flow, 8, 9) };
+module.exports.parse = (flow, callback) => { overload(modes.READABLE, flow, 1, 2); njsq._call(xppq, 3, flow, callback) };
 module.exports.tokens = tokens;
