@@ -277,7 +277,15 @@ namespace tht {
 		}
 	};
 
-		// Block a thread until another unblocks it.
+	qENUM( BlockerPreset ) {
+	  bpDoPrefetch,
+	  bpNoPrefetch,
+	  bp_amount,
+	  bp_Undefined,
+	  bp_Default = bpDoPrefetch
+	};
+
+  // Block a thread until another unblocks it.
 	class rBlocker {
 	private:
 		mtx::rMutex
@@ -305,7 +313,7 @@ namespace tht {
 			Local_ = Main_ = mtx::Undefined;
 		}
 		qCDTOR( rBlocker );
-		void Init( bso::sBool SkipPrefetching = false )
+		void Init(eBlockerPreset Preset = bp_Default)
 		{
 		qRH;
 		qRB;
@@ -314,7 +322,10 @@ namespace tht {
 			Local_ = mtx::Create();
 			Main_ = mtx::Create();
 
-			if ( !SkipPrefetching ) {
+			if ( Preset >= bp_amount )
+        qRFwk();
+
+			if ( Preset == bpDoPrefetch ) {
 				mtx::Lock( Main_ );
 			}
 		qRR;

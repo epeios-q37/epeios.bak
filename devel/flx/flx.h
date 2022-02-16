@@ -1804,7 +1804,7 @@ namespace flx {
 			fdr::sSize Size )
 		{
 			Locker_.Init();
-			Blocker_.Init( true );
+			Blocker_.Init();
 
 			Buffer_ = Buffer;
 

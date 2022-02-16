@@ -19,17 +19,64 @@
 
 #include "stream.h"
 
-#include "stream_s.h"
+using namespace stream;
 
-using stream_s::rRack;
+namespace {
+  qCDEF( char *, Id_, "_q37RackPreprocessor" );
+}
 
-void stream::Set( sclnjs::sCaller &Caller )
+void stream::upstream::OnData( sclnjs::sCaller &Caller )
+{
+qRH
+	sclnjs::rRStream This;
+	sclnjs::rBuffer Chunk;
+qRB
+	tol::Init( This, Chunk );
+	Caller.GetArgument( This, Chunk );
+
+	This.Get<shared::rRack>(Id_) << Chunk;
+	cio::COut << Chunk << txf::commit;
+qRR
+qRT
+qRE
+}
+
+void stream::upstream::OnEnd( sclnjs::sCaller &Caller )
+{
+qRH
+	sclnjs::rRStream This;
+qRB
+	tol::Init( This );
+	Caller.GetArgument( This );
+
+	This.Get<shared::rRack>(Id_).Commit();
+qRR
+qRT
+qRE
+}
+
+void stream::downstream::Read( sclnjs::sCaller &Caller )
+{
+qRH
+	sclnjs::rRStream This;
+qRB
+	This.Init();
+
+	Caller.GetArgument( This );
+
+	This.Get<shared::rRack>(Id_).Unblock();	// Reports than 'push()' operations can be made.
+qRR
+qRE
+qRT
+}
+
+void stream::_Set( sclnjs::sCaller &Caller )
 {
 qRH
 	sclnjs::rRStream Source, *This = NULL;
-	rRack *Rack = NULL;
+	shared::rRack *Rack = NULL;
 qRB
-	Rack = new rRack;
+	Rack = new shared::rRack;
 
 	if ( Rack == NULL )
 		qRAlc();
@@ -45,8 +92,8 @@ qRB
 
 	Rack->Init( *This );
 
-	Source.Set( stream_s::Id, Rack );
-	This->Set( stream_s::Id, Rack );
+	Source.Set( Id_, Rack );
+	This->Set( Id_, Rack );
 
 	sclnjs::Launch( *Rack );
 qRR

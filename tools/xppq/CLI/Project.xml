@@ -1,59 +1,59 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<xpp:bloc>
-		<!-- User definitions -->
-		<xpp:define name="Version">
-			<xpp:bloc></xpp:bloc>
-		</xpp:define>
-		<xpp:define name="CopyrightYears">
-			<xpp:bloc>2007</xpp:bloc>
-		</xpp:define>
-		<xpp:set name="Credits" value="Epeios"/>
-		<xpp:set name="Type" value="Tool"/>
-	</xpp:bloc>
-	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
-	<xpp:expand value-of="q37.project"/>
-	<About>
-		<Program>xppq</Program>
-		<Software>XPPq</Software>
-		<UUID>4e0195ad-2b3d-4fc2-8b1f-73a59bd765fe</UUID>
-	</About>
-	<Modules xpp:marker="$">
-		<Modules Group="Epeios" Path="$EpeiosPath$/">
-			<Modules Group="Core">
-				<xpp:expand select="Core"/>
-			</Modules>
-			<Modules Group="SCL">
-				<xpp:expand select="SCL"/>
-			</Modules>
-		</Modules>
-		<Module>i18n</Module>
-		<Module>registry</Module>
-	</Modules>
-	<SourceDirs>
-	</SourceDirs>
-	<Files>
-		<Files RTW="./">
-			<File>README.md</File>
-			<File>Makefile</File>
-			<Files Path="../">
-				<File>CHANGELOG.md</File>
-			</Files>
-			<Files RTW="test/">
-				<File>Common.xml</File>
-				<File>POSIX.xml</File>
-				<File>Windows.xml</File>
-			</Files>
+  <xpp:bloc>
+    <!-- User definitions -->
+    <xpp:define name="Version">
+      <xpp:bloc></xpp:bloc>
+    </xpp:define>
+    <xpp:define name="CopyrightYears">
+      <xpp:bloc>2007</xpp:bloc>
+    </xpp:define>
+    <xpp:set name="Credits" value="Epeios"/>
+    <xpp:set name="Type" value="Tool"/>
+  </xpp:bloc>
+  <xpp:set name="q37.project" env-var="Q37_PROJECT"/>
+  <xpp:expand value-of="q37.project"/>
+  <About>
+    <Program>xppq</Program>
+    <Software>XPPq</Software>
+    <UUID>4e0195ad-2b3d-4fc2-8b1f-73a59bd765fe</UUID>
+  </About>
+  <Modules xpp:marker="$">
+    <Modules Group="Epeios" Path="$EpeiosPath$/">
+      <Modules Group="Core">
+        <xpp:expand select="Core"/>
+      </Modules>
+      <Modules Group="SCL">
+        <xpp:expand select="SCL"/>
+      </Modules>
+    </Modules>
+    <Module>i18n</Module>
+    <Module>registry</Module>
+  </Modules>
+  <SourceDirs>
+  </SourceDirs>
+  <Files>
+    <Files RTW="./">
+      <File>README.md</File>
+      <File>Makefile</File>
+      <Files Path="../">
+        <File>CHANGELOG.md</File>
+      </Files>
+      <Files RTW="test/">
+        <File>Common.xml</File>
+        <File>POSIX.xml</File>
+        <File>Windows.xml</File>
+      </Files>
     </Files>
-	</Files>
+  </Files>
   <RTW Folder="xppq-cli">
-	  <!--
+    <!--
       If '@Parameters'' empty, launching 'help' and 'version' GitHub actions job, but not 'test'.
       If '@Parameters' absent no ''help', 'version' nor 'test' GitHub action jobs launched.
     -->
-		<CI>
-		  <Parameters target="POSIX">test/POSIX.xml</Parameters>
-		  <Parameters target="Windows">test/Windows.xml</Parameters>
-		</CI>
-	</RTW>
+    <CI>
+      <Parameters target="POSIX">test/POSIX.xml</Parameters>
+      <Parameters target="Windows">test/Windows.xml</Parameters>
+    </CI>
+  </RTW>
 </Project>

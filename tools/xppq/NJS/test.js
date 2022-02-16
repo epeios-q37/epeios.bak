@@ -75,7 +75,6 @@ function indent(level) {
 }
 
 function callback(token, tag, attribute, value) {
-    console.log("Yo!");
     switch (token) {
     case xppq.tokens.ERROR:
         throw new Error("ERROR :'" + value + "'\n");
@@ -122,7 +121,7 @@ function getStream() {
         return new StringStream(xml);
         break;
     case inputs.FILE:
-        return fs.createReadStream( __dirname + '/demo.xml' );
+        return fs.createReadStream( __dirname + '/Project.xml' );
         break;
     default:
         throw new Error("Bad input type...");
@@ -142,7 +141,7 @@ function test( id ) {
         getStream().pipe(process.stdout);
         break;
     case 1:
-        console.log("Outputting to natively console.\n");
+        console.log("Outputting natively to console.\n");
         xppq.basic(getStream());
         break;
     case 2:

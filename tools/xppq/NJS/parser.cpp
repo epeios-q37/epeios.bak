@@ -63,17 +63,14 @@ namespace {
 
 			Content.Init();
 
-      CPq;
 			switch ( Content.Token = Parser.Parse( xml::tfObvious ) ) {
 			case xml::t_Error:
-        CPq;
 				Meaning.Init();
 				xml::GetMeaning( Parser.GetStatus(), Parser.Flow().Position(), Meaning );
 				Locale.Init();
 				sclm::GetBaseTranslation( Meaning, Content.Error );
 				break;
 			default:
-        CPq;
 				Content.Tag = Parser.TagName();
 				Content.Attribute = Parser.AttributeName();
 				Content.Value = Parser.Value();
@@ -124,14 +121,10 @@ namespace {
 		void Read( void )
 		{
 			if ( First_ ) {
-        CPq;
 				XFlow_.Init( IFlow_, utf::f_Guess );
-        CPq;
 				Parser_.Init( XFlow_, xml::eh_Default );
-        CPq;
 
 				First_ = false;
-        CPq;
 			}
 
 			Process_( Parser_, Content_ );
@@ -217,7 +210,7 @@ qRB
 	Caller.GetArgument( This, Chunk );
 
 	This.Get<rRack_>( Id_ ).OFlow << Chunk;
-	cio::COut << Chunk << txf::nl << txf::commit;
+//	cio::COut << Chunk << txf::nl << txf::commit;
 qRR
 qRT
 qRE
