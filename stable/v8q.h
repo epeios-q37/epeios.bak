@@ -136,12 +136,12 @@ namespace v8q {
 	}
 
 	template <typename arg> inline void Set_(
-		v8::Isolate *,
+		v8::Isolate *Isolate,
 		v8::Local<v8::Value> *argv,
 		int Position,
 		const arg &Arg )
 	{
-		argv[Position] = Arg.Core();
+		argv[Position] = Arg.Core(Isolate);
 	}
 
 	template <typename t> inline void Set_(
@@ -347,12 +347,12 @@ namespace v8q {
 		{
 			Core_.Reset();
 		}
-		v8::Local<item> Core( v8::Isolate *Isolate = NULL ) const
+		v8::Local<item> Core(v8::Isolate *Isolate = NULL) const
 		{
 			if ( Core_.IsEmpty() )
 				qRFwk();
 
-			return Get_( GetIsolate_( Isolate ) );
+			return Get_(GetIsolate_(Isolate));
 		}
 		bso::sBool IsEmpty( v8::Isolate *Isolate = NULL ) const
 		{
@@ -392,11 +392,11 @@ namespace v8q {
 		{
 			Core_.Clear();
 		}
-		v8::Local<item> Core( v8::Isolate *Isolate = NULL ) const
+		v8::Local<item> Core(v8::Isolate *Isolate = NULL) const
 		{
 			return Core_;
 		}
-		bso::sBool IsEmpty( void ) const
+		bso::sBool IsEmpty(void) const
 		{
 			if ( Core_.IsEmpty() )
 				return true;
@@ -457,10 +457,9 @@ namespace v8q {
 			int Argc,
 			v8::Local<v8::Value> Argv[] ) const
 		{
-			
-			v8::Local<v8::Function> Function = GetFunction( Core(), Method, Isolate );
+      v8::Local<v8::Function> Function = GetFunction(Core(Isolate), Method, Isolate);
 
-			return ToLocal( Function->Call( GetContext_( Isolate ), Core(), Argc, Argv ), Isolate );
+			return ToLocal( Function->Call(GetContext_(Isolate), Core(Isolate), Argc, Argv), Isolate);
 		}
 	public:
 		using value::reset;
@@ -488,7 +487,7 @@ namespace v8q {
 			bool (v8::Value::*Function)(void) const,
 			v8::Isolate *Isolate = NULL )
 		{
-			value::Init( Value, UndefinedForbidden, Function, Isolate ); 
+			value::Init( Value, UndefinedForbidden, Function, Isolate );
 		}
 		void Init(
 			v8::Local<v8::Value> Value,
@@ -508,7 +507,8 @@ namespace v8q {
 			v8::Isolate *Isolate = NULL )
 		{
 			Isolate = GetIsolate_( Isolate );
-			return ToLocal( Core()->Get( GetContext_( Isolate ), v8q::ToString( Key, Isolate ) ), Isolate );
+
+			return ToLocal(Core(Isolate)->Get( GetContext_(Isolate), v8q::ToString(Key, Isolate) ), Isolate);
 		}
 		bso::sBool Set(
 			const char *Key,
@@ -517,7 +517,8 @@ namespace v8q {
 			qRPD )
 		{
 			Isolate = GetIsolate_( Isolate );
-			if ( !Expose( Core()->Set( GetContext_( Isolate ), v8q::ToString( Key, Isolate ), Value ) ) ) {
+
+			if ( !Expose(Core(Isolate)->Set(GetContext_(Isolate), v8q::ToString(Key, Isolate), Value) ) ) {
 				if ( qRPU )
 					qRFwk();
 				else
@@ -532,7 +533,9 @@ namespace v8q {
 			v8::Isolate *Isolate = NULL,
 			qRPD )
 		{
-			return Set( Key, Value.Core(), Isolate, qRP );
+		  Isolate = GetIsolate_(Isolate);
+
+			return Set(Key, Value.Core(Isolate), Isolate, qRP);
 		}
 		template <typename t> bso::sBool Set(
 			const char *Key,
@@ -646,7 +649,9 @@ namespace v8q {
 			v8::Local<v8::Value> *Return,
 			v8::Isolate *Isolate = NULL )
 		{
-			if ( !Core()->Call( GetContext_(Isolate), Core(), Argc, Argv ).ToLocal( Return) )
+		  Isolate = GetIsolate_(Isolate);
+
+			if ( !Core(Isolate)->Call(GetContext_(Isolate), Core(Isolate), Argc, Argv ).ToLocal( Return))
 				qRFwk();
 		}
 		template <typename arg, typename ...args> v8::Local<v8::Value> Launch(
@@ -664,9 +669,9 @@ namespace v8q {
 		{
 			return Launch( NULL, Args... );
 		}
-		v8::Local<v8::Value> Launch( void )
+		v8::Local<v8::Value> Launch(void)
 		{
-			return Core()->Call( Core(), 0, NULL );
+			return Core()->Call(Core(), 0, NULL);
 		}
 	};
 
@@ -745,13 +750,17 @@ namespace v8q {
 		// NOT the number of char, but the size of the string in bytes, WITHOUT NULL terminating char.
 		int Size( v8::Isolate *Isolate = NULL ) const
 		{
-			return Core()->Utf8Length(GetIsolate_(Isolate));
+		  Isolate = GetIsolate_(Isolate);
+
+			return Core(Isolate)->Utf8Length(Isolate);
 		}
 		int Get(
 			char *Buffer,
 			v8::Isolate *Isolate = NULL) const
 		{
-			return Core()->WriteUtf8(GetIsolate_(Isolate), Buffer);
+		  Isolate = GetIsolate_(Isolate);
+
+			return Core(Isolate)->WriteUtf8(Isolate, Buffer);
 		}
 		// Defined at bottom of this file.
 		void Get( str::dString &String );

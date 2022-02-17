@@ -111,7 +111,7 @@ namespace {
 
 		String.Init( Info );
 
-		Args.GetReturnValue().Set( String.Core() );
+		Args.GetReturnValue().Set( String.Core());
 	qRR
 	qRT
 	qRE

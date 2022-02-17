@@ -120,7 +120,7 @@ namespace {
 
 			while ( Length-- ) {
 				String.Init( v8q::ToLocal( Array->Get( v8q::GetContext(), Length ) ) );
-				String.Get( StringsCallback->Expose()( Length ) ); 
+				String.Get( StringsCallback->Expose()( Length ) );
 			}
 		}
 	qRR;
@@ -202,9 +202,9 @@ namespace {
 			{
 				Core_.Init( Value, UndefinedForbidden );
 			}
-			v8::Local<v8::Value> Core( void ) const
+			v8::Local<v8::Value> Core(v8::Isolate *Isolate = NULL) const
 			{
-				return Core_.Core();
+				return Core_.Core(Isolate);
 			}
 		};
 
@@ -601,7 +601,7 @@ void SetReturnValue_(
 
 	String.Init( Value );
 
-	Info.GetReturnValue().Set( String.Core() );
+	Info.GetReturnValue().Set(String.Core());
 }
 
 void SetReturnValue_(

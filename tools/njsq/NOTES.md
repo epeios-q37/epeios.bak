@@ -30,7 +30,7 @@ Toute référence à `node-pre-gyp` dans le reste du document fait référence �
 
 - `DVLGenGYP` : génère le fichier `binding.gyp` — n'est à lancer qu'une seule fois et à chaque changement de version de *Node.js* et/ou modification du fichier `Project.xml` ;
 - `node-pre-gyp configure` : génère le contenu du répertoire `build` ;
-- `node-pre-gyp build` : génère le fichier `njsq.node`.
+- `node-pre-gyp [+-j [x]] [--debug] build` : génère le fichier `njsq.node`.
 
 Notez que, sous *Windows*, `node-pre-gyp configure` génère un projet *Visual C++* (`.vcxproj`). Par conséquent, on peut utiliser *Visual C++* pour compiler la bibliothèque, mais aussi la déboguer. Par conséquent, il est plus facile de mette au point ce composant sour *Windows*…
 

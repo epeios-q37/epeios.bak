@@ -37,6 +37,13 @@
 namespace nodeq {
 	using namespace v8q;
 
+  inline void ConstFreeCallback_(
+   char* data,
+   void* hint)
+  {
+         // Does nothing, as called for const buffer on stack.
+  }
+
 	template <typename object> class xBuffer_
 	: public object
 	{
@@ -45,14 +52,14 @@ namespace nodeq {
 		using object::Core;
 		using object::Launch;
 		qCDTOR( xBuffer_ );
-		xBuffer_( 
+		xBuffer_(
 			const char *Data,
 			size_t Length,
 			v8::Isolate *Isolate = NULL )
 		{
 			Init( Data, Length, Isolate );
 		}
-		xBuffer_( 
+		xBuffer_(
 			const char *Data,
 			v8::Isolate *Isolate = NULL )
 		{
@@ -65,8 +72,8 @@ namespace nodeq {
 			v8::Isolate *Isolate = NULL )
 		{
 			Isolate = v8q::GetIsolate( Isolate );
-			//			object::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, ConstFreeCallback_, NULL ) ) );
-			object::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, NULL, NULL ) ) );
+			object::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, ConstFreeCallback_, NULL ) ) );
+			// object::Init( v8q::ToLocal( node::Buffer::New( Isolate, (char *)Data, Length, NULL, NULL ) ) );
 		}
 		void Init(
 			const char *Data,
@@ -164,13 +171,15 @@ namespace nodeq {
 			v8::Isolate *Isolate = NULL )
 		{
 			v8q::sLObject Object;
-			
+
+			Isolate = v8q::GetIsolate(Isolate);
+
 			Object.Init( Launch( "read", Isolate ) );
 
 			if ( Object.IsEmpty() )
 				return false;
 			else {
-				Chunk.Init( Object.Core() );
+				Chunk.Init(Object.Core(Isolate));
 				return true;
 			}
 		}
@@ -198,11 +207,15 @@ namespace nodeq {
 			const buffer &Buffer,
 			v8::Isolate *Isolate = NULL )
 		{
-			return Push_( Buffer.Core(), Isolate );
+		  Isolate = v8q::GetIsolate(Isolate);
+
+			return Push_(Buffer.Core(Isolate), Isolate);
 		}
 		void End( v8::Isolate *Isolate = NULL )
 		{
-			Push_( v8::Null( v8q::GetIsolate( Isolate ) ), Isolate );
+		  Isolate = v8q::GetIsolate(Isolate);
+
+			Push_(v8::Null(Isolate), Isolate);
 		}
 	};
 
