@@ -10,6 +10,10 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2022-02-18
+- THT: renaming blocker preset items,
+- TOL: introducing `qNEW(…]) and `qDELETE(…)`,
+
 ## 2022-02-16
 - FLX: fixing first reading not blocked when no writing occured wirg *relay* object,
 - THT: using *enum* instead of *booleanù for blocker preset,

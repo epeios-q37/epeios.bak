@@ -2406,6 +2406,26 @@ namespace tol {
 	{
 		return Same_( Arg, Args... );
 	}
+
+	template <typename obj> inline obj *New_(void)
+	{
+	  obj *Object = new obj;
+
+	  if ( Object == NULL )
+      qRAlc();
+
+    return Object;
+	}
+
+# define qNEW(type) tol::New_<type>()
+
+	template <typename obj> inline void Delete_(obj *Object)
+	{
+	  if ( Object != NULL )
+      delete Object;
+	}
+
+# define qDELETE(object) tol::Delete_(object)
 }
 
 

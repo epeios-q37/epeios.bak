@@ -1,20 +1,20 @@
 /*
-	Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
+    Copyright (C) 2007-2017 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of XPPq.
+    This file is part of XPPq.
 
-	XPPq is free software: you can redistribute it and/or
-	modify it under the terms of the GNU Affero General Public License as
-	published by the Free Software Foundation, either version 3 of the
-	License, or (at your option) any later version.
+    XPPq is free software: you can redistribute it and/or
+    modify it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
 
-	XPPq is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-	Affero General Public License for more details.
+    XPPq is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Affero General Public License for more details.
 
-	You should have received a copy of the GNU Affero General Public License
-	along with XPPq. If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License
+    along with XPPq. If not, see <http://www.gnu.org/licenses/>.
 */
 
 // Once installed, launch 'npm explore xppq -- node test.js'.
@@ -25,8 +25,8 @@
 var id = 1;   // Default test id.
 
 var inputs = {
-    STRING: 0,
-    FILE: 1,
+  STRING: 0,
+  FILE: 1,
 };
 
 const input = inputs.STRING;
@@ -52,118 +52,130 @@ var indentLevel = 0;
 var out = "";
 
 class StringStream extends stream.Readable {
-    constructor(text, options) {
-        super(options);
-        this.text = text;
-    }
-    _read() {
-        if (!this.eos) {
-            this.push(this.text);
-            this.eos = true
-        } else
-            this.push(null);
-    }
+  constructor(text, options) {
+    super(options);
+    this.text = text;
+  }
+  _read() {
+    if (!this.eos) {
+      this.push(this.text);
+      this.eos = true
+    } else
+      this.push(null);
+  }
 }
 
 function write(text) {
-    out = out + text;
+  out = out + text;
 }
 
 function indent(level) {
-    while (level--)
-        write('.');
+  while (level--)
+    write('.');
 }
 
 function callback(token, tag, attribute, value) {
-    switch (token) {
+  switch (token) {
     case xppq.tokens.ERROR:
-        throw new Error("ERROR :'" + value + "'\n");
-        break;
+      throw new Error("ERROR :'" + value + "'\n");
+      break;
     case xppq.tokens.DONE:
-        process.stdout.write(out);
-        break;
+      process.stdout.write(out);
+      break;
     case xppq.tokens.START_TAG:
-        write("Start tag");
-        indent(indentLevel);
-        write(":'" + tag + "'\n");
-        indentLevel++;
-        break;
+      write("Start tag");
+      indent(indentLevel);
+      write(":'" + tag + "'\n");
+      indentLevel++;
+      break;
     case xppq.tokens.ATTRIBUTE:
-        write("Attribute");
-        indent(indentLevel);
-        write(":'" + attribute + "' = '" + value + "'\n");
-        break;
+      write("Attribute");
+      indent(indentLevel);
+      write(":'" + attribute + "' = '" + value + "'\n");
+      break;
     case xppq.tokens.VALUE:
-        write("Value    ");
-        indent(indentLevel);
-        write(":'" + value.trim() + "'\n");
-        break;
+      write("Value    ");
+      indent(indentLevel);
+      write(":'" + value.trim() + "'\n");
+      break;
     case xppq.tokens.END_TAG:
-        indentLevel--;
-        write("End tag  ");
-        indent(indentLevel);
-        write(":'" + tag + "'\n");
-        break;
+      indentLevel--;
+      write("End tag  ");
+      indent(indentLevel);
+      write(":'" + tag + "'\n");
+      break;
     default:
-        throw new Error("Unknown token !!!");
-        break;
-    }
+      throw new Error("Unknown token !!!");
+      break;
+  }
 }
 
 const arg = process.argv[2];
 
 if (arg != undefined)
-    id = Number(arg);
+  id = Number(arg);
 
 function getStream() {
-    switch (input) {
+  switch (input) {
     case inputs.STRING:
-        return new StringStream(xml);
-        break;
+      return new StringStream(xml);
+      break;
     case inputs.FILE:
-        return fs.createReadStream( __dirname + '/Project.xml' );
-        break;
+      return fs.createReadStream(__dirname + '/Project.xml');
+      break;
     default:
-        throw new Error("Bad input type...");
-        break;
-    }
+      throw new Error("Bad input type...");
+      break;
+  }
 }
 
-console.log( xppq.componentInfo() );
-console.log( xppq.wrapperInfo());
-console.log( xppq.returnArgument('Basic test : this text comes from the addon (native code), and is written from Javascript.' ) );
+console.log(xppq.componentInfo());
+console.log(xppq.wrapperInfo());
+console.log(xppq.returnArgument('Basic test : this text comes from the addon (native code), and is written from Javascript.'));
 console.log('     ---------------');
 
-function test( id ) {
-    switch ( id ) {
+function test(id) {
+  switch (id) {
     case 0:
-        console.log("No treatment ; to see the original XML data.\n");
-        getStream().pipe(process.stdout);
-        break;
+      console.log("No treatment ; to see the original XML data.\n");
+      new getStream().pipe(process.stdout);
+      break;
     case 1:
-        console.log("Outputting natively to console.\n");
-        xppq.basic(getStream());
-        break;
+      console.log("The original XML data through a natively handled stream.\n");
+      new xppq.PassthroughStream(getStream()).pipe(process.stdout);
+      break;
     case 2:
-        console.log("Piping the preprocessing stream.\n");
-        new xppq.Stream(getStream()).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).pipe(process.stdout);
-        break;
+      console.log("Outputting natively to console.\n");
+      xppq.basic(getStream());
+      break;
     case 3:
-        console.log("Using the preprocessing stream with a callback, which transforms to lower case.\n");
-        new xppq.Stream(getStream()).on('data', (chunk) => write(chunk.toString().toLowerCase())).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).on('end', () => console.log(out));
-        break;
+      console.log("Outputting natively to console through a natively handled stream.\n");
+      xppq.basic(new xppq.PassthroughStream(getStream()));
+      break;
     case 4:
-        console.log("XML parsing WITHOUT preprocessing.\n");
-        xppq.parse(getStream(), callback);
-        break;
+      console.log("Outputting using a natively handled stream.\n");
+      new xppq.PassthroughStream(getStream()).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).pipe(process.stdout);
+      break;
     case 5:
-        console.log("XML parsing WITH preprocessing.\n");
-        xppq.parse(new xppq.Stream(getStream()).on('error', (err) => console.error('>>> ERROR : ' + err)), callback);
-        break;
+      console.log("Piping the preprocessing stream.\n");
+      new xppq.Stream(getStream()).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).pipe(process.stdout);
+      break;
+    case 6:
+      console.log("Using the preprocessing stream with a callback, which transforms to lower case.\n");
+      new xppq.Stream(getStream()).on('data', (chunk) => write(chunk.toString().toLowerCase())).on('error', (err) => console.error('\n>>> ERROR : ' + err + '\n')).on('end', () => console.log(out));
+      break;
+    case 7:
+      console.log("XML parsing WITHOUT preprocessing.\n");
+      xppq.parse(getStream(), callback);
+      break;
+    case 8:
+      console.log("XML parsing WITH preprocessing.\n");
+      xppq.parse(new xppq.Stream(getStream()).on('error', (err) => console.error('>>> ERROR : ' + err)), callback);
+      break;
     default:
-        console.log("'" + id + "' is not a valid test id ; must be '0' to '5'.");
-        break;
-    }
+      console.log("'" + id + "' is not a valid test id ; must be '0' to '8'.");
+      break;
+  }
 }
 
-test( id );
+test(id);

@@ -84,19 +84,61 @@ namespace console_ {
 
 namespace stream_ {
 	namespace {
-		qCDEF(char *, Id_, "_q37QStream");
+		qCDEF(char *, TargetId_, "_q37Target");
+		qCDEF(char *, TargetReadBlockerId_, "_q37TargetReadBlocker");
+		qCDEF(char *, TargetWriteBlockerId_, "_q37TargetWriteBlocker");
+		qCDEF(char *, TargetChunkId_, "_q37TargetChunk");
+
+		typedef str::wString rChunk_;
+
+		inline sclnjs::rRStream &GetTarget_(sclnjs::rRStream &Source)
+		{
+		  return Source.Get<sclnjs::rRStream>(TargetId_);
+		}
+
+		namespace {
+      inline tht::rBlocker &GetBlocker_(
+        const char *Id,
+        sclnjs::rRStream &Target)
+      {
+        return Target.Get<tht::rBlocker>(Id);
+      }
+		}
+
+		inline tht::rBlocker &GetReadBlocker_(sclnjs::rRStream &Target)
+		{
+		  return GetBlocker_(TargetReadBlockerId_, Target);
+		}
+
+		inline tht::rBlocker &GetWriteBlocker_(sclnjs::rRStream &Target)
+		{
+		  return GetBlocker_(TargetWriteBlockerId_, Target);
+		}
+
+		inline rChunk_ &GetChunk_(sclnjs::rRStream &Target)
+		{
+		  return Target.Get<rChunk_>(TargetChunkId_);
+		}
 	}
 
 	SCLNJS_F( OnData )
 	{
 	qRH
-		sclnjs::rRStream This;
+		sclnjs::rRStream This;  // Source.
 		sclnjs::rBuffer Chunk;
 	qRB
 		tol::Init( This, Chunk );
 		Caller.GetArgument( This, Chunk );
 
-		This.Get<sclnjs::rRStream>(Id_).Push(Chunk);
+		sclnjs::rRStream &Target = GetTarget_(This);
+
+    CPq;
+		GetWriteBlocker_(Target).Wait();
+    CPq;
+		Chunk.ToString(GetChunk_(Target));
+    CPq;
+		GetReadBlocker_(Target).Unblock();
+    CPq;
 	qRR
 	qRT
 	qRE
@@ -105,12 +147,61 @@ namespace stream_ {
 	SCLNJS_F( OnEnd )
 	{
 	qRH
-		sclnjs::rRStream This;
+		sclnjs::rRStream This;  // Source.
+	qRB
+    CPq;
+		tol::Init( This );
+		Caller.GetArgument( This );
+    CPq;
+		sclnjs::rRStream &Target = GetTarget_(This);
+    CPq;
+		GetWriteBlocker_(Target).Wait();
+    CPq;
+		GetChunk_(Target).Init();
+    CPq;
+		GetReadBlocker_(Target).Unblock();
+    CPq;
+	qRR
+	qRT
+	qRE
+	}
+
+	SCLNJS_F( Read )
+	{
+	qRH
+		sclnjs::rRStream This;  // Target
+		static bool First = true;
 	qRB
 		tol::Init( This );
 		Caller.GetArgument( This );
 
-		This.Get<sclnjs::rRStream>(Id_).Push();
+		if ( First ) {
+      First = false;
+		} else {
+		  CPq;
+      This.Push();
+      CPq;
+		}
+
+    CPq;
+		GetReadBlocker_(This).Wait();
+    CPq;
+
+    rChunk_ &Chunk = GetChunk_(This);
+
+//    cio::COut << ">>>" << Chunk << "<<<" << txf::commit;
+
+    CPq;
+    if ( Chunk.Amount() )
+      This.Push(Chunk);
+    else
+      This.Push();
+
+    CPq;
+    Chunk.Init();
+    CPq;
+    GetWriteBlocker_(This).Unblock();
+    CPq;
 	qRR
 	qRT
 	qRE
@@ -120,20 +211,31 @@ namespace stream_ {
 	{
 	qRH
 		sclnjs::rRStream Source, *This = NULL;
+		tht::rBlocker
+      *ReadBlocker = NULL,
+      *WriteBlocker = NULL;
+    rChunk_ *Chunk = NULL;
 	qRB
-		This = new sclnjs::rRStream;
+		This = qNEW(sclnjs::rRStream);
+    ReadBlocker = qNEW(tht::rBlocker);
+    WriteBlocker = qNEW(tht::rBlocker);
+    Chunk = qNEW(rChunk_);
 
-		if ( This == NULL )
-			qRAlc();
+		tol::Init(Source, *This, *ReadBlocker, *Chunk);
 
-		tol::Init( Source, *This );
+		WriteBlocker->Init(tht::bpDontLock);
 
 		Caller.GetArgument( Source, *This );
 
-		Source.Set(Id_, This);
+		Source.Set(TargetId_, This);
+		This->Set(TargetReadBlockerId_, ReadBlocker);
+		This->Set(TargetWriteBlockerId_, WriteBlocker);
+		This->Set(TargetChunkId_, Chunk);
 	qRR
-		if ( This != NULL )
-			delete This;
+    qDELETE(This);
+    qDELETE(ReadBlocker);
+    qDELETE(WriteBlocker);
+    qDELETE(Chunk);
 	qRT
 	qRE
 	}
@@ -147,7 +249,7 @@ const scli::sInfo &sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 	Registrar.Register( parser::OnData, parser::OnEnd, parser::Parse );             // 1 … 3
 	Registrar.Register( stream::upstream::OnData, stream::upstream::OnEnd, stream::downstream::Read, stream::_Set ); // 4 … 7
 	Registrar.Register( console_::OnData, console_::OnEnd );                        // 8 … 9
-	Registrar.Register( stream_::OnData, stream_::OnEnd, stream_::Set );            // 10 .. 12
+	Registrar.Register( stream_::OnData, stream_::OnEnd, stream_::Read, stream_::Set );            // 10 .. 13
 
 	return Info;
 }

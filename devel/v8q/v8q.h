@@ -331,9 +331,9 @@ namespace v8q {
 		}
 		v8::Local<item> Get_( v8::Isolate *Isolate ) const
 		{
-			// Do not exists in 'Node.js' v4.
-			// return Core_.Get( GetIsolate_( Isolate ) );
+			return Core_.Get( GetIsolate_( Isolate ) );
 
+			// Above didn't exist in some version of Node.js, Below was the used.
 			// This is the definition of v8::Persistent<>::Get()' in 'Node.js' >v4.
 			return v8::Local<item>::New( Isolate, Core_ );
 		}
@@ -1112,6 +1112,5 @@ namespace v8q {
 		return v8q::GetIsolate_(Isolate);
 	}
 }
-
 
 #endif

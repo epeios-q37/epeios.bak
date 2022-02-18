@@ -79,6 +79,20 @@ function overload(mode, flow, onData, onEnd) {
     throw new Error("Unknown mode...");
 }
 
+// For debugging.
+class PassthroughStream extends stream.Readable {
+  _read(size) {
+    console.log("Before");
+    njsq._call(xppq, 12, this);
+    console.log("After");
+  }
+  constructor(flow, options) {
+    super(options);
+    overload(modes.DATA_END, flow, 10, 11);
+    njsq._call(xppq, 13, flow, this);
+  }
+}
+
 class Stream extends stream.Readable {
   _read(size) {
     njsq._call(xppq, 6, this);
@@ -103,6 +117,7 @@ var tokens = {
 
 module.exports.componentInfo = () => njsq._componentInfo(xppq);
 module.exports.wrapperInfo = () => njsq._wrapperInfo();
+module.exports.PassthroughStream = PassthroughStream;
 module.exports.Stream = Stream;
 module.exports.basic = (flow) => { overload(modes.DATA_END, flow, 8, 9) };
 module.exports.parse = (flow, callback) => { overload(modes.READABLE, flow, 1, 2); njsq._call(xppq, 3, flow, callback) };

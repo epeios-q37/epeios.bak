@@ -278,11 +278,11 @@ namespace tht {
 	};
 
 	qENUM( BlockerPreset ) {
-	  bpDoPrefetch,
-	  bpNoPrefetch,
+	  bpLock,
+	  bpDontLock,
 	  bp_amount,
 	  bp_Undefined,
-	  bp_Default = bpDoPrefetch
+	  bp_Default = bpLock
 	};
 
   // Block a thread until another unblocks it.
@@ -325,7 +325,7 @@ namespace tht {
 			if ( Preset >= bp_amount )
         qRFwk();
 
-			if ( Preset == bpDoPrefetch ) {
+			if ( Preset == bpLock ) {
 				mtx::Lock( Main_ );
 			}
 		qRR;
