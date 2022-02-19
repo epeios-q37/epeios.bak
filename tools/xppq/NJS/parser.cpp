@@ -203,7 +203,7 @@ namespace {
 SCLNJS_F( parser::OnData )
 {
 qRH
-	sclnjs::rRStream This;
+	sclnjs::rObject This;
 	sclnjs::rBuffer Chunk;
 qRB
 	tol::Init( This, Chunk );
@@ -219,7 +219,7 @@ qRE
 SCLNJS_F( parser::OnEnd )
 {
 qRH
-	sclnjs::rRStream This;
+	sclnjs::rObject This;
 qRB
 	tol::Init( This );
 	Caller.GetArgument( This );
@@ -233,7 +233,7 @@ qRE
 SCLNJS_F( parser::Parse )
 {
 qRH
-	sclnjs::rRStream Source;
+	sclnjs::rObject Source;
 	sclnjs::rCallback *Callback = NULL;
 	rRackAsyncCallback_ *Rack = NULL;
 qRB

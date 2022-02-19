@@ -83,7 +83,10 @@ function overload(mode, flow, onData, onEnd) {
 class PassthroughStream extends stream.Readable {
   _read(size) {
     console.log("Before");
-    njsq._call(xppq, 12, this);
+    let chunk = njsq._call(xppq, 12, this);
+    console.log(chunk);
+    console.log("Between");
+    this.push( chunk );
     console.log("After");
   }
   constructor(flow, options) {
@@ -95,13 +98,43 @@ class PassthroughStream extends stream.Readable {
 
 class Stream extends stream.Readable {
   _read(size) {
-    njsq._call(xppq, 6, this);
-    this.push(null);
+    this.push(njsq._call(xppq, 6, this));
   }
   constructor(flow, options) {
     super(options);
     overload(modes.DATA_END, flow, 4, 5);
     njsq._call(xppq, 7, flow, this);
+  }
+}
+
+class DummyStream_ extends stream.Readable {
+  constructor(options) {
+    super(options);
+    njsq._call(xppq, 15, this);
+  }
+  _read() {
+    console.log("Before");
+    if (!this.eos) {
+      njsq._call(xppq, 14, this);
+      this.eos = true
+    } else
+      this.push(null);
+    console.log("After");
+  }
+}
+
+class DummyStream extends stream.Readable {
+  constructor(options) {
+    super(options);
+  }
+  _read() {
+    console.log("Before");
+    if (!this.eos) {
+      this.push("Year!");
+      this.eos = true
+    } else
+      this.push(null);
+    console.log("After");
   }
 }
 
@@ -117,8 +150,9 @@ var tokens = {
 
 module.exports.componentInfo = () => njsq._componentInfo(xppq);
 module.exports.wrapperInfo = () => njsq._wrapperInfo();
-module.exports.PassthroughStream = PassthroughStream;
 module.exports.Stream = Stream;
+module.exports.PassthroughStream = PassthroughStream;
+module.exports.DummyStream = DummyStream_;
 module.exports.basic = (flow) => { overload(modes.DATA_END, flow, 8, 9) };
 module.exports.parse = (flow, callback) => { overload(modes.READABLE, flow, 1, 2); njsq._call(xppq, 3, flow, callback) };
 module.exports.tokens = tokens;

@@ -154,6 +154,7 @@ template <> void scln4::Get(
 	Get_<n4njs::cUObject>( Index, Caller, n4njs::tObject, Object );
 }
 
+#if 0
 template <> void scln4::Get(
 	int Index,
 	cCaller_ &Caller,
@@ -161,6 +162,7 @@ template <> void scln4::Get(
 {
 	Get_<n4njs::cURStream>( Index, Caller, n4njs::tRStream, Stream );
 }
+#endif
 
 template <> void scln4::Get(
 	int Index,
@@ -276,6 +278,7 @@ qRE
 	return Launcher;
 }
 
+#if 0
 bso::sBool sclnjs::rRStream::Push( const str::dString &SBuffer )
 {
 	bso::sBool Result = false;
@@ -303,6 +306,7 @@ qRT
 qRE
 	return Result;
 }
+#endif // 0
 
 void sclnjs::Launch( cAsync &Async )
 {

@@ -55,7 +55,7 @@ namespace console_ {
 	SCLNJS_F( OnData )
 	{
 	qRH
-		sclnjs::rRStream This;
+		sclnjs::rObject This;
 		sclnjs::rBuffer Chunk;
 	qRB
 		tol::Init( This, Chunk );
@@ -70,7 +70,7 @@ namespace console_ {
 	SCLNJS_F( OnEnd )
 	{
 	qRH
-		sclnjs::rRStream This;
+		sclnjs::rObject This;
 	qRB
 		tol::Init( This );
 		Caller.GetArgument( This );
@@ -91,31 +91,31 @@ namespace stream_ {
 
 		typedef str::wString rChunk_;
 
-		inline sclnjs::rRStream &GetTarget_(sclnjs::rRStream &Source)
+		inline sclnjs::rObject &GetTarget_(sclnjs::rObject &Source)
 		{
-		  return Source.Get<sclnjs::rRStream>(TargetId_);
+		  return Source.Get<sclnjs::rObject>(TargetId_);
 		}
 
 		namespace {
       inline tht::rBlocker &GetBlocker_(
         const char *Id,
-        sclnjs::rRStream &Target)
+        sclnjs::rObject &Target)
       {
         return Target.Get<tht::rBlocker>(Id);
       }
 		}
 
-		inline tht::rBlocker &GetReadBlocker_(sclnjs::rRStream &Target)
+		inline tht::rBlocker &GetReadBlocker_(sclnjs::rObject &Target)
 		{
 		  return GetBlocker_(TargetReadBlockerId_, Target);
 		}
 
-		inline tht::rBlocker &GetWriteBlocker_(sclnjs::rRStream &Target)
+		inline tht::rBlocker &GetWriteBlocker_(sclnjs::rObject &Target)
 		{
 		  return GetBlocker_(TargetWriteBlockerId_, Target);
 		}
 
-		inline rChunk_ &GetChunk_(sclnjs::rRStream &Target)
+		inline rChunk_ &GetChunk_(sclnjs::rObject &Target)
 		{
 		  return Target.Get<rChunk_>(TargetChunkId_);
 		}
@@ -124,13 +124,13 @@ namespace stream_ {
 	SCLNJS_F( OnData )
 	{
 	qRH
-		sclnjs::rRStream This;  // Source.
+		sclnjs::rObject This;  // Source.
 		sclnjs::rBuffer Chunk;
 	qRB
 		tol::Init( This, Chunk );
 		Caller.GetArgument( This, Chunk );
 
-		sclnjs::rRStream &Target = GetTarget_(This);
+		sclnjs::rObject &Target = GetTarget_(This);
 
     CPq;
 		GetWriteBlocker_(Target).Wait();
@@ -147,13 +147,13 @@ namespace stream_ {
 	SCLNJS_F( OnEnd )
 	{
 	qRH
-		sclnjs::rRStream This;  // Source.
+		sclnjs::rObject This;  // Source.
 	qRB
     CPq;
 		tol::Init( This );
 		Caller.GetArgument( This );
     CPq;
-		sclnjs::rRStream &Target = GetTarget_(This);
+		sclnjs::rObject &Target = GetTarget_(This);
     CPq;
 		GetWriteBlocker_(Target).Wait();
     CPq;
@@ -169,19 +169,10 @@ namespace stream_ {
 	SCLNJS_F( Read )
 	{
 	qRH
-		sclnjs::rRStream This;  // Target
-		static bool First = true;
+		sclnjs::rObject This;  // Target
 	qRB
 		tol::Init( This );
 		Caller.GetArgument( This );
-
-		if ( First ) {
-      First = false;
-		} else {
-		  CPq;
-      This.Push();
-      CPq;
-		}
 
     CPq;
 		GetReadBlocker_(This).Wait();
@@ -193,9 +184,9 @@ namespace stream_ {
 
     CPq;
     if ( Chunk.Amount() )
-      This.Push(Chunk);
+      Caller.SetReturnValue(Chunk);
     else
-      This.Push();
+      Caller.SetReturnValueAsNull();
 
     CPq;
     Chunk.Init();
@@ -210,13 +201,13 @@ namespace stream_ {
 	SCLNJS_F( Set )
 	{
 	qRH
-		sclnjs::rRStream Source, *This = NULL;
+		sclnjs::rObject Source, *This = NULL;
 		tht::rBlocker
       *ReadBlocker = NULL,
       *WriteBlocker = NULL;
     rChunk_ *Chunk = NULL;
 	qRB
-		This = qNEW(sclnjs::rRStream);
+		This = qNEW(sclnjs::rObject);
     ReadBlocker = qNEW(tht::rBlocker);
     WriteBlocker = qNEW(tht::rBlocker);
     Chunk = qNEW(rChunk_);
@@ -241,6 +232,44 @@ namespace stream_ {
 	}
 }
 
+namespace dummy_ {
+	SCLNJS_F( Read )
+	{
+	qRH
+		static bool First = true;
+		str::wString Chunk;
+	qRB
+		if ( First ) {
+      First = false;
+		  CPq;
+		  Chunk.Init("Coucou");
+      Caller.SetReturnValue(Chunk);
+		  CPq;
+		} else {
+		  CPq;
+		  Caller.SetReturnValueAsNull();
+      CPq;
+		}
+	qRR
+	qRT
+	qRE
+	}
+
+	SCLNJS_F( Set )
+	{
+	qRH
+		sclnjs::rObject *This = NULL;
+	qRB
+		This = qNEW(sclnjs::rObject);
+
+		tol::Init(*This);
+	qRR
+    qDELETE(This);
+	qRT
+	qRE
+	}
+}
+
 const scli::sInfo &sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 {
 	static scli::sInfo Info(NAME_LC, NAME_MC, "q37.info");
@@ -249,7 +278,8 @@ const scli::sInfo &sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 	Registrar.Register( parser::OnData, parser::OnEnd, parser::Parse );             // 1 … 3
 	Registrar.Register( stream::upstream::OnData, stream::upstream::OnEnd, stream::downstream::Read, stream::_Set ); // 4 … 7
 	Registrar.Register( console_::OnData, console_::OnEnd );                        // 8 … 9
-	Registrar.Register( stream_::OnData, stream_::OnEnd, stream_::Read, stream_::Set );            // 10 .. 13
+	Registrar.Register( stream_::OnData, stream_::OnEnd, stream_::Read, stream_::Set );            // 10 … 13
+	Registrar.Register(dummy_::Read, dummy_::Set);  // 14 … 15
 
 	return Info;
 }

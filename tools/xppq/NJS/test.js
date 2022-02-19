@@ -60,8 +60,11 @@ class StringStream extends stream.Readable {
     if (!this.eos) {
       this.push(this.text);
       this.eos = true
-    } else
-      this.push(null);
+    } else {
+      console.log(">>> B");
+      this.push();
+      console.log(">>> A");
+    }
   }
 }
 
@@ -172,8 +175,11 @@ function test(id) {
       console.log("XML parsing WITH preprocessing.\n");
       xppq.parse(new xppq.Stream(getStream()).on('error', (err) => console.error('>>> ERROR : ' + err)), callback);
       break;
+    case 9:
+      new xppq.DummyStream().pipe(process.stdout);
+      break;
     default:
-      console.log("'" + id + "' is not a valid test id ; must be '0' to '8'.");
+      console.log("'" + id + "' is not a valid test id ; must be '0' to '9'.");
       break;
   }
 }

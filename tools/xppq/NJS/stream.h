@@ -33,7 +33,7 @@ namespace stream {
 
     class rIn_ {
     private:
-      qRMV( sclnjs::rRStream, S_, Stream_ );
+      qRMV( sclnjs::rObject, S_, Stream_ );
       bso::sBool IsFirst_;
       str::wString Buffer_;
       tht::rBlocker Blocker_;
@@ -64,11 +64,13 @@ namespace stream {
       }
       sclnjs::eBehavior Send( void )
       {
+        qRVct();
+
         /* The use of a fixed size buffer, with several time calling the above function to fill it
         and then 'push()' the content, will crash the preprocessor. But, even in this case,
         when the preprocessor is handled by the parser, it will NOT crash (???). */
-        S_().Push( Buffer_ );
-        S_().End();
+//        S_().Push( Buffer_ );
+//        S_().End();
 
         return sclnjs::bExitAndDelete;
       }
@@ -88,7 +90,7 @@ namespace stream {
       }
       qCDTOR( rIn_ );
       void Init(
-        sclnjs::rRStream &Stream,
+        sclnjs::rObject &Stream,
         flx::rRelay_ &Core )
       {
         Stream_ = &Stream;
@@ -157,7 +159,7 @@ namespace stream {
         tol::reset( P, Relay_ );
       }
       qCDTOR( rRack );
-      void Init( sclnjs::rRStream &Stream )
+      void Init( sclnjs::rObject &Stream )
       {
         Relay_.Init();
 

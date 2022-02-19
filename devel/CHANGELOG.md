@@ -10,6 +10,10 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2022-02-19
+- N4NJS: removing `cURStream`.
+- SCLNJS: [adpt],
+
 ## 2022-02-18
 - THT: renaming blocker preset items,
 - TOL: introducing `qNEW(…]) and `qDELETE(…)`,

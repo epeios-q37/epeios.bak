@@ -58,10 +58,12 @@ namespace n4njs {
 		tString,
 		tStrings,
 		tObject,	// Generic object; sort of superclass.
-		tRStream,
+//		tRStream,
 		tBuffer,
 		tCallback,
 		tCallbacks,
+		tNull,  // To return the JS 'null' value.
+		tUndefined, // To return the JS 'undefined' value. Really useful ?
 		t_amount,
 		t_Undefined
 	};
@@ -149,6 +151,7 @@ namespace n4njs {
 		}
 	};
 
+# if 0	// Does not work consistently between version of Node.js.
 	class cURStream
 	: public cUObject
 	{
@@ -175,6 +178,7 @@ namespace n4njs {
 			return N4NJSEnd();
 		}
 	};
+# endif
 
 	// Callback for an upstream callback, i.e. which will be launched downstream.
 	class cUCallback

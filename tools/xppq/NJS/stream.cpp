@@ -28,7 +28,7 @@ namespace {
 void stream::upstream::OnData( sclnjs::sCaller &Caller )
 {
 qRH
-	sclnjs::rRStream This;
+	sclnjs::rObject This;
 	sclnjs::rBuffer Chunk;
 qRB
 	tol::Init( This, Chunk );
@@ -44,7 +44,7 @@ qRE
 void stream::upstream::OnEnd( sclnjs::sCaller &Caller )
 {
 qRH
-	sclnjs::rRStream This;
+	sclnjs::rObject This;
 qRB
 	tol::Init( This );
 	Caller.GetArgument( This );
@@ -58,7 +58,7 @@ qRE
 void stream::downstream::Read( sclnjs::sCaller &Caller )
 {
 qRH
-	sclnjs::rRStream This;
+	sclnjs::rObject This;
 qRB
 	This.Init();
 
@@ -73,7 +73,7 @@ qRT
 void stream::_Set( sclnjs::sCaller &Caller )
 {
 qRH
-	sclnjs::rRStream Source, *This = NULL;
+	sclnjs::rObject Source, *This = NULL;
 	shared::rRack *Rack = NULL;
 qRB
 	Rack = new shared::rRack;
@@ -81,7 +81,7 @@ qRB
 	if ( Rack == NULL )
 		qRAlc();
 
-	This = new sclnjs::rRStream;
+	This = new sclnjs::rObject;
 
 	if ( This == NULL )
 		qRAlc();

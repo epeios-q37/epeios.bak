@@ -214,6 +214,7 @@ namespace sclnjs {
 		}
 	};
 
+# if 0
 	typedef rObject_<n4njs::cURStream> rRStream_;
 
 	class rRStream
@@ -241,6 +242,7 @@ namespace sclnjs {
 			return C_().End();
 		}
 	};
+# endif
 
 	// Launch with 'dArguments' as arguments.
 	template <typename ret_item, typename ret> bso::sBool Launch_(
@@ -414,6 +416,14 @@ namespace sclnjs {
 		{
 			C_().SetReturnValue( n4njs::tStrings, &Values );
 		}
+		void SetReturnValueAsNull(void)
+		{
+		  C_().SetReturnValue(n4njs::tNull, NULL);
+		}
+		void SetReturnValueAsUndefined(void)
+		{
+		  C_().SetReturnValue(n4njs::tUndefined, NULL);
+		}
 	};
 
 	typedef void ( fFunction )( sCaller &Caller );
@@ -446,10 +456,12 @@ namespace scln4 {
 		cCaller_ &Caller,
 		sclnjs::rString &String );
 
+# if 0
 	template <> void Get(
 		int Index,
 		cCaller_ &Caller,
 		sclnjs::rRStream &Stream );
+# endif
 
 	template <> void Get(
 		int Index,

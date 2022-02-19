@@ -296,6 +296,7 @@ namespace {
 			}
 		};
 
+#if 0
 		class rRStream_
 		: public rCore_<n4njs::cURStream, nodeq::rPRStream>
 		{
@@ -319,6 +320,7 @@ namespace {
 				return Core_.End();
 			}
 		};
+#endif // 0
 
 		namespace {
 			namespace {
@@ -494,12 +496,14 @@ namespace {
 		return Get_<rBuffer_>( Index, Info, true );
 	}
 
+#if 0
 	inline n4njs::cURStream *GetStream_(
 		int Index,
 		const v8::FunctionCallbackInfo<v8::Value> &Info )
 	{
 		return Get_<rRStream_>( Index, Info, true );
 	}
+#endif // 0
 
 	inline n4njs::cUCallback *GetCallback_(
 		const v8::Local<v8::Value> &Value,
@@ -601,7 +605,10 @@ void SetReturnValue_(
 
 	String.Init( Value );
 
-	Info.GetReturnValue().Set(String.Core());
+	if ( Value.Amount() == 0 )
+    	Info.GetReturnValue().SetEmptyString();
+  else
+    Info.GetReturnValue().Set(String.Core());
 }
 
 void SetReturnValue_(
@@ -643,9 +650,11 @@ namespace {
 			case n4njs::tBuffer:
 				(*(n4njs::cUBuffer **)Value ) = GetBuffer_( Index, I_() );
 				break;
+#if 0
 			case n4njs::tRStream:
 				( *(n4njs::cURStream **)Value ) = GetStream_( Index, I_() );
 				break;
+#endif
 			case n4njs::tCallback:
 				( *(n4njs::cUCallback **)Value ) = GetCallback_( Index, I_(), false );
 				break;
@@ -668,6 +677,16 @@ namespace {
 			case n4njs::tStrings:
 				SetReturnValue_( I_(), *( const str::dStrings * )Value );
 				break;
+      case n4njs::tNull:
+        if ( Value != NULL )
+          qRGnr();
+        I_().GetReturnValue().SetNull();
+        break;
+      case n4njs::tUndefined:
+        if ( Value != NULL )
+          qRGnr();
+        I_().GetReturnValue().SetUndefined();
+        break;
 			default:
 				qRGnr();
 				break;
