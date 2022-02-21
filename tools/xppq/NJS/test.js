@@ -29,7 +29,7 @@ var inputs = {
   FILE: 1,
 };
 
-const input = inputs.STRING;
+const input = inputs.FILE;
 
 const xml = `
 <?xml version="1.0" encoding="UTF-8"?>
@@ -62,7 +62,7 @@ class StringStream extends stream.Readable {
       this.eos = true
     } else {
       console.log(">>> B");
-      this.push();
+      this.push(null);
       console.log(">>> A");
     }
   }
@@ -141,7 +141,7 @@ function test(id) {
   switch (id) {
     case 0:
       console.log("No treatment ; to see the original XML data.\n");
-      new getStream().pipe(process.stdout);
+      getStream().pipe(process.stdout);
       break;
     case 1:
       console.log("The original XML data through a natively handled stream.\n");

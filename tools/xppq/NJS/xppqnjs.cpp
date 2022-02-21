@@ -75,7 +75,7 @@ namespace console_ {
 		tol::Init( This );
 		Caller.GetArgument( This );
 
-		cio::COut << txf::nl;
+		cio::COut << txf::nl << "END!!!" << txf::commit;
 	qRR
 	qRT
 	qRE
@@ -85,8 +85,7 @@ namespace console_ {
 namespace stream_ {
 	namespace {
 		qCDEF(char *, TargetId_, "_q37Target");
-		qCDEF(char *, TargetReadBlockerId_, "_q37TargetReadBlocker");
-		qCDEF(char *, TargetWriteBlockerId_, "_q37TargetWriteBlocker");
+		qCDEF(char *, TargetEODId_, "_q37TargetEOD");
 		qCDEF(char *, TargetChunkId_, "_q37TargetChunk");
 
 		typedef str::wString rChunk_;
@@ -96,23 +95,9 @@ namespace stream_ {
 		  return Source.Get<sclnjs::rObject>(TargetId_);
 		}
 
-		namespace {
-      inline tht::rBlocker &GetBlocker_(
-        const char *Id,
-        sclnjs::rObject &Target)
-      {
-        return Target.Get<tht::rBlocker>(Id);
-      }
-		}
-
-		inline tht::rBlocker &GetReadBlocker_(sclnjs::rObject &Target)
+		inline bso::sBool &GetEOD_(sclnjs::rObject &Target)
 		{
-		  return GetBlocker_(TargetReadBlockerId_, Target);
-		}
-
-		inline tht::rBlocker &GetWriteBlocker_(sclnjs::rObject &Target)
-		{
-		  return GetBlocker_(TargetWriteBlockerId_, Target);
+      return Target.Get<bso::sBool>(TargetEODId_);
 		}
 
 		inline rChunk_ &GetChunk_(sclnjs::rObject &Target)
@@ -133,12 +118,8 @@ namespace stream_ {
 		sclnjs::rObject &Target = GetTarget_(This);
 
     CPq;
-		GetWriteBlocker_(Target).Wait();
-    CPq;
 		Chunk.ToString(GetChunk_(Target));
-    CPq;
-		GetReadBlocker_(Target).Unblock();
-    CPq;
+		CPq;
 	qRR
 	qRT
 	qRE
@@ -149,18 +130,13 @@ namespace stream_ {
 	qRH
 		sclnjs::rObject This;  // Source.
 	qRB
-    CPq;
 		tol::Init( This );
 		Caller.GetArgument( This );
-    CPq;
+
+		CPq;
 		sclnjs::rObject &Target = GetTarget_(This);
-    CPq;
-		GetWriteBlocker_(Target).Wait();
-    CPq;
-		GetChunk_(Target).Init();
-    CPq;
-		GetReadBlocker_(Target).Unblock();
-    CPq;
+		GetEOD_(Target) = true;
+		CPq;
 	qRR
 	qRT
 	qRE
@@ -174,25 +150,19 @@ namespace stream_ {
 		tol::Init( This );
 		Caller.GetArgument( This );
 
-    CPq;
-		GetReadBlocker_(This).Wait();
-    CPq;
-
     rChunk_ &Chunk = GetChunk_(This);
 
-//    cio::COut << ">>>" << Chunk << "<<<" << txf::commit;
-
     CPq;
-    if ( Chunk.Amount() )
+    if ( !GetEOD_(This) ) {
       Caller.SetReturnValue(Chunk);
-    else
+      CPq;
+    } else {
       Caller.SetReturnValueAsNull();
+      CPq;
+    }
+    CPq;
 
-    CPq;
     Chunk.Init();
-    CPq;
-    GetWriteBlocker_(This).Unblock();
-    CPq;
 	qRR
 	qRT
 	qRE
@@ -202,30 +172,24 @@ namespace stream_ {
 	{
 	qRH
 		sclnjs::rObject Source, *This = NULL;
-		tht::rBlocker
-      *ReadBlocker = NULL,
-      *WriteBlocker = NULL;
+    bso::sBool *EOD = NULL;
     rChunk_ *Chunk = NULL;
 	qRB
 		This = qNEW(sclnjs::rObject);
-    ReadBlocker = qNEW(tht::rBlocker);
-    WriteBlocker = qNEW(tht::rBlocker);
+    EOD = qNEW(bso::sBool);
     Chunk = qNEW(rChunk_);
 
-		tol::Init(Source, *This, *ReadBlocker, *Chunk);
-
-		WriteBlocker->Init(tht::bpDontLock);
+		tol::Init(Source, *This, *Chunk);
+		*EOD = false;
 
 		Caller.GetArgument( Source, *This );
 
 		Source.Set(TargetId_, This);
-		This->Set(TargetReadBlockerId_, ReadBlocker);
-		This->Set(TargetWriteBlockerId_, WriteBlocker);
+		This->Set(TargetEODId_, EOD);
 		This->Set(TargetChunkId_, Chunk);
 	qRR
     qDELETE(This);
-    qDELETE(ReadBlocker);
-    qDELETE(WriteBlocker);
+    qDELETE(EOD);
     qDELETE(Chunk);
 	qRT
 	qRE

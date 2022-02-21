@@ -68,25 +68,32 @@ var modes = {
 };
 
 function overload(mode, flow, onData, onEnd) {
+//  flow.setEncoding('utf8');
   if (mode == modes.READABLE)
     flow.on('readable', () => onReadable(flow, onData, onEnd));
   else if (mode == modes.DATA_END) {
-    flow.on('data', (chunk) => { njsq._call(xppq, onData, flow, chunk); process.stdout.write(""); });
+    flow.on('data', (chunk) => { console.log(">>> OnData"); njsq._call(xppq, onData, flow, chunk); process.stdout.write(""); });
     // The 'process.stdout.write("")' will do nothing, but the parser hangs
     // when parsing the preprocessor output if missing.
-    flow.on('end', () => njsq._call(xppq, onEnd, flow));
+    flow.on('end', () => { console.log(">>> OnEnd");  njsq._call(xppq, onEnd, flow) } );
   } else
     throw new Error("Unknown mode...");
 }
 
 // For debugging.
 class PassthroughStream extends stream.Readable {
-  _read(size) {
+  _read() {
     console.log("Before");
     let chunk = njsq._call(xppq, 12, this);
     console.log(chunk);
     console.log("Between");
-    this.push( chunk );
+    if ( ( chunk == null ) || ( chunk.size <= 1 ) ) {
+      this.push( chunk );
+      console.log("Yop");
+    } else {
+      // this.push("Yo!");
+      console.log("Year!");
+    }
     console.log("After");
   }
   constructor(flow, options) {
