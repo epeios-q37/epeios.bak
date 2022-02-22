@@ -81,25 +81,15 @@ function overload(mode, flow, onData, onEnd) {
 }
 
 // For debugging.
-class PassthroughStream extends stream.Readable {
-  _read() {
-    console.log("Before");
-    let chunk = njsq._call(xppq, 12, this);
-    console.log(chunk);
-    console.log("Between");
-    if ( ( chunk == null ) || ( chunk.size <= 1 ) ) {
-      this.push( chunk );
-      console.log("Yop");
-    } else {
-      // this.push("Yo!");
-      console.log("Year!");
-    }
-    console.log("After");
+class PassthroughStream extends stream.Transform {
+  _transform(chunk, enc, cb) {
+//    var upperChunk = chunk.toString().toUpperCase();
+//    this.push(upperChunk);
+    cb(null,  njsq._call(xppq, 12, chunk));
   }
-  constructor(flow, options) {
+
+  constructor(options) {
     super(options);
-    overload(modes.DATA_END, flow, 10, 11);
-    njsq._call(xppq, 13, flow, this);
   }
 }
 

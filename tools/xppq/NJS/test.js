@@ -145,7 +145,7 @@ function test(id) {
       break;
     case 1:
       console.log("The original XML data through a natively handled stream.\n");
-      new xppq.PassthroughStream(getStream()).pipe(process.stdout);
+      getStream().pipe(new xppq.PassthroughStream()).pipe(process.stdout);
       break;
     case 2:
       console.log("Outputting natively to console.\n");
@@ -153,7 +153,7 @@ function test(id) {
       break;
     case 3:
       console.log("Outputting natively to console through a natively handled stream.\n");
-      xppq.basic(new xppq.PassthroughStream(getStream()));
+      xppq.basic(getStream().pipe(new xppq.PassthroughStream()));
       break;
     case 4:
       console.log("Outputting using a natively handled stream.\n");

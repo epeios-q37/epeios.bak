@@ -142,6 +142,7 @@ namespace stream_ {
 	qRE
 	}
 
+
 	SCLNJS_F( Read )
 	{
 	qRH
@@ -163,6 +164,25 @@ namespace stream_ {
     CPq;
 
     Chunk.Init();
+	qRR
+	qRT
+	qRE
+	}
+
+	SCLNJS_F( Transform )
+	{
+	qRH
+		sclnjs::rBuffer In;
+		str::wString Out;
+	qRB
+		tol::Init(In, Out);
+		Caller.GetArgument(In);
+
+		In.ToString(Out);
+
+		str::ToUpper(Out);
+
+		Caller.SetReturnValue(Out);
 	qRR
 	qRT
 	qRE
@@ -242,7 +262,7 @@ const scli::sInfo &sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 	Registrar.Register( parser::OnData, parser::OnEnd, parser::Parse );             // 1 … 3
 	Registrar.Register( stream::upstream::OnData, stream::upstream::OnEnd, stream::downstream::Read, stream::_Set ); // 4 … 7
 	Registrar.Register( console_::OnData, console_::OnEnd );                        // 8 … 9
-	Registrar.Register( stream_::OnData, stream_::OnEnd, stream_::Read, stream_::Set );            // 10 … 13
+	Registrar.Register( stream_::OnData, stream_::OnEnd, stream_::Transform, stream_::Set );            // 10 … 13
 	Registrar.Register(dummy_::Read, dummy_::Set);  // 14 … 15
 
 	return Info;
