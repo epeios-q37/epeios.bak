@@ -83,9 +83,9 @@ namespace flx {
 	typedef string_text_oflow___ rStringTOFlow;
 	typedef rStringTOFlow rStringTWFlow;
 
-	class string_text_iflow___;
-	typedef string_text_iflow___ rStringTIFlow;
-	typedef rStringTIFlow rStringTIFlow;
+	class string_text_iflow__;
+	typedef string_text_iflow__ sStringTIFlow;
+	typedef sStringTIFlow sStringTRFlow;
 
 	class string_text_oflow___;
 	typedef string_text_oflow___ rStringTOFlow;

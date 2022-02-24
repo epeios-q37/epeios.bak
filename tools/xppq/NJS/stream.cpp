@@ -19,89 +19,233 @@
 
 #include "stream.h"
 
+#include "mtk.h"
+
 using namespace stream;
 
 namespace {
-  qCDEF( char *, Id_, "_q37RackPreprocessor" );
+  qCDEF( char *, Id_, "_q37Preprocessor" );
 }
 
-void stream::upstream::OnData( sclnjs::sCaller &Caller )
+namespace {
+	class rRWDriver_
+	: public fdr::rRWDressedDriver
+	{
+  private:
+    flx::sStringRFlow Input_;
+    flx::rStringWFlow Output_;
+    tht::rBlocker UpstreamBlocker_;
+    tht::rBlocker DownstreamBlocker_;
+    bso::sBool
+      Pending_,
+      Working_,
+      Finished_;
+  protected:
+		virtual fdr::sSize FDRRead(
+			fdr::sSize Maximum,
+			fdr::sByte *Buffer ) override
+    {
+      fdr::sSize &Amount = Maximum;
+
+      if ( !Working_ ) {
+        DownstreamBlocker_.Wait();
+        Working_ = true;
+      }
+
+      if ( ( Amount = Input_.ReadUpTo(Maximum, Buffer) ) == 0 ) { // EOF; all the current chunk as been read.
+        Pending_ = false;
+        Working_ = false;
+        UpstreamBlocker_.Unblock();
+      }
+
+      return Amount;
+    }
+		virtual bso::sBool FDRDismiss(
+			bso::sBool Unlock,
+			qRPN ) override
+    {
+      return true;
+    }
+		virtual fdr::sTID FDRRTake( fdr::sTID Owner ) override
+		{
+			return fdr::UndefinedTID;
+		}
+		virtual fdr::sSize FDRWrite(
+			const fdr::sByte *Buffer,
+			fdr::sSize Maximum ) override
+    {
+      if ( !Working_ ) {
+        DownstreamBlocker_.Wait();
+        Working_ = true;
+      }
+
+      Output_.Write(Buffer, Maximum);
+
+      if ( !Pending_ ) {
+        Working_ = false;
+        UpstreamBlocker_.Unblock();
+      }
+
+      return Maximum;
+    }
+		virtual bso::sBool FDRCommit(
+			bso::sBool Unlock,
+			qRPN ) override
+    {
+      Finished_ = true;
+      UpstreamBlocker_.Unblock();
+
+      return true;
+    }
+		virtual fdr::sTID FDRWTake( fdr::sTID Owner ) override
+		{
+			return fdr::UndefinedTID;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			fdr::rRWDressedDriver::reset( P );
+			tol::reset( P, Input_, Output_, DownstreamBlocker_, UpstreamBlocker_);
+			Pending_ = Working_ = Finished_ = false;
+		}
+		qCVDTOR( rRWDriver_ );
+		void Init( fdr::eThreadSafety ThreadSafety = fdr::ts_Default )
+		{
+			fdr::rRWDressedDriver::Init( ThreadSafety );
+			// 'Input_' and 'Output' will be initialized later.
+			Pending_ = Working_ = Finished_ = false;
+			tol::Init(UpstreamBlocker_, DownstreamBlocker_);
+			// 'Output' will be initialized later;
+		}
+		void Handle(
+     const str::dString &Input,
+      str::dString &Output)
+    {
+      Finished_ = false;
+
+      Input_.Init(Input);
+      Output_.Init(Output);
+
+      Pending_ = true;
+
+      DownstreamBlocker_.Unblock();
+      UpstreamBlocker_.Wait();
+    }
+    void Finish(str::dString &Output)
+    {
+      if ( !Finished_ ) {
+        Output_.Init(Output);
+
+        Pending_ = true;
+        DownstreamBlocker_.Unblock();
+        UpstreamBlocker_.Wait();
+      }
+    }
+	};
+
+	typedef flw::rXDressedRWFlow<rRWDriver_> rRWFlow_;
+
+	void Routine(
+    void *UP,
+    mtk::gBlocker &Blocker)
+  {
+    rRWFlow_ &Flow = *(rRWFlow_ *)UP;
+
+    xtf::sRFlow XFlow;
+    txf::sWFlow TFlow;
+
+    XFlow.Init(Flow, utf::f_Default);
+    TFlow.Init(Flow);
+
+    xpp::Process(XFlow, xpp::rCriterions(""), xml::oCompact, TFlow);
+
+    Blocker.Release();
+  }
+
+
+	class rPreprocessor_
+	: public rRWFlow_
+	{
+  public:
+    void reset(bso::sBool P = true)
+    {
+      rRWFlow_::reset(P);
+    }
+    qCVDTOR(rPreprocessor_);
+    void Init(void)
+    {
+      subInit();
+      mtk::Launch(Routine, this);
+    }
+		void Handle(
+     const str::dString &Input,
+      str::dString &Output)
+    {
+      return Driver_.Handle(Input, Output);
+    }
+    void Finish(str::dString &Output)
+    {
+      return Driver_.Finish(Output);
+    }
+  };
+}
+
+SCLNJS_F(stream::Set)
+{
+qRH
+	sclnjs::rObject This;
+	rPreprocessor_ *Preprocessor = NULL;
+qRB
+  Preprocessor = qNEW(rPreprocessor_);
+
+	tol::Init(This);
+	Preprocessor->Init();
+
+	Caller.GetArgument( This );
+
+	This.Set(Id_, Preprocessor);
+qRR
+  qDELETE(Preprocessor);
+qRT
+qRE
+}
+
+SCLNJS_F(stream::Transform)
 {
 qRH
 	sclnjs::rObject This;
 	sclnjs::rBuffer Chunk;
+	str::wString Input, Output;
 qRB
-	tol::Init( This, Chunk );
-	Caller.GetArgument( This, Chunk );
+	tol::Init(This, Chunk, Input, Output);
+	Caller.GetArgument(This, Chunk);
 
-	This.Get<shared::rRack>(Id_) << Chunk;
-	cio::COut << Chunk << txf::commit;
+	Chunk.ToString(Input);
+
+	This.Get<rPreprocessor_>(Id_).Handle(Input, Output);
+
+	Caller.SetReturnValue(Output);
 qRR
 qRT
 qRE
 }
 
-void stream::upstream::OnEnd( sclnjs::sCaller &Caller )
+SCLNJS_F(stream::Flush)
 {
 qRH
 	sclnjs::rObject This;
+	str::wString Output;
 qRB
-	tol::Init( This );
-	Caller.GetArgument( This );
-
-	This.Get<shared::rRack>(Id_).Commit();
-qRR
-qRT
-qRE
-}
-
-void stream::downstream::Read( sclnjs::sCaller &Caller )
-{
-qRH
-	sclnjs::rObject This;
-qRB
-	This.Init();
+	tol::Init(This, Output);
 
 	Caller.GetArgument( This );
 
-	This.Get<shared::rRack>(Id_).Unblock();	// Reports than 'push()' operations can be made.
+	This.Get<rPreprocessor_>(Id_).Finish(Output);
+
+	Caller.SetReturnValue(Output);
 qRR
 qRE
 qRT
 }
 
-void stream::_Set( sclnjs::sCaller &Caller )
-{
-qRH
-	sclnjs::rObject Source, *This = NULL;
-	shared::rRack *Rack = NULL;
-qRB
-	Rack = new shared::rRack;
 
-	if ( Rack == NULL )
-		qRAlc();
-
-	This = new sclnjs::rObject;
-
-	if ( This == NULL )
-		qRAlc();
-
-	tol::Init( Source, *This );
-
-	Caller.GetArgument( Source, *This );
-
-	Rack->Init( *This );
-
-	Source.Set( Id_, Rack );
-	This->Set( Id_, Rack );
-
-	sclnjs::Launch( *Rack );
-qRR
-	if ( Rack != NULL )
-		delete Rack;
-
-	if ( This != NULL )
-		delete This;
-qRT
-qRE
-}

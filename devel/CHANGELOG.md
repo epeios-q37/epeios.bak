@@ -10,6 +10,10 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2022-02-24
+- FDR: [stdz],
+- FLX: typo,
+
 ## 2022-02-19
 - N4NJS: removing `cURStream`.
 - SCLNJS: [adpt],

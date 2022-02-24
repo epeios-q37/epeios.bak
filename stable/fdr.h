@@ -834,9 +834,9 @@ namespace fdr {
 	: public fdr::rRDressedDriver
 	{
 	protected:
-		virtual fdr::size__ FDRRead(
-			fdr::size__ Maximum,
-			fdr::byte__ *Buffer ) override;
+		virtual fdr::sSize FDRRead(
+			fdr::sSize Maximum,
+			fdr::sByte *Buffer ) override;
 		virtual bso::sBool FDRDismiss(
 			bso::sBool Unlock,
 			qRPN ) override;
@@ -863,9 +863,9 @@ namespace fdr {
 	: public fdr::rWDressedDriver
 	{
 	protected:
-		virtual fdr::size__ FDRWrite(
-			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum ) override;
+		virtual fdr::sSize FDRWrite(
+			const fdr::sByte *Buffer,
+			fdr::sSize Maximum ) override;
 		virtual bso::sBool FDRCommit(
 			bso::sBool Unlock,
 			qRPN ) override;
@@ -892,9 +892,9 @@ namespace fdr {
 	: public fdr::rRWDressedDriver
 	{
 	protected:
-		virtual fdr::size__ FDRRead(
-			fdr::size__ Maximum,
-			fdr::byte__ *Buffer ) override;
+		virtual fdr::sSize FDRRead(
+			fdr::sSize Maximum,
+			fdr::sByte *Buffer ) override;
 		virtual bso::sBool FDRDismiss(
 			bso::sBool Unlock,
 			qRPN ) override;
@@ -902,9 +902,9 @@ namespace fdr {
 		{
 			return fdr::UndefinedTID;
 		}
-		virtual fdr::size__ FDRWrite(
-			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum ) override;
+		virtual fdr::sSize FDRWrite(
+			const fdr::sByte *Buffer,
+			fdr::sSize Maximum ) override;
 		virtual bso::sBool FDRCommit(
 			bso::sBool Unlock,
 			qRPN ) override;
