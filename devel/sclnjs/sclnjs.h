@@ -112,9 +112,13 @@ namespace sclnjs {
 		{
 			return C_().Set( Key, Value );
 		}
-		template <typename object> object &Get( const char *Key )
+		template <typename object> object *GetP(const char *Key)
 		{
-			return *(object *)C_().Get( Key );
+			return (object *)C_().Get(Key);
+		}
+		template <typename object> object &Get(const char *Key)
+		{
+			return *GetP<object>(Key);
 		}
 		void EmitError( const str::dString &Message )
 		{

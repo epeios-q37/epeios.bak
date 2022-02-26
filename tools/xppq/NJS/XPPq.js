@@ -72,10 +72,10 @@ function overload(mode, flow, onData, onEnd) {
   if (mode == modes.READABLE)
     flow.on('readable', () => onReadable(flow, onData, onEnd));
   else if (mode == modes.DATA_END) {
-    flow.on('data', (chunk) => { console.log(">>> OnData"); njsq._call(xppq, onData, flow, chunk); process.stdout.write(""); });
+    flow.on('data', (chunk) => {njsq._call(xppq, onData, flow, chunk); process.stdout.write(""); });
     // The 'process.stdout.write("")' will do nothing, but the parser hangs
     // when parsing the preprocessor output if missing.
-    flow.on('end', () => { console.log(">>> OnEnd");  njsq._call(xppq, onEnd, flow) } );
+    flow.on('end', () => {njsq._call(xppq, onEnd, flow) } );
   } else
     throw new Error("Unknown mode...");
 }
@@ -85,7 +85,7 @@ class PassthroughStream extends stream.Transform {
   _transform(chunk, enc, cb) {
 //    var upperChunk = chunk.toString().toUpperCase();
 //    this.push(upperChunk);
-    cb(null,  njsq._call(xppq, 12, chunk));
+    cb(null,  njsq._call(xppq, 40, chunk));
   }
 
   constructor(options) {
@@ -93,15 +93,19 @@ class PassthroughStream extends stream.Transform {
   }
 }
 
-class Stream extends stream.Readable {
-  _read(size) {
-    this.push(njsq._call(xppq, 6, this));
-  }
-  constructor(flow, options) {
+class Stream extends stream.Transform {
+  constructor(options) {
     super(options);
-    overload(modes.DATA_END, flow, 4, 5);
-    njsq._call(xppq, 7, flow, this);
+    njsq._call(xppq, 20, this)
   }
+  _transform(chunk, enc, cb) {
+    cb(null,  njsq._call(xppq, 21, this, chunk));
+  }
+
+  _flush(cb) {
+    cb(null, njsq._call(xppq, 22, this));
+  }
+    
 }
 
 class DummyStream_ extends stream.Readable {
@@ -150,6 +154,6 @@ module.exports.wrapperInfo = () => njsq._wrapperInfo();
 module.exports.Stream = Stream;
 module.exports.PassthroughStream = PassthroughStream;
 module.exports.DummyStream = DummyStream_;
-module.exports.basic = (flow) => { overload(modes.DATA_END, flow, 8, 9) };
-module.exports.parse = (flow, callback) => { overload(modes.READABLE, flow, 1, 2); njsq._call(xppq, 3, flow, callback) };
+module.exports.basic = (flow) => { overload(modes.DATA_END, flow, 30, 31) };
+module.exports.parse = (flow, callback) => { overload(modes.READABLE, flow, 10, 11); njsq._call(xppq, 12, flow, callback) };
 module.exports.tokens = tokens;

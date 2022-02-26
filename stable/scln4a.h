@@ -92,28 +92,50 @@ namespace scln4 {
 }
 
 namespace scln4a {
+  void Register_(
+    n4all::sIndex Current,
+    n4all::sIndex New,
+    n4all::cRegistrar &Registrar);
+
 	template <typename function> class sRegistrar {
 	private:
 		qRMV( n4all::cRegistrar, R_, Registrar_ );
+		n4all::sIndex Index_;
 	public:
 		void reset( bso::sBool = true )
 		{
 			Registrar_ = NULL;
+			Index_ = 0;
 		}
 		qCDTOR( sRegistrar );
 		void Init( n4all::cRegistrar &Registrar )
 		{
 			Registrar_ = &Registrar;
+			Index_ = 0;
 		}
 		// Termination function.
 		void Register()
 		{}
-		template <typename ...functions> void Register(
-			function Function,
-			functions ...Functions )
+		template <typename ...fori> void Register(
+			n4all::sIndex Index,
+			fori ...FunctionsOrIndexes )
 		{
-			R_().Register( (void *)Function );
-			Register( Functions... );
+		  Register_(Index_, Index, R_());
+
+		  Index_ = Index;
+
+      Register( FunctionsOrIndexes... );
+		}
+		template <typename ...fori> void Register(
+			function Function,
+			fori ...FunctionsOrIndexes )
+		{
+			if ( Index_ != R_().Register((void *)Function, Index_) )
+        qRFwk();
+
+      Index_++;
+
+			Register( FunctionsOrIndexes... );
 		}
 	};
 

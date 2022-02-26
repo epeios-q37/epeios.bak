@@ -52,3 +52,20 @@ qRFT
 qRFE( sclm::ErrorDefaultHandling() )
 	return Launcher;
 }
+
+void scln4a::Register_(
+  n4all::sIndex Current,
+  n4all::sIndex New,
+  n4all::cRegistrar &Registrar)
+{
+    if ( Current >= New )
+      qRFwk();
+
+    while ( Current < New ) {
+      if ( Current != Registrar.Register(NULL, Current) )
+        qRFwk();
+
+      Current++;
+    }
+}
+

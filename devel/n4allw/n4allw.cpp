@@ -39,9 +39,16 @@ namespace {
 	private:
 		qRMV( dFunctions_, F_, Functions_ );
 	protected:
-		virtual void N4ALLRegister( void *Function ) override
+		virtual n4all::sIndex N4ALLRegister(
+      void *Function,
+      n4all::sIndex Index) override
 		{
-			F_().Append( Function );
+			sdr::sRow Row = F_().Append( Function );
+
+			if ( *Row != Index )
+        qRFwk();
+
+      return Index;
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -61,9 +68,14 @@ namespace {
 void *n4allw::rLauncher::GetFunction_( sdr::sRow Row )
 {
 	if ( !Functions_.Exists( Row ) )
-		qRGnr();
+		qRFwk();
 
-	return Functions_( Row );
+  void *Function = Functions_(Row);
+
+  if ( Function == NULL )
+    qRFwk();
+
+	return Function;
 }
 
 bso::bool__ n4allw::rLauncher::Register_(

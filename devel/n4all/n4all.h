@@ -66,14 +66,22 @@ namespace n4all {
 		}
 	};
 
+	typedef bso::sUInt sIndex;
+
+	qCDEF(sIndex, IndexMax, bso::UIntMax)	;
+
 	class cRegistrar {
 	protected:
-		virtual void N4ALLRegister( void *Function ) = 0;
+		virtual sIndex N4ALLRegister(
+      void *Function,
+      sIndex Index) = 0;
 	public:
 		qCALLBACK( Registrar );
-		void Register( void *Function )
+		sIndex Register(
+      void *Function,
+      sIndex Index)
 		{
-			return N4ALLRegister( Function );
+			return N4ALLRegister(Function, Index);
 		}
 	};
 

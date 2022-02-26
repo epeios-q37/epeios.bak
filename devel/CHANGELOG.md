@@ -10,6 +10,11 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2022-02-26
+- N4ALL: introducing index handling,
+- N4ALLW, SCLN4A: [adpt],
+- SCLNJS: introducing `rObject_::GetP(…)`,
+
 ## 2022-02-24
 - FDR: [stdz],
 - FLX: typo,

@@ -93,6 +93,7 @@ namespace {
 			qRPN ) override
     {
       Finished_ = true;
+      Output_.Commit();
       UpstreamBlocker_.Unblock();
 
       return true;
@@ -154,12 +155,12 @@ namespace {
     xtf::sRFlow XFlow;
     txf::sWFlow TFlow;
 
+    Blocker.Release();
+
     XFlow.Init(Flow, utf::f_Default);
     TFlow.Init(Flow);
 
-    xpp::Process(XFlow, xpp::rCriterions(""), xml::oCompact, TFlow);
-
-    Blocker.Release();
+    xpp::Process(XFlow, xpp::rCriterions(""), xml::oIndent, TFlow);
   }
 
 
@@ -175,10 +176,11 @@ namespace {
     void Init(void)
     {
       subInit();
+      Driver_.Init();
       mtk::Launch(Routine, this);
     }
 		void Handle(
-     const str::dString &Input,
+      const str::dString &Input,
       str::dString &Output)
     {
       return Driver_.Handle(Input, Output);
@@ -235,16 +237,20 @@ SCLNJS_F(stream::Flush)
 qRH
 	sclnjs::rObject This;
 	str::wString Output;
+	rPreprocessor_ *Preprocessor = NULL;
 qRB
 	tol::Init(This, Output);
 
 	Caller.GetArgument( This );
 
-	This.Get<rPreprocessor_>(Id_).Finish(Output);
+	Preprocessor = This.GetP<rPreprocessor_>(Id_);
+
+	Preprocessor->Finish(Output);
 
 	Caller.SetReturnValue(Output);
 qRR
 qRE
+  qDELETE(Preprocessor);
 qRT
 }
 

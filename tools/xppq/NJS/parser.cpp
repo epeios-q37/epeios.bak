@@ -88,26 +88,20 @@ namespace {
 		xtf::sRFlow XFlow_;
 		xml::rParser Parser_;
 		rContent_ Content_;
-		qRMV( sclnjs::rCallback, C_, Callback_ );
-		common::sRelay Relay_;
+    sclnjs::rCallback Callback_;
+    common::sRelay Relay_;
 		bso::sBool First_;
 	public:
 		txf::rWFlow OFlow;
 		str::wString Error;
 		void reset( bso::sBool P = true )
 		{
-			if ( P ) {
-				if ( Callback_ != NULL )
-					delete Callback_;
-			}
-
 			tol::reset( P, IFlow_, XFlow_, OFlow, Parser_, Content_, Callback_, Relay_, First_, Error );
 		}
 		qCVDTOR( rRack_ );
-		void Init( sclnjs::rCallback *Callback )
+		sclnjs::rCallback &Init(void)
 		{
-			Callback_ = Callback;
-			tol::Init( Relay_, Content_, Error );
+			tol::Init( Content_, Callback_, Relay_, Error );
 			OFlow.Init( Relay_.Out );
 			IFlow_.Init( Relay_.In );
 			tol::Init( Content_ );
@@ -117,6 +111,8 @@ namespace {
 			XFlow_.Init( IFlow_, utf::f_Guess );
 			Parser_.Init( XFlow_, xml::eh_Default );
 			*/
+
+			return Callback_;
 		}
 		void Read( void )
 		{
@@ -132,12 +128,12 @@ namespace {
 		bso::sBool SendToCallback( void )
 		{
 			if ( Content_.Token == xml::t_Error ) {
-				C_().VoidLaunch( 0, Content_.Tag, Content_.Attribute, Content_.Error );
+				Callback_.VoidLaunch( 0, Content_.Tag, Content_.Attribute, Content_.Error );
 				XFlow_.UndelyingFlow().RDriver().RTake( tht::GetTID() );
 				XFlow_.Dismiss();	// To avoid locker owner problem on destruction.
 				return true;
 			} else if ( Content_.Token == xml::t_Processed ) {
-				C_().VoidLaunch( 1, Content_.Tag, Content_.Attribute, Content_.Value );
+				Callback_.VoidLaunch( 1, Content_.Tag, Content_.Attribute, Content_.Value );
 				XFlow_.UndelyingFlow().RDriver().RTake( tht::GetTID() );
 				XFlow_.Dismiss();	// To avoid locker owner problem on destruction.
 				return true;
@@ -162,7 +158,7 @@ namespace {
 					break;
 				}
 
-				C_().VoidLaunch( Token, Content_.Tag, Content_.Attribute, Content_.Value );
+				Callback_.VoidLaunch( Token, Content_.Tag, Content_.Attribute, Content_.Value );
 			}
 
 			return false;
@@ -193,10 +189,6 @@ namespace {
 			rRack_::reset( P );
 		}
 		qCVDTOR( rRackAsyncCallback_ );
-		void Init( sclnjs::rCallback *Callback )
-		{
-			rRack_::Init( Callback );
-		}
 	};
 }
 
@@ -220,11 +212,14 @@ SCLNJS_F( parser::OnEnd )
 {
 qRH
 	sclnjs::rObject This;
+	rRack_ *Rack = NULL;
 qRB
 	tol::Init( This );
 	Caller.GetArgument( This );
 
-	This.Get<rRack_>( Id_ ).OFlow.Commit();
+  Rack = This.GetP<rRack_>(Id_);
+
+	Rack->OFlow.Commit();
 qRR
 qRT
 qRE
@@ -234,40 +229,19 @@ SCLNJS_F( parser::Parse )
 {
 qRH
 	sclnjs::rObject Source;
-	sclnjs::rCallback *Callback = NULL;
 	rRackAsyncCallback_ *Rack = NULL;
 qRB
-	Rack = new rRackAsyncCallback_;
+	Rack = qNEW(rRackAsyncCallback_);
+	// NOTA: 'Rack' is deleted upstream (see 'SCLNJSAfter' above).
 
-	if ( Rack == NULL )
-		qRGnr();
+	Source.Init();
+	Caller.GetArgument(Source, Rack->Init());
 
-	Callback = new sclnjs::rCallback;
-
-	if ( Callback == NULL )
-		qRGnr();
-
-	tol::Init( Source, *Callback );
-	Caller.GetArgument( Source, *Callback );
-	Rack->Init( Callback );
-
-	Source.Set( Id_, Rack );
-
-#if 1
-//	Source.OnReadable( OnReadable_ );
-// The 'readable' event is implemented in the JS file.
-# else // Doesn't always work. Sometimes, 'onend' event is not launched...
-	Source.OnData( OnData_ );
-	Source.OnEnd( OnEnd_ );
-#endif
+	Source.Set(Id_, Rack);
 
 	sclnjs::Launch( *Rack );
 qRR
-	if ( Rack != NULL )
-		delete Rack;
-
-	if ( Callback != NULL )
-		delete Callback;
+	qDELETE(Rack);
 qRT
 qRE
 }
