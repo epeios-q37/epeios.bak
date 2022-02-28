@@ -54,9 +54,9 @@ const body = `<fieldset>
   <textarea name="" id="input" cols="30" rows="10"></textarea>
   <fieldset>
     <button xdh:onevent="Raw">Raw</button>
-    <button>Preprocessed</button>
-    <button>Parsing without prprocessing</button>
-    <button>Parsing with preprocessing</button>
+    <button xdh:onevent="Preprocessed">Preprocessed</button>
+    <button xdh:onevent="With">Parsing without preprocessing</button>
+    <button xdh:onevent="Without">Parsing with preprocessing</button>
     <fieldset>
        <output id="output">Output</output>
     </fieldset>
@@ -88,13 +88,29 @@ function streamToString(stream, cb) {
   });
 }
 
+var dom_;
+var out = "";
+var indentLevel = 0;
+
+function write(text) {
+  out = out + text;
+}
+
+function indent(level) {
+  while (level--)
+    write(' ');
+}
+
 function callback(token, tag, attribute, value) {
   switch (token) {
     case xppq.tokens.ERROR:
       throw new Error("ERROR :'" + value + "'\n");
       break;
     case xppq.tokens.DONE:
-      process.stdout.write(out);
+      out = "coucou";
+      dom_.setValue("output", out, () => dom_.setValue("input", "toto"));
+      //dom_.inner("output", "<div>" + out + "</div>");
+      console.log("Hey!");
       break;
     case xppq.tokens.START_TAG:
       write("Start tag:");
@@ -138,24 +154,35 @@ class StringStream extends stream.Readable {
 
 function escapeHtml(unsafe)
 {
-    return unsafe
+    return "<div>" + unsafe
          .replace(/&/g, "&amp;")
          .replace(/</g, "&lt;")
          .replace(/>/g, "&gt;")
          .replace(/"/g, "&quot;")
-         .replace(/'/g, "&#039;");
+         .replace(/'/g, "&#039;") + "</div>";
  }
 
 function acRaw(dom) {
-  streamToString(new StringStream(xml).pipe(new xppq.Stream()),(result) => dom.inner("output", escapeHtml(result)));
-//  streamToString(new StringStream(dom.getValue("input")).pipe(new xppq.Stream), (result) => dom.setValue("output", result));
+  dom.getValue("input", (value) => streamToString(new StringStream(value).pipe(new xppq.Stream()),(result) => dom.inner("output", escapeHtml(result))), true);
+// dom.getValue("input", (value) =>  dom.inner("output", escapeHtml(value)));
 }
 
 
 const callbacks = {
-    "": (dom) => dom.inner("", body,
-        () => dom.setValue("input", xml)),
-    "Raw": acRaw,
-};
+  "": (dom) => dom.inner("", body,
+     () => dom.setValue("input", xml)),
+  "Raw": (dom) => dom.getValue("input",
+    (value) => streamToString(new StringStream(value),
+      (result) => dom.inner("output", escapeHtml(result))), true),
+  "Preprocessed": (dom) => dom.getValue("input",
+    (value) => streamToString(new StringStream(value).pipe(new xppq.Stream()),
+      (result) => dom.inner("output", escapeHtml(result))), true),
+  "With": (dom) => {
+    dom_ = dom;
+    dom.getValue("input",
+      (value) => streamToString(new StringStream(value),
+        (result) => xppq.parse(new StringStream(result), callback)), true);
+    },
+  };
 
 atlas.launch(() => new atlas.DOM(), callbacks, head);

@@ -33,6 +33,25 @@ var wPort = "";
 var instances = {};
 var socket = undefined;
 
+const path = require('path');
+
+['debug', 'log', 'warn', 'error'].forEach((methodName) => {
+    const originalLoggingMethod = console[methodName];
+    console[methodName] = (firstArgument, ...otherArguments) => {
+        const originalPrepareStackTrace = Error.prepareStackTrace;
+        Error.prepareStackTrace = (_, stack) => stack;
+        const callee = new Error().stack[1];
+        Error.prepareStackTrace = originalPrepareStackTrace;
+        const relativeFileName = path.relative(process.cwd(), callee.getFileName());
+        const prefix = `${relativeFileName}:${callee.getLineNumber()}:`;
+        if (typeof firstArgument === 'string') {
+            originalLoggingMethod(prefix + ' ' + firstArgument, ...otherArguments);
+        } else {
+            originalLoggingMethod(prefix, firstArgument, ...otherArguments);
+        }
+    };
+});
+
 function REPLit(url) {
 	require('http').createServer(function (req, res) {
 		res.end("<html><body><iframe style=\"border-style: none; width: 100%;height: 100%\" src=\"https://atlastk.org/repl_it.php?url=" + url + "\"</iframe></body></html>");
@@ -58,10 +77,10 @@ switch (getEnv("ATK").toUpperCase()) {
 case 'DEV':
 	pAddr = "localhost";
 	wPort = "8080";
-    console.log("\tDEV mode !");
+	process.stdout.write("\tDEV mode !\n");
 	break;
 case 'TEST':
-    console.log("\tTEST mode !");
+	process.stdout.write("\tTEST mode !\n");
 	break;
 case '':case 'REPLIT':case 'NONE':
 	break;
@@ -83,6 +102,7 @@ if (wPort !== "")
 
 const shared = require('./XDHqSHRD.js');
 const net = require('net');
+const { exit } = require('process');
 
 const types = shared.types;
 const open = shared.open;
@@ -191,9 +211,9 @@ var sInt = 0;
 var length = 0;
 var buffer = Buffer.alloc(0);
 var string = "";
-var amount = 0;
+var amount_ = 0;
 var strings = [];
-var id = "";	// Buffers the action related id.
+var id_ = "";	// Buffers the action related id.
 var cont = true;
 
 /********/
@@ -220,7 +240,7 @@ function push(op) {
 		push(d.AMOUNT);
 		break;
 	case d.AMOUNT:
-		amount = 0;
+		amount_ = 0;
 		push(d.UINT);
 		break;
 	case d.STRING:
@@ -299,14 +319,14 @@ function handleData(feeder) {
 		break;
 	case d.AMOUNT:
 		pop();
-		amount = uInt;
+		amount_ = uInt;
 		push(d.STRING);
 		break;
 	case d.STRINGS:
 		strings.push(string);
 		// console.log("S:", amount, strings);
 
-		if ( strings.length < amount)
+		if ( strings.length < amount_)
 			push(d.STRING);
 		else
 			pop();
@@ -325,7 +345,7 @@ function handleData(feeder) {
 /* SERVE */
 /*********/
 
-var instance = undefined;
+var instance_ = undefined;
 
 const s = {
 	SERVE: 300,
@@ -426,21 +446,30 @@ function callCallback(callback, instance, id, action) {
 
 function standBy(instance) {
 	socket.write(addString(convertSInt(instance._xdh.id), "#StandBy_1"));
+	instance._xdh.inProgress = false;
+	instance._xdh.wait = false;
 }
 
-function handleLaunch(id, action, actionCallbacks) {
+function handleLaunch(instance, id, action, actionCallbacks) {
 	if ( instance === undefined)
 		exit_("No instance set!");
 
+	instance._xdh.inProgress = true;
+	
 	if ( ( action === "" ) && isDev() )
 		instance.debugLog();
 
-	if ((action === "") || !("_PreProcess" in actionCallbacks) || callCallback(actionCallbacks["_Preprocess"], instance, id, action))
-		if (callCallback(actionCallbacks[action], instance, id, action) && ("_PreProcess" in actionCallbacks))
-			callCallback(actionCallbacks["_Postprocess"], instance, id, action);
+	if ( ( action === "" )
+	     || !( "_PreProcess" in actionCallbacks )
+			 || callCallback(actionCallbacks["_PreProcess"], instance, id, action) )
+		if ( callCallback(actionCallbacks[action], instance, id, action)
+		     && ( "_PostProcess" in actionCallbacks ) )
+			callCallback(actionCallbacks["_PostProcess"], instance, id, action);
 
-	if (instance._xdh.queued.length === 0)
+	if ( ( instance._xdh.queued.length === 0 ) && !instance._xdh.wait ) {
 		standBy(instance);
+		console.log();
+	}
 }
 
 function setResponse(type) {
@@ -479,17 +508,17 @@ function serve(feeder, createCallback, actionCallbacks) {
 					report_("Unknown instance of id '" + id + "'!");
 					dismiss_(id);
 				} else {
-					instance = instances[id];
+					instance_ = instances[id];
 
-					if (instance._xdh.language === undefined) {
+					if (instance_._xdh.language === undefined) {
 						push(s.LANGUAGE);
 						push(d.STRING);
-					} else if ( instance._xdh.queued.length === 0) {
+					} else if ( instance_._xdh.queued.length === 0) {
 						push(s.LAUNCH);
 						push(s.ID);
 						push(d.STRING);
 					} else {
-						setResponse(instance._xdh.queued[0].type);
+						setResponse(instance_._xdh.queued[0].type);
 					}
 				}
 			}
@@ -511,17 +540,17 @@ function serve(feeder, createCallback, actionCallbacks) {
 			push(d.STRING);
 			break;
 		case s.LANGUAGE:
-			instance._xdh.language = string;
+			instance_._xdh.language = string;
 			pop();
 			break;
 		case s.LAUNCH:
 			pop();
 			// console.log(">>>>> Action:", string, id);
-			handleLaunch(id, string, actionCallbacks);
+			handleLaunch(instance_, id_, string, actionCallbacks);
 			break;
 		case s.ID:
 			pop();
-			id = string;
+			id_ = string;
 			push(s.ACTION);
 			push(d.STRING);
 			break;
@@ -532,11 +561,11 @@ function serve(feeder, createCallback, actionCallbacks) {
 		case s.RESPONSE:
 			pop();
 
-			let pending = instance._xdh.queued.shift();
+			let pending = instance_._xdh.queued.shift();
 			let type = pending.type;
 			let callback = pending.callback;
 
-			if ( callback !== undefined) {
+			if ( callback !== undefined ) {
 				switch ( type ) {
 				case types.UNDEFINED:
 					exit_("Undefined type not allowed here!");
@@ -556,10 +585,15 @@ function serve(feeder, createCallback, actionCallbacks) {
 					break;
 				}
 
-				if (instance._xdh.queued.length === 0)
-					standBy(instance);
-			} else
-				standBy(instance);
+				if ( ( instance_._xdh.queued.length === 0 ) && !instance_._xdh.wait ) {
+					standBy(instance_);
+					console.log();
+				} else
+					console.log();
+			} else {
+				standBy(instance_);
+				console.log();
+			}
 			break;
 		default:
 			if ( !handleData(feeder) )
@@ -581,9 +615,9 @@ const i = {
 }
 
 function handleURL(url) {
-	console.log(url);
-	console.log(new Array(url.length + 1).join('^'));
-	console.log("Open above URL in a web browser (click, right click or copy/paste). Enjoy!\n");
+	process.stdout.write(url + '\n');
+	process.stdout.write(new Array(url.length + 1).join('^') + '\n');
+	process.stdout.write("Open above URL in a web browser (click, right click or copy/paste). Enjoy!\n");
 
 	let ATK = getEnv("ATK").toUpperCase();
 
@@ -664,7 +698,7 @@ function handshakes(feeder, head) {
 			break;
 		case h.NOTIFICATION_FAAS:
 			if ( string.length )
-				console.log(string);
+				process.stdout.write(string + '\n');
 
 			socket.write(addString(addString(handleString(mainProtocolLabel),mainProtocolVersion),scriptVersion));
 			pop();
@@ -681,7 +715,7 @@ function handshakes(feeder, head) {
 				break;
 		case h.NOTIFICATION_MAIN:
 			if ( string.length )
-				console.log(string);
+				process.stdout.write(string + '\n');
 
 			pop();
 			break;
@@ -732,15 +766,12 @@ function onRead(data, createCallback, actionCallbacks, head) {
 function launch(createCallback, actionCallbacks, head) {
 	socket = new net.Socket();
 
-	socket.on('error', (err) => {
-		console.log("Unable to connect to '" + pAddr + ":" + pPort + "' !!!");
-		process.exit(-1);
-	});
+	socket.on('error', (err) =>	exit_("Unable to connect to '" + pAddr + ":" + pPort + "' !!!"));
 
-	console.log("Connecting to '" + pAddr + ":" + pPort + "'…");
+	process.stdout.write("Connecting to '" + pAddr + ":" + pPort + "'…\n");
 
 	socket.connect(pPort, pAddr, () => {
-		console.log("Connected to '" + pAddr + ":" + pPort + "'.")
+		process.stdout.write("Connected to '" + pAddr + ":" + pPort + "'.\n")
 		push(h.HANDSHAKES);
 		push(h.ERROR_FAAS);
 		push(d.STRING);
@@ -753,18 +784,19 @@ function launch(createCallback, actionCallbacks, head) {
 function addTagged(data, argument) {
 	if (typeof argument === "string") {
 		return addString(Buffer.concat([data,convertUInt(types.STRING)]), argument);
-    } else if (typeof argument === "object") {
+	} else if (typeof argument === "object") {
 		return addStrings(Buffer.concat([data,convertUInt(types.STRINGS)]), argument);
-    } else
+	} else
 		exit_("Unexpected argument type: " + typeof argument);
 }
 
 function call(instance, command, type) {
-	// console.log(">>>>> Call command:", instance._xdh.id, command);
+	if ( !instance._xdh.inProgress )
+		exit_("Orphan function call!!!");
 
 	let i = 3;
 	let data = convertSInt(instance._xdh.id);
-	let amount = arguments.length-1;
+	let amount = arguments.length-2;
     
   data = Buffer.concat([addString(data,command),convertUInt(type)])
 
@@ -777,11 +809,22 @@ function call(instance, command, type) {
 
 	socket.write(data);
 
-	let callback = arguments[i++]
-	
+	let callback = arguments[i++];
+	let wait = arguments[i++];
+
+	if ( callback === undefined )
+		instance._xdh.wait = false;
+	else
+		instance._xdh.wait = wait === true ? true : false;
+
+
 	if ( type === types.VOID) {
-		if ( callback !== undefined )
+		console.log();
+		if ( callback !== undefined ) {
+			console.log();
 			callback();
+			console.log();
+		}
 	} else if ( type !== types.UNDEFINED ) {
 		let pending = new Object();
 

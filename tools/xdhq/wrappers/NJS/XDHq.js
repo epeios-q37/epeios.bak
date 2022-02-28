@@ -133,235 +133,220 @@ function launch(callback, tagsAndCallbacks, head, mode) {
 }
 
 class XDH {
-	execute_(type, script, callback) {
-		call(this, "Execute_1", type, script, callback);
+	execute_(type, script, callback, wait) {
+		call(this, "Execute_1", type, script, callback, wait);
 	}
-	executeVoid(script, callback) {
-		this.execute_(types.VOID, script, callback);
+	executeVoid(script, callback, wait) {
+		this.execute_(types.VOID, script, callback, wait);
 	}
-	executeString(script, callback) {
-		this.execute_(types.STRING, script, callback);
+	executeString(script, callback, wait) {
+		this.execute_(types.STRING, script, callback, wait);
 	}
-	executeStrings(script, callback) {
-		this.execute_(types.STRINGS, script, callback);
+	executeStrings(script, callback, wait) {
+		this.execute_(types.STRINGS, script, callback, wait);
 	}
-	flush(id, callback) {
-		call(this, "Flush_1", types.STRING, id, callback);
+	flush(id, callback, wait) {
+		call(this, "Flush_1", types.STRING, id, callback, wait);
 	}
-	alert(message, callback) {
-        call(this, "Alert_1", types.STRING, message, callback);
+	alert(message, callback, wait) {
+        call(this, "Alert_1", types.STRING, message, callback, wait);
         // For the return value being 'STRING' instead of 'VOID',
         // see the 'alert' primitive in 'XDHqXDH'.
 	}
-	confirm(message, callback) {
-		call(this, "Confirm_1", types.STRING, message, (answer) => callback(answer === "true"));
+	confirm(message, callback, wait) {
+		call(this, "Confirm_1", types.STRING, message, callback === undefined ? callback : (answer) => callback(answer === "true"), wait);
 	}
-	handleLayout_(variant, id, xml, xsl, callback) {
+	handleLayout_(variant, id, xml, xsl, callback, wait) {
 		if (typeof xml !== "string")
 			xml = xml.toString();
 
-		call(this, "HandleLayout_1", types.STRING, variant, id, xml, xsl, callback);
+		call(this, "HandleLayout_1", types.STRING, variant, id, xml, xsl, callback, wait);
 	}
-	prependLayout(id, html, callback) {	// Deprecated!
-		this.handleLayout_("Prepend", id, html, "", callback);
+	prependLayout(id, html, callback, wait) {	// Deprecated!
+		this.handleLayout_("Prepend", id, html, "", callback, wait);
 	}
-	inner(id, html, callback) {	// Deprecated!
-		this.handleLayout_("Set", id, html, "", callback);
+	appendLayout(id, html, callback, wait) {	// Deprecated!
+		this.handleLayout_("Append", id, html, "", callback, wait);
 	}
-	appendLayout(id, html, callback) {	// Deprecated!
-		this.handleLayout_("Append", id, html, "", callback);
-	}
-	handleLayoutXSL_(variant, id, xml, xslFilename, callback) {
+	handleLayoutXSL_(variant, id, xml, xslFilename, callback, wait) {
 		let xslURL = xslFilename;
 
 		if (this._xdh.isFAAS)
 			xslURL = "data:text/xml;charset=utf-8," + encodeURIComponent(readXSLAsset(xslFilename));
 
-		this.handleLayout_(variant, id, xml, xslURL, callback);
+		this.handleLayout_(variant, id, xml, xslURL, callback, wait);
 	}
-	prependLayoutXSL(id, xml, xsl, callback) {	// Deprecated!
-		this.handleLayoutXSL_("Prepend", id, xml, xsl, callback);
+	prependLayoutXSL(id, xml, xsl, callback, wait) {	// Deprecated!
+		this.handleLayoutXSL_("Prepend", id, xml, xsl, callback, wait);
 	}
-	setLayoutXSL(id, xml, xsl, callback) {	// Deprecated!
-		this.handleLayoutXSL_("Set", id, xml, xsl, callback);
+	setLayoutXSL(id, xml, xsl, callback, wait) {	// Deprecated!
+		this.handleLayoutXSL_("Set", id, xml, xsl, callback, wait);
 	}
-	appendLayoutXSL(id, xml, xsl, callback) {	// Deprecated!
-		this.handleLayoutXSL_("Append", id, xml, xsl, callback);
+	appendLayoutXSL(id, xml, xsl, callback, wait) {	// Deprecated!
+		this.handleLayoutXSL_("Append", id, xml, xsl, callback, wait);
 	}
-	layout_(variant, id, xml, xslOrCallback, callback) {
+	layout_(variant, id, xml, xslOrCallback, callbackOrWait, wait) {
 		let xsl = "";
+		let callback = undefined;
 
-		if ( typeof xslOrCallback === "string")
+		if ( typeof xslOrCallback === "string") {
 			xsl = xslOrCallback;
-		else
+			callback = callbackOrWait;
+		} else {
 			callback = xslOrCallback;
+			wait = callbackOrWait;
+		}
 
 		if ((xsl !== "") && this._xdh.isFAAS)
 			xsl = "data:text/xml;charset=utf-8," + encodeURIComponent(readXSLAsset(xsl));
 
-		call(this, "HandleLayout_1", types.STRING, variant, id, typeof xml === "string" ? xml : xml.toString(), xsl, callback);
+		call(this, "HandleLayout_1", types.STRING, variant, id, typeof xml === "string" ? xml : xml.toString(), xsl, callback, wait);
 	}
-	before(id,xml,xslOrCallback,callback) {
-		this.layout_("beforebegin", id, xml, xslOrCallback, callback);
+	before(id,xml,xslOrCallback,callback, wait) {
+		this.layout_("beforebegin", id, xml, xslOrCallback, callback, wait);
 	}
-	begin(id,xml,xslOrCallback,callback) {
-		this.layout_("afterbegin", id, xml, xslOrCallback, callback);
+	begin(id,xml,xslOrCallback,callback, wait) {
+		this.layout_("afterbegin", id, xml, xslOrCallback, callback, wait);
 	}
-	inner(id,xml,xslOrCallback,callback) {
-		this.layout_("inner", id, xml, xslOrCallback, callback);
+	inner(id,xml,xslOrCallback,callback, wait) {
+		this.layout_("inner", id, xml, xslOrCallback, callback, wait);
 	}
-	end(id,xml,xslOrCallback,callback) {
-		this.layout_("beforeend", id, xml, xslOrCallback, callback);
+	end(id,xml,xslOrCallback,callback, wait) {
+		this.layout_("beforeend", id, xml, xslOrCallback, callback, wait);
 	}
-	after(id,xml,xslOrCallback,callback) {
-		this.layout_("afterend", id, xml, xslOrCallback, callback);
+	after(id,xml,xslOrCallback,callback, wait) {
+		this.layout_("afterend", id, xml, xslOrCallback, callback, wait);
 	}
-	getContents(ids, callback) {	// Deprecated
-		call(this, "GetContents_1", types.STRINGS, ids,
-			(contents) => callback(unsplit(ids, contents))
+	getContents(ids, callback, wait) {	// Deprecated
+		call(this, "GetContents_1", types.STRINGS, ids, callback === undefined ? callback : (contents) => callback(unsplit(ids, contents), wait)
 		);
 	}
-	getContent(id, callback) {	// Deprecated
-		return this.getContents([id], (result) => { callback(result[id]); });
+	getContent(id, callback, wait) {	// Deprecated
+		return this.getContents([id], callback === undefined ? callback : (result) => { callback(result[id]); }, wait);
 	}
-	setContents(idsAndContents, callback) {	// Deprecated
+	setContents(idsAndContents, callback, wait) {	// Deprecated
 		var ids = [];
 		var contents = [];
 
 		split(idsAndContents, ids, contents);
 
-		call(this, "SetContents_1", types.VOID, ids, contents, callback);
+		call(this, "SetContents_1", types.VOID, ids, contents, callback, wait);
 	}
-	setContent(id, content, callback) {	// Deprecated
-		return this.setContents(merge(id, content), callback);
+	setContent(id, content, callback, wait) {	// Deprecated
+		return this.setContents(merge(id, content), callback, wait);
 	}
-	getValues(ids, callback) {
-		call(this, "GetValues_1", types.STRINGS, ids,
-			(values) => callback(unsplit(ids, values))
+	getValues(ids, callback, wait) {
+		call(this, "GetValues_1", types.STRINGS, ids, callback === undefined ? callback : (values) => callback(unsplit(ids, values)), wait
 		);
 	}
-	getValue(id, callback) {
-		return this.getValues([id], (result) => { callback(result[id]); });
+	getValue(id, callback, wait) {
+		return this.getValues([id], callback === undefined ? callback : (result) => { callback(result[id]); }, wait);
 	}
-	setValues(idsAndValues, callback) {
+	setValues(idsAndValues, callback, wait) {
 		var ids = [];
 		var values = [];
 
 		split(idsAndValues, ids, values);
 
-		call(this, "SetValues_1", types.VOID, ids, values, callback);
+		call(this, "SetValues_1", types.VOID, ids, values, callback, wait);
 	}
-	setValue(id, value, callback) {
-		return this.setValues(merge(id, value), callback);
+	setValue(id, value, callback, wait) {
+		this.setValues(merge(id, value), callback, wait);
 	}
-	getMarks(ids, callback) {
-		call(this, "GetMarks_1", types.STRINGS, ids,
-			(marks) => callback(unsplit(ids, marks))
+	getMarks(ids, callback, wait) {
+		call(this, "GetMarks_1", types.STRINGS, ids, callback === undefined ? callback : (marks) => callback(unsplit(ids, marks), wait)
 		);
 	}
-	getMark(id, callback) {
-		return this.getMarks([id], (result) => { callback(result[id]); });
+	getMark(id, callback, wait) {
+		return this.getMarks([id], callback === undefined ? callback : (result) => { callback(result[id]); }, wait);
 	}
-	setMarks(idsAndMarks, callback) {
+	setMarks(idsAndMarks, callback, wait) {
 		var ids = [];
 		var marks = [];
 
 		split(idsAndMarks, ids, marks);
 
-		call(this, "SetMarks_1", types.VOID, ids, marks, callback);
+		call(this, "SetMarks_1", types.VOID, ids, marks, callback, wait);
 	}
-	setMark(id, mark, callback) {
-		return this.setMarks(merge(id, mark), callback);
+	setMark(id, mark, callback, wait) {
+		return this.setMarks(merge(id, mark), callback, wait);
 	}
-/*
-	createElement_(name, id, callback ) {
-        call(this, "CreateElement_1", types.STRING, 2, name, id, 0, callback);
-    }
-	createElement(name, idOrCallback, callback ) {
-		if (typeof idOrCallback === "string")
-			return this.createElement_(name, idOrCallback, callback);
-		else
-			return this.createElement_(name, "", idOrCallback);
-	}
-	insertChild(child, id, callback) {
-		call(this, "InsertChild_1", types.VOID, 2, child, id, 0, callback);
-	}
-*/
-	handleClasses(idsAndClasses, variant, callback) {
+
+		handleClasses(idsAndClasses, variant, callback, wait) {
 		var ids = [];
 		var classes = [];
 
 		split(idsAndClasses, ids, classes);
 
-		call(this, "HandleClasses_1", types.VOID, variant, ids, classes, callback);
+		call(this, "HandleClasses_1", types.VOID, variant, ids, classes, callback, wait);
 	}
-	addClasses(idsAndClasses, callback) {
-		this.handleClasses(idsAndClasses, "Add", callback);
+	addClasses(idsAndClasses, callback, wait) {
+		this.handleClasses(idsAndClasses, "Add", callback, wait);
 	}
-	addClass(id, clas, callback) {
-		this.addClasses(merge(id, clas), callback);
+	addClass(id, clas, callback, wait) {
+		this.addClasses(merge(id, clas), callback, wait);
 	}
-	removeClasses(idsAndClasses, callback) {
-		this.handleClasses(idsAndClasses, "Remove", callback);
+	removeClasses(idsAndClasses, callback, wait) {
+		this.handleClasses(idsAndClasses, "Remove", callback, wait);
 	}
-	removeClass(id, clas, callback) {
-		this.removeClasses(merge(id, clas), callback);
+	removeClass(id, clas, callback, wait) {
+		this.removeClasses(merge(id, clas), callback, wait);
 	}
-	toggleClasses(idsAndClasses, callback) {
-		this.handleClasses(idsAndClasses, "Toggle", callback);
+	toggleClasses(idsAndClasses, callback, wait) {
+		this.handleClasses(idsAndClasses, "Toggle", callback, wait);
 	}
-	toggleClass(id, clas, callback) {
-		this.toggleClasses(merge(id, clas), callback);
+	toggleClass(id, clas, callback, wait) {
+		this.toggleClasses(merge(id, clas), callback, wait);
 	}
-	enableElements(ids, callback) {
-		call(this, "EnableElements_1", types.VOID, ids, callback);
+	enableElements(ids, callback, wait) {
+		call(this, "EnableElements_1", types.VOID, ids, callback, wait);
 	}
-	enableElement(id, callback) {
-		this.enableElements([id], callback);
+	enableElement(id, callback, wait) {
+		this.enableElements([id], callback, wait);
 	}
-	disableElements(ids, callback) {
-		call(this, "DisableElements_1", types.VOID, ids, callback);
+	disableElements(ids, callback, wait) {
+		call(this, "DisableElements_1", types.VOID, ids, callback, wait);
 	}
-	disableElement(id, callback) {
-		this.disableElements([id], callback);
+	disableElement(id, callback, wait) {
+		this.disableElements([id], callback, wait);
 	}
-	setAttribute(id, name, value, callback) {
-		call(this, "SetAttribute_1", types.VOID, id, name, value, callback);
+	setAttribute(id, name, value, callback, wait) {
+		call(this, "SetAttribute_1", types.VOID, id, name, value, callback, wait);
 	}
-	getAttribute(id, name, callback) {
-		return call(this, "GetAttribute_1", types.STRING, id, name, callback);
+	getAttribute(id, name, callback, wait) {
+		return call(this, "GetAttribute_1", types.STRING, id, name, callback, wait);
 	}
-	removeAttribute(id, name, callback) {
-		call(this, "RemoveAttribute_1", types.VOID, id, name, callback);
+	removeAttribute(id, name, callback, wait) {
+		call(this, "RemoveAttribute_1", types.VOID, id, name, callback, wait);
 	}
-	setProperty(id, name, value, callback) {
-		call(this, "SetProperty_1", types.VOID, id, name, value, callback);
+	setProperty(id, name, value, callback, wait) {
+		call(this, "SetProperty_1", types.VOID, id, name, value, callback, wait);
 	}
-	getProperty(id, name, callback) {
-		return call(this, "GetProperty_1", types.STRING, id, name, callback);
+	getProperty(id, name, callback, wait) {
+		return call(this, "GetProperty_1", types.STRING, id, name, callback, wait);
 	}
-	focus(id, callback) {
-		call(this, "Focus_1", types.VOID, id, callback);
+	focus(id, callback, wait) {
+		call(this, "Focus_1", types.VOID, id, callback, wait);
 	}
-	parent(id, callback) {
-		return call(this, "Parent_1", types.STRING, id, callback);
+	parent(id, callback, wait) {
+		return call(this, "Parent_1", types.STRING, id, callback, wait);
 	}
-	firstChild(id, callback) {
-		return call(this, "FirstChild_1", types.STRING, id, callback);
+	firstChild(id, callback, wait) {
+		return call(this, "FirstChild_1", types.STRING, id, callback, wait);
 	}
-	lastChild(id, callback) {
-		return call(this, "LastChild_1", types.STRING, id, callback);
+	lastChild(id, callback, wait) {
+		return call(this, "LastChild_1", types.STRING, id, callback, wait);
 	}
-	previousSibling(id, callback) {
-		return call(this, "PreviousSibling_1", types.STRING, id, callback);
+	previousSibling(id, callback, wait) {
+		return call(this, "PreviousSibling_1", types.STRING, id, callback, wait);
 	}
-	nextSibling(id, callback) {
-		return call(this, "NextSibling_1", types.STRING, id, callback);
+	nextSibling(id, callback, wait) {
+		return call(this, "NextSibling_1", types.STRING, id, callback, wait);
 	}
-	scrollTo(id, callback) {
-		call(this, "ScrollTo_1", types.VOID, id, callback);
+	scrollTo(id, callback, wait) {
+		call(this, "ScrollTo_1", types.VOID, id, callback, wait);
 	}
-	debugLog(switcher, callback) {
+	debugLog(switcher, callback, wait) {
 		if ( switcher === undefined)
 			switcher = true;
 		else if ( typeof(switcher) !== "boolean" ) {
@@ -371,10 +356,10 @@ class XDH {
 			switcher = true;
 		}
 
-		call(this, "DebugLog_1", types.VOID, switcher ? "true" : "false" , callback);
+		call(this, "DebugLog_1", types.VOID, switcher ? "true" : "false" , callback, wait);
 	}
-	log(message, callback) {
-		call(this, "Log_1", types.VOID, message , callback);
+	log(message, callback, wait) {
+		call(this, "Log_1", types.VOID, message , callback, wait);
 	}
 }
 
