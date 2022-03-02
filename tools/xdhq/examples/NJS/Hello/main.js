@@ -46,7 +46,13 @@ const callbacks = {
     (name) => dom.alert("Hello, " + name + "!",
       () => dom.focus("input"))),
   "Clear": (dom) => dom.confirm("Are you sure ?",
-    (answer) => { if (answer) dom.setValue("input", ""); dom.focus("input"); })
+    (answer) => {
+      if (answer) {
+        dom.setValue("input", "",
+          () => dom.hold());
+      }
+      dom.focus("input");
+    }),
 };
 
 atlas.launch(() => new atlas.DOM(), callbacks, atlas.readAsset('Head.html'));

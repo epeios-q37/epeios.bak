@@ -48,6 +48,29 @@ const stream = require("stream");
 const head = `
 <title>XML preprocessor with Node.js</title>
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==" />
+<!-- HTML Syntax highlighting -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+<script>"document.querySelectorAll('pre').forEach((block) => {hljs.highlightBlock(block);});"</script>
+<style>
+  .Tag {
+    font-weight: bold;
+  }
+
+  .AttributeName {
+    font-weight: bold;
+    color:darkblue;
+  }
+
+  .AttributeValue {
+    background-color:lightblue;
+  }
+
+  .Value {
+    background-color:lightgrey;
+  }
+
+</style>
 `;
 
 const body = `<fieldset>
@@ -55,10 +78,12 @@ const body = `<fieldset>
   <fieldset>
     <button xdh:onevent="Raw">Raw</button>
     <button xdh:onevent="Preprocessed">Preprocessed</button>
-    <button xdh:onevent="With">Parsing without preprocessing</button>
-    <button xdh:onevent="Without">Parsing with preprocessing</button>
+    <button xdh:onevent="Without">Parsing without preprocessing</button>
+    <button xdh:onevent="With">Parsing with preprocessing</button>
     <fieldset>
-       <output id="output">Output</output>
+       <output id="output">
+        <span style="font-style: oblique;">Click on one of above button.</span>
+       </output>
     </fieldset>
   </fieldset>
 </fieldset>
@@ -107,29 +132,30 @@ function callback(token, tag, attribute, value) {
       throw new Error("ERROR :'" + value + "'\n");
       break;
     case xppq.tokens.DONE:
-      out = "coucou";
-      dom_.setValue("output", out, () => dom_.setValue("input", "toto"));
-      //dom_.inner("output", "<div>" + out + "</div>");
-      console.log("Hey!");
+      dom_.inner("output", "<pre>" + out + "</pre>");
+      out = "";
       break;
     case xppq.tokens.START_TAG:
       write("Start tag:");
       indent(indentLevel);
-      write("'" + tag + "'\n");
+      write('<span class="Tag">' + tag + '</span></br>');
       indentLevel++;
       break;
     case xppq.tokens.ATTRIBUTE:
       write("Attribute:");
       indent(indentLevel);
-      write("'" + attribute + "' = '" + value + "'\n");
+      write('<span class="AttributeName">' + attribute + '</span> = <span class="AttributeValue">' + value + '</span></br>');
       break;
     case xppq.tokens.VALUE:
       write("Value    :");
       indent(indentLevel);
-      write("'" + value.trim() + "'\n");
+      write('<span class="Value">' + value.trim() + '</span></br>');
       break;
     case xppq.tokens.END_TAG:
       indentLevel--;
+      write("End tag  :");
+      indent(indentLevel);
+      write('<span class="Tag">' + tag + '</span></br>');
       break;
     default:
       throw new Error("Unknown token !!!");
@@ -154,34 +180,37 @@ class StringStream extends stream.Readable {
 
 function escapeHtml(unsafe)
 {
-    return "<div>" + unsafe
+    return "<pre class='lang-xml'>" + unsafe
          .replace(/&/g, "&amp;")
          .replace(/</g, "&lt;")
          .replace(/>/g, "&gt;")
          .replace(/"/g, "&quot;")
-         .replace(/'/g, "&#039;") + "</div>";
+         .replace(/'/g, "&#039;") + "</pre>";
  }
-
-function acRaw(dom) {
-  dom.getValue("input", (value) => streamToString(new StringStream(value).pipe(new xppq.Stream()),(result) => dom.inner("output", escapeHtml(result))), true);
-// dom.getValue("input", (value) =>  dom.inner("output", escapeHtml(value)));
-}
-
 
 const callbacks = {
   "": (dom) => dom.inner("", body,
      () => dom.setValue("input", xml)),
   "Raw": (dom) => dom.getValue("input",
     (value) => streamToString(new StringStream(value),
-      (result) => dom.inner("output", escapeHtml(result))), true),
+      (result) => dom.inner("output", escapeHtml(result),
+        () => dom.executeVoid("hljs.highlightBlock(document.getElementById('output').firstChild);")
+        ))),
   "Preprocessed": (dom) => dom.getValue("input",
     (value) => streamToString(new StringStream(value).pipe(new xppq.Stream()),
-      (result) => dom.inner("output", escapeHtml(result))), true),
+      (result) => dom.inner("output", escapeHtml(result),
+      () => dom.executeVoid("hljs.highlightBlock(document.getElementById('output').firstChild);")))),
+  "Without": (dom) => {
+    dom_ = dom;
+    dom.getValue("input",
+      (value) => streamToString(new StringStream(value),
+        (result) => xppq.parse(new StringStream(result), callback)));
+    },
   "With": (dom) => {
     dom_ = dom;
     dom.getValue("input",
       (value) => streamToString(new StringStream(value),
-        (result) => xppq.parse(new StringStream(result), callback)), true);
+        (result) => xppq.parse(new StringStream(result).pipe(new xppq.Stream()), callback)));
     },
   };
 

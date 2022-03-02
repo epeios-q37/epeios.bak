@@ -447,7 +447,7 @@ function callCallback(callback, instance, id, action) {
 function standBy(instance) {
 	socket.write(addString(convertSInt(instance._xdh.id), "#StandBy_1"));
 	instance._xdh.inProgress = false;
-	instance._xdh.wait = false;
+//	console.log("Standby!!!");
 }
 
 function handleLaunch(instance, id, action, actionCallbacks) {
@@ -457,7 +457,7 @@ function handleLaunch(instance, id, action, actionCallbacks) {
 	instance._xdh.inProgress = true;
 	
 	if ( ( action === "" ) && isDev() )
-		instance.debugLog();
+		instance.debugLog( () => instance.hold() );
 
 	if ( ( action === "" )
 	     || !( "_PreProcess" in actionCallbacks )
@@ -465,11 +465,6 @@ function handleLaunch(instance, id, action, actionCallbacks) {
 		if ( callCallback(actionCallbacks[action], instance, id, action)
 		     && ( "_PostProcess" in actionCallbacks ) )
 			callCallback(actionCallbacks["_PostProcess"], instance, id, action);
-
-	if ( ( instance._xdh.queued.length === 0 ) && !instance._xdh.wait ) {
-		standBy(instance);
-		console.log();
-	}
 }
 
 function setResponse(type) {
@@ -489,12 +484,13 @@ function setResponse(type) {
 }
 
 function serve(feeder, createCallback, actionCallbacks) {
+	
 	while ( !feeder.isEmpty() || cont ) {
 		cont = false;
 
 		// console.log(stack)
 		
-		switch (top()) {
+		switch ( top() ) {
 		case s.SERVE:
 			push(s.COMMAND);
 			push(d.SINT);
@@ -584,15 +580,9 @@ function serve(feeder, createCallback, actionCallbacks) {
 					exit_("Unknown type of value '" + type + "'!");
 					break;
 				}
-
-				if ( ( instance_._xdh.queued.length === 0 ) && !instance_._xdh.wait ) {
-					standBy(instance_);
-					console.log();
-				} else
-					console.log();
 			} else {
 				standBy(instance_);
-				console.log();
+				// console.log();
 			}
 			break;
 		default:
@@ -601,6 +591,7 @@ function serve(feeder, createCallback, actionCallbacks) {
 			break;
 		}
 	}
+	// console.log();
 }
 
 /************/
@@ -738,7 +729,6 @@ const p = {
 var phase = p.HANDSHAKES;
 
 function onRead(data, createCallback, actionCallbacks, head) {
-
 	// console.log(">>>>> DATA:", data.length);
 
 	let feeder = new Feeder(data);
@@ -791,16 +781,16 @@ function addTagged(data, argument) {
 }
 
 function call(instance, command, type) {
+	///( Date.now(), " Command: ", command, instance._xdh.id);
+
 	if ( !instance._xdh.inProgress )
-		exit_("Orphan function call!!!");
+		exit_("Out of frame function call!");
 
 	let i = 3;
 	let data = convertSInt(instance._xdh.id);
-	let amount = arguments.length-2;
+	let amount = arguments.length-1;
     
   data = Buffer.concat([addString(data,command),convertUInt(type)])
-
-//	console.log( Date.now(), " Command: ", command, instance._xdh.id);
 
 	while (i < amount)
 		data = addTagged(data, arguments[i++]);
@@ -809,21 +799,14 @@ function call(instance, command, type) {
 
 	socket.write(data);
 
-	let callback = arguments[i++];
-	let wait = arguments[i++];
-
-	if ( callback === undefined )
-		instance._xdh.wait = false;
-	else
-		instance._xdh.wait = wait === true ? true : false;
-
+	let callback = arguments[i];
 
 	if ( type === types.VOID) {
-		console.log();
-		if ( callback !== undefined ) {
-			console.log();
+		if ( callback !== undefined )
 			callback();
-			console.log();
+		else {
+			standBy(instance);
+			// console.log();
 		}
 	} else if ( type !== types.UNDEFINED ) {
 		let pending = new Object();
@@ -846,4 +829,5 @@ function broadcastAction(action, id) {
 module.exports.launch = launch;
 module.exports.call = call;
 module.exports.broadcastAction = broadcastAction;
+module.exports.standBy = standBy;
 
