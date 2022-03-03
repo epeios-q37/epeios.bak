@@ -82,7 +82,7 @@ const body = `<fieldset>
     <button xdh:onevent="With">Parsing with preprocessing</button>
     <fieldset>
        <output id="output">
-        <span style="font-style: oblique;">Click on one of above button.</span>
+        <span style="font-style: oblique;">Click one of above button.</span>
        </output>
     </fieldset>
   </fieldset>
@@ -113,49 +113,51 @@ function streamToString(stream, cb) {
   });
 }
 
-var dom_;
-var out = "";
-var indentLevel = 0;
+class Context {
+  constructor(dom) {
+    this.dom = dom;
+    this.out = "";
+    this.level = 0;
+  }
+  write(text) {
+    this.out += text;
+  }
+  indent() {
+    let level = this.level;
 
-function write(text) {
-  out = out + text;
-}
+    while (level--)
+      this.write(' ');
+  }}
 
-function indent(level) {
-  while (level--)
-    write(' ');
-}
-
-function callback(token, tag, attribute, value) {
+function callback(token, tag, attribute, value, context) {
   switch (token) {
     case xppq.tokens.ERROR:
-      throw new Error("ERROR :'" + value + "'\n");
+      context.dom.inner("output", '<pre style="color: darkred;">' + value + "</pre>");
       break;
     case xppq.tokens.DONE:
-      dom_.inner("output", "<pre>" + out + "</pre>");
-      out = "";
+      context.dom.inner("output", "<pre>" + context.out + "</pre>");
       break;
     case xppq.tokens.START_TAG:
-      write("Start tag:");
-      indent(indentLevel);
-      write('<span class="Tag">' + tag + '</span></br>');
-      indentLevel++;
+      context.write("Start tag:");
+      context.indent();
+      context.write('<span class="Tag">' + tag + '</span></br>');
+      context.level++;
       break;
     case xppq.tokens.ATTRIBUTE:
-      write("Attribute:");
-      indent(indentLevel);
-      write('<span class="AttributeName">' + attribute + '</span> = <span class="AttributeValue">' + value + '</span></br>');
+      context.write("Attribute:");
+      context.indent();
+      context.write('<span class="AttributeName">' + attribute + '</span> = <span class="AttributeValue">' + value + '</span></br>');
       break;
     case xppq.tokens.VALUE:
-      write("Value    :");
-      indent(indentLevel);
-      write('<span class="Value">' + value.trim() + '</span></br>');
+      context.write("Value    :");
+      context.indent();
+      context.write('<span class="Value">' + value.trim() + '</span></br>');
       break;
     case xppq.tokens.END_TAG:
-      indentLevel--;
-      write("End tag  :");
-      indent(indentLevel);
-      write('<span class="Tag">' + tag + '</span></br>');
+      context.level--;
+      context.write("End tag  :");
+      context.indent();
+      context.write('<span class="Tag">' + tag + '</span></br>');
       break;
     default:
       throw new Error("Unknown token !!!");
@@ -190,7 +192,8 @@ function escapeHtml(unsafe)
 
 const callbacks = {
   "": (dom) => dom.inner("", body,
-     () => dom.setValue("input", xml)),
+     () => dom.setValue("input", xml,
+      () => dom.end("output", "<pre>" + xppq.componentInfo() + "</pre><pre>" + xppq.wrapperInfo() + "</pre>"))),
   "Raw": (dom) => dom.getValue("input",
     (value) => streamToString(new StringStream(value),
       (result) => dom.inner("output", escapeHtml(result),
@@ -204,13 +207,13 @@ const callbacks = {
     dom_ = dom;
     dom.getValue("input",
       (value) => streamToString(new StringStream(value),
-        (result) => xppq.parse(new StringStream(result), callback)));
+        (result) => xppq.parse(new StringStream(result), callback, new Context(dom))));
     },
   "With": (dom) => {
     dom_ = dom;
     dom.getValue("input",
       (value) => streamToString(new StringStream(value),
-        (result) => xppq.parse(new StringStream(result).pipe(new xppq.Stream()), callback)));
+        (result) => xppq.parse(new StringStream(result).pipe(new xppq.Stream()), callback, new Context(dom))));
     },
   };
 

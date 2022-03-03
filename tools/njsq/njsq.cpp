@@ -92,7 +92,7 @@ namespace {
 			Flow.Init( BaseFlow );
 
 			Flow << NAME_MC << " v" << VERSION << " - Node v" NODE_VERSION_STRING " ABI v" NODE_STRINGIFY( NODE_MODULE_VERSION ) << txf::nl
-			<< txf::pad << "Build : " __DATE__ " " __TIME__ " (" << cpe::GetDescription() << ')';
+			<< txf::pad << "Build: " __DATE__ " " __TIME__ " (" << cpe::GetDescription() << ')';
 		qRR
 		qRT
 		qRE

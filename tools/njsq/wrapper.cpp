@@ -486,7 +486,7 @@ namespace {
 		int Index,
 		const v8::FunctionCallbackInfo<v8::Value> &Info )
 	{
-		return Get_<rObject_>( Index, Info, true );
+		return Get_<rObject_>( Index, Info, false );
 	}
 
 	inline n4njs::cUBuffer *GetBuffer_(

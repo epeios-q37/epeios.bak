@@ -29,7 +29,7 @@
 void sclnjs::SCLNJSInfo( txf::sWFlow &Flow )
 {
 	Flow << NAME_MC << " v" << VERSION << txf::nl
-		 << txf::pad << "Build : " __DATE__ " " __TIME__ " (" << cpe::GetDescription() << ')';
+		 << txf::pad << "Build: " __DATE__ " " __TIME__ " (" << cpe::GetDescription() << ')';
 }
 
 namespace {

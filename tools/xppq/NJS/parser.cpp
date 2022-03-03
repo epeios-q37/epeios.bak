@@ -89,6 +89,7 @@ namespace {
 		xml::rParser Parser_;
 		rContent_ Content_;
     sclnjs::rCallback Callback_;
+		sclnjs::rObject Object_;
     common::sRelay Relay_;
 		bso::sBool First_;
 	public:
@@ -96,12 +97,14 @@ namespace {
 		str::wString Error;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, IFlow_, XFlow_, OFlow, Parser_, Content_, Callback_, Relay_, First_, Error );
+			tol::reset( P, IFlow_, XFlow_, OFlow, Parser_, Content_, Callback_, Object_, Relay_, First_, Error );
 		}
 		qCVDTOR( rRack_ );
-		sclnjs::rCallback &Init(void)
+		void Init(
+      sclnjs::rCallback *&Callback,
+      sclnjs::rObject *&Object)
 		{
-			tol::Init( Content_, Callback_, Relay_, Error );
+			tol::Init( Content_, Callback_, Object_, Relay_, Error );
 			OFlow.Init( Relay_.Out );
 			IFlow_.Init( Relay_.In );
 			tol::Init( Content_ );
@@ -111,8 +114,8 @@ namespace {
 			XFlow_.Init( IFlow_, utf::f_Guess );
 			Parser_.Init( XFlow_, xml::eh_Default );
 			*/
-
-			return Callback_;
+      Callback = &Callback_;
+      Object = &Object_;
 		}
 		void Read( void )
 		{
@@ -128,12 +131,12 @@ namespace {
 		bso::sBool SendToCallback( void )
 		{
 			if ( Content_.Token == xml::t_Error ) {
-				Callback_.VoidLaunch( 0, Content_.Tag, Content_.Attribute, Content_.Error );
+				Callback_.VoidLaunch(0, Content_.Tag, Content_.Attribute, Content_.Error, Object_);
 				XFlow_.UndelyingFlow().RDriver().RTake( tht::GetTID() );
 				XFlow_.Dismiss();	// To avoid locker owner problem on destruction.
 				return true;
 			} else if ( Content_.Token == xml::t_Processed ) {
-				Callback_.VoidLaunch( 1, Content_.Tag, Content_.Attribute, Content_.Value );
+				Callback_.VoidLaunch(1, Content_.Tag, Content_.Attribute, Content_.Value, Object_);
 				XFlow_.UndelyingFlow().RDriver().RTake( tht::GetTID() );
 				XFlow_.Dismiss();	// To avoid locker owner problem on destruction.
 				return true;
@@ -158,7 +161,7 @@ namespace {
 					break;
 				}
 
-				Callback_.VoidLaunch( Token, Content_.Tag, Content_.Attribute, Content_.Value );
+				Callback_.VoidLaunch(Token, Content_.Tag, Content_.Attribute, Content_.Value, Object_);
 			}
 
 			return false;
@@ -228,14 +231,19 @@ qRE
 SCLNJS_F( parser::Parse )
 {
 qRH
-	sclnjs::rObject Source;
+	sclnjs::rObject
+    Source,
+    *Object = NULL;
+	sclnjs::rCallback *Callback = NULL;
 	rRackAsyncCallback_ *Rack = NULL;
 qRB
 	Rack = qNEW(rRackAsyncCallback_);
 	// NOTA: 'Rack' is deleted upstream (see 'SCLNJSAfter' above).
 
 	Source.Init();
-	Caller.GetArgument(Source, Rack->Init());
+	Rack->Init(Callback, Object);
+
+	Caller.GetArgument(Source, *Callback, *Object);
 
 	Source.Set(Id_, Rack);
 

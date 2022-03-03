@@ -155,5 +155,5 @@ module.exports.Stream = Stream;
 module.exports.PassthroughStream = PassthroughStream;
 module.exports.DummyStream = DummyStream_;
 module.exports.basic = (flow) => { overload(modes.DATA_END, flow, 30, 31) };
-module.exports.parse = (flow, callback) => { overload(modes.READABLE, flow, 10, 11); njsq._call(xppq, 12, flow, callback) };
+module.exports.parse = (flow, callback, userObject) => { overload(modes.READABLE, flow, 10, 11); njsq._call(xppq, 12, flow, callback, userObject  == undefined ? new Object : userObject) };
 module.exports.tokens = tokens;
