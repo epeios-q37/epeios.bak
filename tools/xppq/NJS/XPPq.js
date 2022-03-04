@@ -99,13 +99,22 @@ class Stream extends stream.Transform {
     njsq._call(xppq, 20, this)
   }
   _transform(chunk, enc, cb) {
-    cb(null,  njsq._call(xppq, 21, this, chunk));
+    let data = njsq._call(xppq, 21, this, chunk);
+
+    if ( data === null )
+      cb(njsq._call(xppq, 23, this));
+    else
+      cb(null, data);
   }
 
   _flush(cb) {
-    cb(null, njsq._call(xppq, 22, this));
+    let data = njsq._call(xppq, 22, this);
+
+    if ( data === null )
+      cb(njsq._call(xppq, 23, this));
+    else
+      cb(null, data);
   }
-    
 }
 
 class DummyStream_ extends stream.Readable {

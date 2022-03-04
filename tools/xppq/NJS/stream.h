@@ -31,6 +31,7 @@ namespace stream {
 	SCLNJS_F( Set );
 	SCLNJS_F( Transform );
 	SCLNJS_F( Flush );
+	SCLNJS_F( GetError );
 }
 
 #endif

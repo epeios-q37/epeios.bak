@@ -146,38 +146,68 @@ namespace {
 
 	typedef flw::rXDressedRWFlow<rRWDriver_> rRWFlow_;
 
+	struct sData_ {
+	  rRWFlow_ *Flow;
+	  str::dString *Error;
+	};
+
 	void Routine(
     void *UP,
     mtk::gBlocker &Blocker)
   {
-    rRWFlow_ &Flow = *(rRWFlow_ *)UP;
+  qRH;
+    xpp::eStatus Status = xpp::s_Undefined;
+    xpp::rContext Context;
+    lcl::wMeaning Meaning;
+  qRB;
+    const sData_ &Data = *(const sData_ *)UP;
+
+    rRWFlow_ &Flow = *Data.Flow;
+    str::dString &Error = *Data.Error;
+
+    Blocker.Release();
 
     xtf::sRFlow XFlow;
     txf::sWFlow TFlow;
 
-    Blocker.Release();
-
     XFlow.Init(Flow, utf::f_Default);
     TFlow.Init(Flow);
 
-    xpp::Process(XFlow, xpp::rCriterions(""), xml::oIndent, TFlow);
-  }
+    Context.Init();
 
+    if ( ( Status = xpp::Process(XFlow, xpp::rCriterions(""), xml::oIndent, TFlow, Context) ) != xpp::sOK ) {
+      Meaning.Init();
+      xpp::GetMeaning(Context, Meaning);
+      sclm::GetBaseTranslation(Meaning, Error);
+    }
+  qRR;
+  qRT;
+  qRE;
+  }
 
 	class rPreprocessor_
 	: public rRWFlow_
 	{
   public:
+    str::wString Error;
     void reset(bso::sBool P = true)
     {
       rRWFlow_::reset(P);
+      Error.reset(P);
     }
     qCVDTOR(rPreprocessor_);
     void Init(void)
     {
+      sData_ Data;
+
       subInit();
       Driver_.Init();
-      mtk::Launch(Routine, this);
+      Error.Init();
+
+      Data.Flow = this;
+      Data.Error = &Error;
+
+      mtk::Launch(Routine, &Data);
     }
 		void Handle(
       const str::dString &Input,
@@ -224,9 +254,14 @@ qRB
 
 	Chunk.ToString(Input);
 
-	This.Get<rPreprocessor_>(Id_).Handle(Input, Output);
+	rPreprocessor_ &Preprocessor = This.Get<rPreprocessor_>(Id_);
 
-	Caller.SetReturnValue(Output);
+	Preprocessor.Handle(Input, Output);
+
+	if ( Preprocessor.Error.Amount() )
+    Caller.SetReturnValueAsNull();
+  else
+    Caller.SetReturnValue(Output);
 qRR
 qRT
 qRE
@@ -247,11 +282,32 @@ qRB
 
 	Preprocessor->Finish(Output);
 
-	Caller.SetReturnValue(Output);
+	if ( Preprocessor->Error.Amount() )
+    Caller.SetReturnValueAsNull();
+  else
+    Caller.SetReturnValue(Output);
 qRR
 qRE
   qDELETE(Preprocessor);
 qRT
 }
 
+SCLNJS_F(stream::GetError)
+{
+qRH
+	sclnjs::rObject This;
+qRB
+	tol::Init(This);
 
+	Caller.GetArgument( This );
+
+	rPreprocessor_ &Preprocessor = This.Get<rPreprocessor_>(Id_);
+
+	if ( Preprocessor.Error.Amount() == 0 )
+    qRGnr();
+
+  Caller.SetReturnValue(Preprocessor.Error);
+qRR
+qRE
+qRT
+}

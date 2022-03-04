@@ -48,17 +48,12 @@
 #endif
 
 /*************/
-/**** OLD ****/
+/**** NEW ****/
 /*************/
 
 namespace xpp {
-
-	typedef bso::uint__ level__;	// Imbrication level.
-
-	#define XPP_LEVEL_MAX	BSO_UINT_MAX
-
-	// NOTA : Si modifi�, modifier 'GetTranslation()' en cons�quent, ainsi que le contenu du ficher 'xpp.xlcl'.
-	enum status__ {
+	// NOTA : if modified, modify also 'GetTranslation()', and the content of thez 'xpp.xlcl' file.
+	qENUM(Status) {
 		sOK = xml::sOK,
 		sNoTagsAllowedHere = xml::s_amount,
 		sUnexpectedValue,
@@ -90,6 +85,20 @@ namespace xpp {
 		s_Undefined,
 		s_Pending,
 	};
+}
+
+/*************/
+/**** OLD ****/
+/*************/
+
+
+namespace xpp {
+
+	typedef bso::uint__ level__;	// Imbrication level.
+
+	#define XPP_LEVEL_MAX	BSO_UINT_MAX
+
+	typedef eStatus status__;
 
 	inline status__ _Convert( xml::status__ Status )
 	{

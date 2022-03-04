@@ -349,11 +349,7 @@ namespace v8q {
 		}
 		v8::Local<item> Core(v8::Isolate *Isolate = NULL) const
 		{
-			if ( Core_.IsEmpty() ) {
-        return v8::Undefined(Isolate);
-
-			}
-
+			if ( Core_.IsEmpty() )
 				qRFwk();
 
 			return Get_(GetIsolate_(Isolate));

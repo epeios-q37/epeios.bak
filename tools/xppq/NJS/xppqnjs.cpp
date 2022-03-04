@@ -109,7 +109,7 @@ const scli::sInfo &sclnjs::SCLNJSRegister( sclnjs::sRegistrar &Registrar )
 
 	Registrar.Register(ReturnArgument_ );
 	Registrar.Register(10, parser::OnData, parser::OnEnd, parser::Parse);
-	Registrar.Register(20, stream::Set, stream::Transform, stream::Flush);
+	Registrar.Register(20, stream::Set, stream::Transform, stream::Flush, stream::GetError);
 	Registrar.Register(30, console_::OnData, console_::OnEnd);
 	Registrar.Register(40, stream_::Transform);
 
