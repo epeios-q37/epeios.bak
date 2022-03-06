@@ -181,8 +181,8 @@ void xpp::_qualified_preprocessor_directives___::Init( const str::string_ &Names
 	CypherTag.Init( NamespaceWithSeparator );
 	CypherTag.Append( CYPHER_TAG );
 
-	_AttributeAttribute.Init( NamespaceWithSeparator );
-	_AttributeAttribute.Append( ATTRIBUTE_ATTRIBUTE );
+	AttributeAttribute.Init( NamespaceWithSeparator );
+	AttributeAttribute.Append( ATTRIBUTE_ATTRIBUTE );
 
 	MarkerAttribute.Init( NamespaceWithSeparator );
 	MarkerAttribute.Append( MARKER_ATTRIBUTE );
@@ -235,7 +235,7 @@ enum directive__ {
 	dCData,
 	dSet,
 	dCypher,
-	d_Attribute,
+	dAttribute,
 	dMarker,
 	d_amount,
 	d_Undefined
@@ -265,8 +265,8 @@ static inline directive__ GetDirective_(
 			Directive = dSet;
 		else if ( Directives.CypherTag == Name )
 			Directive = dCypher;
-		else if ( Directives._AttributeAttribute == Name )
-			Directive = d_Attribute;
+		else if ( Directives.AttributeAttribute == Name )
+			Directive = dAttribute;
 		else if ( Directives.MarkerAttribute == Name )
 			Directive = dMarker;
 		else
@@ -697,7 +697,6 @@ qRB
 		Status = AwaitingToken_( _Parser, xml::tEndTag, sMustBeEmpty );
 
 	_Parser.PurgeDumpData();
-
 qRR
 qRT
 qRE
@@ -1221,6 +1220,23 @@ static void StripHeadingSpaces_( str::string_ &Data )
 
 #define CDATA_NESTING_MAX	BSO_UINT_MAX
 
+namespace {
+  inline void AddHeadingSpaces_(
+    const str::dString &Source,
+    str::dString &Target)
+  {
+    if ( Source.Amount() ) {
+      flx::sStringIFlow Flow;
+      bso::sChar C;
+
+      Flow.Init(Source);
+
+      while( !Flow.EndOfFlow() && ( isspace(C = Flow.Get() ) ) )
+        Target.Append(C);
+    }
+  }
+}
+
 status__ xpp::_extended_parser___::Handle(
 	_extended_parser___ *&Parser,
 	str::string_ &Data )
@@ -1295,18 +1311,20 @@ status__ xpp::_extended_parser___::Handle(
 					switch ( GetDirective_( _Parser.AttributeName(), _Directives, PreservationLevel_ ) ) {
 					case dNone:
 						if ( Marker_() != 0 ) {
+							AddHeadingSpaces_(_Parser.DumpData(), Data);
 							_Parser.PurgeDumpData();
-							Data.Append (_Parser.AttributeName() );
-							Data.Append( "=\"") ;
+              Data.Append (_Parser.AttributeName() );
+							Data.Append(_Parser.AttributeBetween()) ;
+							Data.Append(_Parser.AttributeDelimiter());
 							Status = HandleAttributeValueSubstitution_( _Parser.Value(), Marker_(), Data );
-							Data.Append('"');
+							Data.Append(_Parser.AttributeDelimiter());
 						} else
 							Status = sOK;
 						break;
 					case dUnknown:
 						Status = sUnknownDirective;
 						break;
-					case d_Attribute:
+					case dAttribute:
 						_Parser.PurgeDumpData();
 						Status = HandleAttributeDirective_( _Parser.Value(), Parser, Data );
 						break;

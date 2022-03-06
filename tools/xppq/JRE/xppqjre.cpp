@@ -67,19 +67,12 @@ namespace parsing_ {
 	{
 		rParser_ *Parser = NULL;
 	qRH
-		cObject *Stream = NULL;
 	qRB
-		Parser = new rParser_;
-
-		if ( Parser == NULL )
-			qRAlc();
+		Parser = qNEW(rParser_);
 
 		Parser->Init( Caller );
 	qRR
-		if ( Parser != NULL )
-			delete Parser;	// Deletes also 'Stream' if set.
-		else if ( Stream != NULL )
-			delete Stream;
+		qDELETE(Parser);
 	qRT
 	qRE
 		return Long( Env, (scljre::sJLong)Parser );
@@ -208,8 +201,8 @@ namespace processing_ {
 		private:
 			scljre::rInputStreamRDriver Input_;
 			flw::rDressedRFlow<> Flow_;
-			xtf::extended_text_iflow__ XFlow_;
-			xpp::preprocessing_iflow___ PFlow_;
+			xtf::sRFlow XFlow_;
+			xpp::rRFlow PFlow_;
 		public:
 			void reset( bso::sBool P = true )
 			{
@@ -234,15 +227,11 @@ namespace processing_ {
 		rProcessor_ *Processor = NULL;
 	qRH
 	qRB
-		Processor = new rProcessor_;
-
-		if ( Processor == NULL )
-			qRAlc();
+		Processor = qNEW(rProcessor_);
 
 		Processor->Init( Caller );
 	qRR
-		if ( Processor != NULL )
-			delete Processor;
+		qDELETE(Processor);
 	qRT
 	qRE
 		return scljre::Long( Env, (scljre::sJLong)Processor );
@@ -298,8 +287,8 @@ const scli::sInfo &scljre::SCLJRERegister( sRegistrar &Registrar )
 {
 	static scli::sInfo Info(NAME_LC, NAME_MC, "q37.info");
 
-	Registrar.Register( parsing_::New, parsing_::Delete, parsing_::Parse );
-	Registrar.Register( processing_::New, processing_::Delete,  processing_::Read );
+	Registrar.Register( 1, parsing_::New, parsing_::Delete, parsing_::Parse );
+	Registrar.Register( 11, processing_::New, processing_::Delete,  processing_::Read );
 
 	return Info;
 }

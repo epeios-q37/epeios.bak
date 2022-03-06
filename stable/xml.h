@@ -801,6 +801,7 @@ namespace xml {
 		str::string _TagName;
 		str::string AttributeName_;
 		bso::sChar AttributeDelimiter_;
+		str::wString AttributeBetween_; // Characters between the attribute name and the attribute value, including the '='.
 		str::string _Value;
 		status__ _Status;
 		entities_handling__ _EntitiesHandling;
@@ -813,6 +814,7 @@ namespace xml {
 			_TagName.reset( P );
 			AttributeName_.reset( P );
 			AttributeDelimiter_ = delimiter::sUndefined;
+			AttributeBetween_.reset(P);
 			_Value.reset( P );
 			_Status = s_Undefined;
 
@@ -846,6 +848,7 @@ namespace xml {
 
 			_TagName.Init();
 			AttributeName_.Init();
+			AttributeBetween_.Init();
 
 			_Value.Init();
 
@@ -866,6 +869,7 @@ namespace xml {
 		token__ Parse(
 			str::string_ &TagName,
 			str::string_ &AttributeName,
+			str::dString &AttributeBetween,
 			bso::sChar &AttributeDelimiter,
 			str::string_ &Value,	// Contient la valeur d'une balise ('tag') our d'un attribut, en fonction de la valeur retourne ('tTag' ou 'tAttribute').
 			xml::dump_ &Dump,
@@ -877,6 +881,7 @@ namespace xml {
 			TagName = _TagName;
 			AttributeName = AttributeName_;
 			AttributeDelimiter = AttributeDelimiter_;
+			AttributeBetween = AttributeBetween_;
 			Value = _Value;
 			Status = _Status;
 
@@ -898,6 +903,7 @@ namespace xml {
 		E_RODISCLOSE__( str::string_, TagName );
 		qRODISCLOSEr( str::string_, AttributeName );
 		qRODISCLOSEr( bso::sChar, AttributeDelimiter );
+		qRODISCLOSEr( str::dString, AttributeBetween );
 		E_RODISCLOSE__( str::string_, Value );
 		E_RODISCLOSE__( status__, Status );
 		E_RODISCLOSE__( token__, Token );
@@ -940,13 +946,15 @@ namespace xml {
 		virtual bso::bool__ XMLAttribute(
 			const str::string_ &TagName,
 			const str::string_ &Name,
-			bso::sChar Delimiter,
+			const str::string_ &AttributeBetween,
+			bso::sChar AttributeDelimiter,
 			const str::string_ &Value,
 			const dump_ &Dump ) = 0;
 		virtual bso::bool__ XMLSpecialAttribute(
 			const str::string_ &TagName,
 			const str::string_ &Name,
-			bso::sChar Delimiter,
+			const str::string_ &AttributeBetween,
+			bso::sChar AttributeDelimiter,
 			const str::string_ &Value,
 			const dump_ &Dump )
 		{

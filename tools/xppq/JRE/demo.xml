@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SomeTag xmlns:xpp="http://q37.info/ns/xpp/" AnAttribute="SomeAttributeValue">
- <SomeOtherTag AnotherAttribute="AnotherAttributeValue">TagValue</SomeOtherTag>
- <xpp:define name="SomeMacro">
-  <xpp:bloc>Some macro content from file !</xpp:bloc>
- </xpp:define>
- <YetAnotherTag YetAnotherAttribute="YetAnotherAttributeValue">
-  <xpp:expand select="SomeMacro"/>
- </YetAnotherTag>
-</SomeTag>
+<Root xmlns:xpp="http://q37.info/ns/xpp/">
+  <Tag
+  AttributeOn = "Attribute for the $FirstVar$"
+  AttributeTwo="Attribute for the $SecondVar$">
+	  <Test/>
+  </Tag>
+  <Yo/>
+<xpp:set
+    name="FirstVar"
+    value="FirstVarValue"/>
+  <xpp:set
+    name="SecondVar"
+    value="SecondVarValue"/>
+  <xpp:bloc marker="$">
+    <Tag
+      AttributeOne="Attribute for the $FirstVar$"
+      AttributeTwo = 
+		"Attribute for the $SecondVar$"/>
+  </xpp:bloc>
+</Root>

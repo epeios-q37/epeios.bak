@@ -10,6 +10,12 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2022-03-06
+- RGSTRY: [adpt],
+- TOL: `qDELETE(Object)` returns now a boolean to indicate wether `Object` was or not set,
+- XML: fixing vanishing `\n` after `\r` after tag followed by attribute,
+- XPP: adding missing space between attributes in raw output,
+
 ## 2022-03-04
 - XPP: [stdz],
 

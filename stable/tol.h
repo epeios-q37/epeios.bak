@@ -2419,10 +2419,13 @@ namespace tol {
 
 # define qNEW(type) tol::New_<type>()
 
-	template <typename obj> inline void Delete_(obj *Object)
+	template <typename obj> inline bso::sBool Delete_(obj *Object)
 	{
-	  if ( Object != NULL )
+	  if ( Object != NULL ) {
       delete Object;
+      return true;
+	  } else
+      return false;
 	}
 
 # define qDELETE(object) tol::Delete_(object)

@@ -1,3 +1,6 @@
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 class CLI {
   private static void displayBytecodeBuildTimestamp() throws Exception {
     System.out.println("Bytecode build : " + new java.util.Date(new java.io.File(XPPqTest.class.getClassLoader()
@@ -6,12 +9,15 @@ class CLI {
 
   private static void dump(java.io.InputStream stream) throws Exception {
     int c = 0;
+    String result = "";
 
     while ((c = stream.read()) != -1) {
-      System.out.print((char) c);
+      result = result + ((char) c);
     }
 
-    System.out.println();
+    Logger.getLogger("toto").log(Level.INFO, result);
+
+    System.out.println(result);
   }
 
   private static void test0(java.io.InputStream stream) throws Exception {
@@ -79,7 +85,7 @@ class CLI {
       "</SomeTag>\n";
 
   private static java.io.InputStream getStream() throws Exception {
-    if (false)
+    if (true)
       return new java.io.FileInputStream("demo.xml");
     else
       return new java.io.ByteArrayInputStream(xml.getBytes());

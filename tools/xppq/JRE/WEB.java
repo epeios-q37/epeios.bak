@@ -1,6 +1,10 @@
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 import info.q37.atlas.*;
@@ -100,6 +104,12 @@ public class WEB  extends Atlas {
       result = result + ((char) c);
     }
 
+    Logger.getLogger("toto").log(Level.INFO, result);
+
+    BufferedWriter writer = new BufferedWriter(new FileWriter("Result.xml"));
+    writer.write(result);
+    writer.close();
+
     return result;
   }
 
@@ -134,7 +144,7 @@ public class WEB  extends Atlas {
   }
 
   private void acPreprocessed(DOM dom) throws IOException {
-    dom.inner("output", escapeHtmlAndFormat(streamToString(new XPPqPreprocessor(stringToStream(dom.executeString("editor.getValue();"))))));
+    dom.inner("output", escapeHtmlAndFormat(streamToString(new XPPqPreprocessor(new java.io.FileInputStream("demo.xml")))));
     dom.executeVoid("hljs.highlightBlock(document.getElementById('output').firstChild);");
   }
 

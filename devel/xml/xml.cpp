@@ -80,10 +80,15 @@ qRT
 qRE
 }
 
-static status__ SkipSpaces_( _flow___ &Flow )
+static status__ SkipSpaces_(
+  _flow___ &Flow,
+  str::dString *Spaces = NULL)
 {
 	while ( !Flow.EndOfFlow() && isspace( Flow.View() ) )
-		Flow.Get();
+    if ( Spaces != NULL )
+      Spaces->Append(Flow.Get());
+    else
+      Flow.Get();
 
 	if ( Flow.EndOfFlow() )
 		return sUnexpectedEOF;
@@ -499,6 +504,7 @@ static status__ GetAttribute_(
 	_flow___ &Flow,
 	entities_handling__ EntitiesHandling,
 	str::string_ &Name,
+	str::dString &Between,  // Chars between the attribute name and the attribute value, including the '=' sign.
 	bso::sChar &Delimiter,
 	str::string_ &Value)
 {
@@ -509,12 +515,14 @@ static status__ GetAttribute_(
 		return sUnexpectedCharacter;
 	}
 
-	HANDLE( SkipSpaces_( Flow ) );
+	HANDLE( SkipSpaces_(Flow, &Between) );
 
 	if ( Flow.Get() != '=' )
 		return sMissingEqualSign;
 
-	HANDLE( SkipSpaces_( Flow ) );
+	Between.Append('=');
+
+  HANDLE( SkipSpaces_(Flow, &Between) );
 
 	Delimiter = Flow.Get();
 
@@ -561,6 +569,16 @@ inline static bso::bool__ IsSpecialAttribute_( const str::string_ &Attribute )
 		return false;
 
 	return true;
+}
+
+namespace {
+  inline bso::sBool IsDualEOL_(
+    bso::sChar First,
+    bso::sChar Second )
+  {
+    return ( ( First == '\r') && ( Second == '\n' ) )
+             || ( ( First == '\n' ) && ( Second == '\r') );
+  }
 }
 
 #undef HANDLE
@@ -697,9 +715,14 @@ qRB
 					if ( _Flow.EndOfFlow() )
 						RETURN( sUnexpectedEOF );
 
-					// Pour faciliter la localisation d'une erreur.
-					if ( isspace( _Flow.View() ) )
-						_Flow.Get();
+					// To facilitate localization of errors.
+					if ( isspace( _Flow.View() ) ) {
+						bso::sChar C = _Flow.Get();
+
+						if ( !_Flow.EndOfFlow() )
+              if ( IsDualEOL_(C, _Flow.View() ) )
+                _Flow.Get();
+					}
 
 					if ( ( 1 << _Token ) & TokenToReport )
 						Continue = false;
@@ -792,9 +815,10 @@ qRB
 			case t_Undefined:
 				AttributeName_.Init();
 				AttributeDelimiter_ = delimiter::sUndefined;
+				AttributeBetween_.Init();
 				_Value.Init();
 
-				HANDLE( GetAttribute_( _Flow, _EntitiesHandling, AttributeName_, AttributeDelimiter_, _Value ) );
+				HANDLE( GetAttribute_( _Flow, _EntitiesHandling, AttributeName_, AttributeBetween_, AttributeDelimiter_, _Value ) );
 
 				if ( _Tags.IsEmpty() )
 					qRFwk();
@@ -1056,7 +1080,7 @@ status__ xml::Parse(
 	status__ Status = s_Undefined;
 qRH
 	parser___ Parser;
-	str::string TagName, AttributeName, Value;
+	str::string TagName, AttributeName, AttributeBetween, Value;
 	bso::sChar AttributeDelimiter = delimiter::sUndefined;
 	bso::bool__ Stop = false;
 	xml::dump Dump;
@@ -1066,11 +1090,12 @@ qRB
 	while ( !Stop ) {
 		TagName.Init();
 		AttributeName.Init();
+		AttributeBetween.Init();
 		AttributeDelimiter = delimiter::sUndefined;
 		Value.Init();
 		Dump.PurgeData();
 
-		switch ( Parser.Parse( TagName, AttributeName, AttributeDelimiter, Value, Dump, Status ) ) {
+		switch ( Parser.Parse( TagName, AttributeName, AttributeBetween, AttributeDelimiter, Value, Dump, Status ) ) {
 		case tProcessingInstruction:
 			Stop = !Callback.XMLProcessingInstruction( Dump );
 			break;
@@ -1081,10 +1106,10 @@ qRB
 			Stop = !Callback.XMLStartTagClosed( TagName, Dump );
 			break;
 		case tAttribute:
-			Stop = !Callback.XMLAttribute( TagName, AttributeName, AttributeDelimiter, Value, Dump );
+			Stop = !Callback.XMLAttribute( TagName, AttributeName, AttributeBetween, AttributeDelimiter, Value, Dump );
 			break;
 		case tSpecialAttribute:
-			Stop = !Callback.XMLSpecialAttribute( TagName, AttributeName, AttributeDelimiter, Value, Dump );
+			Stop = !Callback.XMLSpecialAttribute( TagName, AttributeName, AttributeBetween, AttributeDelimiter, Value, Dump );
 			break;
 		case tValue:
 		case tCData:

@@ -929,7 +929,8 @@ namespace {
 		virtual bso::bool__ XMLAttribute(
 			const str::string_ &TagName,
 			const str::string_ &Name,
-			bso::sChar Delimiter,
+			const str::string_ &AttributeBetween,
+			bso::sChar AttributeDelimiter,
 			const str::string_ &Value,
 			const xml::dump_ &Dump ) override
 		{

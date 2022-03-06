@@ -196,7 +196,7 @@ namespace xpp {
 		str::string BlocTag;
 		str::string CDataTag;
 		str::string CypherTag;
-		str::string _AttributeAttribute;	//'<tag xpp:attribute="..." ...>'//
+		str::string AttributeAttribute;	//'<tag xpp:attribute="..." ...>'//
 		str::string MarkerAttribute;	//'<tag xpp:marker="..." ...>'//
 		str::string XMLNS;	// <... xmlns:xpp="..." ...> ('xpp' ou ce qui a �t� choisi par l'utilisateur ...).
 		void reset( bso::bool__ P = true )
@@ -209,7 +209,7 @@ namespace xpp {
 			IfeqTag.reset( P );
 			BlocTag.reset( P );
 			CDataTag.reset( P );
-			_AttributeAttribute.reset( P );
+			AttributeAttribute.reset( P );
 			MarkerAttribute.reset( P );
 			MarkerAttribute.reset( P );
 			XMLNS.reset( P );

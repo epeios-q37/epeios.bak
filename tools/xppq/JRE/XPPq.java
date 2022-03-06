@@ -55,32 +55,32 @@ class XPPq extends XPPqWrapper {
 	
 	static public Object getParser( java.io.InputStream stream )
 	{
-		return call( 0, stream );
+		return call( 1, stream );
 	}
 	
 	public void releaseParser()
 	{
-		call( 1, core );
+		call( 2, core );
 	}
 	
 	public int parse( XPPqData data )
 	{
-		return ( (java.lang.Integer)call( 2, core, data ) ).intValue();
+		return ( (java.lang.Integer)call( 3, core, data ) ).intValue();
 	}
 	
-	static public Object getPreprocessor( java.io.InputStream stream )
+	public static Object getPreprocessor( java.io.InputStream stream )
 	{
-		return call( 3, stream );
+		return call( 11, stream );
 	}
 	
 	public void releasePreprocessor()
 	{
-		call( 4, core );
+		call( 12, core );
 	}
 	
 	public int readFromPreprocessor()
 	{
-		return ( (java.lang.Integer)call( 5, core ) ).intValue();
+		return ( (java.lang.Integer)call( 13, core ) ).intValue();
 	}
 
 	public void finalize()
