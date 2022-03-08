@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Root xmlns:xpp="http://q37.info/ns/xpp/">
-  <Tag
-  AttributeOn = "Attribute for the $FirstVar$"
-  AttributeTwo="Attribute for the $SecondVar$">
-	  <Test/>
-  </Tag>
-  <Yo/>
-<xpp:set
-    name="FirstVar"
-    value="FirstVarValue"/>
-  <xpp:set
-    name="SecondVar"
-    value="SecondVarValue"/>
-  <xpp:bloc marker="$">
-    <Tag
-      AttributeOne="Attribute for the $FirstVar$"
-      AttributeTwo = 
-		"Attribute for the $SecondVar$"/>
-  </xpp:bloc>
+  <Out>
+    <In/>
+  </Out>
+  <Out>
+    <In A="B"/>
+  </Out>
+  <Out>
+    <In>
+      Value
+    </In>
+  </Out>
+  <Out>
+    <In A="B">Value</In>
+  </Out>
 </Root>

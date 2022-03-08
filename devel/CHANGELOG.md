@@ -10,6 +10,9 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2022-03-08
+- XPP: fixing output layout,
+
 ## 2022-03-06
 - RGSTRY: [adpt],
 - TOL: `qDELETE(Object)` returns now a boolean to indicate wether `Object` was or not set,

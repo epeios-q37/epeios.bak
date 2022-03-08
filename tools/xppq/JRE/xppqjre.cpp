@@ -150,8 +150,8 @@ namespace parsing_ {
 			xml::GetMeaning( Parser().GetStatus(), Parser().Flow().Position(), Meaning );
 			Locale.Init();
 			Error.Init();
-			Locale.GetTranslation( Meaning, "", Error );
-			Throw( Env, Error );
+			sclm::GetBaseTranslation(Meaning, Error);
+			Throw(Env, Error);
 			break;
 		case xml::t_Processed:
 			break;
@@ -251,7 +251,7 @@ namespace processing_ {
 		return Null();
 	}
 
-	SCLJRE_F( Read )
+	SCLJRE_F( ReadChar )
 	{
 		sJByte Char = 0;
 	qRH
@@ -273,7 +273,7 @@ namespace processing_ {
 			xpp::GetMeaning(Processor(), Meaning );
 			Locale.Init();
 			Translation.Init();
-			sclm::GetBaseTranslation( Meaning, Translation );
+			sclm::GetBaseTranslation(Meaning, Translation);
 			scljre::Throw( Env, Translation );
 		}
 	qRR
@@ -281,14 +281,53 @@ namespace processing_ {
 	qRE
 		return Integer( Env, Char );
 	}
+
+	SCLJRE_F( ReadBuffer )
+	{
+    sdr::sSize Amount = 0;
+  qRH
+ 		scljre::java::lang::rLong Long, Offset, Length;
+ 		n4jre::rJByteArray Array;
+		lcl::meaning Meaning;
+		lcl::locale Locale;
+    str::wString Translation;
+	qRB
+    qRVct();
+
+    // To implement!
+# if 0
+    tol::Init(Long, Array, Offset, Length);
+
+    Caller.Get(Long, Array, Offset, Length);
+
+		rProcessor_ &Processor = *(rProcessor_ *)Long.LongValue();
+
+		if ( !Processor().EndOfFlow() )
+			Amount = Processor().ReadUpTo(Length.LongValue(), Array.Core() + Offset.LongValue());
+		else if ( Processor().Status() == xpp::sOK )
+			Amount = -1;
+		else {
+			Meaning.Init();
+			xpp::GetMeaning(Processor(), Meaning );
+			Locale.Init();
+			Translation.Init();
+			sclm::GetBaseTranslation( Meaning, Translation );
+			scljre::Throw( Env, Translation );
+		}
+# endif
+	qRR
+	qRT
+	qRE
+		return Integer(Env, Amount);
+	}
 }
 
 const scli::sInfo &scljre::SCLJRERegister( sRegistrar &Registrar )
 {
 	static scli::sInfo Info(NAME_LC, NAME_MC, "q37.info");
 
-	Registrar.Register( 1, parsing_::New, parsing_::Delete, parsing_::Parse );
-	Registrar.Register( 11, processing_::New, processing_::Delete,  processing_::Read );
+	Registrar.Register(1, parsing_::New, parsing_::Delete, parsing_::Parse);
+	Registrar.Register(11, processing_::New, processing_::Delete,  processing_::ReadChar, processing_::ReadBuffer);
 
 	return Info;
 }

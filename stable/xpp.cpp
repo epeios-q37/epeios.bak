@@ -1207,9 +1207,9 @@ static bso::bool__ StripHeadingSpaces_(
 	const str::string_ &NamespaceWithSeparator )
 {
 	return ( PreviousToken == xml::tValue )
-		   || ( ( PreviousToken == xml::tEndTag )
-		      && ( BelongsToNamespace_( Parser.TagName(), NamespaceWithSeparator )
-			  || ( Parser.Token() == xml::tEndTag ) ) );
+           || ( ( PreviousToken == xml::tEndTag )
+                && ( BelongsToNamespace_( Parser.TagName(), NamespaceWithSeparator )
+                && ( Parser.Token() == xml::tEndTag ) ) );
 }
 
 static void StripHeadingSpaces_( str::string_ &Data )
@@ -1351,17 +1351,17 @@ status__ xpp::_extended_parser___::Handle(
 						} else
 							Status = sOK;
 					} else if ( _Parser.AttributeName() == BLOC_TAG_MARKER_ATTRIBUTE ) {
-					    if ( PreservationLevel_ == 0 ) {
-                            status__ IntermediateStatus = HandleMarkerDirective_( _Parser.Value(), Parser );
+            if ( PreservationLevel_ == 0 ) {
+              status__ IntermediateStatus = HandleMarkerDirective_( _Parser.Value(), Parser );
 
-                            if ( IntermediateStatus == sOK) {
-                                Continue = true;
-                            } else
-                                Status = IntermediateStatus;
-                        } else
-                            Status = sOK;
-					} else
-						Status = sUnexpectedAttribute;
+              if ( IntermediateStatus == sOK) {
+                  Continue = true;
+              } else
+                  Status = IntermediateStatus;
+            } else
+                Status = sOK;
+            } else
+              Status = sUnexpectedAttribute;
 					break;
 				case dCData:
 					Status = sUnexpectedAttribute;
@@ -1388,7 +1388,6 @@ status__ xpp::_extended_parser___::Handle(
 					break;
 				}
 			}
-
 			Status = sOK;
 			break;
 		case xml::tStartTagClosed:

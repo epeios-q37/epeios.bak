@@ -53,7 +53,7 @@ class XPPq extends XPPqWrapper {
 		this.core = core;
 	}
 	
-	static public Object getParser( java.io.InputStream stream )
+	public static Object getParser( java.io.InputStream stream )
 	{
 		return call( 1, stream );
 	}
@@ -83,8 +83,15 @@ class XPPq extends XPPqWrapper {
 		return ( (java.lang.Integer)call( 13, core ) ).intValue();
 	}
 
+	public int readFromPreprocessor(byte[] b, int off, int len) 
+	{
+		// Not implemented yet (see C++ source) !
+		return ( (java.lang.Integer)call( 14, core, b, off, len ) ).intValue();		
+	}	
+
 	public void finalize()
 	{
+		releasePreprocessor();
 	}
 }
 
@@ -95,16 +102,21 @@ class XPPqPreprocessor extends java.io.InputStream {
 		xppq = new XPPq( XPPq.getPreprocessor( Stream ) );
 	}
 	
- // To optimize by using the buffer.
+ 	@Override
 	public int read()
 	{
 		return xppq.readFromPreprocessor();
 	}
-	
-	public void finalize()
-	{
-		xppq.releasePreprocessor();
-	}
+	/*
+		Commented so that a call of below function will call above one,
+		as the native corresponding function in not implemented yet.
+	*/
+	/*
+  @Override
+  public int read(byte[] b, int off, int len) {
+		return xppq.readFromPreprocessor(b, off, len);
+  }
+*/	
 }
 
 class XPPqParser {

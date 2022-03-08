@@ -15,8 +15,6 @@ class CLI {
       result = result + ((char) c);
     }
 
-    Logger.getLogger("toto").log(Level.INFO, result);
-
     System.out.println(result);
   }
 
