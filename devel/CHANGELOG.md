@@ -10,6 +10,14 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2022-03-09
+- BCH:
+  - typo,
+  - adding method to avoid ambiguity,
+- RGSTRY: [adpt],
+- XML: [rvrt] betwwen attribute spaces,
+- XPP: [adpt],
+
 ## 2022-03-08
 - XPP: fixing output layout,
 

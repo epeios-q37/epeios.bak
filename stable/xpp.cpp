@@ -1221,19 +1221,20 @@ static void StripHeadingSpaces_( str::string_ &Data )
 #define CDATA_NESTING_MAX	BSO_UINT_MAX
 
 namespace {
-  inline void AddHeadingSpaces_(
+  inline void AppendUpToAttributeValueDelimiter_(
     const str::dString &Source,
+    bso::sChar Delimiter,
     str::dString &Target)
   {
-    if ( Source.Amount() ) {
-      flx::sStringIFlow Flow;
-      bso::sChar C;
+    sdr::sRow Position = Source.Search(Delimiter);
 
-      Flow.Init(Source);
+    if ( Position == qNIL )
+      qRFwk();
 
-      while( !Flow.EndOfFlow() && ( isspace(C = Flow.Get() ) ) )
-        Target.Append(C);
-    }
+    if ( Position == Source.First() )
+      qRFwk();
+
+    Target.Append(Source, (sdr::sSize)(*Position + 1));
   }
 }
 
@@ -1311,12 +1312,9 @@ status__ xpp::_extended_parser___::Handle(
 					switch ( GetDirective_( _Parser.AttributeName(), _Directives, PreservationLevel_ ) ) {
 					case dNone:
 						if ( Marker_() != 0 ) {
-							AddHeadingSpaces_(_Parser.DumpData(), Data);
+							AppendUpToAttributeValueDelimiter_(_Parser.DumpData(), _Parser.AttributeDelimiter(), Data);
 							_Parser.PurgeDumpData();
-              Data.Append (_Parser.AttributeName() );
-							Data.Append(_Parser.AttributeBetween()) ;
-							Data.Append(_Parser.AttributeDelimiter());
-							Status = HandleAttributeValueSubstitution_( _Parser.Value(), Marker_(), Data );
+							Status = HandleAttributeValueSubstitution_(_Parser.Value(), Marker_(), Data);
 							Data.Append(_Parser.AttributeDelimiter());
 						} else
 							Status = sOK;

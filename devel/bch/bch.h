@@ -174,7 +174,7 @@ namespace bch {
 			if ( mng::SetStepped( Step ) )
 				mmr::Allocate( Step );
 		}
-		void StoreAndAdjust_(
+		void StoreAndAdjust(
 			const mmr &Bunch,
 			sdr::size__ Amount,
 			row Row = 0,
@@ -194,7 +194,7 @@ namespace bch {
 		}
 */		/*f Store at 'Offset' the content of 'Bunch' from position 'Row' to the end.
 		Adjust the size of the bunch. */
-		void StoreAndAdjust_(
+		void StoreAndAdjust(
 			const mmr &Bunch,
 			row Row,
 			row Offset = 0 )
@@ -273,9 +273,16 @@ namespace bch {
 		{
 			row Position = this->Amount();
 
-			StoreAndAdjust_( Bunch, Amount, Position, Offset );
+			StoreAndAdjust( Bunch, Amount, Position, Offset );
 
 			return Position;
+		}
+		row Append(
+			const _bunch &Bunch,
+			sdr::size__ Amount,
+			row Offset = 0 )
+		{
+      return Append(Bunch.Memory(), Amount, Offset);
 		}
 		// Ajoute le contenu de 'Bunch' de la position 'First'  la position 'Last', toute deux incluses.
 		row Append(
