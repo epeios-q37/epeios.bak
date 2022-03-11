@@ -265,7 +265,7 @@ namespace n4jre {
 		virtual void N4JRESetElement(
 			sJSize Index,
 			cObject *Object ) = 0;
-# define H( type, name )\
+# define N4JRE_M_( type, name )\
 	protected:\
 		virtual type N4JRECall##name##Method(\
 			const char *Method,\
@@ -281,12 +281,34 @@ namespace n4jre {
 		{\
 			return N4JRECall##name##Method( Method, Signature, ArgC, ArgV );\
 		}
-		H( void, Void );
-		H( sJBoolean, Boolean );
-		H( sJShort, Short );
-		H( sJInt, Int );
-		H( sJLong, Long );
-# undef H
+		N4JRE_M_( void, Void );
+		N4JRE_M_( sJBoolean, Boolean );
+		N4JRE_M_( sJShort, Short );
+		N4JRE_M_( sJInt, Int );
+		N4JRE_M_( sJLong, Long );
+# undef N4JRE_M_
+# define N4JRE_SG_( type, name )\
+  protected:\
+    virtual void N4JRESet##name(\
+      const char *Name,\
+      type Value) = 0;\
+    virtual type N4JREGet##name(const char *Name) = 0;\
+  public:\
+    void Set##name(\
+      const char *Name,\
+      type Value)\
+    {\
+      return N4JRESet##name(Name, Value);\
+    }\
+    type Get##name(const char *Name)\
+    {\
+      return N4JREGet##name(Name);\
+    }
+		N4JRE_SG_( sJBoolean, Boolean );
+		N4JRE_SG_( sJShort, Short );
+		N4JRE_SG_( sJInt, Int );
+		N4JRE_SG_( sJLong, Long );
+# undef N4JRE_SG_
 	public:
 		qCALLBACK( Object );
 		void Set(

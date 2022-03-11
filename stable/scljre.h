@@ -93,7 +93,7 @@ namespace scljre {
 	public:
 		void reset( bso::sBool P = true );
 		qCDTOR( rObject );
-		void Init( n4jre::cObject *Object )
+		void Init(n4jre::cObject *Object = NULL)
 		{
 			reset();
 
@@ -149,69 +149,45 @@ namespace scljre {
 
 			O_().CallObjectMethod( Method, Signature, Return, sizeof...( args ), Values );
 		}
-		template <typename ...args> void CallVoidMethod(
-			const char *Method,
-			const char *Signature,
-			args&... Args )
-		{
-			sValue Values[sizeof...(args)+1];	/// '+1' only to avoid attempt to create a array of size 0.
-
-			Values[sizeof...( args )].Type = t_Undefined;
-
-			Fill_( 0, Values, Args... );
-
-			O_().CallVoidMethod( Method, Signature, sizeof...( args ), Values );
+# define SCLJRE_M_( type, name )\
+		template <typename ...args> type Call##name##Method(\
+			const char *Method,\
+			const char *Signature,\
+			args&... Args )\
+		{\
+			sValue Values[sizeof...(args)+1];\
+			Values[sizeof...( args )].Type = t_Undefined;\
+\
+			Fill_( 0, Values, Args... );\
+\
+			return O_().Call##name##Method( Method, Signature, sizeof...( args ), Values );\
 		}
-		template <typename ...args> sJBoolean CallBooleanMethod(
-			const char *Method,
-			const char *Signature,
-			args&... Args )
-		{
-			sValue Values[sizeof...(args)+1];	/// '+1' only to avoid attempt to create a array of size 0.
-			Values[sizeof...(args)].Type = t_Undefined;
-
-			Fill_( 0, Values, Args... );
-
-			return O_().CallBooleanMethod( Method, Signature, sizeof...(args), Values );
-		}
-		template <typename ...args> sJShort CallShortMethod(
-			const char *Method,
-			const char *Signature,
-			args&... Args )
-		{
-			sValue Values[sizeof...(args)+1];	/// '+1' only to avoid attempt to create a array of size 0.
-			Values[sizeof...( args )].Type = t_Undefined;
-
-			Fill_( 0, Values, Args... );
-
-			return O_().CallShortMethod( Method, Signature, sizeof...( args ), Values );
-		}
-		template <typename ...args> sJInt CallIntMethod(
-			const char *Method,
-			const char *Signature,
-			args&... Args )
-		{
-			sValue Values[sizeof...(args)+1];	/// '+1' only to avoid attempt to create a array of size 0.
-			Values[sizeof...( args )].Type = t_Undefined;
-
-			Fill_( 0, Values, Args... );
-
-			return O_().CallIntMethod( Method, Signature, sizeof...( args ), Values );
-		}
-		template <typename ...args> sJLong CallLongMethod(
-			const char *Method,
-			const char *Signature,
-			args&... Args )
-		{
-			sValue Values[sizeof...(args)+1];	/// '+1' only to avoid attempt to create a array of size 0.
-
-			Fill_( 0, Values, Args... );
-
-			return O_().CallLongMethod( Method, Signature, sizeof...( args ), Values );
-		}
+		SCLJRE_M_( void, Void );
+		SCLJRE_M_( sJBoolean, Boolean );
+		SCLJRE_M_( sJShort, Short );
+		SCLJRE_M_( sJInt, Int );
+		SCLJRE_M_( sJLong, Long );
+# undef SCLJRE_M_
+# define SCLJRE_SG_( type, name )\
+    void Set##name(\
+      const char *Name,\
+      type Value)\
+    {\
+      return O_().Set##name(Name, Value);\
+    }\
+    type Get##name(const char *Name)\
+    {\
+      return O_().Get##name(Name);\
+    }
+		SCLJRE_SG_( sJBoolean, Boolean );
+		SCLJRE_SG_( sJShort, Short );
+		SCLJRE_SG_( sJInt, Int );
+		SCLJRE_SG_( sJLong, Long );
+# undef SCLJRE_SG_
 	};
 
-	class rCore_ {
+	class rCore_
+	{
 	protected:
 		rObject Object_;
 	public:
@@ -341,10 +317,59 @@ namespace scljre {
 		}
 	}
 
+	namespace {
+    qCDEF( char *, JCorePointerMemberName_, "pointer" );
+	}
+
+	template <typename t> class rJCore
+	: public rObject
+	{
+  private:
+    t *GetPointer_(qRPD)
+    {
+      t *Pointer = (t *)GetLong(JCorePointerMemberName_);
+
+      if ( qRPT )
+        qRFwk();
+
+      return Pointer;
+    }
+    qRMV(t, P_, Pointer_);
+  public:
+    void reset(bso::sBool P = true)
+    {
+      rObject:: reset(P);
+
+      Pointer_ = NULL;
+    }
+		void Init(n4jre::cObject *Object = NULL)
+		{
+		  reset();
+
+		  rObject::Init(Object);
+
+		  if ( Object != NULL )
+        Pointer_ = GetPointer_(err::hUserDefined);
+		}
+    t &operator()(void)
+    {
+      return P_();
+    }
+    void Delete(void)
+    {
+      if ( Pointer_ != NULL )
+      {
+        SetLong(JCorePointerMemberName_, NULL);
+        qDELETE(Pointer_);
+      }
+    }
+	};
+
 	typedef scln4a::sCaller sCaller_;
 
 	class sCaller
-	: public sCaller_ {
+	: public sCaller_
+	{
 	private:
 		bso::sU8 Index_;
 		void Get_(
@@ -425,7 +450,15 @@ namespace scljre {
 		qRT;
 		qRE;
 		}
-		// Termination method.
+		template <typename t> void Get_(rJCore<t> &Core)
+		{
+		  return Core.Init(GetObject());
+		}
+		void Get_(rObject &Object)
+		{
+		  Object.Init(GetObject());
+		}
+    // Termination method.
 		void Get( void ) {}
 	public:
 		void reset( bso::sBool P = true )
@@ -463,6 +496,14 @@ namespace scljre {
 		void Get( str::dStrings &Strings )
 		{
 			return Get_( Strings );
+		}
+		template <typename t> void Get(rJCore<t> &Core)
+		{
+		  return Get_(Core);
+		}
+		void Get(rObject &Object)
+		{
+		  return Get_(Object);
 		}
 		template <typename arg, typename ...args> void Get(
 			arg &Arg,

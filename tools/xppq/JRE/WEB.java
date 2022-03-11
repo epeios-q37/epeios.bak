@@ -41,10 +41,12 @@ public class WEB extends Atlas {
 
   private static final String BODY =
   "<fieldset>" +
+  "  <legend>Input</legend>" +
   "  <fieldset>" +
   "    <div id=\"input\" style=\"font-size: initial; resize: horizontal;\"/>" +
   "  </fieldset>" +
   "  <fieldset style=\"display: flex;flex-direction: row;justify-content: space-evenly;\">" +
+  "  <legend>Actions</legend>" +
   "    <fieldset style=\"display: flex; align-items: center;\">" +
   "      <legend>Examples</legend>" +
   "      <select xdh:onevent=\"Select\">" +
@@ -66,6 +68,7 @@ public class WEB extends Atlas {
   "    </fieldset>" +
   "  </fieldset>" +
   "  <fieldset>" +
+  "  <legend>Output</legend>" +
   "      <output id=\"output\">" +
   "      <span style=\"font-style: oblique;\">Enter XML code or select an exemple,<br/>and/or click one of above button.</span>"
   +
@@ -137,6 +140,13 @@ public class WEB extends Atlas {
   "  </xpp:bloc>\n" +
   "</Root>";
 
+  private static final String USER_EXAMPLE = 
+  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
+  "<Root xmlns:xpp=\"http://q37.info/ns/xpp/\">\n" +
+  "  Type your own XML code here.\n" + 
+  "</Root>";
+
+
   private static String indentation(int level) {
     String result = "";
 
@@ -154,7 +164,7 @@ public class WEB extends Atlas {
 
     int token = parser.parse(data);
 
-    while (token != XPPqParser.PROCESSED) {
+    while (token != XPPqParser.DONE) {
       switch (token) {
         case XPPqParser.START_TAG:
           result.append(indentation(level) + "<span class=\"Tag\">" + data.tagName + "</span></br>");
@@ -235,8 +245,8 @@ public class WEB extends Atlas {
     case "substitutionExample":
       xml = SUBSTITUTION_EXAMPLE;
       break;
-    case "Example":
-      // xml = _EXAMPLE;
+    case "userExample":
+      xml = USER_EXAMPLE;
       break;
     }
 

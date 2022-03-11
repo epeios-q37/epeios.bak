@@ -166,38 +166,6 @@ namespace jniq {
 		return FieldID;
 	}
 
-	inline jint GetIntField(
-		JNIEnv *Env,
-		jobject Object,
-		const char *Name )
-	{
-		return Env->GetIntField( Object, GetFieldID( Env, Object, Name, "I" ) );
-	}
-
-	inline jint GetStaticIntField(
-		JNIEnv *Env,
-		jclass Class,
-		const char *Name )
-	{
-		return Env->GetStaticIntField( Class, GetStaticFieldID( Env, Class, Name, "I" ) );
-	}
-
-	inline jlong GetLongField(
-		JNIEnv *Env,
-		jobject Object,
-		const char *Name )
-	{
-		return Env->GetLongField( Object, GetFieldID( Env, Object, Name, "J" ) );
-	}
-
-	inline jlong GetStaticLongField(
-		JNIEnv *Env,
-		jclass Class,
-		const char *Name )
-	{
-		return Env->GetStaticLongField( Class, GetStaticFieldID( Env, Class, Name, "J" ) );
-	}
-
 	inline jobject GetObjectField(
 		JNIEnv *Env,
 		jobject Object,
@@ -235,24 +203,34 @@ namespace jniq {
 		return GetStaticObjectField( Env, FindClass( Env, ClassName ), Name, Signature );
 	}
 
-	inline void SetIntField(
-		JNIEnv *Env,
-		jobject Object,
-		const char *Name,
-		jint Value )
-	{
-		Env->SetIntField( Object, GetFieldID( Env, Object, Name, "J" ), Value );
+# define JNIQ_SG_(type, name)\
+	inline void Set##name##Field(\
+		JNIEnv *Env,\
+		jobject Object,\
+		const char *Name,\
+		j##type Value )\
+	{\
+		Env->Set##name##Field(Object, GetFieldID( Env, Object, Name, "J" ), Value);\
+	}\
+  inline j##type Get##name##Field(\
+		JNIEnv *Env,\
+		jobject Object,\
+		const char *Name )\
+	{\
+		return Env->Get##name##Field( Object, GetFieldID( Env, Object, Name, "J" ) );\
+	}\
+	inline j##type GetStatic##name##Field(\
+		JNIEnv *Env,\
+		jclass Class,\
+		const char *Name )\
+	{\
+		return Env->GetStatic##name##Field( Class, GetStaticFieldID( Env, Class, Name, "J" ) );\
 	}
-
-	inline void SetLongField(
-		JNIEnv *Env,
-		jobject Object,
-		const char *Name,
-		jlong Value )
-	{
-		Env->SetLongField( Object, GetFieldID( Env, Object, Name, "J" ), Value );
-	}
-
+  JNIQ_SG_(boolean, Boolean);
+  JNIQ_SG_(short, Short);
+  JNIQ_SG_(long, Long);
+	JNIQ_SG_(int, Int);
+#undef JNIQ_SG_
 	inline void SetObjectField(
 		JNIEnv *Env,
 		jobject Object,

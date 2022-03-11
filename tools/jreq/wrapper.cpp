@@ -361,7 +361,22 @@ namespace {
 		{
 			return CallMethod_<jlong>( Method, Signature, ArgC, ArgV, Env_->functions->CallLongMethodA );
 		}
-
+#define SG_(name)\
+    virtual void N4JRESet##name(\
+      const char *Name,\
+      n4jre::sJ##name Value) override\
+    {\
+      jniq::Set##name##Field( Env_, Object_, Name, Value);\
+    }\
+    virtual n4jre::sJ##name N4JREGet##name(const char *Name) override\
+    {\
+      return jniq::Get##name##Field(Env_, Object_, Name);\
+    }
+    SG_(Boolean);
+    SG_(Short);
+    SG_(Int);
+    SG_(Long);
+#undef SG_
 	public:
 		void reset( bso::sBool P = true )
 		{

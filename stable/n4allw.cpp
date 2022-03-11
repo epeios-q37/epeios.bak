@@ -68,12 +68,12 @@ namespace {
 void *n4allw::rLauncher::GetFunction_( sdr::sRow Row )
 {
 	if ( !Functions_.Exists( Row ) )
-		qRFwk();
+		qRFwk();  // Beyond last registered function.
 
   void *Function = Functions_(Row);
 
   if ( Function == NULL )
-    qRFwk();
+    qRFwk();  // No function registered for this row/index.
 
 	return Function;
 }

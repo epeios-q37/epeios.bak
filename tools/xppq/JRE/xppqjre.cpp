@@ -37,16 +37,17 @@ void scljre::SCLJREInfo( txf::sWFlow &Flow )
 namespace parsing_ {
 	namespace {
 		class rParser_
+		: public xml::rParser
 		{
 		private:
 			rInputStreamRDriver Stream_;
 			flw::rDressedRFlow<> IFlow_;
 			xtf::sRFlow XFlow_;
-			xml::rParser Parser_;
 		public:
 			void reset( bso::sBool P = true )
 			{
-				tol::reset( P, Stream_, IFlow_, XFlow_, Parser_ );
+				tol::reset(P, Stream_, IFlow_, XFlow_);
+				xml::rParser::reset(P);
 			}
 			qCDTOR( rParser_ );
 			void Init( sCaller &Caller )
@@ -54,11 +55,7 @@ namespace parsing_ {
 				Stream_.Init( Caller );
 				IFlow_.Init( Stream_ );
 				XFlow_.Init( IFlow_, utf::f_Default );
-				Parser_.Init( XFlow_, xml::eh_Default );
-			}
-			xml::rParser &operator()( void )
-			{
-				return Parser_;
+				xml::rParser::Init( XFlow_, xml::eh_Default );
 			}
 		};
 	}
@@ -78,21 +75,9 @@ namespace parsing_ {
 		return Long( Env, (scljre::sJLong)Parser );
 	}
 
-	SCLJRE_F( Delete )
-	{
-	qRH
-		scljre::java::lang::rLong Long;
-	qRB
-		Long.Init( Caller.GetObject() );
-
-		delete (rParser_ *)Long.LongValue();
-	qRR
-	qRT
-	qRE
-		return Null();
-	}
-
 	namespace {
+	  typedef scljre::rJCore<rParser_> rJParser_;
+
 		void Init_(
 			sEnv *Env,
 			scljre::java::lang::rString &String,
@@ -133,21 +118,21 @@ namespace parsing_ {
 	{
 		sJInt Token = 0;
 	qRH
-		scljre::java::lang::rLong Long;
 		lcl::wMeaning Meaning;
 		lcl::locale Locale;
 		str::wString Error;
+		rJParser_ JParser;
 		scljre::rObject Data;
 	qRB
-		Long.Init( Caller.GetObject() );
-		rParser_ &Parser = *(rParser_ *)Long.LongValue();
+    tol::Init(JParser, Data);
+    Caller.Get(JParser, Data);
 
-		Data.Init( Caller.GetObject() );
+    rParser_ &Parser = JParser();
 
-		switch ( Parser().Parse( xml::tfObvious ) ) {
+		switch ( Parser.Parse( xml::tfObvious ) ) {
 		case xml::t_Error:
 			Meaning.Init();
-			xml::GetMeaning( Parser().GetStatus(), Parser().Flow().Position(), Meaning );
+			xml::GetMeaning( Parser.GetStatus(), Parser.Flow().Position(), Meaning );
 			Locale.Init();
 			Error.Init();
 			sclm::GetBaseTranslation(Meaning, Error);
@@ -156,18 +141,19 @@ namespace parsing_ {
 		case xml::t_Processed:
 			break;
 		default:
-			Set_( Env, "tagName", Parser().TagName(), Data );
-			Set_( Env, "attributeName", Parser().AttributeName(), Data );
-			Set_( Env, "value", Parser().Value(), Data );
+			Set_( Env, "tagName", Parser.TagName(), Data );
+			Set_( Env, "attributeName", Parser.AttributeName(), Data );
+			Set_( Env, "value", Parser.Value(), Data );
 			break;
 		}
 
 		// If modified, modify also Java source file.
-		switch ( Parser().Token() ) {
+		switch ( Parser.Token() ) {
 		case xml::t_Error:
 			break;
 		case xml::t_Processed:
 			Token = 0;
+			JParser.Delete();
 			break;
 		case xml::tStartTag:
 			Token = 1;
@@ -185,8 +171,8 @@ namespace parsing_ {
 			qRGnr();
 			break;
 		}
-
 	qRR
+    JParser.Delete();
 	qRT
 	qRE
 		return Integer( Env, Token );
@@ -196,87 +182,76 @@ namespace parsing_ {
 
 namespace processing_ {
 	namespace {
-		class rProcessor_
+		class rPreprocessor_
+		: public xpp::rRFlow
 		{
 		private:
 			scljre::rInputStreamRDriver Input_;
 			flw::rDressedRFlow<> Flow_;
 			xtf::sRFlow XFlow_;
-			xpp::rRFlow PFlow_;
 		public:
 			void reset( bso::sBool P = true )
 			{
-				tol::reset( P, Input_, Flow_, XFlow_, PFlow_ );
+				tol::reset( P, Input_, Flow_, XFlow_);
+				xpp::rRFlow::reset(P);
 			}
 			void Init( sCaller &Caller )
 			{
 				Input_.Init( Caller );
 				Flow_.Init( Input_ );
 				XFlow_.Init( Flow_, utf::f_Default );
-				PFlow_.Init(XFlow_, xpp::criterions___( str::wString() ) );
-			}
-			xpp::preprocessing_iflow___ &operator()( void )
-			{
-				return PFlow_;
+				xpp::rRFlow::Init(XFlow_, xpp::criterions___( str::wString() ) );
 			}
 		};
+
+		typedef scljre::rJCore<rPreprocessor_> rJPreprocessor_;
 	}
 
 	SCLJRE_F( New )
 	{
-		rProcessor_ *Processor = NULL;
+		rPreprocessor_ *Preprocessor = NULL;
 	qRH
 	qRB
-		Processor = qNEW(rProcessor_);
+		Preprocessor = qNEW(rPreprocessor_);
 
-		Processor->Init( Caller );
+		Preprocessor->Init( Caller );
 	qRR
-		qDELETE(Processor);
+		qDELETE(Preprocessor);
 	qRT
 	qRE
-		return scljre::Long( Env, (scljre::sJLong)Processor );
-	}
-
-	SCLJRE_F( Delete )
-	{
-	qRH
-		scljre::java::lang::rLong Long;
-	qRB
-		Long.Init( Caller.GetObject() );
-
-		delete (rProcessor_ *)Long.LongValue();
-	qRR
-	qRT
-	qRE
-		return Null();
+		return scljre::Long( Env, (scljre::sJLong)Preprocessor );
 	}
 
 	SCLJRE_F( ReadChar )
 	{
 		sJByte Char = 0;
 	qRH
-		scljre::java::lang::rLong Long;
+		rJPreprocessor_ JPreprocessor;
 		lcl::meaning Meaning;
 		lcl::locale Locale;
 		str::wString Translation;
 	qRB
-		Long.Init( Caller.GetObject() );
+    JPreprocessor.Init();
+		Caller.Get(JPreprocessor);
 
-		rProcessor_ &Processor = *(rProcessor_ *)Long.LongValue();
+		rPreprocessor_ &Preprocessor = JPreprocessor();
 
-		if ( !Processor().EndOfFlow() )
-			Char = Processor().Get();
-		else if ( Processor().Status() == xpp::sOK )
+    if ( !Preprocessor.EndOfFlow() )
+			Char = Preprocessor.Get();
+		else if ( Preprocessor.Status() == xpp::sOK ) {
 			Char = -1;
-		else {
+			JPreprocessor.Delete();
+		} else {
 			Meaning.Init();
-			xpp::GetMeaning(Processor(), Meaning );
+			xpp::GetMeaning(Preprocessor, Meaning );
 			Locale.Init();
 			Translation.Init();
 			sclm::GetBaseTranslation(Meaning, Translation);
 			scljre::Throw( Env, Translation );
+			JPreprocessor.Delete();
 		}
 	qRR
+		JPreprocessor.Delete();
 	qRT
 	qRE
 		return Integer( Env, Char );
@@ -326,8 +301,8 @@ const scli::sInfo &scljre::SCLJRERegister( sRegistrar &Registrar )
 {
 	static scli::sInfo Info(NAME_LC, NAME_MC, "q37.info");
 
-	Registrar.Register(1, parsing_::New, parsing_::Delete, parsing_::Parse);
-	Registrar.Register(11, processing_::New, processing_::Delete,  processing_::ReadChar, processing_::ReadBuffer);
+	Registrar.Register(11, parsing_::New, parsing_::Parse);
+	Registrar.Register(21, processing_::New, processing_::ReadChar, processing_::ReadBuffer);
 
 	return Info;
 }

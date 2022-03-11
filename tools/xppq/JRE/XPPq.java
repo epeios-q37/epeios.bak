@@ -47,52 +47,37 @@ class XPPqWrapper extends JRE {
 }
 
 class XPPq extends XPPqWrapper {
-	public Object core;
-	public XPPq( Object core )
+	public Core core;
+	public XPPq(long pointer)
 	{
-		this.core = core;
+		core = new Core(pointer);
 	}
 	
-	public static Object getParser( java.io.InputStream stream )
+	public static long getParser( java.io.InputStream stream )
 	{
-		return call( 1, stream );
-	}
-	
-	public void releaseParser()
-	{
-		call( 2, core );
+		return ( (java.lang.Long)call( 11, stream )).longValue();
 	}
 	
 	public int parse( XPPqData data )
 	{
-		return ( (java.lang.Integer)call( 3, core, data ) ).intValue();
+		return ( (java.lang.Integer)call( 12, core, data ) ).intValue();
 	}
 	
-	public static Object getPreprocessor( java.io.InputStream stream )
+	public static long getPreprocessor( java.io.InputStream stream )
 	{
-		return call( 11, stream );
-	}
-	
-	public void releasePreprocessor()
-	{
-		call( 12, core );
+		return ( (java.lang.Long)call( 21, stream )).longValue();
 	}
 	
 	public int readFromPreprocessor()
 	{
-		return ( (java.lang.Integer)call( 13, core ) ).intValue();
+		return ( (java.lang.Integer)call( 22, core ) ).intValue();
 	}
 
 	public int readFromPreprocessor(byte[] b, int off, int len) 
 	{
 		// Not implemented yet (see C++ source) !
-		return ( (java.lang.Integer)call( 14, core, b, off, len ) ).intValue();		
+		return ( (java.lang.Integer)call( 23, core, b, off, len ) ).intValue();		
 	}	
-
-	public void finalize()
-	{
-		releasePreprocessor();
-	}
 }
 
 class XPPqPreprocessor extends java.io.InputStream {
@@ -122,7 +107,7 @@ class XPPqPreprocessor extends java.io.InputStream {
 class XPPqParser {
 	private XPPq xppq;
 	// If modified, modify also C++ source file.
-	static final int PROCESSED	= 0;
+	static final int DONE	= 0;
 	static final int START_TAG	= 1;
 	static final int ATTRIBUTE	= 2;
 	static final int VALUE	= 3;
@@ -136,10 +121,5 @@ class XPPqParser {
 	{
 //		System.out.println( data.tagName.getClass().getName() );
 		return xppq.parse( data  );
-	}
-	
-	public void finalize()
-	{
-		xppq.releaseParser();
 	}
 }
