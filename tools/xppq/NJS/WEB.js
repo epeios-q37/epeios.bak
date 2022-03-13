@@ -66,6 +66,10 @@ const head = `
   .Value {
     background-color:lightgrey;
   }
+  ul {
+    padding-left: 10px;
+    list-style-type: none;
+  }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" integrity="sha512-6ts6Fu561/yzWvD6uwQp3XVYwiWNpWnZ0hdeQrETqtnQiGjTfOS06W76aUDnq51hl1SxXtJaqy7IsZ3oP/uZEg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 `;
@@ -73,9 +77,11 @@ const head = `
 const body = `
 <fieldset>
   <fieldset>
+    <legend>Input</legend>
     <div id="input" style="font-size: initial; resize: horizontal;"/>
   </fieldset>
   <fieldset style="display: flex;flex-direction: row;justify-content: space-evenly;">
+    <legend>Actions</legend>
     <fieldset style="display: flex; align-items: center;">
       <legend>Examples</legend>
       <select xdh:onevent="Select">
@@ -97,6 +103,7 @@ const body = `
     </fieldset>
   </fieldset>
   <fieldset>
+    <legend>Output</legend>
       <output id="output">
       <span style="font-style: oblique;">Enter XML code or select an exemple,<br/>and/or click one of above button.</span>
       </output>
@@ -197,16 +204,9 @@ class Context {
   constructor(dom) {
     this.dom = dom;
     this.out = "";
-    this.level = 0;
   }
   write(text) {
     this.out += text;
-  }
-  indent() {
-    let level = this.level;
-
-    while (level--)
-      this.write(' ');
   }
 }
 
@@ -231,25 +231,19 @@ function callback(token, tag, attribute, value, context) {
       handleError(context.dom, value);
       break;
     case xppq.tokens.DONE:
-      context.dom.inner("output", "<pre>" + context.out + "</pre>");
+      context.dom.inner("output", "<pre><ul>" + context.out + "</ul></pre>");
       break;
     case xppq.tokens.START_TAG:
-      context.indent();
-      context.write('<span class="Tag">' + tag + '</span></br>');
-      context.level++;
+      context.write('<fieldset style="border: 5px ridge; margin: 2px;"><li><fieldset><legend>Tag</legend><span class="Tag">' + tag + '</span></fieldset><ul>');
       break;
     case xppq.tokens.ATTRIBUTE:
-      context.indent();
-      context.write('<span class="AttributeName">' + attribute + '</span>: <span class="AttributeValue">' + value + '</span></br>');
+      context.write('<li><fieldset><legend>Attribute</legend><span class="AttributeName">' + attribute + '</span>: <span class="AttributeValue">' + value + '</span></fieldset></li>');
       break;
     case xppq.tokens.VALUE:
-      context.indent();
-      context.write('<span class="Value">' + value.trim() + '</span></br>');
+      context.write('<li><fieldset><legend>Value</legend><span class="Value">' + value + '</span></fieldset></li>');
       break;
     case xppq.tokens.END_TAG:
-      context.level--;
-      context.indent();
-      context.write('<span class="Tag">' + tag + '</span></br>');
+      context.write('</ul></li></fieldset>');
       break;
     default:
       throw new Error("Unknown token !!!");

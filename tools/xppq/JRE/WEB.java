@@ -27,6 +27,10 @@ public class WEB extends Atlas {
   "  .Value {" +
   "    background-color:lightgrey;" +
   "  }" +
+  "  ul {" +
+  "    padding-left: 10px;" +
+  "    list-style-type: none;" +
+  "  }" +
   "</style>" +
   "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js\" integrity=\"sha512-6ts6Fu561/yzWvD6uwQp3XVYwiWNpWnZ0hdeQrETqtnQiGjTfOS06W76aUDnq51hl1SxXtJaqy7IsZ3oP/uZEg==\" crossorigin=\"anonymous\" referrerpolicy=\"no-referrer\"></script>";
 
@@ -146,20 +150,9 @@ public class WEB extends Atlas {
   "  Type your own XML code here.\n" + 
   "</Root>";
 
-
-  private static String indentation(int level) {
-    String result = "";
-
-    while (level-- != 0)
-      result = result + " ";
-
-    return result;
-  }
-
   private static String parse(InputStream stream) {
     XPPqData data = new XPPqData();
     XPPqParser parser = new XPPqParser(stream);
-    int level = 0;
     StringBuilder result = new StringBuilder();
 
     int token = parser.parse(data);
@@ -167,18 +160,16 @@ public class WEB extends Atlas {
     while (token != XPPqParser.DONE) {
       switch (token) {
         case XPPqParser.START_TAG:
-          result.append(indentation(level) + "<span class=\"Tag\">" + data.tagName + "</span></br>");
-          level++;
+          result.append("<fieldset style=\"border: 5px ridge; margin: 2px;\"><li><fieldset><legend>Tag</legend><span class=\"Tag\">" + data.tagName + "</span></fieldset><ul>");
           break;
         case XPPqParser.ATTRIBUTE:
-          result.append(indentation(level) + "<span class=\"AttributeName\">" + data.attributeName + "</span>: <span class=\"AttributeValue\">" + data.value + "</span></br>");
+          result.append("<li><fieldset><legend>Attribute</legend><span class=\"AttributeName\">" + data.attributeName + "</span>: <span class=\"AttributeValue\">" + data.value + "</span></fieldset></li>");
           break;
         case XPPqParser.VALUE:
-          result.append(indentation(level) + "<span class=\"Value\">" + data.value + "</span></br>");
+          result.append("<li><fieldset><legend>Value</legend><span class=\"Value\">" + data.value + "</span></fieldset></li>");
           break;
         case XPPqParser.END_TAG:
-          level--;
-          result.append(indentation(level)+ "<span class=\"Tag\">" + data.tagName + "</span></br>");
+          result.append("</ul></li></fieldset>");
           break;
         default:
           System.err.println("Unknown token!");
@@ -266,12 +257,12 @@ public class WEB extends Atlas {
   }
 
   private void acWithout(DOM dom) {
-    dom.inner("output", "<pre>" + parse(stringToStream(dom.executeString("editor.getValue();"))) + "</pre>");
+    dom.inner("output", "<pre><ul>" + parse(stringToStream(dom.executeString("editor.getValue();"))) + "</ul></pre>");
   }
 
   private void acWith(DOM dom) {
     dom.inner("output",
-        "<pre>" + parse(new XPPqPreprocessor(stringToStream(dom.executeString("editor.getValue();")))) + "</pre>");
+        "<pre><ul>" + parse(new XPPqPreprocessor(stringToStream(dom.executeString("editor.getValue();")))) + "</ul></pre>");
   }
 
   @Override

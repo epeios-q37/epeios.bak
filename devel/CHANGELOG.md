@@ -10,6 +10,9 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2022-03-13
+- XPP: fixing space handling betwwen tags.
+
 ## 2022-03-11
 - JNIQ: adding missing functions,
 - N4JRE, SCLJRE: introducing `jCore`,

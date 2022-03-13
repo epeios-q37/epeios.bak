@@ -442,6 +442,8 @@ qRB
 
 	if ( ( Status = GetDefineNameAndContent_( _Parser, Name, Content ) ) == sOK )
 		_Repository.Store( Name, Position, _LocalizedFileName, Content );
+
+  _Parser.PurgeDumpData();
 qRR
 qRT
 qRE
@@ -1200,19 +1202,7 @@ status__ xpp::_extended_parser___::_InitCypher(
 	return Init( _XFlow, FileName, Directory, CypherKey, Preserve, SubstitutionMarker );
 }
 
-
-static bso::bool__ StripHeadingSpaces_(
-	xml::token__ PreviousToken,
-	const xml::parser___ &Parser,
-	const str::string_ &NamespaceWithSeparator )
-{
-	return ( PreviousToken == xml::tValue )
-           || ( ( PreviousToken == xml::tEndTag )
-                && ( BelongsToNamespace_( Parser.TagName(), NamespaceWithSeparator )
-                && ( Parser.Token() == xml::tEndTag ) ) );
-}
-
-static void StripHeadingSpaces_( str::string_ &Data )
+static void TrimHeadingSpaces_( str::string_ &Data )
 {
 	while ( ( Data.First() != qNIL ) && ( isspace( Data( Data.First() ) ) ) )
 		Data.Remove( Data.First() );
@@ -1245,7 +1235,7 @@ status__ xpp::_extended_parser___::Handle(
 	status__ Status = s_Undefined;
 	bso::bool__ Continue = true;
 	xml::token__ PreviousToken = xml::t_Undefined;
-	bso::bool__ StripHeadingSpaces = false;
+	bso::sBool PreviousWasDirective = false;
 	directive__ Directive = d_Undefined;
 
 	Parser = NULL;
@@ -1257,7 +1247,7 @@ status__ xpp::_extended_parser___::Handle(
 
 	while ( Continue ) {
 		Continue = false;
-		PreviousToken = _Parser.Token();
+
 		switch ( _Parser.Parse() ) {
 		case  xml::tProcessingInstruction:
 			if ( _IgnorePreprocessingInstruction ) {
@@ -1402,7 +1392,6 @@ status__ xpp::_extended_parser___::Handle(
 					Data.Append( "<![CDATA[" );
 
 				_CDataNesting++;
-				StripHeadingSpaces = true;
 				break;
 			case dBloc:
 				if ( PreservationLevel_ > 1 )
@@ -1424,11 +1413,10 @@ status__ xpp::_extended_parser___::Handle(
 		case xml::tEndTag:
 			switch ( GetDirective_( _Parser.TagName(), _Directives, PreservationLevel_ ) ) {
 			case dNone:
-				if ( _CDataNesting == 0 )
-					StripHeadingSpaces = StripHeadingSpaces_( PreviousToken, _Parser, _Directives.NamespaceWithSeparator );
 				Status = sOK;
 				break;
 			case dCData:
+			  PreviousWasDirective = true;
 				switch ( _CDataNesting ) {
 				case 0:
 					qRFwk();
@@ -1444,18 +1432,18 @@ status__ xpp::_extended_parser___::Handle(
 				_CDataNesting--;
 				break;
 			case dBloc:
-				if ( PreservationLevel_ != 0 ) {
+        if ( PreservationLevel_ != 0 ) {
 					PreservationLevel_--;
 					if ( PreservationLevel_ > 0 ) {
 						Status = sOK;
 						break;
 					}
-				}
+				} else
+          PreviousWasDirective = true;
 			// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
 			// fall through
 			case dCypher:
 				if ( _CDataNesting == 0 ) {
-					StripHeadingSpaces = StripHeadingSpaces_( PreviousToken, _Parser, _Directives.NamespaceWithSeparator );
 					Continue = true;
 				} else
 					Status = sOK;
@@ -1508,8 +1496,8 @@ status__ xpp::_extended_parser___::Handle(
 	if ( Parser == NULL ) {
 		Data.Append( _Parser.DumpData() );
 
-		if ( StripHeadingSpaces )
-			StripHeadingSpaces_( Data );
+		if ( PreviousWasDirective )
+      TrimHeadingSpaces_(Data);
 	}
 
 	return Status;
