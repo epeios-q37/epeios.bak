@@ -24,7 +24,7 @@ SOFTWARE.
 
 "use strict";
 
-const version = "0.13";
+const version = "0.13.2";	// Should be probably placed in 'XDHqSHRD.js'.
 
 var pAddr = "faas.q37.info";
 var pPort = 53700;

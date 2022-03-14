@@ -3,6 +3,11 @@
 - Common to **all** bindings,
 - does **not** concern the native code.
 
+## 2022-03-14
+- *Node*:
+  - adding `Hold()` and `Drop()`,
+  - fixing issue when no callback provided,
+
 ## 2022-01-20
 - *Python*: adaptation of the *Widgets* demo,
 
