@@ -5,10 +5,15 @@
 - [adpt]: adaptation to changes in underlying modules;
 - [cont]: continuation of previous modifications;
 - [crtn]: creation;
+- [obvs]: obvious modifications;
 - [rvrt]: reverting modifications;
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
+
+## 2022-03-14
+- XML: [obvs],
+- XPP: [cont],
 
 ## 2022-03-13
 - XPP: fixing space handling betwwen tags.
@@ -4218,35 +4223,40 @@
 [adpt]:#Adaptation
 [cont]:#Continuation
 [crtn]:#Creation
+[obvs]:#Obvious
 [rvrt]:#Reverting
 [stdz]:#Standardization
 [trvl]:#Trivial
 [warn]:#Warning
 
-### Adaptation
+### Adaptation (adpt)
 
 Adaptation to changes in underlying modules.
 
-### Continuation
+### Continuation (cont)
 
-Continuation of the modifications.
+Continuation of the in progress modifications.
 
-### Creation
+### Creation (crtn)
 
 Creation of the library.
 
-### Reverting
+### Obvious (obvs)
+
+Obvious modifications; look at source code diffs.
+
+### Reverting (rvrt)
 
 Reverting previous modifications.
 
-### Standardization
+### Standardization (stdz)
 
 Modification to comply with current standards.
 
-### Trivial
+### Trivial (trvl)
 
 Trivial modifications.
 
-### Warning
+### Warning (warn)
 
 Fixing warning message issued by compilers.

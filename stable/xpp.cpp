@@ -324,17 +324,11 @@ static status__ GetDefineNameAttributeValue_(
 	return sOK;
 }
 
-void Dump_(
+inline void Dump_(
 	const str::string_ &Data,
 	flw::oflow__ &Flow )
 {
-qRH
-	TOL_CBUFFER___ Buffer;
-qRB
-	Flow.Write( Data.Convert( Buffer ), Data.Amount() );
-qRR
-qRT
-qRE
+  Data.WriteToFlow(Flow, false);
 }
 
 static status__ RetrieveTree_(
@@ -443,7 +437,7 @@ qRB
 	if ( ( Status = GetDefineNameAndContent_( _Parser, Name, Content ) ) == sOK )
 		_Repository.Store( Name, Position, _LocalizedFileName, Content );
 
-		_Parser.PurgeDumpData();
+  _Parser.PurgeDumpData();
 qRR
 qRT
 qRE
@@ -1202,12 +1196,6 @@ status__ xpp::_extended_parser___::_InitCypher(
 	return Init( _XFlow, FileName, Directory, CypherKey, Preserve, SubstitutionMarker );
 }
 
-static void TrimHeadingSpaces_( str::string_ &Data )
-{
-	while ( ( Data.First() != qNIL ) && ( isspace( Data( Data.First() ) ) ) )
-		Data.Remove( Data.First() );
-}
-
 #define CDATA_NESTING_MAX	BSO_UINT_MAX
 
 namespace {
@@ -1234,8 +1222,6 @@ status__ xpp::_extended_parser___::Handle(
 {
 	status__ Status = s_Undefined;
 	bso::bool__ Continue = true;
-	xml::token__ PreviousToken = xml::t_Undefined;
-	bso::sBool PreviousWasDirective = false;
 	directive__ Directive = d_Undefined;
 
 	Parser = NULL;
@@ -1414,9 +1400,9 @@ status__ xpp::_extended_parser___::Handle(
 			switch ( GetDirective_( _Parser.TagName(), _Directives, PreservationLevel_ ) ) {
 			case dNone:
 				Status = sOK;
+				_Parser.TrimDumpDataHeadingSpaces();
 				break;
 			case dCData:
-			  PreviousWasDirective = true;
 				switch ( _CDataNesting ) {
 				case 0:
 					qRFwk();
@@ -1439,7 +1425,6 @@ status__ xpp::_extended_parser___::Handle(
 						break;
 					}
 				} else
-          PreviousWasDirective = true;
 			// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
 			// fall through
 			case dCypher:
@@ -1495,9 +1480,6 @@ status__ xpp::_extended_parser___::Handle(
 
 	if ( Parser == NULL ) {
 		Data.Append( _Parser.DumpData() );
-
-		if ( PreviousWasDirective )
-      TrimHeadingSpaces_(Data);
 	}
 
 	return Status;
