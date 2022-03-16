@@ -30,7 +30,6 @@
   <Files>
     <File>demo.xml</File>
   </Files>
-  <RTW Description="XML parser and preprocessor" Keywords="XML,parser,preprocessor,xpp">
-    <Dir>xppq-java</Dir>
+  <RTW Description="XML parser and preprocessor" Keywords="XML,parser,preprocessor,xpp" Folder="xppq-java">
   </RTW>
 </Project>

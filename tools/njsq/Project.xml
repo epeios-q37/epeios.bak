@@ -42,9 +42,8 @@
 	</Modules>
 	<SourceDirs>
 	</SourceDirs>
-	<RTW Description="Node.js addon wrapper" Keywords="wrapper,libuv">
-  <Dir>njsq</Dir>
- </RTW>
+	<RTW Description="Node.js addon wrapper" Keywords="wrapper,libuv" Folder="njsq">
+   </RTW>
 	<Files>
  </Files>
  <Doc>

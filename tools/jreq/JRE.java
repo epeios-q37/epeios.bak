@@ -38,7 +38,7 @@ class Wrapper {
 		String osName = System.getProperty("os.name").toLowerCase();
 
 		if (System.getenv("Q37_EPEIOS") == null) {
-			return java.nio.file.Paths.get("");
+			return java.nio.file.Paths.get("./");
 		} else if (osName.contains("windows"))
 			return java.nio.file.Paths.get("h:/bin/");
 		else if (osName.contains("mac")) {

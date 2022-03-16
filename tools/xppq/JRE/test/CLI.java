@@ -1,12 +1,12 @@
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import info.q37.xppq.*;
 
 class CLI {
+/*
   private static void displayBytecodeBuildTimestamp() throws Exception {
     System.out.println("Bytecode build : " + new java.util.Date(new java.io.File(XPPqTest.class.getClassLoader()
         .getResource(XPPqTest.class.getCanonicalName().replace('.', '/') + ".class").toURI()).lastModified()));
   }
-
+*/
   private static void dump(java.io.InputStream stream) throws Exception {
     int c = 0;
     String result = "";
@@ -36,7 +36,7 @@ class CLI {
 
     int token = parser.parse(data);
 
-    while (token != XPPqParser.PROCESSED) {
+    while (token != XPPqParser.DONE) {
       switch (token) {
         case XPPqParser.START_TAG:
           System.out.print("Start tag: '" + data.tagName + "'\n");
@@ -93,7 +93,7 @@ class CLI {
     XPPq.Init();
     System.out.println(XPPq.wrapperInfo());
     System.out.println(XPPq.componentInfo());
-    displayBytecodeBuildTimestamp();
+//    displayBytecodeBuildTimestamp();
     System.out.println();
 
     int test = 3;

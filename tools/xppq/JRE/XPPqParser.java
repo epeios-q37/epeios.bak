@@ -19,39 +19,22 @@
 
 package info.q37.xppq;
 
-import info.q37.jreq.Core;
-
-public class XPPq extends XPPqWrapper {
-	public Core core;
-	public XPPq(long pointer)
+public class XPPqParser {
+	private XPPq xppq;
+	// If modified, modify also C++ source file.
+	public static final int DONE	= 0;
+	public static final int START_TAG	= 1;
+	public static final int ATTRIBUTE	= 2;
+	public static final int VALUE	= 3;
+	public static final int END_TAG	= 4;
+	public XPPqParser( java.io.InputStream Stream )
 	{
-		core = new Core(pointer);
-	}
-	
-	public static long getParser( java.io.InputStream stream )
-	{
-		return ( (java.lang.Long)call( 11, stream )).longValue();
+		xppq = new XPPq( XPPq.getParser( Stream ) );
 	}
 	
 	public int parse( XPPqData data )
 	{
-		return ( (java.lang.Integer)call( 12, core, data ) ).intValue();
+//		System.out.println( data.tagName.getClass().getName() );
+		return xppq.parse( data  );
 	}
-	
-	public static long getPreprocessor( java.io.InputStream stream )
-	{
-		return ( (java.lang.Long)call( 21, stream )).longValue();
-	}
-	
-	public int readFromPreprocessor()
-	{
-		return ( (java.lang.Integer)call( 22, core ) ).intValue();
-	}
-
-	public int readFromPreprocessor(byte[] b, int off, int len) 
-	{
-		// Not implemented yet (see C++ source) !
-		return ( (java.lang.Integer)call( 23, core, b, off, len ) ).intValue();		
-	}	
 }
-

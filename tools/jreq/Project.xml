@@ -44,7 +44,7 @@
 		<File Pack="No">JREq.java</File>
 		<File Pack="No">Test.java</File>
 	</Files>
- <RTW>
-  <Dir>jreq</Dir>
+ <RTW Folder="jreq">
+  <Dir></Dir>
  </RTW>
 </Project>

@@ -42,7 +42,7 @@ if (process.env.Q37_EPEIOS) {
   atlas = require('atlastk');
 }
 
-const xppq = require('./XPPq.js');
+const xppq = require('../XPPq.js');
 const stream = require("stream");
 
 const head = `
@@ -69,6 +69,9 @@ const head = `
   ul {
     padding-left: 10px;
     list-style-type: none;
+  }
+  button {
+    margin: 2px;
   }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" integrity="sha512-6ts6Fu561/yzWvD6uwQp3XVYwiWNpWnZ0hdeQrETqtnQiGjTfOS06W76aUDnq51hl1SxXtJaqy7IsZ3oP/uZEg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

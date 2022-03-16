@@ -2,6 +2,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import info.q37.xppq.*;
 import info.q37.atlas.*;
 
 public class WEB extends Atlas {
@@ -30,6 +31,9 @@ public class WEB extends Atlas {
   "  ul {" +
   "    padding-left: 10px;" +
   "    list-style-type: none;" +
+  "  }" +
+  "  button {" +
+  "    margin: 2px;" +
   "  }" +
   "</style>" +
   "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js\" integrity=\"sha512-6ts6Fu561/yzWvD6uwQp3XVYwiWNpWnZ0hdeQrETqtnQiGjTfOS06W76aUDnq51hl1SxXtJaqy7IsZ3oP/uZEg==\" crossorigin=\"anonymous\" referrerpolicy=\"no-referrer\"></script>";

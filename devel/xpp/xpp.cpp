@@ -1221,7 +1221,10 @@ status__ xpp::_extended_parser___::Handle(
 	str::string_ &Data )
 {
 	status__ Status = s_Undefined;
-	bso::bool__ Continue = true;
+	bso::bool__
+    Continue = true,
+    IsDirectiveEndTag = false,
+    WasDirectiveEndTag = false;
 	directive__ Directive = d_Undefined;
 
 	Parser = NULL;
@@ -1233,6 +1236,8 @@ status__ xpp::_extended_parser___::Handle(
 
 	while ( Continue ) {
 		Continue = false;
+		WasDirectiveEndTag = IsDirectiveEndTag;
+		IsDirectiveEndTag = false;
 
 		switch ( _Parser.Parse() ) {
 		case  xml::tProcessingInstruction:
@@ -1400,7 +1405,8 @@ status__ xpp::_extended_parser___::Handle(
 			switch ( GetDirective_( _Parser.TagName(), _Directives, PreservationLevel_ ) ) {
 			case dNone:
 				Status = sOK;
-				_Parser.TrimDumpDataHeadingSpaces();
+				if ( WasDirectiveEndTag)
+          _Parser.TrimDumpDataHeadingSpaces();
 				break;
 			case dCData:
 				switch ( _CDataNesting ) {
@@ -1409,7 +1415,8 @@ status__ xpp::_extended_parser___::Handle(
 					break;
 				case 1:
 					Continue = true;
-					Data.Append( "]]>" );
+          IsDirectiveEndTag = true;
+          Data.Append( "]]>" );
 					break;
 				default:
 					Status = sOK;
@@ -1424,17 +1431,23 @@ status__ xpp::_extended_parser___::Handle(
 						Status = sOK;
 						break;
 					}
-				} else
+				} else {
+          IsDirectiveEndTag = true;
+          Continue = true;
+				}
 			// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
 			// fall through
 			case dCypher:
 				if ( _CDataNesting == 0 ) {
 					Continue = true;
+          IsDirectiveEndTag = true;
 				} else
 					Status = sOK;
 				break;
 			case dExpand:
-				Status = sOK;
+			  IsDirectiveEndTag = true;
+			  Continue = true;
+				// Status = sOK;
 				break;
 			default:
 				qRFwk();
