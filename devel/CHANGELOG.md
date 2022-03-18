@@ -11,12 +11,15 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2022-03-17
+- XPP: [cont],
+
 ## 2022-03-14
 - XML: [obvs],
 - XPP: [cont],
 
 ## 2022-03-13
-- XPP: fixing space handling betwwen tags.
+- XPP: fixing spaces issue between tags.
 
 ## 2022-03-11
 - JNIQ: adding missing functions,

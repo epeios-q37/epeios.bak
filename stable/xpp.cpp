@@ -1218,12 +1218,13 @@ namespace {
 
 status__ xpp::_extended_parser___::Handle(
 	_extended_parser___ *&Parser,
-	str::string_ &Data )
+	str::string_ &Data,
+	bso::sBool SwitchedParser)
 {
 	status__ Status = s_Undefined;
 	bso::bool__
     Continue = true,
-    IsDirectiveEndTag = false,
+    IsDirectiveEndTag = SwitchedParser,
     WasDirectiveEndTag = false;
 	directive__ Directive = d_Undefined;
 
@@ -1277,6 +1278,8 @@ status__ xpp::_extended_parser___::Handle(
 					break;
 				default:
 					Status = HandlePreprocessorDirective_( Directive, Parser );
+
+					IsDirectiveEndTag = true;
 
 					if ( Parser == NULL )
 						Continue = true;
@@ -1431,9 +1434,6 @@ status__ xpp::_extended_parser___::Handle(
 						Status = sOK;
 						break;
 					}
-				} else {
-          IsDirectiveEndTag = true;
-          Continue = true;
 				}
 			// Below comment is taken into account by some compiler, and avoid a 'fall through' warning.
 			// fall through
@@ -1522,7 +1522,7 @@ sdr::size__ xpp::_preprocessing_iflow_driver___::FDRRead(
 
 		Parser = NULL;
 
-		Status_ = _Parser().Handle( Parser, _Data );
+		Status_ = _Parser().Handle(Parser, _Data, false);
 
 		while ( Status_ == s_Pending ) {
 #ifdef XPP_DBG
@@ -1543,7 +1543,7 @@ sdr::size__ xpp::_preprocessing_iflow_driver___::FDRRead(
 				}
 
 			if ( Status_ == s_Pending )
-				Status_ = _Parser().Handle( Parser, _Data );
+				Status_ = _Parser().Handle(Parser, _Data, true);
 			} else {
 				Maximum = 0;	// Pour sortir de la boucle.
 				Status_ = (xpp::status__)xml::sOK;

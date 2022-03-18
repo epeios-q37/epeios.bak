@@ -18,8 +18,7 @@
     <Software>XPPq</Software>
     <UUID>d6a723cb-e88f-4f2f-b429-3adc207f1d62</UUID>
   </About>
-  <RTW Description="XML parser and preprocessor" Keywords="XML,parser,preprocessor,xpp">
-    <Dir>xppq-node</Dir>
+  <RTW Description="XML parser and preprocessor" Keywords="XML,parser,preprocessor,xpp" Folder="xppq-node">
   </RTW>
   <Modules xpp:marker="$">
     <Modules Group="Epeios" Path="$EpeiosPath$/">

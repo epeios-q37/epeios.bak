@@ -26,7 +26,6 @@
 #include "flf.h"
 #include "fnm.h"
 #include "lcl.h"
-#include "cio.h"
 
 using namespace xml;
 
@@ -1018,8 +1017,6 @@ qRB
 		if ( Error )
 			break;
 	}
-
-	cio::COut << "$>" << _Flow.Dump.Data << "<$" << txf::nl << txf::commit;
 
 
 	if ( !Error ) {

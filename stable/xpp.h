@@ -650,7 +650,8 @@ namespace xpp {
 		}
 		status__ Handle(
 			_extended_parser___ *&Parser,
-			str::string_ &Data );
+			str::string_ &Data,
+			bso::sBool SwitchedParser);
 		xtf::extended_text_iflow__ &Flow( void )
 		{
 			return _Parser.Flow();

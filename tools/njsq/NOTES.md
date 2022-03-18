@@ -35,3 +35,16 @@ Toute référence à `node-pre-gyp` dans le reste du document fait référence �
 Notez que, sous *Windows*, `node-pre-gyp configure` génère un projet *Visual C++* (`.vcxproj`). Par conséquent, on peut utiliser *Visual C++* pour compiler la bibliothèque, mais aussi la déboguer. Par conséquent, il est plus facile de mette au point ce composant sour *Windows*…
 
 Une fois l'*addon* crée (`njsq.node`), un `require("NJSq.js")` va charger cet *addon*. Voir `test.js` ; lancer `node test.js` pour tester.
+
+## Mise en place sur *Replit*
+
+- `DVLRTW` dans `tools/njsq` ;
+- placer `NJSq.js`, `binding.gyp` et `package.json` dans `RTW/njsq` ;
+- compresser `RTW/njsq`, télécharger et décompresser sur *Replit* ;
+- installer *@mapbox/node-pre-gyp* à partir du gestionnaire de paquets de *Replit* ;
+- si *Python* manquant, ajouter `pkgs.[nom_du_paquet_python]` dans le fichier (caché) `replit.nix` (lancer `python` dans le shell pour voir le nom du paquet, par exemple `python39Full.out'`) ;
+- lancer `..:node_modules/.bin/node-pre-gyp` dans le répertoire `njsq` avec, respectivement, les arguments :
+  - `configure`,
+  - `build -j 2` ;
+
+

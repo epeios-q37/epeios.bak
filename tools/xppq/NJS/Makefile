@@ -33,15 +33,14 @@ mods += fil flf flsq flw flx
 mods += fnm ias idsq iof iop 
 mods += lcl lck lst lstbch lstcrt 
 mods += lstctn mns mtk mtx ntvstr 
-mods += que rgstry sdr stkbse stkbch 
-mods += stkcrt stkctn str strng stsfsm 
-mods += tagsbs tht thtsub tol txf 
-mods += tys uys utf xml xpp 
-mods += xtf llio dlbrry n4all n4njs 
-mods += plgn plgncore uvqdcl 
-mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
-mods += scln4a sclnjs 
-mods += stream_d stream_s stream_u 
+mods += osd que rgstry sdr stkbse 
+mods += stkbch stkcrt stkctn str strng 
+mods += stsfsm tagsbs tht thtsub tol 
+mods += txf tys uys utf xml 
+mods += xpp xtf llio dlbrry n4all 
+mods += n4njs plgn plgncore uvqdcl 
+mods += scla scli sclm scle scll 
+mods += sclr scln4a sclnjs 
 mods += common parser stream registry 
 
 pmods += pllio 
@@ -78,7 +77,7 @@ MacOS=Darwin
 Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
-ifdef EPEIOS_SRC
+ifdef Q37_EPEIOS
 endif
 
 
@@ -119,7 +118,8 @@ endif
 #############################
 
 ifeq ("$(os)","$(GNULinux)")
-
+# By default, 'CXX' is set to 'g++'.
+# 	CXX = clang++
 endif
 
 #############################
@@ -391,15 +391,15 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20171225"\"
+copt += -DVERSION=\""20220318"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2017"\"
 copt += -DIDENTIFIER=\""d6a723cb-e88f-4f2f-b429-3adc207f1d62"\"
 
-ifndef EPEIOS_SRC
+ifndef Q37_EPEIOS
 	src += :src:src/epeios
 	out = ./
 else
-	src += :$(EPEIOS_SRC)
+	src += :$(Q37_EPEIOS)/stable
 	out = $(dest)
 endif
 
@@ -419,7 +419,7 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
-ifdef EPEIOS_SRC			
+ifdef Q37_EPEIOS			
 	mkdir -p $(out)
 	cp $(binary) $(out)
 endif
