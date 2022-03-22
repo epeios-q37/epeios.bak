@@ -40,8 +40,7 @@ class Context {
   }
 }
 
-function handleError(dom, error)
-{
+function handleError(dom, error) {
   dom.inner("output", '<pre style="color: darkred;">' + error + "</pre>");
 }
 
@@ -97,6 +96,7 @@ function escapeHtmlAndFormat(unsafe) {
 }
 
 const BODY = `
+<iframe style="width: 100%; border: none;" src="FaaSDesc.php?text=VGhpcyBhcHBsaWNhdGlvbiBpcyBhbiBleGFtcGxlIG9mIGEgWypOb2RlLmpzKiBhZGRvbl0oaHR0cHM6Ly9ub2RlanMub3JnL2FwaS9hZGRvbnMuaHRtbCkuIFRoaXMgYWRkb24gYWxsb3dzIHRvIHVzZSB3aXRoICpOb2RlLmpzKiBhbiAqWE1MKiBwYXJzZXIgYW5kIFtwcmVwcm9jZXNzb3JdKGh0dHBzOi8vcTM3LmluZm8vcy9rbXByM256cCkgZGV2ZWxvcGVkIGluICpDKi8qQysrKiwgYW5kIHRoZXJlZm9yZSBtdWNoIG1vcmUgZmFzdGVyIHRoYW4gaWYgdGhleSB3ZXJlIGRldmVsb3BlZCBpbiBwdXJlICpKYXZhU2NyaXB0Ki4gIApUaGUgKlJhdyogYnV0dG9uIGRpc3BsYXlzIHRoZSBjb250ZW50IG9mIHRoZSAqSW5wdXQqIGZpZWxkIGluIHRoZSAqT3V0cHV0KiBmaWVsZC4gVGhlICpQcmVwcm9jZXNzZWQqIGJ1dHRvbiBkaXNwbGF5cyB0aGUgcmVzdWx0IG9mIHRoZSBwcmVwcm9jZXNzaW5nLiBUaGUgKncvbyBwcmVwcm9jZXNzaW5nKiBhbmQgKndpdGggcHJlcHJvY2Vzc2luZyogYnV0dG9ucyBmb3JtYXQgdGhlICpYTUwqIGRhdGEgdXNpbmcgdGhlIHBhcnNlciwgcmVzcGVjdGl2ZWx5IHdpdGhvdXQgYW5kIHdpdGggcHJlcHJvY2Vzc2luZy4gWW91IGNhbiBwbGFjZSB5b3VyIG93biBjb250ZW50IGluIHRoZSAqSW5wdXQqIGZpZWxkLiAgCkFzIHlvdSBjYW4gc2VlIGluIHRoZSBbKldFQi5qcypdKGh0dHBzOi8vcTM3LmluZm8vcy83end0dDNoNCkgZmlsZSwgdGhpcyBhZGRvbiBpcyB1c2VkIGxpa2UgYW55IG90aGVyICpOb2RlLmpzKiBtb2R1bGUuIFlvdSB3aWxsIGFsc28gZmluZCBpbiB0aGUgc2FtZSByZXBvc2l0b3J5IHRoZSBjb21wbGV0ZSAqQyovKkMrKyogY29kZSBjb3JyZXNwb25kaW5nIHRvIHRoaXMgYWRkb24u"></iframe>
 <fieldset>
   <fieldset>
     <legend>Input</legend>
@@ -130,7 +130,6 @@ const BODY = `
       <span style="font-style: oblique;">Enter XML code or select an example,<br/>andr click one of above buttons.</span>
       </output>
   </fieldset>
-  <div style="width: 100%;text-align: center;"><a href="https://q37.info/s/kmpr3nzp" target="_blank">XPPq</a></div>  
 </fieldset>
 `;
 

@@ -231,7 +231,7 @@ public class WEB extends Atlas {
   /* GUI related */
 
   private static final String HEAD =
-"<title>Native XML preprocessor and parser with Node.js</title>" +
+"<title>Native XML preprocessor and parser with Java</title>" +
 "<link rel=\"icon\" type=\"image/png\" href=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAMFBMVEUEAvyEhsxERuS8urQsKuycnsRkYtzc2qwUFvRUVtysrrx0ctTs6qTMyrSUksQ0NuyciPBdAAABHklEQVR42mNgwAa8zlxjDd2A4POfOXPmzZkFCAH2M8fNzyALzDlzg2ENssCbMwkMOsgCa858YOjBKxBzRoHhD7LAHiBH5swCT9HQ6A9ggZ4zp7YCrV0DdM6pBpAAG5Blc2aBDZA68wCsZPuZU0BDH07xvHOmAGKKvgMP2NA/Zw7ADIYJXGDgLQeBBSCBFu0aoAPYQUadMQAJAE29zwAVWMCWpgB08ZnDQGsbGhpsgCqBQHNfzRkDEIPlzFmo0T5nzoMovjPHoAK8Zw5BnA5yDosDSAVYQOYMKIDZzkoDzagAsjhqzjRAfXTmzAQgi/vMQZA6pjtAvhEk0E+ATWRRm6YBZuScCUCNN5szH1D4TGdOoSrggtiNAH3vBBjwAQCglIrSZkf1MQAAAABJRU5ErkJggg==\" />" +
 "<!-- HTML Syntax highlighting -->" +
 "<link rel=\"stylesheet\" href=\"//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css\">" +
@@ -268,6 +268,7 @@ public class WEB extends Atlas {
 "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js\" integrity=\"sha512-6ts6Fu561/yzWvD6uwQp3XVYwiWNpWnZ0hdeQrETqtnQiGjTfOS06W76aUDnq51hl1SxXtJaqy7IsZ3oP/uZEg==\" crossorigin=\"anonymous\" referrerpolicy=\"no-referrer\"></script>";
 
   private static final String BODY =
+"<iframe style=\"width: 100%; border: none;\" src=\"FaaSDesc.php?text=VGhpcyBhcHBsaWNhdGlvbiBpcyBhbiBleGFtcGxlIG9mIGEgWypKTkkqXShodHRwczovL2VuLndpa2lwZWRpYS5vcmcvd2lraS9KYXZhX05hdGl2ZV9JbnRlcmZhY2UpIGJhc2VkICpKYXZhKiBwYWNrYWdlLiBUaGlzIHBhY2thZ2UgYWxsb3dzIHRvIHVzZSB3aXRoICpKYXZhKiBhbiAqWE1MKiBwYXJzZXIgYW5kIFtwcmVwcm9jZXNzb3JdKGh0dHBzOi8vcTM3LmluZm8vcy9rbXByM256cCkgZGV2ZWxvcGVkIGluICpDKi8qQysrKiwgYW5kIHRoZXJlZm9yZSBtdWNoIG1vcmUgZmFzdGVyIHRoYW4gaWYgdGhleSB3ZXJlIGRldmVsb3BlZCBpbiBwdXJlICpKYXZhKi4gIApUaGUgKlJhdyogYnV0dG9uIGRpc3BsYXlzIHRoZSBjb250ZW50IG9mIHRoZSAqSW5wdXQqIGZpZWxkIGluIHRoZSAqT3V0cHV0KiBmaWVsZC4gVGhlICpQcmVwcm9jZXNzZWQqIGJ1dHRvbiBkaXNwbGF5cyB0aGUgcmVzdWx0IG9mIHRoZSBwcmVwcm9jZXNzaW5nLiBUaGUgKncvbyBwcmVwcm9jZXNzaW5nKiBhbmQgKndpdGggcHJlcHJvY2Vzc2luZyogYnV0dG9ucyBmb3JtYXQgdGhlICpYTUwqIGRhdGEgdXNpbmcgdGhlIHBhcnNlciwgcmVzcGVjdGl2ZWx5IHdpdGhvdXQgYW5kIHdpdGggcHJlcHJvY2Vzc2luZy4gWW91IGNhbiBwbGFjZSB5b3VyIG93biBjb250ZW50IGluIHRoZSAqSW5wdXQqIGZpZWxkLiAgCkFzIHlvdSBjYW4gc2VlIGluIHRoZSBbKldFQi5qYXZhKl0oaHR0cHM6Ly9xMzcuaW5mby9zL3JwcHhnZGY0KSBmaWxlLCB0aGlzIHBhY2thZ2UgaXMgdXNlZCBsaWtlIGFueSBvdGhlciAqSmF2YSogcGFja2FnZS4gWW91IHdpbGwgYWxzbyBmaW5kIGluIHRoZSBzYW1lIHJlcG9zaXRvcnkgdGhlIGNvbXBsZXRlICpDKi8qQysrKiBjb2RlIGNvcnJlc3BvbmRpbmcgdG8gdGhpcyBwYWNrYWdlLg==\"></iframe>" +
 "<fieldset>" +
 "  <legend>Input</legend>" +
 "  <fieldset>" +
@@ -301,7 +302,6 @@ public class WEB extends Atlas {
 "      <span style=\"font-style: oblique;\">Enter XML code or select an example,<br/>and click one of above buttons.</span>" +
 "      </output>" +
 "  </fieldset>" +
-"  <div style=\"width: 100%;text-align: center;\"><a href=\"https://q37.info/s/kmpr3nzp\" target=\"_blank\">XPPq</a></div>" +
 "</fieldset>";
 
   private static final String INIT_SCRIPT =

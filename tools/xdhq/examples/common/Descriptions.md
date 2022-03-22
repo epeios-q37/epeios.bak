@@ -3,7 +3,9 @@
 Descriptions ajoutées dans la page HTML principale de chacune des démonstrations.
 
 - Sélectionner la description au format *Markdown* avec la souris ;
-- (Cette tâche n'est disponible qu'ave le *workspace* *Meta*) *Shift-Ctrl-B* + *entrée* (ou *Command Palette…*, *Tasks: Run Task*, *FaaS Description generator*) ;
+- <u>soit</u> :
+  - lancer `ATKDescGen`,
+  - (cette tâche n'est disponible qu'avec le *folder* *Meta*) *Shift-Ctrl-B* + *entrée* (ou *Command Palette…*, *Tasks: Run Task*, *FaaS Description generator*) ;
 - Coller le presse-papier (*CTRL-V*) comme (en remplacement de la) première ligne du fichier *HTML*.
 
 
