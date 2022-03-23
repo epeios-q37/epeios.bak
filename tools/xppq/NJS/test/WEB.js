@@ -1,4 +1,5 @@
 var atlas;
+var xppq;
 
 if (process.env.Q37_EPEIOS) {
   let epeiosPath = "";
@@ -9,11 +10,12 @@ if (process.env.Q37_EPEIOS) {
     epeiosPath = process.env.Q37_EPEIOS;
 
   atlas = require(epeiosPath + "tools/xdhq/Atlas/NJS/Atlas.js");
+  xppq = require('../XPPq.js');
 } else {
   atlas = require('atlastk');
+  xppq = require('./xppq-node/XPPq.js');
 }
 
-const xppq = require('../XPPq.js');
 const stream = require("stream");
 
 function getExampleScript(variableName) {
@@ -96,8 +98,7 @@ function escapeHtmlAndFormat(unsafe) {
 }
 
 const BODY = `
-<iframe style="width: 100%; border: none;" src="FaaSDesc.php?text=VGhpcyBhcHBsaWNhdGlvbiBpcyBhbiBleGFtcGxlIG9mIGEgWypOb2RlLmpzKiBhZGRvbl0oaHR0cHM6Ly9ub2RlanMub3JnL2FwaS9hZGRvbnMuaHRtbCkuIFRoaXMgYWRkb24gYWxsb3dzIHRvIHVzZSB3aXRoICpOb2RlLmpzKiBhbiAqWE1MKiBwYXJzZXIgYW5kIFtwcmVwcm9jZXNzb3JdKGh0dHBzOi8vcTM3LmluZm8vcy9rbXByM256cCkgZGV2ZWxvcGVkIGluICpDKi8qQysrKiwgYW5kIHRoZXJlZm9yZSBtdWNoIG1vcmUgZmFzdGVyIHRoYW4gaWYgdGhleSB3ZXJlIGRldmVsb3BlZCBpbiBwdXJlICpKYXZhU2NyaXB0Ki4gIApUaGUgKlJhdyogYnV0dG9uIGRpc3BsYXlzIHRoZSBjb250ZW50IG9mIHRoZSAqSW5wdXQqIGZpZWxkIGluIHRoZSAqT3V0cHV0KiBmaWVsZC4gVGhlICpQcmVwcm9jZXNzZWQqIGJ1dHRvbiBkaXNwbGF5cyB0aGUgcmVzdWx0IG9mIHRoZSBwcmVwcm9jZXNzaW5nLiBUaGUgKncvbyBwcmVwcm9jZXNzaW5nKiBhbmQgKndpdGggcHJlcHJvY2Vzc2luZyogYnV0dG9ucyBmb3JtYXQgdGhlICpYTUwqIGRhdGEgdXNpbmcgdGhlIHBhcnNlciwgcmVzcGVjdGl2ZWx5IHdpdGhvdXQgYW5kIHdpdGggcHJlcHJvY2Vzc2luZy4gWW91IGNhbiBwbGFjZSB5b3VyIG93biBjb250ZW50IGluIHRoZSAqSW5wdXQqIGZpZWxkLiAgCkFzIHlvdSBjYW4gc2VlIGluIHRoZSBbKldFQi5qcypdKGh0dHBzOi8vcTM3LmluZm8vcy83end0dDNoNCkgZmlsZSwgdGhpcyBhZGRvbiBpcyB1c2VkIGxpa2UgYW55IG90aGVyICpOb2RlLmpzKiBtb2R1bGUuIFlvdSB3aWxsIGFsc28gZmluZCBpbiB0aGUgc2FtZSByZXBvc2l0b3J5IHRoZSBjb21wbGV0ZSAqQyovKkMrKyogY29kZSBjb3JyZXNwb25kaW5nIHRvIHRoaXMgYWRkb24u"></iframe>
-<fieldset>
+<iframe style="width: 100%; border: none;" src="FaaSDesc.php?text=VGhpcyAqTm9kZS5qcyogYXBwbGljYXRpb24gdXNlcyBhbiBbKmFkZG9uKl0oaHR0cHM6Ly9ub2RlanMub3JnL2FwaS9hZGRvbnMuaHRtbCkgaW1wbGVtZW50aW5nIGFuICpYTUwqIHBhcnNlciBhbmQgcHJlcHJvY2Vzc29yLiBEZXZlbG9wZWQgaW4gKkMqLypDKyssKiB0aGlzIGFkZG9uIGlzIG11Y2ggbW9yZSBmYXN0ZXIsIHJlbGlhYmxlIGFuZCByZXNvdXJjZS1lZmZpY2llbnQsIGFuZCB0aGVyZWZvcmUgbW9yZSBlbnZpcm9ubWVudC1mcmllbmRseSwgdGhhbiBpZiBpdCBoYWQgYmVlbiBkZXZlbG9wZWQgaW4gKkphdmFTY3JpcHQqLiAgClRoZSAqUmF3KiBidXR0b24gZGlzcGxheXMgdGhlIGNvbnRlbnQgb2YgdGhlICpJbnB1dCogZmllbGQgaW4gdGhlICpPdXRwdXQqIGZpZWxkLiBUaGUgKlByZXByb2Nlc3NlZCogYnV0dG9uIGRpc3BsYXlzIHRoZSByZXN1bHQgb2YgdGhlIHByZXByb2Nlc3NpbmcuIFRoZSAqdy9vIHByZXByb2Nlc3NpbmcqIGFuZCAqd2l0aCBwcmVwcm9jZXNzaW5nKiBidXR0b25zIGZvcm1hdCB0aGUgKlhNTCogZGF0YSB1c2luZyB0aGUgcGFyc2VyLCByZXNwZWN0aXZlbHkgd2l0aG91dCBhbmQgd2l0aCBwcmVwcm9jZXNzaW5nLiBZb3UgY2FuIHBsYWNlIHlvdXIgb3duIGNvbnRlbnQgaW4gdGhlICpJbnB1dCogZmllbGQuICAKQXMgeW91IGNhbiBzZWUgaW4gdGhlIFsqV0VCLmpzKl0oaHR0cHM6Ly9xMzcuaW5mby9zLzd6d3R0M2g0KSBmaWxlLCB0aGlzIGFkZG9uIGlzIHVzZWQgbGlrZSBhbnkgb3RoZXIgKk5vZGUuanMqIG1vZHVsZS4gWW91IHdpbGwgYWxzbyBmaW5kIGluIHRoZSBzYW1lIHJlcG9zaXRvcnkgdGhlIGNvbXBsZXRlICpDKi8qQysrKiBjb2RlIGNvcnJlc3BvbmRpbmcgdG8gdGhpcyBhZGRvbi4="></iframe><fieldset>
   <fieldset>
     <legend>Input</legend>
     <div id="input" style="font-size: initial; resize: horizontal;"/>
@@ -285,4 +286,3 @@ const USER_EXAMPLE = `
   Type your own XML code here.
 </Root>
 `;
-
