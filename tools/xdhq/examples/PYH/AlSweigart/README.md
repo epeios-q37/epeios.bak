@@ -1,0 +1,1 @@
+Programs from [The Big Book of Small Python Projects](https://inventwithpython.com/bigbookpython/) fitted with a GUI using the [*Atlas* toolkit(http://atlastk.org)].
