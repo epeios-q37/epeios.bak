@@ -17,7 +17,7 @@ BOARD_HEIGHT = 6
 BODY = """
 <details>
   <summary style="cursor: pointer;">About</summary>
-  <fieldset style="width: 300px; background: aliceblue; position: fixed;">
+  <fieldset style="width: 300px; background: aliceblue; position: absolute;">
 Four in a Row, by Al Sweigart
 <a href="mailto:al@inventwithpython.com">al@inventwithpython.com</a><br/>
 GUI by Claude SIMON
@@ -82,7 +82,7 @@ def displayBoard(dom, board, playerTile):
   winner = getWinner(board)
 
   # Check for a win or tie:
-  if not winner is None:
+  if winner is not None:
     dom.set_value("output", 'Player ' + winner + ' has won!')
   elif isFull(board):
     dom.set_value("output", 'There is a tie!')
