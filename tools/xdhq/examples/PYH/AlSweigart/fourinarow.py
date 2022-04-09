@@ -1,5 +1,5 @@
 """Four in a Row, by Al Sweigart al@inventwithpython.com
-Fitted with a GUI using the Atlas toolkit by Claude SIMON http://q37.info/contact
+Fitted with a WEB GUI by Claude SIMON http://q37.info/contact
 A tile-dropping game to get four in a row, similar to Connect Four.
 Original code is available at https://nostarch.com/big-book-small-python-programming
 Tags: large, game, board game, two-player"""
@@ -13,40 +13,6 @@ PLAYER_O = 'O'
 
 BOARD_WIDTH = 7
 BOARD_HEIGHT = 6
-
-BODY = """
-<details>
-  <summary style="cursor: pointer;">About</summary>
-  <fieldset style="width: 300px; background: aliceblue; position: absolute;">
-Four in a Row, by Al Sweigart
-<a href="mailto:al@inventwithpython.com">al@inventwithpython.com</a><br/>
-GUI by Claude SIMON
-<a href="http://q37.info/contact">http://q37.info/contact</a><hr/>
-Two players take turns dropping tiles into one of seven columns, trying
-to make four in a row horizontally, vertically, or diagonally.
-  </fieldset>
-</details>
-<fieldset>
-  <fieldset id="board" style="font-size: xx-large;"></fieldset>
-  <fieldset>
-    <output id="output"></output>
-  </fieldset>
-  <button style="displaymargin: auto;" id="New" xdh:onevent="New">New game</button>
-</fieldset>
-"""
-
-HEAD = """
-<title>Four in a Row</title>
-<style>
-  td { text-align: center; width: 1ic; }
-  #New { display: block; margin: auto; margin-top: 5px;}
-</style>
-"""
-
-BOARD = '<table style="margin: auto; width: 100%;"><tr>' +\
-  BOARD_WIDTH * '<th><button xdh:onevent="Submit" {} id="{}">{}</button></th>' +\
-  "</tr>" + BOARD_HEIGHT * ("<tr>" + BOARD_WIDTH * "<td>{}</td>" +
-  "</tr>") + "</table>"
 
 gameBoard = None
 playerTurn = None
@@ -83,11 +49,11 @@ def displayBoard(dom, board, playerTile):
 
   # Check for a win or tie:
   if winner is not None:
-    dom.set_value("output", 'Player ' + winner + ' has won!')
+    output(dom, 'Player {} has won!'.format(winner))
   elif isFull(board):
-    dom.set_value("output", 'There is a tie!')
+    output(dom, 'There is a tie!')
   else:
-    dom.set_value("output", "Player {}, click a column button.".format(playerTile))
+    output(dom, "Player {}, click a column button.".format(playerTile))
     gameOver = False
 
   tileChars = []
@@ -161,6 +127,9 @@ def getWinner(board):
         return tile1
   return None
 
+def output(dom, text):
+  dom.inner("output", '<output class="fade-in">{}</output>'.format(text))
+
 def acConnect(dom):
   dom.inner("", BODY)
   displayBoard(dom, gameBoard, playerTurn)
@@ -172,7 +141,7 @@ def acSubmit(dom, id):
 
   # If the column is full, ask for a move again:
   if gameBoard[(columnIndex, 0)] != EMPTY_SPACE:
-    dom.set_value("output", 'That column is full, select another one.')
+    output(dom, 'That column is full, select another one.')
     return
 
   # Starting from the bottom, find the first empty space.
@@ -201,6 +170,55 @@ CALLBACKS = {
   "Submit": acSubmit,
   "New": acNew
 }
+
+HEAD = """
+<title>Four in a Row</title>
+<style>
+  td {
+    text-align: center;
+    width: 1ic;
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .fade-in {
+    animation-name: fadeIn;
+    animation-duration: 1s;
+  }
+</style>
+"""
+
+BODY = """
+<details>
+  <summary style="cursor: pointer;">About</summary>
+  <fieldset style="width: 300px; background: aliceblue; position: absolute;">
+Four in a Row, by Al Sweigart
+<a href="mailto:al@inventwithpython.com">al@inventwithpython.com</a><br/>
+GUI by Claude SIMON
+<a href="http://q37.info/contact">http://q37.info/contact</a><hr/>
+Two players take turns dropping tiles into one of seven columns, trying
+to make four in a row horizontally, vertically, or diagonally.
+  </fieldset>
+</details>
+<fieldset>
+  <fieldset id="board" style="font-size: xx-large;"></fieldset>
+  <fieldset id="output"></fieldset>
+  <button style="display: flex;	margin: 5px auto 0px;" id="New" xdh:onevent="New">New game</button>
+</fieldset>
+"""
+
+BOARD = '<table style="margin: auto; width: 100%;"><tr>' +\
+  BOARD_WIDTH * '<th><button xdh:onevent="Submit" {} id="{}">{}</button></th>' +\
+  "</tr>" + BOARD_HEIGHT * ("<tr>" + BOARD_WIDTH * "<td>{}</td>" +
+  "</tr>") + "</table>"
 
 # If the program is run (instead of imported), run the game:
 if __name__ == '__main__':
