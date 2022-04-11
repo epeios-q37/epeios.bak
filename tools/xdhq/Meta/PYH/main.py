@@ -35,10 +35,7 @@ DEMOS = (
 DEMOS_AMOUNT = len(DEMOS)
 
 def normalize(item):
-	if ( isinstance(item,str) ):
-		return item, 0
-	else:
-		return item
+	return (item, 0) if ( isinstance(item,str) ) else item
 
 while loop:
 	

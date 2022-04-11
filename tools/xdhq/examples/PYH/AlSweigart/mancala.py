@@ -1,8 +1,11 @@
 """Mancala, by Al Sweigart al@inventwithpython.com
-Fitted with a WEB GUI by Claude SIMON http://q37.info/contact
+GUI by Claude SIMON http://q37.info/contact
 The ancient seed-sowing game.
 Original code is available at https://nostarch.com/big-book-small-python-programming
 Tags: large, board game, game, two-player"""
+
+import sys
+sys.path.append("./atlastk")
 
 import atlastk
 
@@ -26,9 +29,11 @@ STARTING_NUMBER_OF_SEEDS = 4  # (!) Try changing this to 1 or 10.
 gameBoard = None
 playerTurn = None
 
+
 def main():
   newGame()
   atlastk.launch(CALLBACKS, headContent=HEAD)
+
 
 def newGame():
   global gameBoard, playerTurn
@@ -36,8 +41,9 @@ def newGame():
   gameBoard = getNewBoard()
   playerTurn = '1'  # Player 1 goes first.
 
+
 def getNewBoard():
-  """Return a dictionary representing a Mancala board in the starting
+  """Returns a dictionary representing a Mancala board in the starting
   state: 4 seeds in each pit and 0 in the stores."""
 
   # Syntactic sugar - Use a shorter variable name:
@@ -48,6 +54,7 @@ def getNewBoard():
   return {'1': 0, '2': 0, 'A': s, 'B': s, 'C': s, 'D': s, 'E': s,
           'F': s, 'G': s, 'H': s, 'I': s, 'J': s, 'K': s, 'L': s}
 
+
 def updateBoard(dom, board):
   """Updates the game board using the board dictionary."""
 
@@ -56,11 +63,11 @@ def updateBoard(dom, board):
   # Check if the game ended and a player has won:
   winner = checkForWinner(gameBoard)
   if winner in ['1', '2']:
-    output(dom, 'Player {} has won!').format(winner)
+    notify(dom, 'Player {} has won!'.format(winner))
   elif winner == 'tie':
-    output(dom, 'There is a tie!')
+    notify(dom, 'There is a tie!')
   else:
-    output(dom, "Player {}, click one of your pit").format(playerTurn)
+    notify(dom, "Player {}, click one of your pit.".format(playerTurn))
 
 
 def makeMove(board, playerTurn, pit):
@@ -100,6 +107,7 @@ def makeMove(board, playerTurn, pit):
   elif playerTurn == '2':
     return '1'
 
+
 def checkForWinner(board):
   """Looks at board and returns either '1' or '2' if there is a
   winner or 'tie' or 'no winner' if there isn't. The game ends when a
@@ -132,12 +140,16 @@ def checkForWinner(board):
   else:
     return 'tie'
 
-def output(dom, text):
+
+def notify(dom, text):
+  """ Displays a text with a little animation to attract attention."""
   dom.inner("output", '<output class="fade-in">{}</output>'.format(text))
+
 
 def acConnect(dom):
   dom.inner("", BODY)
   updateBoard(dom, gameBoard)
+
 
 def acSubmit(dom, id):
   global gameBoard, playerTurn
@@ -147,21 +159,31 @@ def acSubmit(dom, id):
   # Make sure it is a valid pit to select:
   if ( playerTurn == '1' and response not in PLAYER_1_PITS )\
      or ( playerTurn == '2' and response not in PLAYER_2_PITS ):
-    output(dom, 'Please pick a pit on your side of the board.')
+    notify(dom, 'Please pick a pit on your side of the board.')
     return
   if gameBoard.get(response) == 0:
-    output(dom, 'Please pick a non-empty pit.')
+    notify(dom, 'Please pick a non-empty pit.')
     return
 
   playerTurn = makeMove(gameBoard, playerTurn, response)
 
   atlastk.broadcast_action("Display")      
 
+
 def acNew(dom):
   newGame()
   atlastk.broadcast_action("Display")
 
+
+CALLBACKS = {
+  "": acConnect,
+  "Display": lambda dom: updateBoard(dom, gameBoard),
+  "Submit": acSubmit,
+  "New": acNew
+}
+
 HEAD = """
+<title>Mancala</title>
 <style>
   .store_fieldset {
     position: relative;
@@ -279,13 +301,6 @@ More info at <a href="https://en.wikipedia.org/wiki/Mancala">https://en.wikipedi
   <button style="display: flex;	margin: 5px auto 0px;" id="New" xdh:onevent="New">New game</button>
 </fieldset>
 """
-
-CALLBACKS = {
-  "": acConnect,
-  "Display": lambda dom: updateBoard(dom, gameBoard),
-  "Submit": acSubmit,
-  "New": acNew
-}
 
 # If the program is run (instead of imported), run the game:
 if __name__ == '__main__':

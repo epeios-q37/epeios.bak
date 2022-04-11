@@ -2,6 +2,8 @@
 
 Concerne le code *Python* <u>et</u> natif.
 
+> Le répertoire `Examples/AlSweigart` rdt indépendant et contient son propre `NOTES.md` !
+
 ## Exemple de description en anglais (obsolete):
 
 > Lightweight and dependency-free module to easily add a GUI to Python programs. Requires only basic knowledge of web technologies (no JavaScript knowledge required). CLI and GUI can easily coexist in the same program, so the user can choose the interface s/he wants to use.
@@ -132,6 +134,7 @@ Ces projets embarquent le *toolkit* *Atlas*, généralement pour en simplifier l
 - https://github.com/epeios-q37/term2web-python ;
 - https://github.com/epeios-q37/term2web-python-stub ;
 - https://github.com/epeios-q37/tortoise-python ;
+- https://girthub.com/epeios-q37/AlSweigartBigBookPython
 
 
 ## Publications

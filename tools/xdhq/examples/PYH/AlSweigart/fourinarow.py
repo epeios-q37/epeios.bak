@@ -1,8 +1,11 @@
 """Four in a Row, by Al Sweigart al@inventwithpython.com
-Fitted with a WEB GUI by Claude SIMON http://q37.info/contact
+GUI by Claude SIMON http://q37.info/contact
 A tile-dropping game to get four in a row, similar to Connect Four.
 Original code is available at https://nostarch.com/big-book-small-python-programming
 Tags: large, game, board game, two-player"""
+
+import sys
+sys.path.append("./atlastk")
 
 import atlastk
 
@@ -17,15 +20,18 @@ BOARD_HEIGHT = 6
 gameBoard = None
 playerTurn = None
 
+
 def main():
   newGame()
   atlastk.launch(CALLBACKS, headContent=HEAD)
+
 
 def newGame():
   global gameBoard, playerTurn
 
   gameBoard = getNewBoard()
   playerTurn = PLAYER_X
+
 
 def getNewBoard():
   """Returns a dictionary that represents a Four in a Row board.
@@ -38,8 +44,9 @@ def getNewBoard():
       board[(columnIndex, rowIndex)] = EMPTY_SPACE
   return board
 
+
 def displayBoard(dom, board, playerTile):
-  """Display the board and its tiles on the screen."""
+  """Display the board and its tiles in the browser."""
 
   '''Prepare a list to pass to the format() string method for the
   board template. The list holds all of the board's tiles (and empty
@@ -49,11 +56,11 @@ def displayBoard(dom, board, playerTile):
 
   # Check for a win or tie:
   if winner is not None:
-    output(dom, 'Player {} has won!'.format(winner))
+    notify(dom, 'Player {} has won!'.format(winner))
   elif isFull(board):
-    output(dom, 'There is a tie!')
+    notify(dom, 'There is a tie!')
   else:
-    output(dom, "Player {}, click a column button.".format(playerTile))
+    notify(dom, "Player {}, click a column button.".format(playerTile))
     gameOver = False
 
   tileChars = []
@@ -70,12 +77,12 @@ def displayBoard(dom, board, playerTile):
     htmlFeatures.extend([columnIndex, columnIndex+1])
 
   # Display the board:
-  dom.inner("board",BOARD.format(*htmlFeatures, *tileChars))
+  dom.inner("board", BOARD.format(*htmlFeatures, *tileChars))
+
 
 def isFull(board):
   """Returns True if the `board` has no empty spaces, otherwise
   returns False."""
-
   for rowIndex in range(BOARD_HEIGHT):
     for columnIndex in range(BOARD_WIDTH):
       if board[(columnIndex, rowIndex)] == EMPTY_SPACE:
@@ -127,12 +134,16 @@ def getWinner(board):
         return tile1
   return None
 
-def output(dom, text):
+
+def notify(dom, text):
+  """ Displays a text with a little animation to attract attention."""
   dom.inner("output", '<output class="fade-in">{}</output>'.format(text))
+
 
 def acConnect(dom):
   dom.inner("", BODY)
   displayBoard(dom, gameBoard, playerTurn)
+
 
 def acSubmit(dom, id):
   global gameBoard, playerTurn
@@ -141,7 +152,7 @@ def acSubmit(dom, id):
 
   # If the column is full, ask for a move again:
   if gameBoard[(columnIndex, 0)] != EMPTY_SPACE:
-    output(dom, 'That column is full, select another one.')
+    notify(dom, 'That column is full, select another one.')
     return
 
   # Starting from the bottom, find the first empty space.
@@ -160,9 +171,11 @@ def acSubmit(dom, id):
 
   atlastk.broadcast_action("Display")
 
+
 def acNew(dom):
   newGame()
   atlastk.broadcast_action("Display")
+
 
 CALLBACKS = {
   "": acConnect,
