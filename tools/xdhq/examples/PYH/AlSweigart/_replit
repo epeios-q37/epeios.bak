@@ -1,0 +1,8 @@
+# Note au développeur : destiné à Replit. Devra être renommé en '.replit'.
+
+run = ["python3", "replit.py"]
+language = "python3"
+hidden = ["replit.py", "venv", ".config", "**/__pycache__", "**/.mypy_cache", "**/*.pyc"]
+
+[packager]
+ignoredPackages = ["unit_tests", "atlastk"]
