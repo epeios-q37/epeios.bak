@@ -1,11 +1,10 @@
 #!/usr/bin/python3
 
 # If installed with 'pip install term2web',
-# both above lines can be removed.
-import sys
-sys.path.append("./Atlas.zip")
+# above line can be removed.
+__import__("sys").path.append("./atlastk.zip")
 
-import atlastk as Atlas
+import atlastk
 
 # Replace below lines by your own code.
 
@@ -19,6 +18,7 @@ body = """
  </fieldset>
 """
 
+
 def acConnect(dom):
 	dom.inner("", body )
 
@@ -26,10 +26,11 @@ def acConnect(dom):
 def acSubmit(dom):
 	dom.alert("Hello, the World!")
 
+
 callbacks = {
 	"": acConnect,
 	"Submit": acSubmit,
 }
 
 
-Atlas.launch(callbacks, None, head)
+atlastk.launch(callbacks, headContent)

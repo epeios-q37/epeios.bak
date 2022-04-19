@@ -10,6 +10,22 @@ Concerne le code *Python* <u>et</u> natif.
 
 ## Considérations techniques
 
+### Utilisation de la bibliothèque sous forme d'archive
+
+Il est possible d'embarquer la bibliothèque sous forme d'archive, ce qui évite d'avoir à l'installer via *Pypi*.
+
+La commande `ATLAtlasPack` génèe le fichier `atlastk.zip` qui contient la bibliothèque.
+
+Pour l'utiliser, utiliser le code suivant (adapter le chemin ; il semblerait qu'il faille un chemin, même si l'archive se trouve dans le répertoire courant) :
+
+
+```python
+import sys
+sys.path.append("./atlastk.zip")
+
+import atlastk
+```
+
 ### `__main__.py`
 
 En créant, dans le répertoire de l'application, un fichier `__main__.py` contenant juste un `import` du fichier à lancer pour lancer l'application, on peut alors lancer l'application en passant juste le nom du répertoire (avec un `/` final) à la commande `python`.
