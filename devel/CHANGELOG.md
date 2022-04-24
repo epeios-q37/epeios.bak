@@ -11,6 +11,9 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2022-04-24
+- CDGB64: [stdz],
+
 ## 2022-03-17
 - XPP: [cont],
 

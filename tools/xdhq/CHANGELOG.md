@@ -1,5 +1,8 @@
 # *XDHq* changelog.
 
+## 2022-04-24
+- *xdhqxdh*: using shorter random generated tokens,
+
 ## 2021-12-10
 - *xdhqxdh*:
   - fixing bug callback deleted while being used,

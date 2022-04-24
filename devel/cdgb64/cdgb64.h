@@ -521,10 +521,10 @@ namespace cdgb64 {
 /*************/
 
 namespace cdgb64 {
-	typedef cdgb64::encoding_oflow___ rEncodingOFlow;
-	typedef cdgb64::decoding_iflow___ rDecodingIFlow;
+	typedef cdgb64::encoding_oflow___ rEncodingWFlow;
+	typedef cdgb64::decoding_iflow___ rDecodingRFlow;
 
-	class rEncodingODriver
+	class rEncodingWDriver
 	: public encoding_oflow_driver___
 	{
 	private:
@@ -535,7 +535,7 @@ namespace cdgb64 {
 			encoding_oflow_driver___::reset( P );
 			tol::reset( P, Flow_ );
 		}
-		qCVDTOR( rEncodingODriver );
+		qCVDTOR( rEncodingWDriver );
 		void Init(
 			fdr::rWDriver &Driver,
 			eFlavor Flavor,
@@ -546,7 +546,7 @@ namespace cdgb64 {
 		}
 	};
 
-	class rDecodingIDriver
+	class rDecodingRDriver
 	: public decoding_iflow_driver___
 	{
 	private:
@@ -557,7 +557,7 @@ namespace cdgb64 {
 			decoding_iflow_driver___::reset( P );
 			tol::reset( P, Flow_ );
 		}
-		qCVDTOR( rDecodingIDriver );
+		qCVDTOR( rDecodingRDriver );
 		void Init(
 			fdr::rRDriver &Driver,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )

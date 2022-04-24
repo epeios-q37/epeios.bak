@@ -567,6 +567,28 @@ namespace {
 		plgn::rRetriever<plugins::cToken> PluginRetriever_;
 
 		namespace {
+		  namespace {
+		    const str::dString &GenerateRandomToken_(str::dString &Token)
+		    {
+		    qRH;
+          flx::rStringWFlow StringFlow;
+          cdgb64::rEncodingWFlow EncoderFlow;
+          int i = 9;
+		    qRB;
+          StringFlow.Init(Token);
+          EncoderFlow.Init(StringFlow, cdgb64::fURL);
+
+          tol::InitializeRandomGenerator();
+
+          while ( i-- )
+            EncoderFlow.Put(rand());
+		    qRR;
+		    qRT;
+		    qRE;
+          return Token;
+		    }
+		  }
+
 			class sToken_
 			: public plugins::cToken
 			{
@@ -575,13 +597,16 @@ namespace {
 					const str::dString &Raw,
 					str::dString &Normalized ) override
 				{
-					tol::bUUID UUID;
-
 					Normalized = Raw;
 
-					if ( Raw.Amount() == 0 )
+					if ( Raw.Amount() == 0 ) {
+#if 0 // OLD, token is an UUID.
+            tol::bUUID UUID;
 						Normalized.Append( tol::UUIDGen( UUID ) );
-					else if ( (Raw.Amount() > 1) && (Raw( 0 ) == '&') )
+#else
+            GenerateRandomToken_(Normalized);
+#endif
+					} else if ( (Raw.Amount() > 1) && (Raw( 0 ) == '&') )
 						Normalized.Remove( Normalized.First() );
 					else
 						return plugins::sBad;
