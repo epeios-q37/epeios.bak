@@ -230,6 +230,7 @@ bso::sBool session::rSession::XDHCDCInitialize(
 	bso::sBool Success = false;
 qRFH;
 	flw::rDressedWFlow<> Flow;
+	str::wString MessageForLog;
 qRFB;
 	if ( Token.Amount() == 0 ) {
 			if ( slfhlead::CoreIsInitialized() ) {
@@ -257,7 +258,12 @@ qRFB;
 #if 0
 		Log_(Id_, IP_, Token.Amount() ? Token : str::wString("SlfH"));	// This one calls wrongly the destructor of 'Token'.
 #else
-		Log_(Id_, IP_, Token.Amount() ? Token : SelfHostingLabel_);	// Avoids above problem, and also string creation.
+    if ( Token.Amount() ) {
+      MessageForLog.Init("- ");
+      MessageForLog.Append(Token);
+      Log_(Id_, IP_, MessageForLog);	// Avoids above problem, and also string creation.
+    } else
+      Log_(Id_, IP_, SelfHostingLabel_);	// Avoids above problem, and also string creation.
 #endif
 
 		xdhdws::sProxy::Init(Callback);	// Must be last, otherwise, if an error occurs, 'Callback' will be freed twice!

@@ -4,8 +4,9 @@ The ancient seed-sowing game.
 Original code is available at https://nostarch.com/big-book-small-python-programming
 Tags: large, board game, game, two-player"""
 
-import sys
-sys.path.append("./atlastk")
+# The 'atlastk' module will be imported from the provided
+# 'atlastk.zip' archive, to avoid having to install it.  
+__import__("sys").path.append("./atlastk.zip")
 
 import atlastk
 

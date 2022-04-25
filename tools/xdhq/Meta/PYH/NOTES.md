@@ -14,17 +14,18 @@ Concerne le code *Python* <u>et</u> natif.
 
 Il est possible d'embarquer la bibliothèque sous forme d'archive, ce qui évite d'avoir à l'installer via *Pypi*.
 
-La commande `ATLAtlasPack` génèe le fichier `atlastk.zip` qui contient la bibliothèque.
+La commande `ATKAtlasPack` génère le fichier `atlastk.zip` qui contient la bibliothèque.
 
 Pour l'utiliser, utiliser le code suivant (adapter le chemin ; il semblerait qu'il faille un chemin, même si l'archive se trouve dans le répertoire courant) :
 
 
 ```python
-import sys
-sys.path.append("./atlastk.zip")
+__import__("sys").path.append("./atlastk.zip")
 
 import atlastk
 ```
+
+Utiliser `__import__("sys").path.extend(["./atlastk.zip",…])` pour ajouter plusieurs *path*.
 
 ### `__main__.py`
 

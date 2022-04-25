@@ -127,7 +127,7 @@ endif
 
 ifeq ("$(os)","$(GNULinux)")
 # By default, 'CXX' is set to 'g++'.
-	CXX = clang++
+# 	CXX = clang++
 endif
 
 #############################
@@ -399,7 +399,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20220101"\"
+copt += -DVERSION=\""20220424"\"
 copt += -DCOPYRIGHT_YEARS=\""2017"\"
 copt += -DIDENTIFIER=\""5f3ad6c6-4f0d-428d-9c00-678e1ed3967f"\"
 
