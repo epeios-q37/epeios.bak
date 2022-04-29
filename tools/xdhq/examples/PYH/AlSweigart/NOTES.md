@@ -1,3 +1,5 @@
+# Notes à destination du développeur concernant le contenu dec répertoire
+
 Codes source à <https://replit.com/@Q37Info/AlSweigartTheBigBookPython#/FromBook>.
 
 L'autre répertoire contient le dépôt http://github.com/asweigart/PythonStdioGames qui semble reprendre les mêmes programmes, et en contient quelques-uns en plus.
