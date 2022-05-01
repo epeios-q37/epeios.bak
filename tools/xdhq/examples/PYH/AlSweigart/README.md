@@ -1,4 +1,4 @@
-Programs from [The Big Book of Small Python Projects](https://inventwithpython.com/bigbookpython/) by Al Sweigart to which a [graphical user interface](https://q37.info/s/hw9n3pjs) were added.
+Text-based programs from [*The Big Book of Small Python Projects*](https://inventwithpython.com/bigbookpython/) by [Al Sweigart](http://alsweigart.com) to which a [graphical user interface](https://q37.info/s/hw9n3pjs) were added.
 
 Despite being GUI-based, there is no heavy framework to install. Simply retrieve this repository and, from inside of the retrieved repository, launch the `python` command (or `python3` if the default version is not the 3; check with `python --version`) with the name of a program. Example: `python fourinarow.py` (or `python3 fourinarow.py`).
 
