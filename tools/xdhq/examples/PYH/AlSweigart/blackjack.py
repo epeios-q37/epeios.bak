@@ -11,25 +11,37 @@ __import__("sys").path.append("./atlastk.zip")
 
 import atlastk
 
-import random, builtins
+import random, time, threading, uuid, builtins
 from xml.etree import ElementTree
 
 builtins.open = atlastk.defaultBuiltinsFunction
 
+NOTIFICATIONS = {
+  # '0' to report no notification to display.
+  1: "Waiting your bet.",
+  2: "Hit, stand or double bet.",
+  3: "Hit or stand.",
+  4: "Dealer is playing",
+  5: "Dealer busts! You win ${}!",
+  6: "You won!",
+  7: "It's a tie, the bet is returned to you.",
+  8: "You lost ${}!"
+}
+
 def main():
+  global lock
+  lock = threading.Lock()
+
   newGame()
   initSVGCards()
   atlastk.launch(CALLBACKS, headContent=HEAD)
 
 
 def newGame():
-  global deck, playerHand, dealerHand, money, bet
+  global money
 
-  deck = getDeck()
-  dealerHand = [54]
-  playerHand = [54]
   money = 5000
-  bet = 0
+  newTurn()
 
 
 def initSVGCards():
@@ -55,37 +67,13 @@ def getDeck():
   return deck
 
 
-def displayHands(dom, dealerHand, playerHand, showDealerHand):
-    """Show the player's and dealer's cards. Hide the dealer's first
-    card if showDealerHand is False."""
-    if showDealerHand:
-        dom.setContent("dealer_hand_value", getHandValue(dealerHand))
-        displayCards(dom, "dealer_cards", dealerHand)
-    else:
-        dom.setContent("dealer_hand_value", "???")
-        # Hide the dealer's first card:
-        displayCards(dom, "dealer_cards", [54] + dealerHand[1:])
+def newTurn():
+  global deck, playerHand, dealerHand, bet
 
-    # Show the player's cards:
-    dom.setContent("player_hand_value", getHandValue(playerHand))
-    displayCards(dom, "player_cards", playerHand)
-
-    if len(playerHand) >= 2:
-      notify(dom, "Please hit or stand.")    
-    else:
-      notify(dom, "Please bet.")
-
-
-def displayMoneyAndBet(dom, money, bet):
-  dom.inner("money", '<output class="fade-in">{}</output>'.format(money))
-  dom.inner("bet", '<output class="fade-in">{}</output>'.format(bet))
-
-  if bet == 0:
-    notify(dom, "Please make a bet!")
-  elif len(playerHand) <= 2:
-    notify(dom, "Please bet, hit or double down.")
-  else:
-    notify(dom, "Please hit or stand.")
+  deck = getDeck()
+  dealerHand = [54]
+  playerHand = [54]
+  bet = 0   
 
 
 def getHandValue(cards):
@@ -124,57 +112,127 @@ def displayCards(dom, id, cards):
     dom.inner(id, html)
 
 
-def notify(dom, text):
+def notify(dom, text, id="hint"):
   """ Displays a text with a little animation to attract attention."""
-  dom.inner("output", '<output class="fade-in">{}</output>'.format(text))
+  dom.inner(id, '<output class="fade-in">{}</output>'.format(text))
 
 
-def testAction(dom, action):
+def testAction(dom, action, dealerHand, playerHand, bet):
   playerHandSize = len(playerHand)
-
-  if playerHandSize > 2:
+  
+  if bet <= 0 and playerHandSize >= 2:
+    if action != 'R':
+      notify(dom, "Hit resume for another turn!")
+      return False
+  elif playerHandSize > 2:
     if action not in ['H', 'S']:
-      notify(dom, "You van only hit or stand!")
+      notify(dom, "You can only hit or stand!")
       return False
   elif playerHandSize == 2:
     if action not in ['H', 'S', 'D']:
       notify(dom, "You can only hit, stand or double down!")
       return False
   elif action not in ['+', '-', 'B']:
-    notify(dom, "Yu can only bet!")
+    notify(dom, "You can only bet!")
+    return False
+  elif action == 'B' and bet <= 0:
+    notify(dom, "Your bet is empty!")
     return False
 
   return True
 
 
+def dealerTurn(dealerHand, playerHand):
+  while getHandValue(dealerHand) < 17:
+    atlastk.broadcast_action("RefreshDisplay", '4')
+    time.sleep(1)
+    dealerHand.append(deck.pop())
+    atlastk.broadcast_action("RefreshDisplay", 'D0')
+
+  time.sleep(1)
+
+  playerHandValue = getHandValue(playerHand)
+  dealerHandValue = getHandValue(dealerHand)
+
+  if dealerHandValue > 21:
+    notification = 5
+    status = 1
+  elif dealerHandValue < playerHandValue:
+    notification = 6
+    status = 1
+  elif dealerHandValue == playerHandValue:
+    notification = 7
+    status = 0
+  else:
+    notification = 8
+    status = -1
+
+  atlastk.broadcast_action("RefreshDisplay", "D{}".format(notification))
+
+  return status
+
+
 def acConnect(dom):
   dom.inner("", '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="0" height="0">' + SVG_DEFS + '</svg>' + BODY)
-  displayHands(dom, dealerHand, playerHand, False)
-  displayMoneyAndBet(dom, money, bet)
+  turnInProgress = bet > 0 or len(playerHand) >= 2
+  displayHand(dom, 'dealer', dealerHand, False )
+  displayHand(dom, 'player', playerHand, turnInProgress )
+  notify(dom, money, "money")
+  notify(dom, abs(bet), "bet")
+
+  if turnInProgress:
+    notify(dom, "Turn in progress…")
+  else:
+    notify(dom, "Waiting your bet.")
+
+
+def displayHand(dom, host, hand, show):
+  dom.setContent("{}_hand_value".format(host), getHandValue(hand) if show else "???")
+  displayCards(dom, "{}_cards".format(host), hand if show else [54] + hand[1:])
+
+
+def acRefreshDisplay(dom, id):
+  print(id, bet)
+
+  notification = int(id[-1])
+
+  if notification != 0:
+    notify(dom, NOTIFICATIONS[notification].format(abs(bet)))
+
+  if 'd' in id.lower():
+    displayHand(dom, 'dealer', dealerHand, 'D' in id)
+
+  if 'p' in id.lower():
+    displayHand(dom, 'player', playerHand, 'P' in id)
+
+  if 'M' in id:
+    notify(dom, money, "money")
+
+  if 'B' in id:
+    notify(dom, bet, "bet")
 
 
 def acAdd(dom, id):
   global money, bet
 
-  if not testAction(dom, '+'):
+  if not testAction(dom, '+', dealerHand, playerHand, bet):
     return
 
   value = int(dom.get_mark(id))
 
-  if value > money:
+  if ( value + bet ) > money:
     notify(dom, "You can't bet that much!")
     return
 
   bet += value
-  money -= value
 
-  atlastk.broadcast_action("DisplayMoneyAndBet")
+  atlastk.broadcast_action("RefreshDisplay", 'B1')
 
 
 def acSub(dom, id):
   global money, bet
 
-  if not testAction(dom, '-'):
+  if not testAction(dom, '-', dealerHand, playerHand, bet):
     return
 
   value = int(dom.get_mark(id))
@@ -184,65 +242,131 @@ def acSub(dom, id):
     return
 
   bet -= value
-  money += value
 
-  atlastk.broadcast_action("DisplayMoneyAndBet")
+  atlastk.broadcast_action("RefreshDisplay", 'B1')
 
 
 def acBet(dom):
   global dealerHand, playerHand
 
-  if not testAction(dom, 'B'):
+  if not testAction(dom, 'B', dealerHand, playerHand, bet):
     return
 
   dealerHand = [deck.pop(), deck.pop()]
   playerHand = [deck.pop(), deck.pop()]
-  atlastk.broadcast_action("DisplayIntermediateHands")
+
+  atlastk.broadcast_action("RefreshDisplay", 'dP2')
 
 
 def acHit(dom):
-  if not testAction(dom, 'H'):
+  global money, bet, lockId
+
+  if not testAction(dom, 'H', dealerHand, playerHand, bet):
     return
 
   playerHand.append(deck.pop())
-  atlastk.broadcast_action("DisplayIntermediateHands")
+
+  handValue = getHandValue(playerHand)
+
+  if handValue > 21:
+    money -= bet
+    bet = -bet
+    notification = 8
+  elif handValue < 21:
+    notification = 3
+  else:
+    lockId = str(uuid.uuid4())
+    atlastk.broadcast_action("RefreshDisplay", 'P0')
+    atlastk.broadcast_action("DealerMove", lockId)
+    return
+
+  atlastk.broadcast_action("RefreshDisplay", 'P{}'.format(notification))
 
 
 def acStand(dom):
-  if not testAction(dom, 'S'):
+  global money, bet, lockId
+
+  if not testAction(dom, 'S', dealerHand, playerHand, bet):
     return
+
+  lockId = str(uuid.uuid4())
+  atlastk.broadcast_action("DealerMove", lockId)
 
 
 def acDoubleDown(dom):
-  global money, bet, playerHand
+  global money, bet, playerHand, lockId
 
-  if not testAction(dom, 'D'):
+  if not testAction(dom, 'D', dealerHand, playerHand, bet):
     return
 
-  if money == 0:
+  value = min(bet, money - bet)
+
+  if value == 0:
     notify(dom, "Not enough money to double down!")
     return
 
-  value = min(bet, money)
-  money -= value
   bet += value
 
   playerHand.append(deck.pop())
-  atlastk.broadcast_action("DisplayFinalHands")  
-  atlastk.broadcast_action("DisplayMoneyAndBet")
+  atlastk.broadcast_action("RefreshDisplay", 'BP0')
+
+  lockId = str(uuid.uuid4())
+  atlastk.broadcast_action("DealerMove", lockId)
+
+
+def acDealerMove(dom, id):
+  global lockId, dealerHand, money, bet
+  chosenOne = False
+
+  displayHand(dom, 'dealer', dealerHand, True)
+  notify(dom, "Dealer plays.")
+
+  with lock:
+    chosenOne = id == lockId
+    if chosenOne:
+      lockId = str(uuid.uuid4())
+
+  if chosenOne:
+    dealerHandValue = getHandValue(dealerHand)
+    playerHandValue = getHandValue(playerHand)
+    
+    if dealerHandValue < playerHandValue or ( dealerHandValue == playerHandValue and dealerHandValue < 17 ):
+      dealerHand.append(deck.pop())
+      time.sleep(1)
+      atlastk.broadcast_action("DealerMove", lockId)
+    else:
+      if dealerHandValue > 21:
+        notification = 5
+        money += bet
+      elif dealerHandValue == playerHandValue:
+        notification = 7
+      else:
+        notification = 8
+        money -= bet
+      bet = -bet # To report end of turn.
+
+      atlastk.broadcast_action("RefreshDisplay", "M{}".format(notification))
+
+
+def acResume(dom):
+  if not testAction(dom, 'R', dealerHand, playerHand, bet):
+    return
+
+  newTurn()
+  atlastk.broadcast_action("RefreshDisplay", 'dpB1')
 
 
 CALLBACKS = {
   "": acConnect,
-  "DisplayIntermediateHands": lambda dom: displayHands(dom, dealerHand, playerHand, False),
-  "DisplayFinalHands": lambda dom: displayHands(dom, dealerHand, playerHand, True),
-  "DisplayMoneyAndBet": lambda dom: displayMoneyAndBet(dom, money, bet),
+  "RefreshDisplay": acRefreshDisplay,
   "+": acAdd,
   "-": acSub,
   "Bet": acBet,
   "Hit": acHit,
   "Stand": acStand,
-  "DoubleDown": acDoubleDown
+  "DoubleDown": acDoubleDown,
+  "DealerMove": acDealerMove,
+  "Resume": acResume
 }
 
 CHIP_VALUES = [1, 5, 10, 50, 100, 500]
@@ -279,9 +403,9 @@ BODY = """
     <button xdh:onevent="Stand">Stand</button>
     <button xdh:onevent="DoubleDown">Double down</button>
     <span></span>
-    <button>New game</button>
+    <button xdh:onevent="Resume">Resume</button>
   </div>
-  <fieldset id="output"></fieldset>
+  <fieldset id="hint"></fieldset>
 """ + CHIPS.format(*[v for v in CHIP_VALUES for _ in range(2) ]) + """
   <span style="display: flex">
     <fieldset>
