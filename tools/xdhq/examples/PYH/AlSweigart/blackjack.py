@@ -11,26 +11,29 @@ __import__("sys").path.append("./atlastk.zip")
 
 import atlastk
 
-import random, time, threading, uuid, builtins
+import random, time, uuid, builtins
 from xml.etree import ElementTree
+from threading import Lock 
 
-builtins.open = atlastk.defaultBuiltinsFunction
+__import__("builtins").open = atlastk.defaultBuiltinsFunction
 
 NOTIFICATIONS = {
   # '0' to report no notification to display.
-  1: "Waiting your bet.",
-  2: "Hit, stand or double bet.",
+  1: "Waiting for bet.",
+  2: "Hit, stand or double down.",
   3: "Hit or stand.",
   4: "Dealer is playing",
-  5: "Dealer busts! You win ${}!",
+  5: "Dealer busts! You win {}!",
   6: "You won!",
   7: "It's a tie, the bet is returned to you.",
-  8: "You lost ${}!"
+  8: "You lost {}!",
+  9: "You're broke!"
 }
 
 def main():
   global lock
-  lock = threading.Lock()
+
+  lock = Lock()
 
   newGame()
   initSVGCards()
@@ -46,6 +49,7 @@ def newGame():
 
 def initSVGCards():
   global SVG_DEFS, SVG_CARDS
+
   ElementTree.register_namespace('','http://www.w3.org/2000/svg')
   ElementTree.register_namespace('xlink','http://www.w3.org/1999/xlink')
   tree = ElementTree.parse("./cards.svg")
@@ -57,16 +61,6 @@ def initSVGCards():
   ]
 
 
-def getSVGCard(indice):
-  return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" height="243.137" width="167.575" viewBox="-.2 -236 167.575 243.137">' + SVG_CARDS[indice] + '</svg>'
-
-
-def getDeck():
-  deck = list(range(52))
-  random.shuffle(deck)
-  return deck
-
-
 def newTurn():
   global deck, playerHand, dealerHand, bet
 
@@ -76,40 +70,45 @@ def newTurn():
   bet = 0   
 
 
+def getDeck():
+  deck = list(range(52))
+  random.shuffle(deck)
+  return deck
+
+
+def getSVGCard(indice):
+  return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" height="243.137" width="167.575" viewBox="-.2 -236 167.575 243.137">' + SVG_CARDS[indice] + '</svg>'
+
+
 def getHandValue(cards):
-    """Returns the value of the cards. Face cards are worth 10, aces are
-    worth 11 or 1 (this function picks the most suitable ace value)."""
-    value = 0
-    numberOfAces = 0
+  """Returns the value of the cards. Face cards are worth 10, aces are
+  worth 11 or 1 (this function picks the most suitable ace value)."""
+  value = 0
+  numberOfAces = 0
 
-    # Add the value for the non-ace cards:
-    for card in cards:
-        rank = 1 + card % 13
-        if rank == 1:
-            numberOfAces += 1
-        elif rank in (11, 12, 13):  # Face cards are worth 10 points.
-            value += 10
-        else:
-            value += rank  # Numbered cards are worth their number.
+  # Add the value for the non-ace cards:
+  for card in cards:
+    rank = 1 + card % 13
+    if rank == 1:
+      numberOfAces += 1
+    elif rank in (11, 12, 13):  # Face cards are worth 10 points.
+      value += 10
+    else:
+      value += rank  # Numbered cards are worth their number.
 
-    # Add the value for the aces:
-    value += numberOfAces  # Add 1 per ace.
-    for i in range(numberOfAces):
-        # If another 10 can be added without busting, do so:
-        if value + 10 <= 21:
-            value += 10
+  # Add the value for the aces:
+  value += numberOfAces  # Add 1 per ace.
+  for _ in range(numberOfAces):
+    # If another 10 can be added without busting, do so:
+    if value <= 11:
+      value += 10
 
-    return value
+  return value
 
 
-def displayCards(dom, id, cards):
-    """Display all the cards in the cards list."""
-    html = ""
-
-    for card in reversed(cards):
-      html += getSVGCard(card)
-
-    dom.inner(id, html)
+def getSVGCards(cards):
+  """Display all the cards in the cards list."""
+  return "".join(getSVGCard(card) for card in reversed(cards))
 
 
 def notify(dom, text, id="hint"):
@@ -117,9 +116,14 @@ def notify(dom, text, id="hint"):
   dom.inner(id, '<output class="fade-in">{}</output>'.format(text))
 
 
-def testAction(dom, action, dealerHand, playerHand, bet):
+def testAction(dom, action, playerHand, bet):
+  """ Tests if an action is allowed and displays a message if not."""
+  """ See 'ac…' functions for the meanong of 'action'."""
   playerHandSize = len(playerHand)
   
+  if money <= 0 and action != 'R':
+    notify(dom,"You're broke! Hit 'Resume' for a new game!")
+    return False;
   if bet <= 0 and playerHandSize >= 2:
     if action != 'R':
       notify(dom, "Hit resume for another turn!")
@@ -142,34 +146,16 @@ def testAction(dom, action, dealerHand, playerHand, bet):
   return True
 
 
-def dealerTurn(dealerHand, playerHand):
-  while getHandValue(dealerHand) < 17:
-    atlastk.broadcast_action("RefreshDisplay", '4')
-    time.sleep(1)
-    dealerHand.append(deck.pop())
-    atlastk.broadcast_action("RefreshDisplay", 'D0')
+def displayHand(dom, host, hand, show):
+  dom.setContent("{}_hand_value".format(host), getHandValue(hand) if show else "???")
+  dom.inner("{}_cards".format(host), getSVGCards(hand if show else [54] + hand[1:]))
 
-  time.sleep(1)
 
-  playerHandValue = getHandValue(playerHand)
-  dealerHandValue = getHandValue(dealerHand)
+def letDealerPlay():
+  global lockId
 
-  if dealerHandValue > 21:
-    notification = 5
-    status = 1
-  elif dealerHandValue < playerHandValue:
-    notification = 6
-    status = 1
-  elif dealerHandValue == playerHandValue:
-    notification = 7
-    status = 0
-  else:
-    notification = 8
-    status = -1
-
-  atlastk.broadcast_action("RefreshDisplay", "D{}".format(notification))
-
-  return status
+  lockId = str(uuid.uuid4())
+  atlastk.broadcast_action("DealerMove", lockId)
 
 
 def acConnect(dom):
@@ -186,14 +172,7 @@ def acConnect(dom):
     notify(dom, "Waiting your bet.")
 
 
-def displayHand(dom, host, hand, show):
-  dom.setContent("{}_hand_value".format(host), getHandValue(hand) if show else "???")
-  displayCards(dom, "{}_cards".format(host), hand if show else [54] + hand[1:])
-
-
 def acRefreshDisplay(dom, id):
-  print(id, bet)
-
   notification = int(id[-1])
 
   if notification != 0:
@@ -212,10 +191,44 @@ def acRefreshDisplay(dom, id):
     notify(dom, bet, "bet")
 
 
+def acDealerMove(dom, id):
+  global lockId, dealerHand, money, bet
+
+  displayHand(dom, 'dealer', dealerHand, True)
+  notify(dom, "Dealer plays.")
+
+  with lock:
+    chosenOne = id == lockId
+    if chosenOne:
+      lockId = str(uuid.uuid4())
+
+  if chosenOne:
+    notification = 0
+    dealerHandValue = getHandValue(dealerHand)
+    playerHandValue = getHandValue(playerHand)
+    
+    if dealerHandValue > 21:
+      money += bet
+      notification = 5
+    elif dealerHandValue > playerHandValue:
+      money -= bet
+      notification = 8 if money > 0 else 9
+    elif dealerHandValue == playerHandValue and dealerHandValue>= 17:
+        notification = 7
+
+    if notification:
+      bet = -bet # To report end of turn.
+      atlastk.broadcast_action("RefreshDisplay", "M{}".format(notification))
+    else:
+      dealerHand.append(deck.pop())
+      time.sleep(1)
+      atlastk.broadcast_action("DealerMove", lockId)
+
+
 def acAdd(dom, id):
   global money, bet
 
-  if not testAction(dom, '+', dealerHand, playerHand, bet):
+  if not testAction(dom, '+', playerHand, bet):
     return
 
   value = int(dom.get_mark(id))
@@ -226,13 +239,14 @@ def acAdd(dom, id):
 
   bet += value
 
-  atlastk.broadcast_action("RefreshDisplay", 'B1')
+  notify(dom, "Bet raised by {} to {}.".format(value, bet))
+  atlastk.broadcast_action("RefreshDisplay", 'B0')
 
 
 def acSub(dom, id):
   global money, bet
 
-  if not testAction(dom, '-', dealerHand, playerHand, bet):
+  if not testAction(dom, '-', playerHand, bet):
     return
 
   value = int(dom.get_mark(id))
@@ -243,13 +257,14 @@ def acSub(dom, id):
 
   bet -= value
 
-  atlastk.broadcast_action("RefreshDisplay", 'B1')
+  notify(dom, "Bet down by {} to {}.".format(value, bet))
+  atlastk.broadcast_action("RefreshDisplay", 'B0')
 
 
 def acBet(dom):
   global dealerHand, playerHand
 
-  if not testAction(dom, 'B', dealerHand, playerHand, bet):
+  if not testAction(dom, 'B', playerHand, bet):
     return
 
   dealerHand = [deck.pop(), deck.pop()]
@@ -259,44 +274,44 @@ def acBet(dom):
 
 
 def acHit(dom):
-  global money, bet, lockId
+  global money, bet
 
-  if not testAction(dom, 'H', dealerHand, playerHand, bet):
+  if not testAction(dom, 'H', playerHand, bet):
     return
 
   playerHand.append(deck.pop())
 
   handValue = getHandValue(playerHand)
 
-  if handValue > 21:
-    money -= bet
-    bet = -bet
-    notification = 8
-  elif handValue < 21:
-    notification = 3
-  else:
-    lockId = str(uuid.uuid4())
+  if handValue == 21:
     atlastk.broadcast_action("RefreshDisplay", 'P0')
-    atlastk.broadcast_action("DealerMove", lockId)
-    return
+    letDealerPlay()
+  else:
+    view = "P"
+    if handValue > 21:
+      money -= bet
+      bet = -bet
+      notification = 8 if money > 0 else 9
+      view += "M"
+    else: # handValue < 21
+      notification = 3
 
-  atlastk.broadcast_action("RefreshDisplay", 'P{}'.format(notification))
+    atlastk.broadcast_action("RefreshDisplay", '{}{}'.format(view, notification))
 
 
 def acStand(dom):
-  global money, bet, lockId
+  global money, bet
 
-  if not testAction(dom, 'S', dealerHand, playerHand, bet):
+  if not testAction(dom, 'S', playerHand, bet):
     return
 
-  lockId = str(uuid.uuid4())
-  atlastk.broadcast_action("DealerMove", lockId)
+  letDealerPlay()
 
 
 def acDoubleDown(dom):
-  global money, bet, playerHand, lockId
+  global money, bet, playerHand
 
-  if not testAction(dom, 'D', dealerHand, playerHand, bet):
+  if not testAction(dom, 'D', playerHand, bet):
     return
 
   value = min(bet, money - bet)
@@ -308,64 +323,37 @@ def acDoubleDown(dom):
   bet += value
 
   playerHand.append(deck.pop())
-  atlastk.broadcast_action("RefreshDisplay", 'BP0')
 
-  lockId = str(uuid.uuid4())
-  atlastk.broadcast_action("DealerMove", lockId)
-
-
-def acDealerMove(dom, id):
-  global lockId, dealerHand, money, bet
-  chosenOne = False
-
-  displayHand(dom, 'dealer', dealerHand, True)
-  notify(dom, "Dealer plays.")
-
-  with lock:
-    chosenOne = id == lockId
-    if chosenOne:
-      lockId = str(uuid.uuid4())
-
-  if chosenOne:
-    dealerHandValue = getHandValue(dealerHand)
-    playerHandValue = getHandValue(playerHand)
-    
-    if dealerHandValue < playerHandValue or ( dealerHandValue == playerHandValue and dealerHandValue < 17 ):
-      dealerHand.append(deck.pop())
-      time.sleep(1)
-      atlastk.broadcast_action("DealerMove", lockId)
-    else:
-      if dealerHandValue > 21:
-        notification = 5
-        money += bet
-      elif dealerHandValue == playerHandValue:
-        notification = 7
-      else:
-        notification = 8
-        money -= bet
-      bet = -bet # To report end of turn.
-
-      atlastk.broadcast_action("RefreshDisplay", "M{}".format(notification))
+  if getHandValue(playerHand) > 21:
+    money -= bet
+    bet = -bet
+    atlastk.broadcast_action("RefreshDisplay", 'MBP{}'.format(8 if money >= 0 else 9))
+  else:
+    atlastk.broadcast_action("RefreshDisplay", 'BP1')
+    letDealerPlay()
 
 
 def acResume(dom):
-  if not testAction(dom, 'R', dealerHand, playerHand, bet):
+  if not testAction(dom, 'R', playerHand, bet):
     return
 
-  newTurn()
-  atlastk.broadcast_action("RefreshDisplay", 'dpB1')
+  if money > 0:
+    newTurn()
+  else:
+    newGame()
+  atlastk.broadcast_action("RefreshDisplay", 'dpMB1')
 
 
 CALLBACKS = {
   "": acConnect,
   "RefreshDisplay": acRefreshDisplay,
+  "DealerMove": acDealerMove,
   "+": acAdd,
   "-": acSub,
   "Bet": acBet,
   "Hit": acHit,
   "Stand": acStand,
   "DoubleDown": acDoubleDown,
-  "DealerMove": acDealerMove,
   "Resume": acResume
 }
 
@@ -385,18 +373,35 @@ CHIPS = """
   <span>
     <fieldset>
       <legend>Money</legend>
-      <span id="money">5000</span>
+      <span id="money"></span>
     </fieldset>
     <fieldset>
       <legend>Bet</legend>
-      <span id="bet">500</span>
+      <span id="bet"></span>
     </fieldset>
   </span>
 </div>
 """
 
 BODY = """
-<fieldset>
+<details>
+  <summary style="cursor: pointer;">About</summary>
+  <fieldset style="width: 300px; background: aliceblue; position: absolute;">
+Blackjack, by Al Sweigart
+<a href="mailto:al@inventwithpython.com">al@inventwithpython.com</a><br/>
+GUI by Claude SIMON
+<a href="http://q37.info/contact">http://q37.info/contact</a><hr/>
+Try to get as close to 21 without going over.<br/>
+Kings, Queens, and Jacks are worth 10 points.
+Aces are worth 1 or 11 points.
+Cards 2 through 10 are worth their face value.<br/>
+Hit to take another card.
+Stand to stop taking cards.
+On your first play, you can Double down to increase your bet
+but must hit exactly one more time before standing.<br/>
+In case of a tie, the bet is returned to the player.
+</fieldset>
+</details><fieldset>
   <div style="display: flex; justify-content: space-around; padding-bottom: 10px;">
     <button xdh:onevent="Bet">Bet</button>
     <button xdh:onevent="Hit">Hit</button>
@@ -429,16 +434,11 @@ BODY = """
 HEAD = """
 <style>
   @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
+    0% {opacity: 0;}
+    100% {opacity: 1;}
   }
   .fade-in {
-    animation-name: fadeIn;
-    animation-duration: 1s;
+    animation: fadeIn 1s;
   }
   #dealer_cards, #player_cards {
     display: flex;

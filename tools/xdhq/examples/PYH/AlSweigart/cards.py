@@ -29,11 +29,11 @@ def getSVGCard(indice):
 
 def acConnect(dom):
   dom.inner("", '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="0" height="0">' + SVG_DEFS + '</svg>' + BODY)
-  dom.setContent("card_1", len(SVG_CARDS))
+  dom.setContent("card_54", len(SVG_CARDS))
   for i in range(55):
-    dom.inner("card_{}".format(i), getCardHTML(i) )
+    dom.inner("card_{}".format(i), getSVGCard(i) )
     dom.scroll_to("card_{}".format(i))
-  print("END!!!")
+    dom.flush()
 
 
 CALLBACKS = {
@@ -42,23 +42,16 @@ CALLBACKS = {
 
 BODY = """
 <fieldset>
+""" + ( 4 * ( """
   <fieldset style="display: flex;">
-""" + ( 13 * '<fieldset id="card_{}">yoyo</fieldset>' ).format(*range(13)) + """
+""" + ( 13 * '<fieldset id="card_{}"></fieldset>' ) + """
   </fieldset>
+""" ) + """
   <fieldset style="display: flex;">
-""" + ( 13 * '<fieldset id="card_{}">yoyo</fieldset>' ).format(*range(13, 26)) + """
-  </fieldset>
-  <fieldset style="display: flex;">
-""" + ( 13 * '<fieldset id="card_{}">yoyo</fieldset>' ).format(*range(26, 39)) + """
-  </fieldset>
-  <fieldset style="display: flex;">
-""" + ( 13 * '<fieldset id="card_{}">yoyo</fieldset>' ).format(*range(39, 52)) + """
-  </fieldset>
-  <fieldset style="display: flex;">
-""" + ( 3 * '<fieldset id="card_{}">yoyo</fieldset>' ).format(*range(52, 55)) + """
+""" + ( 3 * '<fieldset id="card_{}"></fieldset>' ) + """
   </fieldset>
 </fieldset>
-"""
+""" ).format(*range(55))
 
 HEAD = """
 <style>
