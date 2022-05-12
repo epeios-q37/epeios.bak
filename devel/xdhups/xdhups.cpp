@@ -200,7 +200,7 @@ namespace {
 					str::dString &Script )
 				{
 				qRH
-					str::strings Tags, TagValues;
+					str::wStrings Tags, TagValues;
 					sdr::sRow Row = qNIL;
 				qRB
 					if ( TagList.Amount() != RawTagValues.Amount())

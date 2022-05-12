@@ -11,6 +11,12 @@
 - [trvl]: trivial modifications;
 - [warn]: fixing compiler warning messages;
 
+## 2022-05-12
+- XDHCMN: introducing new HTML's head section handling,
+
+## 2022-05-11
+- XDHUPS: [adpt],
+
 ## 2022-04-24
 - CDGB64: [stdz],
 

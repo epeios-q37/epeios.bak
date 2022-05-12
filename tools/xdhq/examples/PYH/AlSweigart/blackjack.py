@@ -5,6 +5,8 @@ splitting or insurance.)
 Original code is available at https://nostarch.com/big-book-small-python-programming
 Tags: large, game, card game"""
 
+
+import contextlib
 # The 'atlastk' module will be imported from the provided
 # 'atlastk.zip' archive, to avoid having to install it.  
 __import__("sys").path.append("./atlastk.zip")
@@ -15,7 +17,9 @@ import random, time, uuid, builtins
 from xml.etree import ElementTree
 from threading import Lock 
 
-__import__("builtins").open = atlastk.defaultBuiltinsFunction
+# Don't bother; developper's stuff.
+with contextlib.suppress(AttributeError):
+  __import__("builtins").open = atlastk.defaultBuiltinsFunction
 
 NOTIFICATIONS = {
   # '0' to report no notification to display.
@@ -53,11 +57,11 @@ def initSVGCards():
   ElementTree.register_namespace('','http://www.w3.org/2000/svg')
   ElementTree.register_namespace('xlink','http://www.w3.org/1999/xlink')
   tree = ElementTree.parse("./cards.svg")
-  rootChildren = tree.getroot().getchildren()
+  rootChildren = list(tree.getroot())
   SVG_DEFS = ElementTree.tostring(rootChildren[0],encoding="unicode")
   SVG_CARDS = [
       ElementTree.tostring(child, encoding="unicode")
-      for child in rootChildren[1].getchildren()
+      for child in list(rootChildren[1])
   ]
 
 
@@ -119,6 +123,7 @@ def notify(dom, text, id="hint"):
 def testAction(dom, action, playerHand, bet):
   """ Tests if an action is allowed and displays a message if not."""
   """ See 'ac…' functions for the meanong of 'action'."""
+  """ if 'bet' > 0, the trun is over. """
   playerHandSize = len(playerHand)
   
   if money <= 0 and action != 'R':
@@ -126,7 +131,7 @@ def testAction(dom, action, playerHand, bet):
     return False;
   if bet <= 0 and playerHandSize >= 2:
     if action != 'R':
-      notify(dom, "Hit resume for another turn!")
+      notify(dom, "Hit 'Resume' for another turn!")
       return False
   elif playerHandSize > 2:
     if action not in ['H', 'S']:
@@ -152,10 +157,10 @@ def displayHand(dom, host, hand, show):
 
 
 def letDealerPlay():
-  global lockId
+  global leaderId
 
-  lockId = str(uuid.uuid4())
-  atlastk.broadcast_action("DealerMove", lockId)
+  leaderId = str(uuid.uuid4())
+  atlastk.broadcast_action("DealerMove", leaderId)
 
 
 def acConnect(dom):
@@ -188,21 +193,21 @@ def acRefreshDisplay(dom, id):
     notify(dom, money, "money")
 
   if 'B' in id:
-    notify(dom, bet, "bet")
+    notify(dom, abs(bet), "bet")
 
 
 def acDealerMove(dom, id):
-  global lockId, dealerHand, money, bet
+  global leaderId, dealerHand, money, bet
 
   displayHand(dom, 'dealer', dealerHand, True)
   notify(dom, "Dealer plays.")
 
   with lock:
-    chosenOne = id == lockId
-    if chosenOne:
-      lockId = str(uuid.uuid4())
+    leader = id == leaderId
+    if leader:
+      leaderId = str(uuid.uuid4())
 
-  if chosenOne:
+  if leader:
     notification = 0
     dealerHandValue = getHandValue(dealerHand)
     playerHandValue = getHandValue(playerHand)
@@ -222,7 +227,7 @@ def acDealerMove(dom, id):
     else:
       dealerHand.append(deck.pop())
       time.sleep(1)
-      atlastk.broadcast_action("DealerMove", lockId)
+      atlastk.broadcast_action("DealerMove", leaderId)
 
 
 def acAdd(dom, id):
@@ -271,6 +276,9 @@ def acBet(dom):
   playerHand = [deck.pop(), deck.pop()]
 
   atlastk.broadcast_action("RefreshDisplay", 'dP2')
+
+  if getHandValue(playerHand) == 21:
+    letDealerPlay()  
 
 
 def acHit(dom):
@@ -344,6 +352,11 @@ def acResume(dom):
   atlastk.broadcast_action("RefreshDisplay", 'dpMB1')
 
 
+def acNew(dom):
+  newGame()
+  atlastk.broadcast_action("RefreshDisplay", 'dpMB1')
+
+
 CALLBACKS = {
   "": acConnect,
   "RefreshDisplay": acRefreshDisplay,
@@ -354,7 +367,8 @@ CALLBACKS = {
   "Hit": acHit,
   "Stand": acStand,
   "DoubleDown": acDoubleDown,
-  "Resume": acResume
+  "Resume": acResume,
+  "New": acNew
 }
 
 CHIP_VALUES = [1, 5, 10, 50, 100, 500]
@@ -400,8 +414,9 @@ Stand to stop taking cards.
 On your first play, you can Double down to increase your bet
 but must hit exactly one more time before standing.<br/>
 In case of a tie, the bet is returned to the player.
-</fieldset>
-</details><fieldset>
+  </fieldset>
+</details>
+<fieldset>
   <div style="display: flex; justify-content: space-around; padding-bottom: 10px;">
     <button xdh:onevent="Bet">Bet</button>
     <button xdh:onevent="Hit">Hit</button>
@@ -427,7 +442,8 @@ In case of a tie, the bet is returned to the player.
       </legend>
       <span id="player_cards"/>
     </fieldset>
-  </fieldset>
+  </span>
+  <button style="display: flex;	margin: 5px auto 0px;" xdh:onevent="New">New game</button>
 </fieldset>
 """
 

@@ -49,6 +49,7 @@ namespace xdhcmn {
 		namespace upstream {
 			qCDEF( sId, CreationId, -2 );
 			qCDEF( sId, ClosingId, -3 );
+			qCDEF( sId, HeadRetrievingId, -3 );
 		}
 
 		namespace downstream {

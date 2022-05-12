@@ -12,14 +12,15 @@ def main():
 
 def initSVGCards():
   global SVG_DEFS, SVG_CARDS
+
   ElementTree.register_namespace('','http://www.w3.org/2000/svg')
   ElementTree.register_namespace('xlink','http://www.w3.org/1999/xlink')
   tree = ElementTree.parse("./cards.svg")
-  rootChildren = tree.getroot().getchildren()
+  rootChildren = list(tree.getroot())
   SVG_DEFS = ElementTree.tostring(rootChildren[0],encoding="unicode")
   SVG_CARDS = [
       ElementTree.tostring(child, encoding="unicode")
-      for child in rootChildren[1].getchildren()
+      for child in list(rootChildren[1])
   ]
 
 

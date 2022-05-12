@@ -39,8 +39,10 @@ using namespace faaspool;
 #include <time.h>
 
 namespace {
-	qCDEF( char *, ProtocolId_, "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf" );
-	qCDEF( csdcmn::sVersion, LastVersion_, 0 );
+  namespace protocol_ {
+    qCDEF( char *, Id, "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf" );
+    qCDEF( csdcmn::sVersion, LastVersion, 0 );
+  }
 
 	namespace registry_ {
 		namespace parameter {
@@ -256,6 +258,10 @@ namespace faaspool {
 		{
 			reset();
 
+			if ( ( ProtocolVersion > 1 ) && Head.Amount() ) // With protocol > 1, 'Head' is no more stored,
+                                                      // but retrieved pn each new browser connection.
+        qRGnr();
+
 			Mutex_ = mtx::Create();
 			PendingDismiss_ = false;
 			Blocker_.Init();
@@ -448,7 +454,7 @@ namespace faaspool {
 		return Backend;
 	}
 
-	bso::sBool TUGetHead_(
+	bso::sBool TUGetCachedHead_(  // Old behavior.
 		const str::dString &Token,
 		str::dString &Head )
 	{
@@ -461,7 +467,8 @@ namespace faaspool {
 			return false;
 	}
 
-	bso::sBool TSGetHead_(
+	// Don't forget to lock the returned backend using 'Access' member!
+	bso::sBool TSGetCachedHead_(
 		const str::dString &Token,
 		str::dString &Head )
 	{
@@ -471,7 +478,7 @@ namespace faaspool {
 	qRB;
 		Mutex.InitAndLock( Mutex_ );
 
-		Found = TUGetHead_( Token, Head );
+		Found = TUGetCachedHead_( Token, Head );
 	qRR;
 	qRT;
 	qRE;
@@ -655,13 +662,13 @@ namespace {
     fdr::rRWDriver &Driver,
     str::dString &Flavour )
 	{
-	  csdcmn::sVersion Version = csdcmn::UnknownVersion;
+	  csdcmn::sVersion ProtocolVersion = csdcmn::UnknownVersion;
 	qRH;
 		flw::rDressedRWFlow<> Flow;
 	qRB;
 		Flow.Init( Driver );
 
-		switch ( Version = csdcmn::GetProtocolVersion( ProtocolId_, LastVersion_, Flow ) ) {
+		switch ( ProtocolVersion = csdcmn::GetProtocolVersion(protocol_::Id, protocol_::LastVersion, Flow) ) {
 		case csdcmn::UnknownVersion:
 			Put_( "\nUnknown FaaS protocol version!\n", Flow );
 			Flow.Commit();
@@ -673,7 +680,7 @@ namespace {
 			qRGnr();
 			break;
 		default:
-		  if ( Version > LastVersion_ )
+		  if ( ProtocolVersion > protocol_::LastVersion )
         qRUnx();
       Get_(Flow, Flavour);
 			Put_( "", Flow );
@@ -685,7 +692,7 @@ namespace {
 	qRR;
 	qRT;
 	qRE;
-    return Version;
+    return ProtocolVersion;
 	}
 
 	const str::dString &BuildURL_(
@@ -755,7 +762,8 @@ namespace {
 		switch ( Status = token_::GetPlugin().Handle(Token) ) {
 		case plugins::sOK:
 			tol::Init(Head, Address, Misc);
-			Get_(Flow, Head);
+			if ( ProtocolVersion < 1 )
+        Get_(Flow, Head);
 			Get_(Flow, Address);    // Address to which the toolkit has connected.
 			Get_(Flow, Misc);
 
@@ -1078,6 +1086,42 @@ qRE;
 	return Row;	// 'qNIL' report an error, as in 'FaaS' mode, the token can not be empty.
 }
 
+namespace {
+  bso::sBool RetrieveHeadRemotely_(
+    const str::dString &Token,
+    str::dString &Head,
+    csdcmn::sVersion &ProtocolVersion)
+  {
+    bso::sBool Success = false;
+  qRH;
+    mtx::rHandle Mutex;
+    flw::rDressedRWFlow<> Flow;
+    rBackend_ *Backend = NULL;
+  qRB;
+    Backend = TSGetBackend_( Token );
+
+    if ( Backend != NULL ) {
+      Mutex.InitAndLock(Backend->Access);
+
+      ProtocolVersion = Backend->ProtocolVersion;
+
+      if ( ProtocolVersion >= 1 ) {
+        Flow.Init(*Backend->Driver);
+        PutId(upstream::HeadRetrievingId, Flow);	// To signal to the back-end a new connection.
+        Flow.Commit();
+        Get_(Flow, Head);	// The id of the new front-end.
+        Flow.Dismiss();
+
+        Success = true;
+      }
+    }
+  qRR;
+  qRT;
+  qRE;
+    return Success;
+  }
+}
+
 void faaspool::rRWDriver::Release_(void)
 {
 qRH
@@ -1101,7 +1145,15 @@ bso::sBool faaspool::GetHead(
     const str::dString &Token,
     str::dString &Head )
 {
-    return TSGetHead_(Token,Head);	// 'UP' contains the token.
+  csdcmn::sVersion ProtocolVersion = csdcmn::UnknownVersion;
+
+  if ( !RetrieveHeadRemotely_(Token, Head, ProtocolVersion) )
+    if ( ProtocolVersion < 1 )  // Falling back to old behavior
+      return TSGetCachedHead_(Token,Head);
+    else
+      return false;
+  else
+    return true;
 }
 
 qGCTOR(faaspool)

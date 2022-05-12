@@ -8,6 +8,7 @@ if not "REPL_SLUG" in os.environ:
   sys.exit()
 
 PROGRAMS = [
+  "Blackjack",
   "Flooder",
   "Four in a Row",
   "Mancala"

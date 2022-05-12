@@ -4,6 +4,8 @@ The *Atlas* toolkit is particularly well suited for educational purposes, to wri
 
 There is also a stub to for this library at address <https://q37.info/s/zzcn3wnx>.
 
+> You will also find programs from [*The Big Book of Small Python Projects*](https://inventwithpython.com/bigbookpython/) by [Al Sweigart](http://alsweigart.com) to which a graphical user interface using the *Atlas* toolkit were added in this repository: [epeios-q37/AlSweigartTheBigBookPython](https://q37.info/s/kd3bwchj).
+
 ## Content of the repository
 
 The `atlastk` directory contains the *Python* source code of the *Atlas* toolkit, which is the directory you have to reference in `PYTHONPATH` in order to use the *Atlas* toolkit in your own program, unless you have installed the [*atlastk* package](http://q37.info/s/9srmskcm) with `pip install atlastk`.
@@ -31,7 +33,7 @@ You can also directly launch, from within the `examples` directory, `python <Nam
 
 The *Stars* application is an example where the *Atlas* *toolkit* is used to control a [*Pygame*](https://en.wikipedia.org/wiki/Pygame) based application. Of course, *Pygame* needs to be installed.
 
-The `tutorials` directory contains some [*Jupyter* notebooks](https://en.wikipedia.org/wiki/Project_Jupyter#Jupyter_Notebook) about  the *Atlas* *toolkit*. 
+The `tutorials` directory contains some [*Jupyter* notebooks](https://en.wikipedia.org/wiki/Project_Jupyter#Jupyter_Notebook) about  the *Atlas* *toolkit*.
 
 ## *Raspberry Pi*/*ODROID-C2*
 
