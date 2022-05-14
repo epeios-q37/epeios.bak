@@ -299,7 +299,7 @@ More info at <a href="https://en.wikipedia.org/wiki/Mancala">https://en.wikipedi
     </fieldset>
   </fieldset>
   <fieldset id="output"></fieldset>
-  <button style="display: flex;	margin: 5px auto 0px;" xdh:onevent="New">New game</button>
+  <button style="display: flex; margin: 5px auto 0px;" xdh:onevent="New">New game</button>
 </fieldset>
 """
 

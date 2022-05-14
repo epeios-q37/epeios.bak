@@ -29,6 +29,11 @@ using namespace xdhups;
 
 extern "C" typedef xdhcdc::retrieve retrieve;
 
+namespace {
+  // In scripts definitions, tags beginning with this character are NOT normalized, but put as is!
+  qCDEF(char, RawTagValueMarker_, '_'); // Tag with name
+}
+
 // Special primitives, for internal use,
 // which are not directly launched by the user.
 namespace sp_ {	// Special Script
@@ -186,19 +191,20 @@ namespace {
 						if ( !Name.Amount() )
 							qRFwk();
 
-						if ( Name(Name.First()) == '#')
+						if ( Name(Name.First()) == RawTagValueMarker_ )
 							AppendRawTag_(Name, Value, Names, Values );
 						else
 							AppendEscapedTag_(Name, Value, Names, Values );
 					}
 				}
 
-				void SubstituteTags_(
+				bso::sBool SubstituteTags_(
 					const str::string_ &TaggedScript,	// Script with tags. When returning, tags are substitued.
 					const str::dStrings &TagList,
 					const str::dStrings &RawTagValues,
 					str::dString &Script )
 				{
+				  bso::sBool Success = false;
 				qRH
 					str::wStrings Tags, TagValues;
 					sdr::sRow Row = qNIL;
@@ -217,18 +223,20 @@ namespace {
 						Row = TagList.Next(Row);
 					}
 
-					tagsbs::SubstituteLongTags(TaggedScript, Tags, TagValues, Script);
+					Success = tagsbs::SubstituteLongTags(TaggedScript, Tags, TagValues, Script);
 				qRR
 				qRT
 				qRE
+          return Success;
 				}
 			}
 
-			template <typename type> void GetScript_(
+			template <typename type> bso::sBool GetScript_(
 				const type &Name,
 				const str::dStrings &TagValues,
 				str::string_ &Script)
 			{
+			  bso::sBool Success = false;
 			qRH
 				str::string TaggedScript;
 				str::wStrings TagList;
@@ -239,10 +247,11 @@ namespace {
 				TagList.Init();
 				GetScriptTags_(Name, TagList);
 
-				SubstituteTags_(TaggedScript, TagList, TagValues, Script);
+				Success = SubstituteTags_(TaggedScript, TagList, TagValues, Script);
 			qRR
 			qRT
 			qRE
+        return Success;
 			}
 		}
 
@@ -260,9 +269,8 @@ namespace {
 		qRB
 			Script.Init();
 
-			GetScript_(Primitive, TagValues, Script);
-
-			Success = Engine.Process(Script, Blocker, SuccessPointer, ReturnValue );
+			if ( GetScript_(Primitive, TagValues, Script) )
+        Success = Engine.Process(Script, Blocker, SuccessPointer, ReturnValue );
 		qRR
 		qRT
 		qRE

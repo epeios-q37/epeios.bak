@@ -123,7 +123,7 @@ def notify(dom, text, id="hint"):
 def testAction(dom, action, playerHand, bet):
   """ Tests if an action is allowed and displays a message if not."""
   """ See 'ac…' functions for the meanong of 'action'."""
-  """ if 'bet' > 0, the trun is over. """
+  """ if 'bet' < 0, the turn is over. """
   playerHandSize = len(playerHand)
   
   if money <= 0 and action != 'R':
@@ -443,7 +443,7 @@ In case of a tie, the bet is returned to the player.
       <span id="player_cards"/>
     </fieldset>
   </span>
-  <button style="display: flex;	margin: 5px auto 0px;" xdh:onevent="New">New game</button>
+  <button style="display: flex; margin: 5px auto 0px;" xdh:onevent="New">New game</button>
 </fieldset>
 """
 

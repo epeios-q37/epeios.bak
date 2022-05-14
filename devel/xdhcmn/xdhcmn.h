@@ -49,7 +49,7 @@ namespace xdhcmn {
 		namespace upstream {
 			qCDEF( sId, CreationId, -2 );
 			qCDEF( sId, ClosingId, -3 );
-			qCDEF( sId, HeadRetrievingId, -3 );
+			qCDEF( sId, HeadRetrievingId, -4 ); // Since FaaS protocol v1.
 		}
 
 		namespace downstream {

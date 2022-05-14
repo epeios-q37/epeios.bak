@@ -73,7 +73,7 @@ def set_supplier(supplier = None):
 	_Supplier.current = supplier
 
 _FAAS_PROTOCOL_LABEL = "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf"
-_FAAS_PROTOCOL_VERSION = "0"
+_FAAS_PROTOCOL_VERSION = "1"
 _MAIN_PROTOCOL_LABEL = "22bb5d73-924f-473f-a68a-14f41d8bfa83"
 _MAIN_PROTOCOL_VERSION = "0"
 _SCRIPTS_VERSION = "0"
@@ -81,6 +81,7 @@ _SCRIPTS_VERSION = "0"
 _FORBIDDEN_ID = -1
 _CREATION_ID = -2
 _CLOSING_ID = -3
+_HEAD_RETRIEVING_ID = -4	# Since protocol v1.
 
 _writeLock = threading.Lock()
 
@@ -249,7 +250,7 @@ def _ignition():
 	global _token, _url
 	with _writeLock:
 		writeString( _token)
-		writeString(_headContent)
+#		writeString(_headContent)	# Dedicated call from proxy since protocol v1
 		writeString(_wAddr)
 		writeString("")	# Currently not used; for future use.
 
@@ -281,6 +282,7 @@ def _serve(callback,userCallback,callbacks ):
 
 			_instances[id] = _Instance(lambda instance : callback(userCallback, callbacks, instance), id)
 		elif id == _CLOSING_ID:	# Value instructing that a session is closed.
+			l()
 			id = readSInt();
 
 			if not id in _instances:
@@ -292,6 +294,9 @@ def _serve(callback,userCallback,callbacks ):
 				_waitForInstance()
 				instance = None # Without this, instance will only be destroyed
 												# when 'instance" is set to a new instance.
+		elif id == _HEAD_RETRIEVING_ID:
+			l()
+			writeString(_headContent)
 		elif not id in _instances:
 			_report("Unknown instance of id '" + str(id) + "'!")
 			_dismiss(id)

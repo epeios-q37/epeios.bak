@@ -225,7 +225,7 @@ to make four in a row horizontally, vertically, or diagonally.
 <fieldset>
   <fieldset id="board" style="font-size: xx-large;"></fieldset>
   <fieldset id="output"></fieldset>
-  <button style="display: flex;	margin: 5px auto 0px;" xdh:onevent="New">New game</button>
+  <button style="display: flex; margin: 5px auto 0px;" xdh:onevent="New">New game</button>
 </fieldset>
 """
 

@@ -9,7 +9,14 @@
 - [rvrt]: reverting modifications;
 - [stdz]: modification to comply with current standards;
 - [trvl]: trivial modifications;
+- [typo]: typography;
 - [warn]: fixing compiler warning messages;
+
+## 2022-05-14
+- XDHCMN: [typo],
+- XDHUPS:
+  - improving error management,
+  - changing marker for raw tag values in scripts to fit with modifications in *TAGSBS*.
 
 ## 2022-05-12
 - XDHCMN: introducing new HTML's head section handling,
@@ -4239,6 +4246,7 @@
 [rvrt]:#Reverting
 [stdz]:#Standardization
 [trvl]:#Trivial
+[typo]:#Typography
 [warn]:#Warning
 
 ### Adaptation (adpt)
@@ -4268,6 +4276,10 @@ Modification to comply with current standards.
 ### Trivial (trvl)
 
 Trivial modifications.
+
+### Typography
+
+Typographical error.
 
 ### Warning (warn)
 

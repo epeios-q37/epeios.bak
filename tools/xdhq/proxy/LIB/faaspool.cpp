@@ -41,7 +41,8 @@ using namespace faaspool;
 namespace {
   namespace protocol_ {
     qCDEF( char *, Id, "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf" );
-    qCDEF( csdcmn::sVersion, LastVersion, 0 );
+    qCDEF( csdcmn::sVersion, LastVersion, 1 );
+    // Since V1: user part of the HTML head section is retrieved from backend on each new connection, and no more cached.
   }
 
 	namespace registry_ {
@@ -258,8 +259,8 @@ namespace faaspool {
 		{
 			reset();
 
-			if ( ( ProtocolVersion > 1 ) && Head.Amount() ) // With protocol > 1, 'Head' is no more stored,
-                                                      // but retrieved pn each new browser connection.
+			if ( ( ProtocolVersion > 1 ) && Head.Amount() ) // With protocol > 1, 'Head' is no more cached,
+                                                      // but retrieved on each new browser connection.
         qRGnr();
 
 			Mutex_ = mtx::Create();
