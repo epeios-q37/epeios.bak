@@ -195,7 +195,7 @@ namespace faaspool {
 		mtx::rMutex Mutex_;
 		bso::sBool PendingDismiss_;
 		// Prevents destruction of 'Driver_' until no more client use it.
-		tht::rBlocker Blocker_;
+		tht::rBlocker NoMoreClientBlocker_;
 		void InvalidAll_( void )
 		{
 			sFRow_ Row = Shareds.First();
@@ -213,12 +213,14 @@ namespace faaspool {
 		wShareds_ Shareds;
 		mtx::rMutex Access;
 		tht::rBlocker Switch;
+		tht::rBlocker HeadAccess;  // Control the access of the 'Head' member, on new behavior.
 		bso::sBool GiveUp;
 		csdcmn::sVersion ProtocolVersion;
 		str::wString
 			IP,
 			Token,
-			Head;
+			Head; // Head content cache on old behavior.
+    str::dString *HeadContent;  // New behavior.
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
@@ -236,16 +238,15 @@ namespace faaspool {
 
 			Mutex_ = mtx::Undefined;
 			PendingDismiss_ = false;
-			Blocker_.reset(P);
+			tol::reset( P, NoMoreClientBlocker_);
 			TRow = qNIL;
 			Row = qNIL;
 			Driver = NULL;
-			Shareds.reset( P );
 			Access = mtx::Undefined;
-			Switch.reset( P );
 			ProtocolVersion = csdcmn::UnknownVersion;
-			tol::reset(P, IP, Token, Head);
+			tol::reset(P, Shareds, Switch, HeadAccess, IP, Token, Head);
 			GiveUp = false;	// If at 'true', the client is deemed to be disconnected.
+			HeadContent = NULL;
 		}
 		qCDTOR( rBackend_ );
 		void Init(
@@ -265,13 +266,14 @@ namespace faaspool {
 
 			Mutex_ = mtx::Create();
 			PendingDismiss_ = false;
-			Blocker_.Init();
+			tol::Init(NoMoreClientBlocker_);
 			this->Row = Row;
 			this->TRow = TRow;
 			this->Driver = &Driver;
 			Shareds.Init();
 			Access = mtx::Create();
 			Switch.Init();
+			HeadAccess.Init();
 			this->ProtocolVersion = ProtocolVersion;
 			this->IP.Init( IP );
 			this->Token.Init(Token);
@@ -313,7 +315,7 @@ namespace faaspool {
 
 			if (PendingDismiss_)
 				if ( Shareds.Amount() == 0)
-					Blocker_.Unblock();
+					NoMoreClientBlocker_.Unblock();
 		qRR
 		qRT
 		qRE
@@ -329,7 +331,7 @@ namespace faaspool {
 			if ( Shareds.Amount() ) {
 				PendingDismiss_ = true;
 				Mutex.Unlock();
-				Blocker_.Wait();
+				NoMoreClientBlocker_.Wait();
 				Mutex.Lock();	// Otherwise 'Mutex_' could be destroyed before above 'Release' unlocks it.
 			}
 		qRR
@@ -869,7 +871,9 @@ namespace {
 		fdr::rRWDriver &Driver,
 		sRow TRow,
 		const dShareds_ &Shareds,
-		tht::rBlocker &Blocker )
+		tht::rBlocker &Blocker,
+		tht::rBlocker &HeadBlocker,
+		str::dString *&HeadContent )
 	{
 	qRH;
 		flw::rDressedRWFlow<> Flow;
@@ -909,6 +913,14 @@ namespace {
 			case downstream::BroadcastActionId:
 				BroadcastAction_(Flow, TRow);
 				break;
+      case downstream::HeadRetrievingId:
+        if ( HeadContent == NULL )
+          qRGnr();
+        if ( HeadContent->Amount() )
+          qRGnr();
+        prtcl::Get(Flow, *HeadContent);
+        HeadBlocker.Unblock();
+        break;
 			default:
 				if ( !Shareds.Exists( Id ) ) {
             Release_(Flow, Id);
@@ -959,7 +971,7 @@ namespace {
 		ProtocolVersion = Handshake_(Driver, Flavour);
 
 		if ( ( Backend = CreateBackend_(Driver, ProtocolVersion, IP, Flavour) ) != NULL ) {
-			HandleSwitching_(IP, Backend->Token, Driver, Backend->TRow, Backend->Shareds, Backend->Switch );	// Does not return until disconnection or error.
+			HandleSwitching_(IP, Backend->Token, Driver, Backend->TRow, Backend->Shareds, Backend->Switch, Backend->HeadAccess, Backend->HeadContent );	// Does not return until disconnection or error.
 		}
 	qRR;
 		sclm::ErrorDefaultHandling();	// Also resets the error, otherwise the `WaitUntilNoMoreClient()` will lead to a deadlock on next error.
@@ -1096,7 +1108,7 @@ namespace {
     bso::sBool Success = false;
   qRH;
     mtx::rHandle Mutex;
-    flw::rDressedRWFlow<> Flow;
+    flw::rDressedWFlow<> Flow;
     rBackend_ *Backend = NULL;
   qRB;
     Backend = TSGetBackend_( Token );
@@ -1104,14 +1116,19 @@ namespace {
     if ( Backend != NULL ) {
       Mutex.InitAndLock(Backend->Access);
 
+      if ( Backend->HeadContent != NULL )
+        qRGnr();
+
       ProtocolVersion = Backend->ProtocolVersion;
 
       if ( ProtocolVersion >= 1 ) {
+        Backend->HeadContent = &Head;
         Flow.Init(*Backend->Driver);
         PutId(upstream::HeadRetrievingId, Flow);	// To signal to the back-end a new connection.
         Flow.Commit();
-        Get_(Flow, Head);	// The id of the new front-end.
-        Flow.Dismiss();
+        Backend->HeadAccess.Wait();
+        Backend->HeadContent = NULL;
+        Backend->HeadAccess.Init();
 
         Success = true;
       }

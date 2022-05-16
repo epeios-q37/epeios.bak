@@ -49,12 +49,14 @@ namespace xdhcmn {
 		namespace upstream {
 			qCDEF( sId, CreationId, -2 );
 			qCDEF( sId, ClosingId, -3 );
+			// If below changed, check if value is also correct with definition in below 'downstream'.
 			qCDEF( sId, HeadRetrievingId, -4 ); // Since FaaS protocol v1.
 		}
 
 		namespace downstream {
 			qCDEF( sId, BroadcastScriptId, -2 );  // Probably obsolete!
 			qCDEF( sId, BroadcastActionId, -3 );  // Even if above removed, DON'T CHANGE VALUE!!!
+			qCDEF( sId, HeadRetrievingId, upstream::HeadRetrievingId ); // Since FaaS protocol v1.
 		}
 	}
 

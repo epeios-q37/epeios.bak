@@ -296,6 +296,7 @@ def _serve(callback,userCallback,callbacks ):
 												# when 'instance" is set to a new instance.
 		elif id == _HEAD_RETRIEVING_ID:
 			l()
+			writeSInt(_HEAD_RETRIEVING_ID)
 			writeString(_headContent)
 		elif not id in _instances:
 			_report("Unknown instance of id '" + str(id) + "'!")
