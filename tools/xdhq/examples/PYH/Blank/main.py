@@ -31,16 +31,16 @@ import atlastk
 
 def ac_connect(dom):
   dom.inner("", open("Main.html").read())
-  dom.add_class("Input","hidden")
+  dom.addClass("Input","hidden")
 
 def ac_show_input(dom):
-  dom.remove_class("Input", "hidden")
+  dom.removeClass("Input", "hidden")
   dom.focus("Pattern")
 
 callbacks = {
   "": ac_connect,
-  "Submit": lambda dom, id: dom.set_value("Pattern", dom.get_value("Pattern").upper() ),
-  "HideInput": lambda dom, id: dom.add_class("Input", "hidden"),
+  "Submit": lambda dom, id: dom.setValue("Pattern", dom.getValue("Pattern").upper() ),
+  "HideInput": lambda dom, id: dom.addClass("Input", "hidden"),
   "ShowInput": ac_show_input,
 }
 

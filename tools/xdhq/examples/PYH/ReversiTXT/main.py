@@ -195,7 +195,7 @@ def drawBoard(reversi, dom, prefetch=False):
 
   dom.inner("board", board)
 
-  dom.set_values({
+  dom.setValues({
     "black": reversi.count(BLACK),
     "white": reversi.count(WHITE)
   })

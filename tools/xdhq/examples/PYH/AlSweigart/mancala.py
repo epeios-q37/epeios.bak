@@ -59,7 +59,7 @@ def getNewBoard():
 def updateBoard(dom, board):
   """Updates the game board using the board dictionary."""
 
-  dom.set_values(board)
+  dom.setValues(board)
 
   # Check if the game ended and a player has won:
   winner = checkForWinner(gameBoard)
@@ -168,12 +168,12 @@ def acSubmit(dom, id):
 
   playerTurn = makeMove(gameBoard, playerTurn, response)
 
-  atlastk.broadcast_action("Display")      
+  atlastk.broadcastAction("Display")      
 
 
 def acNew(dom):
   newGame()
-  atlastk.broadcast_action("Display")
+  atlastk.broadcastAction("Display")
 
 
 CALLBACKS = {

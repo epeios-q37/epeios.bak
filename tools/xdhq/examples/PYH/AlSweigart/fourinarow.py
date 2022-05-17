@@ -170,12 +170,12 @@ def acSubmit(dom, id):
   elif playerTurn == PLAYER_O:
     playerTurn = PLAYER_X
 
-  atlastk.broadcast_action("Display")
+  atlastk.broadcastAction("Display")
 
 
 def acNew(dom):
   newGame()
-  atlastk.broadcast_action("Display")
+  atlastk.broadcastAction("Display")
 
 
 CALLBACKS = {

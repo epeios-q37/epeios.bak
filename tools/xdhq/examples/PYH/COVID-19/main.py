@@ -88,7 +88,7 @@ def draw_set(set,dom):
 
   dom.inner("SVG", svg)
   
-  dom.set_value("Text",set[0]["date"] + " - " + set[len(set)-1]["date"])
+  dom.setValue("Text",set[0]["date"] + " - " + set[len(set)-1]["date"])
   
 def get_relat(absol):
   relat = []
@@ -99,7 +99,7 @@ def get_relat(absol):
   return relat
 
 def draw(dom):
-  values = dom.get_values(["Code", "Cible", "Relatif"])
+  values = dom.getValues(["Code", "Cible", "Relatif"])
   
   absol = fill(data,values["Code"],values["Cible"])
   

@@ -199,25 +199,25 @@ def drawBoard(reversi, dom):
     board.pop_tag()
 
   if ( reversi.layout == TXT ):
-    dom.set_values({
+    dom.setValues({
       "blackTXT": reversi.count(BLACK),
       "whiteTXT": reversi.count(WHITE)
     })
     dom.inner("board", board, "BoardTXT.xsl")
-    dom.enable_element("styleTXT")
-    dom.disable_element("styleIMG")
-    dom.add_class("scoreIMG", "hidden")
-    dom.remove_class("scoreTXT", "hidden")
+    dom.enableElement("styleTXT")
+    dom.disableElement("styleIMG")
+    dom.addClass("scoreIMG", "hidden")
+    dom.removeClass("scoreTXT", "hidden")
   elif ( reversi.layout == IMG ):
-    dom.set_values({
+    dom.setValues({
       "blackIMG": reversi.count(BLACK),
       "whiteIMG": reversi.count(WHITE)
     })
     dom.inner("board", board, "BoardIMG.xsl")
-    dom.disable_element("styleTXT")
-    dom.enable_element("styleIMG")
-    dom.add_class("scoreTXT", "hidden")
-    dom.remove_class("scoreIMG", "hidden")
+    dom.disableElement("styleTXT")
+    dom.enableElement("styleIMG")
+    dom.addClass("scoreTXT", "hidden")
+    dom.removeClass("scoreIMG", "hidden")
 
 
 def acConnect(reversi, dom):

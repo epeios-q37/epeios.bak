@@ -175,9 +175,9 @@ def get_game_available_player(token):
 
 
 def fade(dom, element):
-  dom.remove_class(element, "fade-in")
+  dom.removeClass(element, "fade-in")
   dom.flush()
-  dom.add_class(element, "fade-in")
+  dom.addClass(element, "fade-in")
 
 
 def update_meter(dom, ab, score, turn, dice): # turn includes dice
@@ -186,23 +186,23 @@ def update_meter(dom, ab, score, turn, dice): # turn includes dice
   else:
     dom.inner(f"ScoreMeter{ab}", METER.format("score-meter", score))
 
-  dom.set_content(f"ScoreText{ab}", score)
+  dom.setValue(f"ScoreText{ab}", score)
 
 
 def disable_game_controls(dom):
-  dom.disable_elements(GAME_CONTROLS)
+  dom.disableElements(GAME_CONTROLS)
 
 
 def enable_game_controls(dom):
-  dom.enable_elements(GAME_CONTROLS)
+  dom.enableElements(GAME_CONTROLS)
 
 
 def disable_play_controls(dom):
-  dom.disable_elements(PLAY_CONTROLS)
+  dom.disableElements(PLAY_CONTROLS)
 
 
 def enable_play_controls(dom):
-  dom.enable_elements(PLAY_CONTROLS)
+  dom.enableElements(PLAY_CONTROLS)
 
 
 def get_opponent(player_ab):
@@ -218,9 +218,9 @@ def get_opponent(player_ab):
 
 def mark_player(dom, ab):
   if ab == 'B':
-    dom.disable_element("DisplayMarkerA")
+    dom.disableElement("DisplayMarkerA")
   else:
-    dom.enable_element("DisplayMarkerA")
+    dom.enableElement("DisplayMarkerA")
 
 
 def display_dice(dom, value):
@@ -267,7 +267,7 @@ def update_play_controls(dom, my_turn, winner):
 
 def display_turn(dom, element, value):
     fade(dom, element)
-    dom.set_content(element, value)
+    dom.setValue(element, value)
 
 
 def update_dice(dom, game, winner):
@@ -286,8 +286,8 @@ def report_winner(dom, player, winner):
   else:
     ab = 'B'
 
-  dom.set_content(f"ScoreMeter{ab}", "<span style='background-color: lightgreen; width: 100%;'><span class='winner'>Winner!</span></span>")
-  dom.set_content(f"ScoreText{ab}", 100)
+  dom.setValue(f"ScoreMeter{ab}", "<span style='background-color: lightgreen; width: 100%;'><span class='winner'>Winner!</span></span>")
+  dom.setValue(f"ScoreText{ab}", 100)
 
 
 def update_layout(dom, game, player):
@@ -322,7 +322,7 @@ def display(dom, game, player):
     return
 
   if game.available == 0 and player == 0:
-    dom.disable_element("PlayerView")
+    dom.disableElement("PlayerView")
 
   update_layout(dom, game, player)
 
@@ -331,7 +331,7 @@ def set_layout(dom):
   dom.inner("", open("Main.html").read())
 
   if debug():
-    dom.remove_class("debug", "removed")
+    dom.removeClass("debug", "removed")
 
 
 def ac_connect(user, dom, id):
@@ -389,7 +389,7 @@ def computer_turn(game, dom):
 
 
 def broadcast(token):
-  atlastk.broadcast_action("Display", token)
+  atlastk.broadcastAction("Display", token)
 
 
 def ac_roll(user, dom):
@@ -408,7 +408,7 @@ def ac_roll(user, dom):
   game.dice = random.randint(1, 6)
 
   if debug():
-    debug_dice = dom.get_content("debug")
+    debug_dice = dom.getValue("debug")
     if debug_dice:
       game.dice = int(debug_dice)
 
@@ -462,13 +462,13 @@ def new_between_humans(user, dom):
 
   url = atlastk.get_app_url(token)
   dom.inner("qrcode", f'<a href="{url}" title="{url}" target="_blank"><img style="margin: auto; width:100%;" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={urllib.parse.quote(url)}&bgcolor=FFB6C1"/></a>')
-  dom.disable_element("HideHHLinkSection")
+  dom.disableElement("HideHHLinkSection")
 
   return user.init(token)
 
 
 def new_against_computer(user, dom):
-  dom.enable_element("HideHHLinkSection")
+  dom.enableElement("HideHHLinkSection")
   deleted = user.init()
 
   user.get_player() ## To assign player.
@@ -478,11 +478,11 @@ def new_against_computer(user, dom):
 
 
 def ac_new(user, dom):
-  mode = dom.get_content("Mode")
+  mode = dom.getValue("Mode")
   token = user.token
 
   set_layout(dom)
-  dom.enable_element("PlayerView")
+  dom.enableElement("PlayerView")
   display_dice(dom, 0)
 
   deleted = new_against_computer(user, dom) if mode == "HC" else new_between_humans(user, dom)

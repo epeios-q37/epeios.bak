@@ -109,48 +109,48 @@ def display(dom):
   targetLabels = []
   sourceLabel = ""
   expanded = True
-  dom.disable_element("HideUnselected")
+  dom.disableElement("HideUnselected")
 
 def ac_connect(dom):
   global workbook
 
   dom.inner("", open("Main.html").read())
 
-  dom.set_value("output", "Opening workbook (may take some time)…")
-  dom.remove_class("output", "hidden")
+  dom.setValue("output", "Opening workbook (may take some time)…")
+  dom.removeClass("output", "hidden")
 
   workbook = openpyxl.load_workbook("produceSales.xlsx")
 
-  dom.set_value("output", "Scrambling…")
+  dom.setValue("output", "Scrambling…")
   scrambler.scramble(workbook)
 
-  dom.set_value("output", "Displaying…")
+  dom.setValue("output", "Displaying…")
   display(dom)
 
-  dom.set_value("output", "Done.")
-  dom.add_class("output", "hidden")
+  dom.setValue("output", "Done.")
+  dom.addClass("output", "hidden")
 
 def ac_checkbox_click(dom,id):
   global targetLabels
 
-  mark = dom.get_mark(id)
+  mark = dom.getMark(id)
 
   if mark in targetLabels:
     targetLabels.remove(mark)
   else:
     targetLabels.append(mark)
 
-  dom.toggle_class("tr.{}".format(mark),"unselected")
+  dom.toggleClass("tr.{}".format(mark),"unselected")
 
 def ac_radio_click(dom,id):
   global sourceLabel
 
   if sourceLabel:
-    dom.toggle_class("tr.{}".format(sourceLabel),"unselected")
+    dom.toggleClass("tr.{}".format(sourceLabel),"unselected")
 
-  sourceLabel = dom.get_mark(id)
+  sourceLabel = dom.getMark(id)
 
-  dom.toggle_class("tr.{}".format(sourceLabel),"unselected")
+  dom.toggleClass("tr.{}".format(sourceLabel),"unselected")
 
 def ac_collapse_expand(dom):
   global expanded
@@ -158,9 +158,9 @@ def ac_collapse_expand(dom):
   expanded = not expanded
 
   if expanded:
-    dom.disable_element("HideUnselected")
+    dom.disableElement("HideUnselected")
   else:
-    dom.enable_element("HideUnselected")
+    dom.enableElement("HideUnselected")
 
 def ac_apply(dom):
   global workbook
@@ -179,7 +179,7 @@ callbacks = {
   "": ac_connect,
   "CheckboxClick": ac_checkbox_click,
   "RadioClick": ac_radio_click,
-  "Jump": lambda dom: dom.scroll_to("sources"),
+  "Jump": lambda dom: dom.scrollTo("sources"),
   "CollapseExpand": ac_collapse_expand,
   "Apply": ac_apply
 }

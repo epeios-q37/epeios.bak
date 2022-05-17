@@ -30,10 +30,10 @@ def getSVGCard(indice):
 
 def acConnect(dom):
   dom.inner("", '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="0" height="0">' + SVG_DEFS + '</svg>' + BODY)
-  dom.setContent("card_54", len(SVG_CARDS))
+  dom.setValue("card_54", len(SVG_CARDS))
   for i in range(55):
     dom.inner("card_{}".format(i), getSVGCard(i) )
-    dom.scroll_to("card_{}".format(i))
+    dom.scrollTo("card_{}".format(i))
     dom.flush()
 
 

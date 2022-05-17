@@ -16,14 +16,14 @@ class Switch:
 
 def ac_switch(switch, dom):
   switch.value = not switch.value
-  dom.debug_log(switch.value)
-  dom.set_content("Switch", "ON" if switch.value else "OFF")
+  dom.Log(switch.value)
+  dom.setValue("Switch", "ON" if switch.value else "OFF")
 
 
 CALLBACKS = {
   "": lambda switch, dom: dom.inner("", open("Test2.html").read()),
   "Switch": ac_switch,
-  "Log": lambda switch, dom: dom.log(dom.get_content("Message"))
+  "Log": lambda switch, dom: dom.log(dom.getValue("Message"))
 }
 
 

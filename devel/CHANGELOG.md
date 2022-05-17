@@ -12,6 +12,9 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-05-17
+- XDHCMN: [cont],
+
 ## 2022-05-16
 - XDHCMN: [cont],
 

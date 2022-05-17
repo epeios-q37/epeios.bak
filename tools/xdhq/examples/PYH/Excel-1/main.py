@@ -74,22 +74,22 @@ def reading(dom):
 
   countyData = {}
 
-  dom.set_values({
+  dom.setValues({
     "output": "Initialization…",
     "table": "",
     "counties": "",
     "states": ""
   })
 
-  dom.remove_class("output", "hidden")
+  dom.removeClass("output", "hidden")
   prevCounty = ""
 
-  dom.set_value('output', 'Opening workbook...')
-  wb = openpyxl.load_workbook(dom.get_value("set"),read_only=True)
+  dom.setValue('output', 'Opening workbook...')
+  wb = openpyxl.load_workbook(dom.getValue("set"),read_only=True)
 
   sheet = wb['Population by Census Tract']
 
-  dom.set_value('output', 'Reading rows...')
+  dom.setValue('output', 'Reading rows...')
 
   limit = sheet.max_row - 1	# This takes time, so it is stored.
 
@@ -118,12 +118,12 @@ def reading(dom):
 
     if not ( index % 2500 ) or ( index == limit ):
       dom.end('table', tableLayout)
-      dom.scroll_to(dom.last_child('table'))
+      dom.scrollTo(dom.lastChild('table'))
       dom.flush()
-      dom.set_value('output', 'Reading rows {}/{}'.format(index,limit))
+      dom.setValue('output', 'Reading rows {}/{}'.format(index,limit))
       tableLayout = ""
 
-  dom.set_value('output', 'Calculating...')
+  dom.setValue('output', 'Calculating...')
   
   statesLayout = ""
   countiesLayout = ""
@@ -139,16 +139,16 @@ def reading(dom):
 
   dom.inner("states", statesLayout)
   dom.inner("counties", countiesLayout)
-  dom.set_value('output', 'Done')
-  dom.add_class("output", "hidden")
-  dom.scroll_to("states")
+  dom.setValue('output', 'Done')
+  dom.addClass("output", "hidden")
+  dom.scrollTo("states")
   
 def ac_connect(dom):
   dom.inner("", open("Main.html").read())
   reading(dom)
 
 def ac_view(dom,id):
-  dom.scroll_to(dom.get_mark(id))
+  dom.scrollTo(dom.getMark(id))
 
 callbacks = {
   "": ac_connect,

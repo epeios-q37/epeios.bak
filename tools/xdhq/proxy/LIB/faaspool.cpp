@@ -913,7 +913,7 @@ namespace {
 			case downstream::BroadcastActionId:
 				BroadcastAction_(Flow, TRow);
 				break;
-      case downstream::HeadRetrievingId:
+      case downstream::HeadSendingId:
         if ( HeadContent == NULL )
           qRGnr();
         if ( HeadContent->Amount() )

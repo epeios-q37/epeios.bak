@@ -27,7 +27,7 @@ def ac_iloop_b(dom, id):
 
 def ac_iloop_c(dom, id):
   while True:
-    dom.set_content("Output",content("SetContent(…)"))
+    dom.setValue("Output",content("SetContent(…)"))
     time.sleep(SLEEP_DELAY)
 
 CALLBACKS = {

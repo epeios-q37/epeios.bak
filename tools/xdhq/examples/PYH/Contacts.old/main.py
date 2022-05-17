@@ -70,12 +70,12 @@ current = None
 
 def displayContact(dom, contact):
   global state
-  dom.set_values(contact)
+  dom.setValues(contact)
 
   if (state == State.EDIT):
-    dom.enable_element("Contact")
+    dom.enableElement("Contact")
   elif (state == State.DISPLAY):
-    dom.disable_element("Contact")
+    dom.disableElement("Contact")
   else:
     raise Exception("Unknown state!")
 
@@ -102,7 +102,7 @@ def displayContacts(dom, contacts):
 
   dom.inner("Content", html)
 
-  dom.set_values(notes)
+  dom.setValues(notes)
 
 
 def display(dom, contacts):
@@ -110,9 +110,9 @@ def display(dom, contacts):
 
   if (len(contacts)):
     displayContacts(dom, contacts)
-    dom.remove_class("Contacts", "hidden")
+    dom.removeClass("Contacts", "hidden")
   else:
-    dom.add_class("Contacts", "hidden")
+    dom.addClass("Contacts", "hidden")
 
   if (current):
     displayContact(dom, contacts[current])
@@ -122,15 +122,15 @@ def handleButtonVisibility(dom):
   global state, current
 
   if state == State.DISPLAY:
-    dom.add_class("EditionButtons", "hidden")
-    dom.disable_element("HideConsultation")
+    dom.addClass("EditionButtons", "hidden")
+    dom.disableElement("HideConsultation")
     if current is None:
-      dom.enable_element("HideConsultationAndSelection")
+      dom.enableElement("HideConsultationAndSelection")
     else:
-      dom.disable_element("HideConsultationAndSelection")
+      dom.disableElement("HideConsultationAndSelection")
   elif State == State.EDIT:
-    dom.remove_class("EditionButtons", "hidden")
-    dom.enable_elements(("HideConsultation", "HideConsultationAndSelection"))
+    dom.removeClass("EditionButtons", "hidden")
+    dom.enableElements(("HideConsultation", "HideConsultationAndSelection"))
   else:
     raise Exception("Unknown state!")
 
@@ -162,7 +162,7 @@ def acEdit(dom):
 
 def acSubmit(dom):
   global contacts
-  [name, address, phone, note] = dom.get_values(
+  [name, address, phone, note] = dom.getValues(
     ["Name.edit", "Address.edit", "Phone.edit", "Note.edit"]).values()
 
   name = name.strip()

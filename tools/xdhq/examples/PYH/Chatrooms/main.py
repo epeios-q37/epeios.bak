@@ -120,7 +120,7 @@ def display_rooms(dom):
 def ac_connect(session,dom,id):
   if id:
     dom.inner("",open("Room.html").read())
-    dom.set_content("Name",rooms[id]["name"])
+    dom.setValue("Name",rooms[id]["name"])
     session.room = rooms[id]["core"]
     session.last_message = 0
     dom.focus("Pseudo")
@@ -133,7 +133,7 @@ def ac_connect(session,dom,id):
 def ac_create(session,dom):
   global rooms
 
-  name = dom.get_content("Name").strip()
+  name = dom.getValue("Name").strip()
 
   if not name:
     dom.alert(f"A room name can not be empty!")
@@ -144,47 +144,47 @@ def ac_create(session,dom):
     url = atlastk.get_app_url(id)
     rooms[id]={"name": name, "core": Room()}
     display_rooms(dom)
-    dom.set_content("Name", "")
+    dom.setValue("Name", "")
 
   dom.focus("Name")
 
 def ac_qrcode(session,dom,id):
-  mark = dom.get_mark(id)
+  mark = dom.getMark(id)
 
   if mark:
     url = atlastk.get_app_url(mark)
-    dom.inner(dom.last_child(id), f'<a href="{url}" title="{url}" target="_blank"><img src="https://api.qrserver.com/v1/create-qr-code/?size=125x125&data={url}"/></a>')
-    dom.set_mark(id,"")
+    dom.inner(dom.lastChild(id), f'<a href="{url}" title="{url}" target="_blank"><img src="https://api.qrserver.com/v1/create-qr-code/?size=125x125&data={url}"/></a>')
+    dom.setMark(id,"")
 
 def ac_submit_pseudo(session,dom):
-  pseudo = dom.get_value("Pseudo").strip()
+  pseudo = dom.getValue("Pseudo").strip()
 
   room = session.room
 
   if not pseudo:
     dom.alert("Pseudo. can not be empty !")
-    dom.set_value("Pseudo", "")
+    dom.setValue("Pseudo", "")
     dom.focus("Pseudo")
   elif room.handle_pseudo(pseudo.upper()):
     session.pseudo = pseudo
-    dom.add_class("PseudoButton", "hidden")
-    dom.disable_element("Pseudo")
-    dom.enable_elements(["Message", "MessageButton"])
+    dom.addClass("PseudoButton", "hidden")
+    dom.disableElement("Pseudo")
+    dom.enableElements(["Message", "MessageButton"])
     dom.focus("Message")
   else:
     dom.alert("Pseudo. not available!")
-    dom.set_value("Pseudo", pseudo)
+    dom.setValue("Pseudo", pseudo)
     dom.focus("Pseudo")
 
 def ac_submit_message(session,dom):
   room = session.room
 
-  message = dom.get_value("Message")
-  dom.set_value("Message", "")
+  message = dom.getValue("Message")
+  dom.setValue("Message", "")
   dom.focus("Message")
   room.add_message(session.pseudo,message)
   room.display_messages(session,dom)
-  atlastk.broadcast_action("Update")     
+  atlastk.broadcastAction("Update")     
 
 CALLBACKS = {
   "": ac_connect,

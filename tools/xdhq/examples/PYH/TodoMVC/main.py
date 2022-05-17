@@ -63,15 +63,15 @@ class TodoMVC:
     elif count != 0:
       text = str(count) + " items left"
 
-    dom.set_value("Count", text)
+    dom.setValue("Count", text)
 
   def handle_count(self, dom):
     count = self.items_left()
 
     if count != len(self.todos):
-      dom.disable_element("HideClearCompleted")
+      dom.disableElement("HideClearCompleted")
     else:
-      dom.enable_element("HideClearCompleted")
+      dom.enableElement("HideClearCompleted")
 
     self.display_count(dom, count)
 
@@ -92,8 +92,8 @@ class TodoMVC:
     self.handle_count(dom)
 
   def submit_new(self, dom):
-    value = dom.get_value("Input").strip()
-    dom.set_value("Input", "")
+    value = dom.getValue("Input").strip()
+    dom.setValue("Input", "")
 
     if value:
       self.todos.insert(0, {'label': value, 'completed': False})
@@ -103,15 +103,15 @@ class TodoMVC:
     index = self.index
     self.index = -1
 
-    value = dom.get_value("Input." + str(index)).strip()
-    dom.set_value("Input." + str(index), "")
+    value = dom.getValue("Input." + str(index)).strip()
+    dom.setValue("Input." + str(index), "")
 
     if value:
       self.todos[index]['label'] = value
 
-      dom.set_value("Label." + str(index), value)
+      dom.setValue("Label." + str(index), value)
 
-      dom.remove_classes({"View." + str(index): "hide", "Todo." + str(index): "editing"})
+      dom.removeClasses({"View." + str(index): "hide", "Todo." + str(index): "editing"})
     else:
       self.todos.pop(index)
       self.displayTodos(dom)
@@ -120,43 +120,43 @@ def ac_connect(self, dom):
   dom.inner("", open("Main.html").read())
   dom.focus("Input")
   self.display_todos(dom)
-  dom.disable_elements(["HideActive", "HideCompleted"])
+  dom.disableElements(["HideActive", "HideCompleted"])
 
 def ac_destroy(self, dom, id):
-  self.todos.pop(int(dom.get_mark(id)))
+  self.todos.pop(int(dom.getMark(id)))
   self.display_todos(dom)
 
 def ac_toggle(self, dom, id):
   index = int(id)
   self.todos[index]['completed'] = not self.todos[index]['completed']
 
-  dom.toggle_class("Todo." + id, "completed")
-  dom.toggle_class("Todo." + id, "active")
+  dom.toggleClass("Todo." + id, "completed")
+  dom.toggleClass("Todo." + id, "active")
 
   self.handle_count(dom)
 
 def ac_all(self, dom):
   self.exclude = None
 
-  dom.add_class("All", "selected")
-  dom.remove_classes({"Active": "selected", "Completed": "selected"})
-  dom.disable_elements(["HideActive", "HideCompleted"])
+  dom.addClass("All", "selected")
+  dom.removeClasses({"Active": "selected", "Completed": "selected"})
+  dom.disableElements(["HideActive", "HideCompleted"])
 
 def ac_active(self, dom):
   self.exclude = True
 
-  dom.add_class("Active", "selected")
-  dom.remove_classes({"All": "selected", "Completed": "selected"})
-  dom.disable_element("HideActive")
-  dom.enable_element("HideCompleted")
+  dom.addClass("Active", "selected")
+  dom.removeClasses({"All": "selected", "Completed": "selected"})
+  dom.disableElement("HideActive")
+  dom.enableElement("HideCompleted")
 
 def ac_completed(self, dom):
   self.exclude = False
 
-  dom.add_class("Completed", "selected")
-  dom.remove_classes({"All": "selected", "Active": "selected"})
-  dom.disable_element("HideCompleted")
-  dom.enable_element("HideActive")
+  dom.addClass("Completed", "selected")
+  dom.removeClasses({"All": "selected", "Active": "selected"})
+  dom.disableElement("HideCompleted")
+  dom.enableElement("HideActive")
 
 def ac_clear(self, dom):
   index = len(self.todos)
@@ -170,19 +170,19 @@ def ac_clear(self, dom):
   self.display_todos(dom)
 
 def ac_edit(self, dom, id):
-  value = dom.get_mark(id)
+  value = dom.getMark(id)
   self.index = int(value)
 
-  dom.add_classes({"View." + value: "hide", id: "editing"})
-  dom.set_value("Input." + value, self.todos[self.index]['label'])
+  dom.addClasses({"View." + value: "hide", id: "editing"})
+  dom.setValue("Input." + value, self.todos[self.index]['label'])
   dom.focus("Input." + value)
 
 def ac_cancel(self, dom):
   index = str(self.index)
   self.index = -1
 
-  dom.set_value("Input." + index, "")
-  dom.remove_classes({"View." + index: "hide", "Todo." + index: "editing"})
+  dom.setValue("Input." + index, "")
+  dom.removeClasses({"View." + index: "hide", "Todo." + index: "editing"})
 
 callbacks = {
   "": ac_connect,

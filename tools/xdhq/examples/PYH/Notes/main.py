@@ -67,9 +67,9 @@ class Notes:
 
   def handle_descriptions(self,dom):
     if self.hide_descriptions:
-      dom.disable_element("ViewDescriptions")
+      dom.disableElement("ViewDescriptions")
     else:
-      dom.enable_element("ViewDescriptions")
+      dom.enableElement("ViewDescriptions")
 
   def display_list(self,dom):
     xml = atlastk.create_XML("XDHTML")
@@ -85,12 +85,12 @@ class Notes:
         values["Description." + str(index)] = self.notes[index]['description']
 
     dom.inner("Notes", xml, "Notes.xsl")
-    dom.set_values(values)
-    dom.enable_elements(view_mode_elements)
+    dom.setValues(values)
+    dom.enableElements(view_mode_elements)
 
   def view(self, dom):
-    dom.enable_elements(view_mode_elements)
-    dom.set_value("Edit." + str(self.index), "")
+    dom.enableElements(view_mode_elements)
+    dom.setValue("Edit." + str(self.index), "")
     self.index = -1
 
 def ac_connect(notes, dom):
@@ -98,30 +98,30 @@ def ac_connect(notes, dom):
   notes.display_list(dom)
 
 def ac_toggle_descriptions(notes, dom, id):
-  notes.hide_descriptions = dom.get_value(id)=="true"
+  notes.hide_descriptions = dom.getValue(id)=="true"
   notes.handle_descriptions(dom)
 
 def ac_search(notes, dom):
-  notes.pattern = dom.get_value("Pattern").lower()
+  notes.pattern = dom.getValue("Pattern").lower()
   notes.display_list(dom)
 
 def ac_edit(notes, dom, id):
-  index = dom.get_mark(id)
+  index = dom.getMark(id)
   notes.index = int(index)
   note = notes.notes[notes.index]
 
   dom.inner("Edit." + index, open( "Note.html").read() )
-  dom.set_values({ "Title": note['title'], "Description": note['description'] })
-  dom.disable_elements(view_mode_elements)
+  dom.setValues({ "Title": note['title'], "Description": note['description'] })
+  dom.disableElements(view_mode_elements)
   dom.focus("Title")
 
 def ac_delete(notes, dom, id):
   if dom.confirm("Are you sure you want to delete this entry?"):
-    notes.notes.pop(int(dom.get_mark(id)))
+    notes.notes.pop(int(dom.getMark(id)))
     notes.display_list(dom)
 
 def ac_submit(notes, dom):
-  result = dom.get_values(["Title", "Description"])
+  result = dom.getValues(["Title", "Description"])
   title = result["Title"].strip()
   description = result["Description"]
 
@@ -132,7 +132,7 @@ def ac_submit(notes, dom):
       notes.notes.insert(0, { 'title': '', 'description': ''})
       notes.display_list( dom )
     else:
-      dom.set_values( { "Title." + str(notes.index): title, "Description." + str(notes.index): description })
+      dom.setValues( { "Title." + str(notes.index): title, "Description." + str(notes.index): description })
       notes.view( dom )
   else:
     dom.alert("Title can not be empty!")
@@ -141,7 +141,7 @@ def ac_submit(notes, dom):
 def ac_cancel(notes, dom):
   note = notes.notes[notes.index]
 
-  result = dom.get_values(["Title", "Description"])
+  result = dom.getValues(["Title", "Description"])
   title = result["Title"].strip()
   description = result["Description"]
 

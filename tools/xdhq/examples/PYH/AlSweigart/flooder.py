@@ -147,12 +147,12 @@ def acSubmit(dom,id):
     changeTile(int(dom.getAttribute(id, "data-tile")), gameBoard, 0, 0)
     movesLeft -= 1
 
-  atlastk.broadcast_action("Display")
+  atlastk.broadcastAction("Display")
 
 
 def acNew(dom):
   newGame()
-  atlastk.broadcast_action("Display")
+  atlastk.broadcastAction("Display")
 
 
 CALLBACKS = {

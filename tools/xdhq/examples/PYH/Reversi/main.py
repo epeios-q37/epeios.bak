@@ -132,7 +132,7 @@ class Reversi:
   def _reset(self):
     if self.token:
       remove(self.token)
-      atlastk.broadcast_action("Refresh", self.token)
+      atlastk.broadcastAction("Refresh", self.token)
 
   def __init__(self):
     self.board = None
@@ -172,7 +172,7 @@ def draw_board(reversi, dom, playability = True):
 
   dom.inner("board", board)
 
-  dom.set_values({
+  dom.setValues({
     "black": reversi.board.count(core.BLACK),
     "white": reversi.board.count(core.WHITE)
   })
@@ -184,7 +184,7 @@ def set_status(dom, status, color):
 
 def ac_connect(reversi, dom, id):
   if reversi.layoutFlag:
-    dom.disable_element("EnhancedLayout")
+    dom.disableElement("EnhancedLayout")
 
   dom.inner("", open("Main.html").read())
 
@@ -196,9 +196,9 @@ def ac_connect(reversi, dom, id):
     bw = core.EMPTY if get_turn(id) == core.EMPTY else core.WHITE
     reversi.init(token = id, board = get_board(id), bw = bw)
     set_status(dom, "Play or wait for the opponent's move." if bw == core.EMPTY else "It's your turn!", "green")
-    dom.disable_element("HideHHStatusSection")
+    dom.disableElement("HideHHStatusSection")
   else:
-    reversi.init(level=int(dom.get_value("level")), bw=core.BLACK)
+    reversi.init(level=int(dom.getValue("level")), bw=core.BLACK)
 
   draw_board(reversi, dom)
 
@@ -247,7 +247,7 @@ def ac_play(reversi, dom, id):
     if board:
       if board.put(xy[0], xy[1], bw):
         set_turn(token, bw * -1)
-        atlastk.broadcast_action("Refresh", token)
+        atlastk.broadcastAction("Refresh", token)
     else:
       set_status(dom, "Game interrupted!", "blue")
   else:
@@ -263,9 +263,9 @@ def ac_play(reversi, dom, id):
 
 def ac_toggle_layout(reversi, dom):
   if reversi.layoutFlag:
-    dom.enable_element("EnhancedLayout")
+    dom.enableElement("EnhancedLayout")
   else:
-    dom.disable_element("EnhancedLayout")
+    dom.disableElement("EnhancedLayout")
 
   reversi.layoutFlag = not reversi.layoutFlag
 
@@ -275,14 +275,14 @@ def new_between_humans(reversi, dom):
   url = atlastk.get_app_url(token)
   dom.inner("qrcode", f'<a href="{url}" title="{url}" target="_blank"><img style="margin: auto; width:100%;" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={urllib.parse.quote(url)}"/></a>')
   set_status(dom, "Play or wait for the opponent's move.", "green")
-  dom.disable_elements(("HideHHStatusSection", "HideHHLinkSection"))
+  dom.disableElements(("HideHHStatusSection", "HideHHLinkSection"))
   reversi.init(token=token, board=create(token))
   draw_board(reversi, dom)
 
 
 def new_versus_computer(reversi, dom, bw):
-  reversi.init(level=int(dom.get_value("level")), bw=bw)
-  dom.enable_elements(("HideHHStatusSection", "HideHHLinkSection"))
+  reversi.init(level=int(dom.getValue("level")), bw=bw)
+  dom.enableElements(("HideHHStatusSection", "HideHHLinkSection"))
 
   if bw == core.WHITE:
     draw_board(reversi, dom, False)
@@ -293,7 +293,7 @@ def new_versus_computer(reversi, dom, bw):
 
 
 def ac_new(reversi, dom):
-  players = dom.get_value("players")
+  players = dom.getValue("players")
   assert players in ["HH", "HC", "CH"]
 
   if players == "HH":
@@ -331,8 +331,8 @@ CALLBACKS = {
   "ToggleLayout": ac_toggle_layout,
   "New": ac_new,
   "Refresh": ac_refresh,
-  "SelectMode": lambda reversi, dom, id: dom.set_attribute("level", "style",
-  f"visibility: {'hidden' if dom.get_value(id) == 'HH' else 'visible'};"),
+  "SelectMode": lambda reversi, dom, id: dom.setAttribute("level", "style",
+  f"visibility: {'hidden' if dom.getValue(id) == 'HH' else 'visible'};"),
 }
 
 atlastk.launch(CALLBACKS, Reversi, open("Head.html").read())

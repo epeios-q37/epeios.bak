@@ -98,33 +98,33 @@ def ac_connect(chatroom, dom):
   chatroom.display_messages(dom)
   
 def ac_submit_pseudo(chatroom, dom):
-  pseudo = dom.get_value("Pseudo").strip()
+  pseudo = dom.getValue("Pseudo").strip()
 
   if not pseudo:
     dom.alert("Pseudo. can not be empty !")
-    dom.set_value("Pseudo", "")
+    dom.setValue("Pseudo", "")
     dom.focus("Pseudo")
   elif chatroom.handle_pseudo(pseudo.upper()):
     chatroom.pseudo = pseudo
-    dom.add_class("PseudoButton", "hidden")
-#		dom.disable_elements(["Pseudo", "PseudoButton"])
-    dom.disable_element("Pseudo")
-    dom.enable_elements(["Message", "MessageButton"])
-#		dom.set_value("Pseudo", pseudo)
+    dom.addClass("PseudoButton", "hidden")
+#		dom.disableElements(["Pseudo", "PseudoButton"])
+    dom.disableElement("Pseudo")
+    dom.enableElements(["Message", "MessageButton"])
+#		dom.setValue("Pseudo", pseudo)
     dom.focus("Message")
     print("\t>>>> New user: " + pseudo)
   else:
     dom.alert("Pseudo. not available!")
-    dom.set_value("Pseudo", pseudo)
+    dom.setValue("Pseudo", pseudo)
     dom.focus("Pseudo")
 
 def ac_submit_message(chatroom, dom):
-  message = dom.get_value("Message")
-  dom.set_value("Message", "")
+  message = dom.getValue("Message")
+  dom.setValue("Message", "")
   dom.focus("Message")
   chatroom.add_message(chatroom.pseudo, message)
   chatroom.display_messages(dom)
-  atlastk.broadcast_action("Update")
+  atlastk.broadcastAction("Update")
 
 callbacks = {
     "": ac_connect,

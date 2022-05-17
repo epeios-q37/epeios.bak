@@ -152,7 +152,7 @@ def testAction(dom, action, playerHand, bet):
 
 
 def displayHand(dom, host, hand, show):
-  dom.setContent("{}_hand_value".format(host), getHandValue(hand) if show else "???")
+  dom.setValue("{}_hand_value".format(host), getHandValue(hand) if show else "???")
   dom.inner("{}_cards".format(host), getSVGCards(hand if show else [54] + hand[1:]))
 
 
@@ -160,7 +160,7 @@ def letDealerPlay():
   global leaderId
 
   leaderId = str(uuid.uuid4())
-  atlastk.broadcast_action("DealerMove", leaderId)
+  atlastk.broadcastAction("DealerMove", leaderId)
 
 
 def acConnect(dom):
@@ -223,11 +223,11 @@ def acDealerMove(dom, id):
 
     if notification:
       bet = -bet # To report end of turn.
-      atlastk.broadcast_action("RefreshDisplay", "M{}".format(notification))
+      atlastk.broadcastAction("RefreshDisplay", "M{}".format(notification))
     else:
       dealerHand.append(deck.pop())
       time.sleep(1)
-      atlastk.broadcast_action("DealerMove", leaderId)
+      atlastk.broadcastAction("DealerMove", leaderId)
 
 
 def acAdd(dom, id):
@@ -236,7 +236,7 @@ def acAdd(dom, id):
   if not testAction(dom, '+', playerHand, bet):
     return
 
-  value = int(dom.get_mark(id))
+  value = int(dom.getMark(id))
 
   if ( value + bet ) > money:
     notify(dom, "You can't bet that much!")
@@ -245,7 +245,7 @@ def acAdd(dom, id):
   bet += value
 
   notify(dom, "Bet raised by {} to {}.".format(value, bet))
-  atlastk.broadcast_action("RefreshDisplay", 'B0')
+  atlastk.broadcastAction("RefreshDisplay", 'B0')
 
 
 def acSub(dom, id):
@@ -254,7 +254,7 @@ def acSub(dom, id):
   if not testAction(dom, '-', playerHand, bet):
     return
 
-  value = int(dom.get_mark(id))
+  value = int(dom.getMark(id))
 
   if value > bet:
     notify(dom, "You can't to remove that much!")
@@ -263,7 +263,7 @@ def acSub(dom, id):
   bet -= value
 
   notify(dom, "Bet down by {} to {}.".format(value, bet))
-  atlastk.broadcast_action("RefreshDisplay", 'B0')
+  atlastk.broadcastAction("RefreshDisplay", 'B0')
 
 
 def acBet(dom):
@@ -275,7 +275,7 @@ def acBet(dom):
   dealerHand = [deck.pop(), deck.pop()]
   playerHand = [deck.pop(), deck.pop()]
 
-  atlastk.broadcast_action("RefreshDisplay", 'dP2')
+  atlastk.broadcastAction("RefreshDisplay", 'dP2')
 
   if getHandValue(playerHand) == 21:
     letDealerPlay()  
@@ -292,7 +292,7 @@ def acHit(dom):
   handValue = getHandValue(playerHand)
 
   if handValue == 21:
-    atlastk.broadcast_action("RefreshDisplay", 'P0')
+    atlastk.broadcastAction("RefreshDisplay", 'P0')
     letDealerPlay()
   else:
     view = "P"
@@ -304,7 +304,7 @@ def acHit(dom):
     else: # handValue < 21
       notification = 3
 
-    atlastk.broadcast_action("RefreshDisplay", '{}{}'.format(view, notification))
+    atlastk.broadcastAction("RefreshDisplay", '{}{}'.format(view, notification))
 
 
 def acStand(dom):
@@ -335,9 +335,9 @@ def acDoubleDown(dom):
   if getHandValue(playerHand) > 21:
     money -= bet
     bet = -bet
-    atlastk.broadcast_action("RefreshDisplay", 'MBP{}'.format(8 if money >= 0 else 9))
+    atlastk.broadcastAction("RefreshDisplay", 'MBP{}'.format(8 if money >= 0 else 9))
   else:
-    atlastk.broadcast_action("RefreshDisplay", 'BP1')
+    atlastk.broadcastAction("RefreshDisplay", 'BP1')
     letDealerPlay()
 
 
@@ -349,12 +349,12 @@ def acResume(dom):
     newTurn()
   else:
     newGame()
-  atlastk.broadcast_action("RefreshDisplay", 'dpMB1')
+  atlastk.broadcastAction("RefreshDisplay", 'dpMB1')
 
 
 def acNew(dom):
   newGame()
-  atlastk.broadcast_action("RefreshDisplay", 'dpMB1')
+  atlastk.broadcastAction("RefreshDisplay", 'dpMB1')
 
 
 CALLBACKS = {

@@ -67,7 +67,7 @@ modificationsItem = """
 def reading_updates(dom,modifications=None):
   global updates
   importlib.reload(updates)
-  dom.set_value("updates", "")
+  dom.setValue("updates", "")
 
   updatesLayout = ""
 
@@ -77,25 +77,25 @@ def reading_updates(dom,modifications=None):
   dom.inner("updates", updatesLayout)
   
 def reading(dom):
-  dom.set_value("output", "Initialization…")
+  dom.setValue("output", "Initialization…")
 
   reading_updates(dom)
 
-  dom.set_value('output', 'Done')
-  dom.add_class("output", "hidden")
+  dom.setValue('output', 'Done')
+  dom.addClass("output", "hidden")
 
 def update_workbook(dom):
-  dom.set_value("sales", "");
+  dom.setValue("sales", "");
 
-  dom.set_value('output', 'Opening workbook...')
+  dom.setValue('output', 'Opening workbook...')
 
   wb = openpyxl.load_workbook("produceSales_.xlsx", read_only=True)
 
   sheet = wb['Sheet']
 
-  dom.remove_class("output", "hidden")
+  dom.removeClass("output", "hidden")
 
-  dom.set_value('output', 'Reading rows...')
+  dom.setValue('output', 'Reading rows...')
 
   limit = sheet.max_row - 1	# This takes time, so it is stored.
 
@@ -117,9 +117,9 @@ def update_workbook(dom):
 
     if not ( index % 2000 ) or ( index == limit ):
       dom.end('sales', salesLayout)
-      dom.scroll_to(dom.last_child('sales'))
+      dom.scrollTo(dom.lastChild('sales'))
       dom.flush()
-      dom.set_value('output', 'Reading rows {}/{}'.format(index,limit))
+      dom.setValue('output', 'Reading rows {}/{}'.format(index,limit))
       salesLayout = ""
 
   return modifications
@@ -143,7 +143,7 @@ def ac_apply(dom):
   reading_updates(dom,modifications)
 
 def ac_view(dom,id):
-  dom.scroll_to(dom.get_value(id))
+  dom.scrollTo(dom.getValue(id))
 
 
 callbacks = {

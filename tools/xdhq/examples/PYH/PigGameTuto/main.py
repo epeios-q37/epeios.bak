@@ -54,7 +54,7 @@ class User:
   def __del__(self):
     if self.player != 0:
       init()
-      atlastk.broadcast_action("Display")
+      atlastk.broadcastAction("Display")
 
 
 def debug():
@@ -91,10 +91,10 @@ def get_status(player):
 
 
 def fade(dom, element):
-  dom.remove_class(element, "fade-in")
+  dom.removeClass(element, "fade-in")
   dom.inner(element, "<span></span>")
   dom.flush()
-  dom.add_class(element, "fade-in")
+  dom.addClass(element, "fade-in")
 
 
 def update_meter(dom, ab, score, adding):
@@ -103,7 +103,7 @@ def update_meter(dom, ab, score, adding):
   else:
     dom.inner(f"ScoreMeter{ab}", METER.format("score-meter", score))
 
-  dom.set_content(f"ScoreText{ab}", score)
+  dom.setValue(f"ScoreText{ab}", score)
 
 
 def get_opponent(player):
@@ -111,7 +111,7 @@ def get_opponent(player):
 
 
 def mark_player(dom, ab):
-  dom.disable_element("DisplayMarkerA") if ab == 'B' else dom.enable_element("DisplayMarkerA")
+  dom.disableElement("DisplayMarkerA") if ab == 'B' else dom.enableElement("DisplayMarkerA")
 
 
 def display_dice(dom, value):
@@ -152,14 +152,14 @@ def update_markers(dom, status):
 
 def update_play_buttons(dom, status, winner):
   if status != PLAY or winner != 0:
-    dom.disable_elements(PLAY_BUTTONS)
+    dom.disableElements(PLAY_BUTTONS)
   else:
-    dom.enable_elements(PLAY_BUTTONS)
+    dom.enableElements(PLAY_BUTTONS)
 
 
 def display_turn(dom, element, value):
   fade(dom, element)
-  dom.set_content(element, value)
+  dom.setValue(element, value)
 
 
 def update_dice(dom, winner):
@@ -176,7 +176,7 @@ def update_turn(dom, winner):
 def report_winner(dom, player, winner):
   ab = 'A' if winner == player or player == 0 and winner == 1 else 'B'
 
-  dom.set_content(f"ScoreMeter{ab}", "<span class='winner'>Winner!</span>")
+  dom.setValue(f"ScoreMeter{ab}", "<span class='winner'>Winner!</span>")
 
 
 def update_layout(dom, player):
@@ -201,7 +201,7 @@ def update_layout(dom, player):
 
 def display(dom, user):
   if user.pending and available == 0 and user.player == 0:
-    dom.disable_element("PlayerView")
+    dom.disableElement("PlayerView")
     user.pending = False
     redraw_meters(dom)
 
@@ -212,7 +212,7 @@ def ac_connect(user, dom):
   dom.inner("", open("Main.html").read())
 
   if debug():
-    dom.remove_class("debug", "removed")
+    dom.removeClass("debug", "removed")
 
   redraw_meters(dom)
 
@@ -222,7 +222,7 @@ def ac_connect(user, dom):
 def become_player(user, dom):
   global available
 
-  dom.enable_element("New")
+  dom.enableElement("New")
   user.player = current
   user.pending = False
 
@@ -232,7 +232,7 @@ def become_player(user, dom):
 def ac_roll(user, dom):
   global current, dice, turn, scores
 
-  dom.disable_elements(PLAY_BUTTONS)
+  dom.disableElements(PLAY_BUTTONS)
 
   if user.player == 0:
     become_player(user, dom)
@@ -242,7 +242,7 @@ def ac_roll(user, dom):
   dice = random.randint(1, 6)
 
   if debug():
-    debug_dice = dom.get_content("debug")
+    debug_dice = dom.getValue("debug")
     if debug_dice:
       dice = int(debug_dice)
 
@@ -256,13 +256,13 @@ def ac_roll(user, dom):
       scores[current] = LIMIT
       turn = 0
 
-  atlastk.broadcast_action("Display")
+  atlastk.broadcastAction("Display")
 
 
 def ac_hold(user, dom):
   global scores, turn, dice, current
 
-  dom.disable_elements(PLAY_BUTTONS) 
+  dom.disableElements(PLAY_BUTTONS) 
 
   if user.player == 0:
     become_player(user, dom)
@@ -272,20 +272,20 @@ def ac_hold(user, dom):
   scores[user.player] += turn
   current = get_opponent(current)
   dice = turn = 0
-  atlastk.broadcast_action("Display")
+  atlastk.broadcastAction("Display")
 
 
 def ac_new():
   init()
-  atlastk.broadcast_action("Display")
+  atlastk.broadcastAction("Display")
 
 
 def ac_display(user, dom):
   if current == 1 and available == 1:
     dom.inner("", open("Main.html").read())
-    dom.enable_element("PlayerView")
+    dom.enableElement("PlayerView")
     if debug():
-      dom.remove_class("debug", "removed")
+      dom.removeClass("debug", "removed")
     user.init()
     dom.flush()
   display(dom, user)

@@ -47,18 +47,19 @@ def signal_handler(sig, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
-def create_XML(root_tag):
+def createXML(root_tag):
 	return XDHq.XML(root_tag)
 
-createXML = create_XML	
+create_XML = createXML	
 
 
-def create_HTML(root_tag=""):	# If 'root_tag' is empty, there will be no root tag in the tree.
+def createHTML(root_tag=""):	# If 'root_tag' is empty, there will be no root tag in the tree.
 	return XDHq.XML(root_tag)
 
-createHTML = create_HTML
+create_HTML = createHTML
 
-broadcast_action = XDHq.broadcastAction
+broadcastAction = XDHq.broadcastAction
+broadcast_action = broadcastAction
 
 
 def _call(func, userObject, dom, id, action):
@@ -109,12 +110,12 @@ def worker(userCallback,dom,callbacks):
 
 		if action == "":
 			if _is_jupyter():
-				dom.disable_element("XDHStyle")
+				dom.disableElement("XDHStyle")
 			else:
-				dom.disable_element("XDHStyleJupyter")
+				dom.disableElement("XDHStyleJupyter")
 
 			if XDHqSHRD.isDev():
-				dom.debug_log(True)
+				dom.debugLog(True)
 
 		if action == "" or not "_PreProcess" in callbacks or _call(callbacks["_PreProcess"],userObject, dom, id, action):
 			if ( action in callbacks ):

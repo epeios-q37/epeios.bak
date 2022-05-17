@@ -221,9 +221,9 @@ class GPIO:
         break
 
     if enable:
-      dom.enable_elements(buttons)
+      dom.enableElements(buttons)
     else:
-      dom.disable_elements(buttons)
+      dom.disableElements(buttons)
 
   def _getSetting(self,wId):
     global settings
@@ -317,17 +317,17 @@ class GPIO:
 
     self._setMode(wId, mode)
 
-    dom.set_value("Value." + str(wId),self._getValue(wId))
+    dom.setValue("Value." + str(wId),self._getValue(wId))
     dom.setAttribute(id,"value",self._getValue(wId))
 
     if (mode==Mode.IN):
-      dom.disable_element(id)
+      dom.disableElement(id)
       dom.setAttribute(id,"step","100")
     elif (mode==Mode.OUT):
-      dom.enable_element(id)
+      dom.enableElement(id)
       dom.setAttribute(id,"step","100")
     elif (mode==Mode.PWM):
-      dom.enable_element(id)
+      dom.enableElement(id)
       dom.setAttribute(id,"step","1")
     else:
       sys.exit("???")
@@ -369,10 +369,10 @@ def acConnect(GPIO,dom):
   GPIO.display(dom)
 
 def acSwitchMode(GPIO,dom,id):
-  GPIO.setMode(dom,getWId(id),int(dom.get_value(id)))
+  GPIO.setMode(dom,getWId(id),int(dom.getValue(id)))
   
 def acChangeValue(GPIO,dom,id):
-  GPIO.setValue(dom,getWId(id),int(dom.get_value(id)))
+  GPIO.setValue(dom,getWId(id),int(dom.getValue(id)))
 
 callbacks = {
     "_PreProcess": preProcess,

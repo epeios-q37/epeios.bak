@@ -48,17 +48,17 @@ def fill(puzzle, dom):
     else:
       puzzle.blank = i
 
-  dom.set_values(values)
-  dom.toggle_class(puzzle.blank, "hidden")
+  dom.setValues(values)
+  dom.toggleClass(puzzle.blank, "hidden")
 
 
 def swap(puzzle, dom, source):
-  dom.set_values({
-    "t"+str(puzzle.blank): dom.get_value("t"+str(source)),
+  dom.setValues({
+    "t"+str(puzzle.blank): dom.getValue("t"+str(source)),
     "t"+str(source): ""
   })
 
-  dom.toggle_classes({
+  dom.toggleClasses({
     puzzle.blank: "hidden",
     source: "hidden"
   })
@@ -159,9 +159,9 @@ def ac_swap(self, dom, id):
       sourceIds.append("t"+str(source))
       bx = convert_x(source)
 
-  dom.set_values(build(sourceIds, targetIds, dom.get_values(sourceIds), id))
+  dom.setValues(build(sourceIds, targetIds, dom.getValues(sourceIds), id))
 
-  dom.toggle_classes({
+  dom.toggleClasses({
     self.blank: "hidden",
     target: "hidden"
   })

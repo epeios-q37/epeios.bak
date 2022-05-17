@@ -78,7 +78,7 @@ def draw_board(player, dom):
       else:
         toRemove[f'{x}{y}'] = "playable"
 
-  dom.set_values(tokens)
+  dom.setValues(tokens)
   dom.addClasses(toAdd)
   dom.removeClasses(toRemove)
 
@@ -97,12 +97,12 @@ def Refresh(dom, player):
   if player.bw == None:
     if not available:
       player.bw = EMPTY
-      dom.disable_element("Submit")
+      dom.disableElement("Submit")
     else:
-      dom.enable_element("Submit")
+      dom.enableElement("Submit")
   draw_board(player, dom)
 
-  dom.set_values({
+  dom.setValues({
     "black": count(board, BLACK),
     "white": count(board, WHITE)
   })
@@ -128,7 +128,7 @@ def ac_connect(player, dom, id):
   dom.inner("", open("Main.html").read())
   if not available:
     player.bw = EMPTY
-    dom.disable_element("Submit")
+    dom.disableElement("Submit")
   Refresh(dom, player)
 
 
@@ -157,7 +157,7 @@ def ac_play(player, dom, id):
 
     turn = turn * -1
 
-  atlastk.broadcast_action("Refresh")
+  atlastk.broadcastAction("Refresh")
 
 
 def ac_refresh(player, dom):
@@ -168,7 +168,7 @@ def ac_refresh(player, dom):
 
 def ac_new(dom):
   init()
-  atlastk.broadcast_action("Refresh")
+  atlastk.broadcastAction("Refresh")
 
 
 CALLBACKS = {

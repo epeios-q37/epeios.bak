@@ -34,12 +34,12 @@ def ac_connect(dom):
   dom.focus( "input")
 
 def ac_submit(dom):
-  dom.alert("Hello, {}!".format(dom.get_value("input")))
+  dom.alert("Hello, {}!".format(dom.getValue("input")))
   dom.focus( "input")
 
 def ac_clear(dom):
   if ( dom.confirm("Are you sure?" ) ):
-    dom.set_value("input", "" )
+    dom.setValue("input", "" )
   dom.focus( "input")
 
 callbacks = {

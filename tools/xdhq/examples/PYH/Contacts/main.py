@@ -87,7 +87,7 @@ contacts = EXAMPLE
 
 
 def display_contact(contactId,dom):
-  dom.set_values(EMPTY_CONTACT if contactId == None else contacts[contactId])
+  dom.setValues(EMPTY_CONTACT if contactId == None else contacts[contactId])
 
 
 def display_contacts(contacts,dom):
@@ -109,17 +109,17 @@ def display_contacts(contacts,dom):
 
 def update_outfit(board, dom):
   if board.state == State.DISPLAY:
-    dom.disable_element("HideDisplay")
-    dom.enable_element("HideEdition")
-    dom.disable_elements(fields)
+    dom.disableElement("HideDisplay")
+    dom.enableElement("HideEdition")
+    dom.disableElements(fields)
     if board.contactId != None:
-      dom.disable_element("HideDisplayAndSelect")
+      dom.disableElement("HideDisplayAndSelect")
     else:
-      dom.enable_element("HideDisplayAndSelect")
+      dom.enableElement("HideDisplayAndSelect")
   elif board.state == State.EDIT:
-    dom.enable_elements(("HideDisplay","HideDisplayAndSelect"))
-    dom.disable_element("HideEdition")
-    dom.enable_elements(fields)
+    dom.enableElements(("HideDisplay","HideDisplayAndSelect"))
+    dom.disableElement("HideEdition")
+    dom.enableElements(fields)
   else:
     raise Exception("Unknown state!")
 
@@ -156,7 +156,7 @@ def ac_delete(board,dom):
 
   update_outfit(board,dom)
 
-  atlastk.broadcast_action("Refresh")
+  atlastk.broadcastAction("Refresh")
 
 
 def edit(board,dom):
@@ -185,7 +185,7 @@ def ac_edit(board,dom):
 
 
 def ac_submit(board,dom):
-  idsAndValues = dom.get_values(fields)
+  idsAndValues = dom.getValues(fields)
 
   if not idsAndValues['Name'].strip():
     dom.alert("The name field can not be empty!")
@@ -197,7 +197,7 @@ def ac_submit(board,dom):
   else:
     contacts[board.contactId] = idsAndValues
 
-  atlastk.broadcast_action("Refresh")
+  atlastk.broadcastAction("Refresh")
 
   board.state = State.DISPLAY
 
