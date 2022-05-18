@@ -187,16 +187,16 @@ class Reversi:
 def drawBoard(reversi, dom):
   board = atlastk.createXML("Board")
   for y, row in enumerate(reversi.board):
-    board.push_tag("Row")
-    board.put_attribute("y", str(y))
+    board.pushTag("Row")
+    board.putAttribute("y", str(y))
     for x, r in enumerate(row):
-      board.push_tag("Square")
-      board.put_attribute( "x", str(x))
+      board.pushTag("Square")
+      board.putAttribute( "x", str(x))
       if (r == EMPTY) and (reversi.is_allowed(y, x, reversi.player)):
-        board.put_attribute("Playable", "true")
+        board.putAttribute("Playable", "true")
       board.putValue({EMPTY: 'None', BLACK: 'Dark', WHITE: 'Light'}[r])
-      board.pop_tag()
-    board.pop_tag()
+      board.popTag()
+    board.popTag()
 
   if ( reversi.layout == TXT ):
     dom.setValues({

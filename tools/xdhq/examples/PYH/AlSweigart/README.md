@@ -27,4 +27,4 @@ The book from which the programs in this repository are based is available under
 
 The [*Atlas* toolkit](http://atlastk.org) used for the GUI and provided with this repository is released under [MIT license](http://q37.info/s/7f9gsms3).
 
-More programs from Al Sweigart's book will be available soon. Contributions welcome!
+More programs from Al Sweigart's book will be added over time. Contributions welcome!

@@ -38,7 +38,7 @@ En créant, dans le répertoire de l'application, un fichier `__main__.py` conte
 
 ## Publication sur *Replit.com*
 
-**Note concernant la démonstration *MatPlotLib*** : En mode *SpotLight*, le serveur *X* est lancé, bien que non utilisé, cachant la console, et donc l'URL pour visualiser cette démo. Effacer la variable d'environnement `ATK` permet d'afficher l'application dans le navigateur embarqué dans *Rplit*, mais il n'y a alors plus moyen d'afficher la console (même en rechargrant le dépôt *Replit*) et donc de lancer une autre démo…
+**Note concernant la démonstration *MatPlotLib*** : En mode *SpotLight*, le serveur *X* est lancé, bien que non utilisé, cachant la console, et donc l'URL pour visualiser cette démo. Effacer la variable d'environnement `ATK` permet d'afficher l'application dans le navigateur embarqué dans *Replit*, mais il n'y a alors plus moyen d'afficher la console (même en rechargrant le dépôt *Replit*) et donc de lancer une autre démo…
 
 Pour garder les stats *Spotlight* de *Replit*, il faut toujours garder le *replit* en cours.
 
@@ -83,6 +83,7 @@ Procédures commune à toutes les versions. Remplacer `<flavour>` par l'identifi
 - mettre à jour, dans `setup.py` :
   - le numéro de version,
   - éventuellement la description ;
+- mettre à jour le numéro de version dans `XDHqFaaS.py` ;
 - effacer les affichages de sortie des *notebooks* *Jupyter* ;
 - mettre à jour le dépôt *Github*. 
 

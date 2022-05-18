@@ -1,5 +1,8 @@
 # *XDHWebQ* *CHANGELOG*
 
+## 2022-05-18
+- adaptation to changes in underlying modules,
+
 ## 2022-01-01
 - handling primitives,
 

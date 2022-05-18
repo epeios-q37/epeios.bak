@@ -183,15 +183,15 @@ class Reversi:
 def drawBoard(reversi, dom, prefetch=False):
   board = atlastk.createHTML("tbody")
   for y, row in enumerate(reversi.board):
-    board.push_tag("tr")
+    board.pushTag("tr")
     for x, r in enumerate(row):
-      board.push_tag("td")
-      board.put_attribute("id", str(x) + str(y))
+      board.pushTag("td")
+      board.putAttribute("id", str(x) + str(y))
       if (r == EMPTY) and (reversi.isAllowed(y, x, reversi.player)):
-        board.put_attribute("xdh:onevent", "Play")
+        board.putAttribute("xdh:onevent", "Play")
       board.putValue({EMPTY: ' ', BLACK: 'X', WHITE: 'O'}[r])
-      board.pop_tag()
-    board.pop_tag()
+      board.popTag()
+    board.popTag()
 
   dom.inner("board", board)
 

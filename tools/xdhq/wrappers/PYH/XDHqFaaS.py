@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-_VERSION = "0.13"
+_VERSION = "0.13.1"
 
 import XDHqSHRD
 from XDHqSHRD import getEnv
@@ -81,7 +81,10 @@ _SCRIPTS_VERSION = "0"
 _FORBIDDEN_ID = -1
 _CREATION_ID = -2
 _CLOSING_ID = -3
-_HEAD_RETRIEVING_ID = -4	# Since protocol v1.
+_HEAD_RETRIEVING_ID = -4
+
+_BROADCCAST_ACTION_ID = -3
+_HEAD_SENDING_ID = -4
 
 _writeLock = threading.Lock()
 
@@ -282,7 +285,6 @@ def _serve(callback,userCallback,callbacks ):
 
 			_instances[id] = _Instance(lambda instance : callback(userCallback, callbacks, instance), id)
 		elif id == _CLOSING_ID:	# Value instructing that a session is closed.
-			l()
 			id = readSInt();
 
 			if not id in _instances:
@@ -295,8 +297,7 @@ def _serve(callback,userCallback,callbacks ):
 				instance = None # Without this, instance will only be destroyed
 												# when 'instance" is set to a new instance.
 		elif id == _HEAD_RETRIEVING_ID:
-			l()
-			writeSInt(_HEAD_RETRIEVING_ID)
+			writeSInt(_HEAD_SENDING_ID)
 			writeString(_headContent)
 		elif not id in _instances:
 			_report("Unknown instance of id '" + str(id) + "'!")
@@ -335,7 +336,7 @@ def get_app_url(id=""):
 
 def broadcastAction(action, id = ""):
 	with _writeLock:
-		writeSInt(-3)
+		writeSInt(_BROADCCAST_ACTION_ID)
 		writeString(action)
 		writeString(id)
 

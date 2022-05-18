@@ -17,7 +17,7 @@ import random, time, uuid, builtins
 from xml.etree import ElementTree
 from threading import Lock 
 
-# Don't bother; developper's stuff.
+# Don't bother; developer's stuff.
 with contextlib.suppress(AttributeError):
   __import__("builtins").open = atlastk.defaultBuiltinsFunction
 
@@ -450,8 +450,12 @@ In case of a tie, the bet is returned to the player.
 HEAD = """
 <style>
   @keyframes fadeIn {
-    0% {opacity: 0;}
-    100% {opacity: 1;}
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
   .fade-in {
     animation: fadeIn 1s;

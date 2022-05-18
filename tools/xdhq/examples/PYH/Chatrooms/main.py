@@ -37,8 +37,8 @@ class Room:
 
   def build_xml(self,session):
     xml = atlastk.create_XML("XDHTML")
-    xml.push_tag("Messages")
-    xml.put_attribute("pseudo",session.pseudo)
+    xml.pushTag("Messages")
+    xml.putAttribute("pseudo",session.pseudo)
 
     with self.lock:
       index = len(self.messages) - 1
@@ -46,17 +46,17 @@ class Room:
       while index >= session.last_message:
         message = self.messages[index]
 
-        xml.push_tag( "Message" )
-        xml.put_attribute( "id", index )
-        xml.put_attribute( "pseudo", message['pseudo'] )
+        xml.pushTag( "Message" )
+        xml.putAttribute( "id", index )
+        xml.putAttribute( "pseudo", message['pseudo'] )
         xml.put_value( message['content'] )
-        xml.pop_tag()
+        xml.popTag()
 
         index -= 1
 
       session.last_message = len(self.messages)
 
-    xml.pop_tag()
+    xml.popTag()
 
     return xml
 
@@ -106,11 +106,11 @@ def get_rooms():
   xml = atlastk.create_XML("Rooms")
 
   for id in rooms:
-    xml.push_tag("Room")
-    xml.put_attribute("id", id)
-    xml.put_attribute("URL", atlastk.get_app_url(id))
+    xml.pushTag("Room")
+    xml.putAttribute("id", id)
+    xml.putAttribute("URL", atlastk.get_app_url(id))
     xml.put_value(rooms[id]["name"])
-    xml.pop_tag()
+    xml.popTag()
 
   return xml
 

@@ -48,9 +48,9 @@ def clean(s,i):
   return s.strip(" \n").replace ("    <","<").replace("xdh:widget_","xdh:widget"),i
 
 def display_code(dom,element,i):
-  source = dom.first_child(element);
+  source = dom.firstChild(element);
   code,i = clean(dom.getValue(source),i)
-  dom.setValue(dom.next_sibling(source),html.escape(code))
+  dom.setValue(dom.nextSibling(source),html.escape(code))
 
   return i
 
@@ -58,22 +58,22 @@ def ac_connect(dom):
   global target
 
   dom.inner("", open("Main.html").read())
-  current = dom.next_sibling(dom.next_sibling(dom.first_child("")))
+  current = dom.nextSibling(dom.nextSibling(dom.firstChild("")))
   i = 0
 
   target = ""
   list = "<option disabled selected value> -- Select a widget -- </option>"
 
   while current != "":
-    id = dom.get_attribute(current,"id")
+    id = dom.getAttribute(current,"id")
     dom.setValue("RetrievedWidget", id)
     list += f'<option value="{id}">{id}</option>'
     i = display_code(dom,current,i)
-    current = dom.next_sibling(current)
+    current = dom.nextSibling(current)
 
-  dom.execute_void("document.querySelectorAll('pre').forEach((block) => {hljs.highlightBlock(block);});")
+  dom.executeVoid("document.querySelectorAll('pre').forEach((block) => {hljs.highlightBlock(block);});")
 
-  dom.set_attribute("ckInput","xdh:widget",dom.get_attribute("ckInput","xdh:widget_"))
+  dom.setAttribute("ckInput","xdh:widget",dom.getAttribute("ckInput","xdh:widget_"))
   dom.after("ckInput","")
   dom.inner("List", list)
 
@@ -96,9 +96,9 @@ def dl_shape(flavors):
   html = atlastk.create_HTML()
 
   for flavor in flavors:
-    html.push_tag("option")
-    html.put_attribute("value", flavor)
-    html.pop_tag()
+    html.pushTag("option")
+    html.putAttribute("value", flavor)
+    html.popTag()
 
   return html
 
@@ -109,7 +109,7 @@ def ac_dl_submit(dom, id):
 
   flavor = dom.getValue(id)
   dom.setValue(id, "")
-  if not flavor in dl_flavors:
+  if flavor not in dl_flavors:
     dl_flavors.append(flavor)
     dl_flavors.sort()
     dom.inner("dlFlavors", dl_shape(dl_flavors))
@@ -118,8 +118,8 @@ def ac_dl_submit(dom, id):
 def sl_embed(other):
   html = atlastk.create_HTML()
 
-  html.push_tag("option")
-  html.put_attribute("selected", "selected")
+  html.pushTag("option")
+  html.putAttribute("selected", "selected")
   html.put_value(other)
 
   return html
@@ -150,13 +150,13 @@ callbacks = {
 
   "clSelect": lambda dom, id: dom.setValue("clOutput", dom.getValue(id)),
 
-  "rgSlide": lambda dom: dom.set_attribute("rgOutput", "value", (dom.getValue("rgVolume"))),
+  "rgSlide": lambda dom: dom.setAttribute("rgOutput", "value", (dom.getValue("rgVolume"))),
 
   "slSelect": lambda dom, id: dom.setValue("slOutput", dom.getValue(id)),
   "slAdd": ac_sl_add,
   "slToggle": lambda dom, id: dom.disableElement("slOthers") if dom.getValue(id) == 'true' else dom.enableElement("slOthers"),
-  "slRadio": lambda dom: ac_select(dom, "List", "radio")
-,
+  "slRadio": lambda dom: ac_select(dom, "List", "radio"),
+
   "ckSubmit": lambda dom, id: dom.setValue("ckOutput", dom.getValue("ckInput")),
 }
 

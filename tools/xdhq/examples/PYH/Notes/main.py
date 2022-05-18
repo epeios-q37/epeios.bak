@@ -33,13 +33,13 @@ import atlastk
 view_mode_elements = ["Pattern", "CreateButton", "DescriptionToggling", "ViewNotes"]
 
 def put(note, id, xml ):
-  xml.push_tag("Note")
-  xml.put_attribute("id", id)
+  xml.pushTag("Note")
+  xml.putAttribute("id", id)
 
   for key in note:
     xml.put_tag_and_value(key, note[key])
 
-  xml.pop_tag()
+  xml.popTag()
 
 class Notes:
   def __init__(self):
@@ -75,7 +75,7 @@ class Notes:
     xml = atlastk.create_XML("XDHTML")
     values = {}
 
-    xml.push_tag("Notes")
+    xml.pushTag("Notes")
 
     for index in range(len(self.notes)):
       if index == 0: # 0 skipped, as it serves as buffer for the new ones.

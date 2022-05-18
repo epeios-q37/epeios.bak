@@ -78,13 +78,13 @@ def draw_set(set,dom):
   svg = atlastk.createHTML()
   
   for i in range(len(set)):
-    svg.push_tag("rect")
-    svg.put_attribute("x", str(i*100/len(set)) + "%");
-    svg.put_attribute("y", height-set[i]["value"]*height/max)
-    svg.put_attribute("width", str(100/len(set)) + "%");
-    svg.put_attribute("height", str(100*set[i]["value"]/max) + "%");
+    svg.pushTag("rect")
+    svg.putAttribute("x", str(i*100/len(set)) + "%");
+    svg.putAttribute("y", height-set[i]["value"]*height/max)
+    svg.putAttribute("width", str(100/len(set)) + "%");
+    svg.putAttribute("height", str(100*set[i]["value"]/max) + "%");
     svg.put_tag_and_value("title", set[i]["date"] + " : " + str(set[i]["value"]))
-    svg.pop_tag();
+    svg.popTag();
 
   dom.inner("SVG", svg)
   

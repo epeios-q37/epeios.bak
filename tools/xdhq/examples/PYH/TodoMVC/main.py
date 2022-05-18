@@ -49,11 +49,11 @@ class TodoMVC:
     return count
 
   def push(self, todo, id, xml):
-    xml.push_tag("Todo")
-    xml.put_attribute("id", id)
-    xml.put_attribute("completed", "true" if todo['completed'] else "false")
+    xml.pushTag("Todo")
+    xml.putAttribute("id", id)
+    xml.putAttribute("completed", "true" if todo['completed'] else "false")
     xml.putValue(todo['label'])
-    xml.pop_tag()
+    xml.popTag()
 
   def display_count(self, dom, count):
     text = ""
@@ -78,7 +78,7 @@ class TodoMVC:
   def display_todos(self, dom):
     xml = atlastk.create_XML("XDHTML")
 
-    xml.push_tag("Todos")
+    xml.pushTag("Todos")
 
     for index in range(len(self.todos)):
       todo = self.todos[index]
@@ -86,7 +86,7 @@ class TodoMVC:
       if (self.exclude == None) or (todo['completed'] != self.exclude):
         self.push(todo, index, xml)
 
-    xml.pop_tag()
+    xml.popTag()
 
     dom.inner("Todos", xml, "Todos.xsl")
     self.handle_count(dom)

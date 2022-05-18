@@ -16,7 +16,7 @@ class Switch:
 
 def ac_switch(switch, dom):
   switch.value = not switch.value
-  dom.Log(switch.value)
+  dom.debugLog(switch.value)
   dom.setValue("Switch", "ON" if switch.value else "OFF")
 
 

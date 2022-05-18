@@ -754,7 +754,7 @@ namespace {
 		rBackend_ *Backend = NULL;
 	qRH;
 		flw::rDressedRWFlow<> Flow;
-		str::wString Token, Head, Address, Misc, ErrorMessageLabel, ErrorMessage, URL;
+		str::wString Token, Head, Address, Misc, ErrorMessageLabel, ErrorMessage, URL, Log;
 		plugins::eStatus Status = plugins::s_Undefined;
 	qRB;
 		Flow.Init( Driver );
@@ -792,7 +792,12 @@ namespace {
 		else {
 			URL.Init();
 			Put_(BuildURL_(Address, str::Empty, Token, URL), Flow);
-			Log_(IP, Token, Flavour );
+
+			bso::pInteger Buffer;
+			Log.Init(Flavour);
+			Log.Append(" / v");
+			Log.Append(bso::Convert(ProtocolVersion, Buffer));
+			Log_(IP, Token, Log );
 		}
 	qRR;
 		if ( Backend != NULL )

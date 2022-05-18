@@ -313,7 +313,7 @@ class DOM:
 	def removeClass(self,id,class_ ):
 		self.removeClasses({id: class_})
 
-	removeclass	= removeClass
+	remove_class	= removeClass
 
 	def toggleClass(self,id,clas ):
 		self.toggleClasses({id: clas})

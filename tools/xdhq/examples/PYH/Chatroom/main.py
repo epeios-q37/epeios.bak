@@ -40,8 +40,8 @@ class Chatroom:
 
   def build_xml(self):
     xml = atlastk.create_XML("XDHTML")
-    xml.push_tag( "Messages" )
-    xml.put_attribute( "pseudo", self.pseudo )
+    xml.pushTag( "Messages" )
+    xml.putAttribute( "pseudo", self.pseudo )
 
     global messages, pseudos
 
@@ -51,17 +51,17 @@ class Chatroom:
       while index >= self.last_message:
         message = messages[index]
 
-        xml.push_tag( "Message" )
-        xml.put_attribute( "id", index )
-        xml.put_attribute( "pseudo", message['pseudo'] )
+        xml.pushTag( "Message" )
+        xml.putAttribute( "id", index )
+        xml.putAttribute( "pseudo", message['pseudo'] )
         xml.put_value( message['content'] )
-        xml.pop_tag()
+        xml.popTag()
 
         index -= 1
 
       self.last_message = len(messages)
 
-    xml.pop_tag()
+    xml.popTag()
 
     return xml
 

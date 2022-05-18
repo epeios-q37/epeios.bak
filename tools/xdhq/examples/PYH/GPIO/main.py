@@ -270,38 +270,38 @@ class GPIO:
     return self._getSetting(wId)[Setting.SELECTED]
 
   def _buildModeCorpus(self,xml):
-    xml.push_tag("Modes")
+    xml.pushTag("Modes")
 
     for mode in Mode.label:
-      xml.push_tag("Mode")
-      xml.put_attribute("id", mode)
-      xml.put_attribute("Label", Mode.label[mode])
-      xml.pop_tag()
+      xml.pushTag("Mode")
+      xml.putAttribute("id", mode)
+      xml.putAttribute("Label", Mode.label[mode])
+      xml.popTag()
 
-    xml.pop_tag()
+    xml.popTag()
 
   def _buildCorpus(self,xml):
-    xml.push_tag( "Corpus")
+    xml.pushTag( "Corpus")
 
     self._buildModeCorpus(xml)
 
-    xml.pop_tag()
+    xml.popTag()
 
   def _buildXML(self):
     global mapping
     xml = atlastk.createXML("XDHTML")
     self._buildCorpus(xml)
-    xml.push_tag("GPIOs")
+    xml.pushTag("GPIOs")
 
     for wId in mapping:
-      xml.push_tag("GPIO")
-      xml.put_attribute( "id", wId)
-      xml.put_attribute("Selected", self._getSelected(wId))
-      xml.put_attribute("Mode",self._getMode(wId))
-      xml.put_attribute("Value",self._getValue(wId))
-      xml.pop_tag()
+      xml.pushTag("GPIO")
+      xml.putAttribute( "id", wId)
+      xml.putAttribute("Selected", self._getSelected(wId))
+      xml.putAttribute("Mode",self._getMode(wId))
+      xml.putAttribute("Value",self._getValue(wId))
+      xml.popTag()
 
-    xml.pop_tag()
+    xml.popTag()
 
     return xml
 

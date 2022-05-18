@@ -157,18 +157,18 @@ class Reversi:
 def draw_board(reversi, dom, playability = True):
   board = atlastk.createHTML("tbody")
   for y, row in enumerate(reversi.board.array()):
-    board.push_tag("tr")
+    board.pushTag("tr")
     for x, r in enumerate(row):
-      board.push_tag("td")
-      board.put_attribute("id", str(x) + str(y))
+      board.pushTag("td")
+      board.putAttribute("id", str(x) + str(y))
       playable = playability and (r == core.EMPTY) and (reversi.board.isAllowed(y, x, reversi.bw if reversi.bw != core.EMPTY else core.BLACK))
       if playable:
-        board.put_attribute("xdh:onevent", "Play")
-      board.put_attribute(
+        board.putAttribute("xdh:onevent", "Play")
+      board.putAttribute(
         "class", {core.EMPTY: 'none', core.BLACK: 'black', core.WHITE: 'white'}[r] + (" playable" if playable else ""))
       board.putValue({core.EMPTY: ' ', core.BLACK: 'X', core.WHITE: 'O'}[r])
-      board.pop_tag()
-    board.pop_tag()
+      board.popTag()
+    board.popTag()
 
   dom.inner("board", board)
 
