@@ -108,6 +108,7 @@ callbacks = {
         <option value="Caramel"></option>
         <option value="Chocolate"></option>
         <option value="Vanilla"></option>
+        <option value="Mint"></option>
       </datalist>
     </span>
     <span>Selected flavor: </span>
@@ -119,23 +120,23 @@ callbacks = {
   </fieldset>
   <pre class="lang-html"></pre>
   <pre class="lang-python">
-dl_flavors = ["Vanilla", "Chocolate", "Caramel"]  
+dlFlavors = ["Vanilla", "Chocolate", "Caramel", "Mint"]  
 
 
-def ac_dl_submit(dom, id):
-  global dl_flavors
+def acDlSubmit(dom, id):
+  global dlFlavors
 
   flavor = dom.getValue(id)
   dom.setValue(id, "")
-  if not flavor in dl_flavors:
-    dl_flavors.append(flavor)
-    dl_flavors.sort()
-    dom.inner("dlFlavors", dl_shape(dl_flavors))
+  if not flavor in dlFlavors:
+    dlFlavors.append(flavor)
+    dlFlavors.sort()
+    dom.inner("dlFlavors", dlShape(dlFlavors))
   dom.setValue("dlOutput", flavor)
 
 
 callbacks = {
-  "dlSubmit": ac_dl_submit,
+  "dlSubmit": acDlSubmit,
 } </pre>
 </fieldset>
 <fieldset class="hidden" id="date">
@@ -214,21 +215,21 @@ callbacks = {
   </fieldset>
   <pre class="lang-html"></pre>
   <pre class="lang-python">
-def sl_embed(other):
+def slEmbed(other):
   html = atlastk.create_HTML()
-  html.push_tag("option")
-  html.put_attribute("selected", "selected")
-  html.put_value(other)
+  html.pushTag("option")
+  html.putAttribute("selected", "selected")
+  html.putValue(other)
   return html
 
-def ac_sl_add(dom):
-  dom.begin("slOthers", sl_embed(dom.getValue("slInput")))
+def acSlAdd(dom):
+  dom.begin("slOthers", slEmbed(dom.getValue("slInput")))
   dom.setValue("slInput", "")
   dom.focus("slInput")  
   
 callbacks = {
   "slSelect": lambda dom, id: dom.setValue("slOutput", dom.getValue(id)),
-  "slAdd": ac_sl_add,
+  "slAdd": acSlAdd,
   "slToggle": lambda dom, id: dom.disableElement("slOthers") if dom.getValue(id) == 'true' else dom.enableElement("slOthers"),
 } </pre>
 </fieldset>

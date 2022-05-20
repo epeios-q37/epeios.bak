@@ -29,19 +29,19 @@ sys.path.append("../../atlastk")
 
 import atlastk
 
-def ac_connect(dom):
+def acConnect(dom):
   dom.inner("", open("Main.html").read())
   dom.addClass("Input","hidden")
 
-def ac_show_input(dom):
+def acShowInput(dom):
   dom.removeClass("Input", "hidden")
   dom.focus("Pattern")
 
 callbacks = {
-  "": ac_connect,
+  "": acConnect,
   "Submit": lambda dom, id: dom.setValue("Pattern", dom.getValue("Pattern").upper() ),
   "HideInput": lambda dom, id: dom.addClass("Input", "hidden"),
-  "ShowInput": ac_show_input,
+  "ShowInput": acShowInput,
 }
 
 atlastk.launch(callbacks, None, open("Head.html").read())

@@ -86,11 +86,11 @@ fields = []
 contacts = EXAMPLE
 
 
-def display_contact(contactId,dom):
+def displayContact(contactId,dom):
   dom.setValues(EMPTY_CONTACT if contactId == None else contacts[contactId])
 
 
-def display_contacts(contacts,dom):
+def displayContacts(contacts,dom):
   html = ""
 
   for contactId in range(len(contacts)):
@@ -107,7 +107,7 @@ def display_contacts(contacts,dom):
   dom.inner("Content", html)
 
 
-def update_outfit(board, dom):
+def updateOutfit(board, dom):
   if board.state == State.DISPLAY:
     dom.disableElement("HideDisplay")
     dom.enableElement("HideEdition")
@@ -124,37 +124,37 @@ def update_outfit(board, dom):
     raise Exception("Unknown state!")
 
 
-def ac_connect(board, dom):
+def acConnect(board, dom):
   dom.inner("",open("Main.html").read())
-  display_contacts(contacts,dom)
+  displayContacts(contacts,dom)
   board.state = State.DISPLAY
-  update_outfit(board,dom)
+  updateOutfit(board,dom)
 
 
-def ac_refresh(board,dom):
-  display_contacts(contacts,dom)
+def acRefresh(board,dom):
+  displayContacts(contacts,dom)
 
 
-def ac_select(board,dom,id):
+def acSelect(board,dom,id):
   contactId = int(id)
 
-  display_contact(contactId,dom)
+  displayContact(contactId,dom)
   board.state = State.DISPLAY
   board.contactId = contactId
 
-  update_outfit(board, dom)
+  updateOutfit(board, dom)
 
 
-def ac_delete(board,dom):
+def acDelete(board,dom):
   if board.contactId == None:
     raise Exception("No contact selected!")
 
   contacts.pop(board.contactId)
   board.contactId = None;
 
-  display_contact(None,dom)
+  displayContact(None,dom)
 
-  update_outfit(board,dom)
+  updateOutfit(board,dom)
 
   atlastk.broadcastAction("Refresh")
 
@@ -164,27 +164,27 @@ def edit(board,dom):
 
   board.state = State.EDIT
 
-  display_contact(contactId,dom)
+  displayContact(contactId,dom)
 
-  update_outfit(board,dom)
+  updateOutfit(board,dom)
 
   dom.focus("Name")
 
 
-def ac_new(board,dom):
+def acNew(board,dom):
   board.contactId = None
 
   edit(board,dom)
 
 
-def ac_edit(board,dom):
+def acEdit(board,dom):
   if board.contactId == None:
     raise Exception("No contact selected!")  
 
   edit(board,dom)
 
 
-def ac_submit(board,dom):
+def acSubmit(board,dom):
   idsAndValues = dom.getValues(fields)
 
   if not idsAndValues['Name'].strip():
@@ -193,7 +193,7 @@ def ac_submit(board,dom):
 
   if board.contactId == None or board.contactId >= len(contacts):
     contacts.append(idsAndValues)
-    display_contact(None,dom)
+    displayContact(None,dom)
   else:
     contacts[board.contactId] = idsAndValues
 
@@ -201,29 +201,29 @@ def ac_submit(board,dom):
 
   board.state = State.DISPLAY
 
-  update_outfit(board,dom)
+  updateOutfit(board,dom)
 
 
-def ac_cancel(board,dom):
+def acCancel(board,dom):
   if not dom.confirm("Are you sure?"):
     return
 
-  display_contact(board.contactId,dom)
+  displayContact(board.contactId,dom)
 
   board.state = State.DISPLAY
 
-  update_outfit(board,dom)
+  updateOutfit(board,dom)
 
 
 CALLBACKS = {
-  "": ac_connect,
-  "Refresh": ac_refresh,
-  "Select": ac_select,
-  "Delete": ac_delete,
-  "New": ac_new,
-  "Edit": ac_edit,
-  "Submit": ac_submit,
-  "Cancel": ac_cancel
+  "": acConnect,
+  "Refresh": acRefresh,
+  "Select": acSelect,
+  "Delete": acDelete,
+  "New": acNew,
+  "Edit": acEdit,
+  "Submit": acSubmit,
+  "Cancel": acCancel
 }
 
 for key in EMPTY_CONTACT.keys():

@@ -66,19 +66,19 @@ def swap(puzzle, dom, source):
   puzzle.blank = source
 
 
-def convert_x(pos):
+def convertX(pos):
   return pos % 4
 
 
-def convert_y(pos):
+def convertY(pos):
   return pos >> 2  # pos / 4
 
 
 def convert(pos):
-  return convert_x(pos), convert_y(pos)
+  return convertX(pos), convertY(pos)
 
 
-def draw_square(board, x, y):
+def drawSquare(board, x, y):
   board.pushTag("use")
   board.putAttribute("id", y * 4 + x)
   board.putAttribute("xdh:onevent", "Swap")
@@ -88,15 +88,15 @@ def draw_square(board, x, y):
   board.popTag()
 
 
-def draw_grid(dom):
+def drawGrid(dom):
   board = atlastk.create_HTML("g")
   for x in range(0, 4):
     for y in range(0, 4):
-      draw_square(board, x, y)
+      drawSquare(board, x, y)
   dom.inner("Stones", board)
 
 
-def set_text(texts, x, y):
+def setText(texts, x, y):
   texts.pushTag("tspan")
   texts.putAttribute("id", "t" + str(y * 4 + x))
   texts.putAttribute("x", x * 100 + 72)
@@ -104,21 +104,21 @@ def set_text(texts, x, y):
   texts.popTag()
 
 
-def set_texts(dom):
+def setTexts(dom):
   texts = atlastk.create_HTML("text")
   for x in range(0, 4):
     for y in range(0, 4):
-      set_text(texts, x, y)
+      setText(texts, x, y)
   dom.inner("Texts", texts)
 
 
 def scramble(puzzle, dom):
-  draw_grid(dom)
-  set_texts(dom)
+  drawGrid(dom)
+  setTexts(dom)
   fill(puzzle, dom)
 
 
-def ac_connect(self, dom):
+def acConnect(self, dom):
   dom.inner("", open("Main.html").read())
   scramble(self, dom)
 
@@ -135,7 +135,7 @@ def build(sourceIds,targetIds,sourceIdsAndValues, blank):
   return targetIdsAndValues
 
 
-def ac_swap(self, dom, id):
+def acSwap(self, dom, id):
   target = int(id)
   source = self.blank
   sourceIds = []
@@ -150,14 +150,14 @@ def ac_swap(self, dom, id):
       targetIds.append("t"+str(source))
       source += delta
       sourceIds.append("t"+str(source))
-      by = convert_y(source)
+      by = convertY(source)
   elif (iy == by):
     delta = 1 if bx < ix else -1
     while(bx != ix):
       targetIds.append("t"+str(source))
       source += delta
       sourceIds.append("t"+str(source))
-      bx = convert_x(source)
+      bx = convertX(source)
 
   dom.setValues(build(sourceIds, targetIds, dom.getValues(sourceIds), id))
 
@@ -170,8 +170,8 @@ def ac_swap(self, dom, id):
 
 
 callbacks = {
-  "": ac_connect,
-  "Swap": ac_swap,
+  "": acConnect,
+  "Swap": acSwap,
   "Scramble": lambda self, dom, id: scramble(self, dom)
 }
 

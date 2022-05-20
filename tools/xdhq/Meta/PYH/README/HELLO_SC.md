@@ -12,19 +12,19 @@ BODY = """
 </fieldset>
 """
  
-def ac_connect(dom):
+def acConnect(dom):
   dom.inner("", BODY)
   dom.focus("Input")
  
-def ac_submit(dom):
-  name = dom.get_value("Input")
+def acSubmit(dom):
+  name = dom.getValue("Input")
   dom.begin("Output", f"<div>Hello, {name}!</div>")
-  dom.set_value("Input", "")
+  dom.setValue("Input", "")
   dom.focus("Input")
  
 CALLBACKS = {
-  "": ac_connect,
-  "Submit": ac_submit
+  "": acConnect,
+  "Submit": acSubmit
 }
  
 atlastk.launch(CALLBACKS)

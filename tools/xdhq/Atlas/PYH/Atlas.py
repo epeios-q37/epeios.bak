@@ -28,6 +28,9 @@ import inspect, time, socket, signal, sys, os
 
 from XDHq import set_supplier, get_app_url, l
 
+setSupplier = set_supplier
+getAppURL = get_app_url
+
 if sys.version_info[0] == 2:
 	import __builtin__ as builtins
 else:

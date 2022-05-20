@@ -29,7 +29,7 @@ DEMOS = (
 	"Chatrooms",
 	"PigGame",
 	"Reversi",
-	"MatPlotLib"
+#	"MatPlotLib"  # Is not displayed properly under 'Replit'.
 )
 
 DEMOS_AMOUNT = len(DEMOS)

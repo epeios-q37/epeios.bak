@@ -35,11 +35,11 @@ lock = threading.Lock()
 
 class Chatroom:
   def __init__(self):
-    self.last_message = 0
+    self.lastMessage = 0
     self.pseudo = ""
 
-  def build_xml(self):
-    xml = atlastk.create_XML("XDHTML")
+  def buildXML(self):
+    xml = atlastk.createXML("XDHTML")
     xml.pushTag( "Messages" )
     xml.putAttribute( "pseudo", self.pseudo )
 
@@ -48,30 +48,30 @@ class Chatroom:
     with lock:
       index = len( messages ) - 1
 
-      while index >= self.last_message:
+      while index >= self.lastMessage:
         message = messages[index]
 
         xml.pushTag( "Message" )
         xml.putAttribute( "id", index )
         xml.putAttribute( "pseudo", message['pseudo'] )
-        xml.put_value( message['content'] )
+        xml.putValue( message['content'] )
         xml.popTag()
 
         index -= 1
 
-      self.last_message = len(messages)
+      self.lastMessage = len(messages)
 
     xml.popTag()
 
     return xml
 
-  def display_messages(self, dom):
+  def displayMessages(self, dom):
     global messages
     
-    if len(messages) > self.last_message:
-      dom.begin("Board", self.build_xml(), "Messages.xsl")
+    if len(messages) > self.lastMessage:
+      dom.begin("Board", self.buildXML(), "Messages.xsl")
 
-  def handle_pseudo(self, pseudo):
+  def handlePseudo(self, pseudo):
     global pseudos
 
     with lock:
@@ -83,7 +83,7 @@ class Chatroom:
 
     return result
 
-  def add_message(self, pseudo, message):
+  def addMessage(self, pseudo, message):
     global messages
     message = message.strip()
 
@@ -92,19 +92,19 @@ class Chatroom:
       with lock:
         messages.append({'pseudo': pseudo, 'content': message})
 
-def ac_connect(chatroom, dom):
+def acConnect(chatroom, dom):
   dom.inner("", open("Main.html").read())
   dom.focus("Pseudo")
-  chatroom.display_messages(dom)
+  chatroom.displayMessages(dom)
   
-def ac_submit_pseudo(chatroom, dom):
+def acSubmitPseudo(chatroom, dom):
   pseudo = dom.getValue("Pseudo").strip()
 
   if not pseudo:
     dom.alert("Pseudo. can not be empty !")
     dom.setValue("Pseudo", "")
     dom.focus("Pseudo")
-  elif chatroom.handle_pseudo(pseudo.upper()):
+  elif chatroom.handlePseudo(pseudo.upper()):
     chatroom.pseudo = pseudo
     dom.addClass("PseudoButton", "hidden")
 #		dom.disableElements(["Pseudo", "PseudoButton"])
@@ -118,19 +118,19 @@ def ac_submit_pseudo(chatroom, dom):
     dom.setValue("Pseudo", pseudo)
     dom.focus("Pseudo")
 
-def ac_submit_message(chatroom, dom):
+def acSubmitMessage(chatroom, dom):
   message = dom.getValue("Message")
   dom.setValue("Message", "")
   dom.focus("Message")
-  chatroom.add_message(chatroom.pseudo, message)
-  chatroom.display_messages(dom)
+  chatroom.addMessage(chatroom.pseudo, message)
+  chatroom.displayMessages(dom)
   atlastk.broadcastAction("Update")
 
 callbacks = {
-    "": ac_connect,
-    "SubmitPseudo": ac_submit_pseudo,
-    "SubmitMessage": ac_submit_message,
-    "Update": lambda chatroom, dom: chatroom.display_messages(dom),
+    "": acConnect,
+    "SubmitPseudo": acSubmitPseudo,
+    "SubmitMessage": acSubmitMessage,
+    "Update": lambda chatroom, dom: chatroom.displayMessages(dom),
   }
     
 atlastk.launch(callbacks, Chatroom, open("Head.html").read())

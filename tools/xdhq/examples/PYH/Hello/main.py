@@ -29,23 +29,25 @@ sys.path.append("../../atlastk")
 
 import atlastk
 
-def ac_connect(dom):
+def acConnect(dom):
   dom.inner("", open( "Main.html").read() )
   dom.focus( "input")
 
-def ac_submit(dom):
+def acSubmit(dom):
   dom.alert("Hello, {}!".format(dom.getValue("input")))
   dom.focus( "input")
 
-def ac_clear(dom):
+def acClear(dom):
   if ( dom.confirm("Are you sure?" ) ):
     dom.setValue("input", "" )
   dom.focus( "input")
 
 callbacks = {
-  "": ac_connect,
-  "Submit": ac_submit,
-  "Clear": ac_clear,
+  "": acConnect,
+  "Submit": acSubmit,
+  "Clear": acClear,
 }
     
 atlastk.launch(callbacks, None, open("Head.html").read())
+
+

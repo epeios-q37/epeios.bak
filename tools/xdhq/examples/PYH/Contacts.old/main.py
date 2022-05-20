@@ -88,16 +88,16 @@ def displayContacts(dom, contacts):
   for i in range(len(contacts)):
     contact = contacts[i]
     html.pushTag("tr")
-    html.put_attribute("id", i)
-    html.put_attribute("xdh:onevent", "Select")
+    html.putAttribute("id", i)
+    html.putAttribute("xdh:onevent", "Select")
     for key in contact:
       if (key == 'Note'):
         id = "Note." + str(i)
         html.pushTag("td")
-        html.put_attribute("id", id)
+        html.putAttribute("id", id)
         notes[id] = contact[key]
       else:
-        html.put_tag_and_value("td", contact[key])
+        html.putTagAndValue("td", contact[key])
     html.popTag()
 
   dom.inner("Content", html)

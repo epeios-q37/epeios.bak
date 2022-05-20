@@ -76,7 +76,7 @@ def showWord(dom, secretWord, correctGuesses):
       output = output[:i] + secretWord[i] + output[i + 1:]
 
   html = atlastk.createHTML()
-  html.put_tag_and_value("h1", output)
+  html.putTagAndValue("h1", output)
   dom.inner("output", html)
 
 

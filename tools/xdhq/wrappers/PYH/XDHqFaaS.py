@@ -83,7 +83,7 @@ _CREATION_ID = -2
 _CLOSING_ID = -3
 _HEAD_RETRIEVING_ID = -4
 
-_BROADCCAST_ACTION_ID = -3
+_BROADCAST_ACTION_ID = -3
 _HEAD_SENDING_ID = -4
 
 _writeLock = threading.Lock()
@@ -336,7 +336,7 @@ def get_app_url(id=""):
 
 def broadcastAction(action, id = ""):
 	with _writeLock:
-		writeSInt(_BROADCCAST_ACTION_ID)
+		writeSInt(_BROADCAST_ACTION_ID)
 		writeString(action)
 		writeString(id)
 

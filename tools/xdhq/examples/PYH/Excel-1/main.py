@@ -143,16 +143,16 @@ def reading(dom):
   dom.addClass("output", "hidden")
   dom.scrollTo("states")
   
-def ac_connect(dom):
+def acConnect(dom):
   dom.inner("", open("Main.html").read())
   reading(dom)
 
-def ac_view(dom,id):
+def acView(dom,id):
   dom.scrollTo(dom.getMark(id))
 
 callbacks = {
-  "": ac_connect,
-  "View": ac_view,
+  "": acConnect,
+  "View": acView,
   "Refresh": lambda dom : reading(dom)
 }
 

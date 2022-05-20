@@ -72,7 +72,7 @@ def load(workbook):
 
   return items, (sheet.max_row - 1) / len(items)
 
-def targets_layout(items,limit):
+def targetsLayout(items,limit):
   layout = ""
 
   for item in sorted(items.items(), key = lambda item: item[1]):
@@ -85,7 +85,7 @@ def targets_layout(items,limit):
 
   return layout
 
-def sources_layout(items,limit):
+def sourcesLayout(items,limit):
   layout = ""
 
   for item in sorted(items.items(), key = lambda item: item[0]):
@@ -99,8 +99,8 @@ def sources_layout(items,limit):
 def fill(dom):
   items, limit = load(workbook)
 
-  dom.after("targets",targets_layout(items,limit))
-  dom.after("sources",sources_layout(items,limit))
+  dom.after("targets",targetsLayout(items,limit))
+  dom.after("sources",sourcesLayout(items,limit))
 
 def display(dom):
   global targetLabels, sourceLabel, expanded
@@ -111,7 +111,7 @@ def display(dom):
   expanded = True
   dom.disableElement("HideUnselected")
 
-def ac_connect(dom):
+def acConnect(dom):
   global workbook
 
   dom.inner("", open("Main.html").read())
@@ -130,7 +130,7 @@ def ac_connect(dom):
   dom.setValue("output", "Done.")
   dom.addClass("output", "hidden")
 
-def ac_checkbox_click(dom,id):
+def acCheckboxClick(dom,id):
   global targetLabels
 
   mark = dom.getMark(id)
@@ -142,7 +142,7 @@ def ac_checkbox_click(dom,id):
 
   dom.toggleClass("tr.{}".format(mark),"unselected")
 
-def ac_radio_click(dom,id):
+def acRadioClick(dom,id):
   global sourceLabel
 
   if sourceLabel:
@@ -152,7 +152,7 @@ def ac_radio_click(dom,id):
 
   dom.toggleClass("tr.{}".format(sourceLabel),"unselected")
 
-def ac_collapse_expand(dom):
+def acCollapseExpand(dom):
   global expanded
 
   expanded = not expanded
@@ -162,7 +162,7 @@ def ac_collapse_expand(dom):
   else:
     dom.enableElement("HideUnselected")
 
-def ac_apply(dom):
+def acApply(dom):
   global workbook
 
   sheet = workbook['Sheet']
@@ -176,12 +176,12 @@ def ac_apply(dom):
   display(dom)
   
 callbacks = {
-  "": ac_connect,
-  "CheckboxClick": ac_checkbox_click,
-  "RadioClick": ac_radio_click,
+  "": acConnect,
+  "CheckboxClick": acCheckboxClick,
+  "RadioClick": acRadioClick,
   "Jump": lambda dom: dom.scrollTo("sources"),
-  "CollapseExpand": ac_collapse_expand,
-  "Apply": ac_apply
+  "CollapseExpand": acCollapseExpand,
+  "Apply": acApply
 }
 
 atlastk.launch(callbacks, None, open("Head.html").read())

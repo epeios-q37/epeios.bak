@@ -64,7 +64,7 @@ modificationsItem = """
 </tr>
 """
 
-def reading_updates(dom,modifications=None):
+def readingUpdates(dom,modifications=None):
   global updates
   importlib.reload(updates)
   dom.setValue("updates", "")
@@ -79,12 +79,12 @@ def reading_updates(dom,modifications=None):
 def reading(dom):
   dom.setValue("output", "Initialization…")
 
-  reading_updates(dom)
+  readingUpdates(dom)
 
   dom.setValue('output', 'Done')
   dom.addClass("output", "hidden")
 
-def update_workbook(dom):
+def updateWorkbook(dom):
   dom.setValue("sales", "");
 
   dom.setValue('output', 'Opening workbook...')
@@ -124,7 +124,7 @@ def update_workbook(dom):
 
   return modifications
   
-def display_modifications(dom,modifications):
+def displayModifications(dom,modifications):
   modificationsLayout = ""
   for produce, lines in modifications.items():
     for line in lines:
@@ -133,24 +133,24 @@ def display_modifications(dom,modifications):
   dom.inner("modifications", modificationsLayout)
 
 
-def ac_connect(dom):
+def acConnect(dom):
   dom.inner("", open("Main.html").read())
   reading(dom)
 
-def ac_apply(dom):
-  modifications = update_workbook(dom)
-  display_modifications(dom,modifications)
-  reading_updates(dom,modifications)
+def acApply(dom):
+  modifications = updateWorkbook(dom)
+  displayModifications(dom,modifications)
+  readingUpdates(dom,modifications)
 
-def ac_view(dom,id):
+def acView(dom,id):
   dom.scrollTo(dom.getValue(id))
 
 
 callbacks = {
-  "": ac_connect,
-  "Refresh": lambda dom: reading_updates(dom),
-  "Apply": ac_apply,
-  "View": ac_view
+  "": acConnect,
+  "Refresh": lambda dom: readingUpdates(dom),
+  "Apply": acApply,
+  "View": acView
 }
 
 atlastk.launch(callbacks, None, open("Head.html").read())

@@ -66,7 +66,7 @@ def fill(data,code,key):
   return set
 
 
-def draw_set(set,dom):
+def drawSet(set,dom):
   seq = [item['value'] for item in set]
   max = builtins.max(seq)
   min = builtins.min(seq)
@@ -83,20 +83,18 @@ def draw_set(set,dom):
     svg.putAttribute("y", height-set[i]["value"]*height/max)
     svg.putAttribute("width", str(100/len(set)) + "%");
     svg.putAttribute("height", str(100*set[i]["value"]/max) + "%");
-    svg.put_tag_and_value("title", set[i]["date"] + " : " + str(set[i]["value"]))
+    svg.putTagAndValue("title", set[i]["date"] + " : " + str(set[i]["value"]))
     svg.popTag();
 
   dom.inner("SVG", svg)
   
   dom.setValue("Text",set[0]["date"] + " - " + set[len(set)-1]["date"])
   
-def get_relat(absol):
-  relat = []
-  
-  for i in range(1,len(absol)):
-    relat.append({"date": absol[i]["date"],"value": absol[i]["value"]-absol[i-1]["value"]})    
-    
-  return relat
+def getRelat(absol):
+  return [{
+      "date": absol[i]["date"],
+      "value": absol[i]["value"] - absol[i - 1]["value"]
+  } for i in range(1, len(absol))]
 
 def draw(dom):
   values = dom.getValues(["Code", "Cible", "Relatif"])
@@ -104,16 +102,16 @@ def draw(dom):
   absol = fill(data,values["Code"],values["Cible"])
   
   
-  draw_set(get_relat(absol) if values["Relatif"] == "true" else absol,dom)
+  drawSet(getRelat(absol) if values["Relatif"] == "true" else absol,dom)
 
 
-def a_connect(dom):
+def acConnect(dom):
   dom.inner("", BODY)
   
   draw(dom)
   
 callbacks = {
-  "": a_connect,
+  "": acConnect,
   "Redraw": lambda dom : draw(dom)
 }
 
