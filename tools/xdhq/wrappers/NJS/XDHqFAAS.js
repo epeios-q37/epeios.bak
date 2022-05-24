@@ -112,7 +112,7 @@ const mainProtocolLabel = "22bb5d73-924f-473f-a68a-14f41d8bfa83";
 const mainProtocolVersion = "0";
 
 const faasProtocolLabel = "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf";
-const faasProtocolVersion = "0";
+const faasProtocolVersion = "1";
 const scriptVersion ="0";
 
 var token = getEnv("ATK_TOKEN");
@@ -172,7 +172,7 @@ function addStrings(data, strings) {
 }
 
 function handleString(string) {
-	let data = new Buffer(0);
+	let data = Buffer.alloc(0);
 
 	data = addString(data, string);
 
@@ -364,10 +364,11 @@ const s = {
 const ids = {
 	FORBIDDEN: -1,
 	CREATION: -2,
-	CLOSING: -3
+	CLOSING: -3,
+	HEAD: -4,
 }
 
-function handleCommand(command) {
+function handleCommand(command, head) {
 	let IsCommand = true;
 
 	// console.log(command);
@@ -383,6 +384,9 @@ function handleCommand(command) {
 	case ids.CLOSING:
 		push(s.CLOSING);
 		push(d.SINT);
+		break;
+	case ids.HEAD:
+		socket.write(addString(convertSInt(-4), head === undefined ? "" : head));
 		break;
 	default:
 		if (command < 0 )
@@ -483,7 +487,7 @@ function setResponse(type) {
 	}	
 }
 
-function serve(feeder, createCallback, actionCallbacks) {
+function serve(feeder, createCallback, actionCallbacks, head) {
 	
 	while ( !feeder.isEmpty() || cont ) {
 		cont = false;
@@ -497,7 +501,7 @@ function serve(feeder, createCallback, actionCallbacks) {
 			break;
 		case s.COMMAND:
 			pop();
-			if ( !handleCommand(sInt) ) {	// Makes the required 'push(…)'.
+			if ( !handleCommand(sInt, head) ) {	// Makes the required 'push(…)'.
 				let id = sInt;
 
 				if ( !(id in instances) ) {
@@ -667,13 +671,13 @@ const h = {
 	NOTIFICATION_MAIN: 105,
 }
 
-function handshakes(feeder, head) {
+function handshakes(feeder) {
 	while ( !feeder.isEmpty() || cont ) {
 		cont = false;
 		switch( top() ) {
 		case h.HANDSHAKES:
 			pop();
-			socket.write(addString(addString(addString(handleString(token), head === undefined ? "" : head),wAddr),""));
+			socket.write(addString(addString(handleString(token),wAddr),""));
 			push(i.IGNITION);
 			push(i.TOKEN);
 			push(d.STRING);
@@ -736,7 +740,7 @@ function onRead(data, createCallback, actionCallbacks, head) {
 	while ( !feeder.isEmpty() ) {
 		switch ( phase ) {
 		case p.HANDSHAKES:
-			if ( !handshakes(feeder, head) )
+			if ( !handshakes(feeder) )
 				phase = p.IGNITION;
 			break;
 		case p.IGNITION:
@@ -744,7 +748,7 @@ function onRead(data, createCallback, actionCallbacks, head) {
 				phase = p.SERVE;
 			break;
 		case p.SERVE:
-			serve(feeder, createCallback, actionCallbacks);
+			serve(feeder, createCallback, actionCallbacks, head);
 			break;
 		default:
 			exit_("Unknown phase of value '" + step + "'!");

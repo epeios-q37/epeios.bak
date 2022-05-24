@@ -3,6 +3,11 @@
 - Common to **all** bindings,
 - does **not** concern the native code.
 
+## 2022-05-24
+- *Node*:
+  - fixing `new Buffer(0)` deprecation,
+  - implementing *FaaS* protocol v1,
+
 ## 2022-05-18
 - *Python*
   - generalization of camel case,
