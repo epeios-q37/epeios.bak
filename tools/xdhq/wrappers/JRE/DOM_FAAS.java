@@ -32,27 +32,31 @@ import java.util.concurrent.*;
 import java.awt.Desktop;
 
 public class DOM_FAAS extends DOM_SHRD {
-	final static private String VERSION_ = "0.13";
-	static private String pAddr = "faas.q37.info";
-	static private int pPort = 53700;
-	static private String wAddr = "";
-	static private String wPort = "";
-	static private String cgi = "xdh";
-	static private String token = "";
-	static private InputStream input_;
-	static private OutputStream output_;
+	private static final String VERSION_ = "0.13.1";
+	private static String pAddr = "faas.q37.info";
+	private static int pPort = 53700;
+	private static String wAddr = "";
+	private static String wPort = "";
+	private static String cgi = "xdh";
+	private static String token = "";
+	private static InputStream input_;
+	private static OutputStream output_;
 	// A 'Semaphore' because there are only reentrant locks in Java.
-	static private Semaphore readLock_ = new Semaphore(1);	// Global read lock.
-	final static private String FAAS_PROTOCOL_LABEL_ = "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf";
-	final static private String FAAS_PROTOCOL_VERSION_ = "0";
-	final static private String MAIN_PROTOCOL_LABEL_ = "22bb5d73-924f-473f-a68a-14f41d8bfa83";
-	final static private String MAIN_PROTOCOL_VERSION_ = "0";
-	final static private String SCRIPTS_VERSION_ = "0";
+	private static Semaphore readLock_ = new Semaphore(1);	// Global read lock.
+	private static final String FAAS_PROTOCOL_LABEL_ = "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf";
+	private static final String FAAS_PROTOCOL_VERSION_ = "1";
+	private static final String MAIN_PROTOCOL_LABEL_ = "22bb5d73-924f-473f-a68a-14f41d8bfa83";
+	private static final String MAIN_PROTOCOL_VERSION_ = "0";
+	private static final String SCRIPTS_VERSION_ = "0";
 
-	final static private int FORBIDDEN_ID_ = -1;
-	final static private int CREATION_ID_ = -2;
-	final static private int CLOSING_ID_ = -3;
-
+	private static final int FORBIDDEN_ID_ = -1;
+	private static final int CREATION_ID_ = -2;
+	private static final int CLOSING_ID_ = -3;
+	private static final int HEAD_RETRIEVING_ID_ = -4;
+	
+	private static final int BROADCAST_ACTION_ID_ = -3;
+	private static final int HEAD_SENDING_ID_ = -4;
+	
 	private int id_;
 	private boolean firstLaunch_ =  true;
 
@@ -314,7 +318,7 @@ public class DOM_FAAS extends DOM_SHRD {
 
 	private static void ignition_() throws IOException {
 		writeString_(token);
-		writeString_(info.q37.xdhq.XDH_FAAS.headContent);
+		// writeString_(info.q37.xdhq.XDH_FAAS.headContent);	// Dedicated request sinve FaaS protocol v1.
 		writeString_(wAddr);
 		writeString_(""); // Currently not used; for future use.
 		
@@ -411,6 +415,9 @@ public class DOM_FAAS extends DOM_SHRD {
 					waitForInstance_();
 					instances_.remove(id);
 				}
+			} else if ( id == HEAD_RETRIEVING_ID_ ) {
+				writeSInt_(HEAD_SENDING_ID_);
+				writeString_(info.q37.xdhq.XDH_FAAS.headContent);
 			} else if ( !instances_.containsKey( id ) ) {
 					report_( "Unknown instance of id '" + id + "'!" );
 					dismiss_(id);
@@ -453,7 +460,7 @@ public class DOM_FAAS extends DOM_SHRD {
 	static public void broadcastAction(String action, String id) {
 		try {
 			synchronized( output_ ) {
-				writeSInt_(-3);
+				writeSInt_(BROADCAST_ACTION_ID_);
 				writeString_(action);
 				writeString_(id);
 				output_.flush();

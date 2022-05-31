@@ -67,8 +67,8 @@ namespace {
 
 	qROW( FRow_ );	// Frontend 'Row'.
 
-	typedef lstbch::qLBUNCHd( rShared *, sFRow_ ) dShareds_;
-	qW( Shareds_ );
+	typedef lstbch::qLBUNCHd( rGate *, sFRow_ ) dGates_;
+	qW( Gates_ );
 
 	qROW( BRow_ );	// Back-end Row.
 
@@ -188,39 +188,114 @@ namespace {
 }
 
 namespace faaspool {
+  namespace {
+    // Head content handling since FaaS protocol v1.
+    class rHeadRelay_
+    {
+    private:
+      str::dString *Relay_;
+      tht::rBlocker
+        Processed_,  // Blocks until the relay data is processed.
+        Guard_; // Used on error, to ensure
+    public:
+      void reset(bso::sBool P = true)
+      {
+        Relay_ = NULL;
+
+        tol::reset(P, Processed_, Guard_);
+      }
+      qCDTOR(rHeadRelay_);
+      void Init(void)
+      {
+        Relay_ = NULL;
+        tol::Init(Processed_, Guard_);
+      }
+     void SetRelay(str::dString &Head)
+      {
+        if ( Relay_ != NULL )
+          qRGnr();
+
+        Relay_ = &Head;
+      }
+      // If returns false, an error occurs and the head could not be retrieved.
+      bso::sBool WaitForData(void)
+      {
+        Processed_.Wait();
+
+        if ( Relay_ != NULL ) {
+          Relay_ = NULL;
+          return true;
+        } else
+          return false;
+      }
+      str::dString &GetRelay(void) const
+      {
+        // No locking or blocking, as this is called only after a 'GetHead' request.
+
+        if ( Relay_ == NULL )
+          qRGnr();
+
+        if ( Relay_->Amount() )
+          qRGnr();
+
+        return *Relay_;
+      }
+      void ReportProcessed(void)
+      {
+        Processed_.Unblock(); // The blocker is also rearmed.
+      }
+      bso::sBool IsBusy(void) const
+      {
+        return Relay_ != NULL;
+      }
+      bso::sBool Dismiss(void)  // Called on error.
+      {
+        if ( Relay_ != NULL ) {
+          Relay_ = NULL;  // To report the error status.
+          Processed_.Unblock();
+          Guard_.Wait();
+          return true;
+        } else
+          return false;
+      }
+      void ReleaseGuard(void)
+     {
+        Guard_.Unblock();
+     }
+    };
+  }
+
 	class rBackend_
 	{
 	private:
-		// Protects access to 'Shareds' and 'PendingDismiss_';
+		// Protects access to 'Gates' and 'PendingDismiss_';
 		mtx::rMutex Mutex_;
 		bso::sBool PendingDismiss_;
 		// Prevents destruction of 'Driver_' until no more client use it.
 		tht::rBlocker NoMoreClientBlocker_;
 		void InvalidAll_( void )
 		{
-			sFRow_ Row = Shareds.First();
+			sFRow_ Row = Gates.First();
 
 			while ( Row != qNIL ) {
-				Shareds( Row )->Id = UndefinedId;
+				Gates(Row)->UnsetId();
 
-				Row = Shareds.Next( Row );
+				Row = Gates.Next( Row );
 			}
 		}
 	public:
 		sBRow_ Row;	// Backend row.
 		sRow TRow; // Token row.	// Can be 'qNIL' in self-hosted mode (no/empty token).
 		fdr::rRWDriver *Driver;	// Is also set to NULL when the backend is no more present.
-		wShareds_ Shareds;
+		wGates_ Gates;
 		mtx::rMutex Access;
 		tht::rBlocker Switch;
-		tht::rBlocker HeadAccess;  // Control the access of the 'Head' member, on new behavior.
-		bso::sBool GiveUp;
 		csdcmn::sVersion ProtocolVersion;
 		str::wString
 			IP,
 			Token,
-			Head; // Head content cache on old behavior.
-    str::dString *HeadContent;  // New behavior.
+			HeadCache; // Head content cache on old behavior (FaaS protocol v0).
+    rHeadRelay_ HeadRelay;
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
@@ -231,7 +306,7 @@ namespace faaspool {
 					mtx::Delete( Access, true );
 
 				if ( TRow != qNIL )
-						common::GetCallback().Remove(TRow);
+          common::GetCallback().Remove(TRow);
 
 				InvalidAll_();
 			}
@@ -244,9 +319,7 @@ namespace faaspool {
 			Driver = NULL;
 			Access = mtx::Undefined;
 			ProtocolVersion = csdcmn::UnknownVersion;
-			tol::reset(P, Shareds, Switch, HeadAccess, IP, Token, Head);
-			GiveUp = false;	// If at 'true', the client is deemed to be disconnected.
-			HeadContent = NULL;
+			tol::reset(P, Gates, Switch, IP, Token, HeadCache, HeadRelay);
 		}
 		qCDTOR( rBackend_ );
 		void Init(
@@ -270,34 +343,31 @@ namespace faaspool {
 			this->Row = Row;
 			this->TRow = TRow;
 			this->Driver = &Driver;
-			Shareds.Init();
+			Gates.Init();
 			Access = mtx::Create();
 			Switch.Init();
-			HeadAccess.Init();
 			this->ProtocolVersion = ProtocolVersion;
 			this->IP.Init( IP );
 			this->Token.Init(Token);
-			this->Head.Init(Head);
-			GiveUp = false;
+			this->HeadCache.Init(Head);
+			HeadRelay.Init();
 		}
-		bso::sBool Set(rShared &Shared)
+		bso::sBool Set(rGate &Gate)
 		{
 			sFRow_ Row = qNIL;
 		qRH
 		qRB
-			Row = Shareds.New();
+			Row = Gates.New();
 
 			if ( *Row > MaxId )
 				qRGnr();
 
-			Shareds.Store( &Shared, Row );
+			Gates.Store( &Gate, Row );
 
-			Shared.Id = (sId)*Row;
-			Shared.Driver = Driver;
-			Shared.Switch = &Switch;
+			Gate.Set(*Row, Driver, &Switch);
 		qRR
 			if ( Row != qNIL )
-				Shareds.Remove(Row);
+				Gates.Remove(Row);
 
 			Row = qNIL;
 		qRT
@@ -311,10 +381,10 @@ namespace faaspool {
 		qRB
 			Mutex.InitAndLock(Mutex_);
 
-			Shareds.Remove((sFRow_)Id);
+			Gates.Remove((sFRow_)Id);
 
-			if (PendingDismiss_)
-				if ( Shareds.Amount() == 0)
+			if ( PendingDismiss_ )
+				if ( Gates.Amount() == 0 )
 					NoMoreClientBlocker_.Unblock();
 		qRR
 		qRT
@@ -328,7 +398,7 @@ namespace faaspool {
 			common::GetCallback().QuitAll(TRow);
 			Mutex.InitAndLock(Mutex_);
 
-			if ( Shareds.Amount() ) {
+			if ( Gates.Amount() ) {
 				PendingDismiss_ = true;
 				Mutex.Unlock();
 				NoMoreClientBlocker_.Wait();
@@ -464,7 +534,7 @@ namespace faaspool {
 		sBRow_ Row = TUGetBackendRow_( Token );
 
 		if ( Row != qNIL ) {
-			Head = Backends_(Row)->Head;
+			Head = Backends_(Row)->HeadCache;
 			return true;
      } else
 			return false;
@@ -849,14 +919,14 @@ namespace {
   qRE
   }
 
-  void Unblock_(const dShareds_ &Shareds)
+  void Unblock_(const dGates_ &Gates)
   {
-    sFRow_ Row = Shareds.First();
+    sFRow_ Row = Gates.First();
 
     while ( Row != qNIL ) {
-      Shareds(Row)->UnblockAndQuit();
+      Gates(Row)->UnblockAndQuit();
 
-      Row = Shareds.Next(Row);
+      Row = Gates.Next(Row);
     }
   }
 
@@ -872,13 +942,8 @@ namespace {
 
 	void HandleSwitching_(
     const str::dString &IP,
-    const str::dString &Token,
 		fdr::rRWDriver &Driver,
-		sRow TRow,
-		const dShareds_ &Shareds,
-		tht::rBlocker &Blocker,
-		tht::rBlocker &HeadBlocker,
-		str::dString *&HeadContent )
+		rBackend_ &Backend)
 	{
 	qRH;
 		flw::rDressedRWFlow<> Flow;
@@ -891,8 +956,9 @@ namespace {
 		while ( true ) {
 			Id = UndefinedId;
 
-			if ( Flow.EndOfFlow() )
+			if ( Flow.EndOfFlow() ) {
 				break;
+			}
 
 			Id = GetId( Flow, &IsError );
 
@@ -910,36 +976,33 @@ namespace {
         Input.Init();
         prtcl::Get(Flow, Input);
 
-        Log_(IP, Token, Input);
+        Log_(IP, Backend.Token, Input);
 				break;
 			case downstream::BroadcastScriptId:
-				BroadcastScript_(Flow, TRow);
+				BroadcastScript_(Flow, Backend.TRow);
 				break;
 			case downstream::BroadcastActionId:
-				BroadcastAction_(Flow, TRow);
+				BroadcastAction_(Flow, Backend.TRow);
 				break;
       case downstream::HeadSendingId:
-        if ( HeadContent == NULL )
-          qRGnr();
-        if ( HeadContent->Amount() )
-          qRGnr();
-        prtcl::Get(Flow, *HeadContent);
-        HeadBlocker.Unblock();
+        prtcl::Get(Flow, Backend.HeadRelay.GetRelay());
+        Backend.HeadRelay.ReportProcessed();
         break;
 			default:
-				if ( !Shareds.Exists( Id ) ) {
+				if ( !Backend.Gates.Exists( Id ) ) {
             Release_(Flow, Id);
 				} else {
-          Shareds( Id )->UnblockReading();
+          Backend.Gates( Id )->UnblockReading();
 
-          Blocker.Wait();	// Waits until all data in flow red.
+          Backend.Switch.Wait();	// Waits until all data in flow red.
 				}
 				break;
 			}
 		}
 	qRR;
 	qRT;
-		Unblock_(Shareds);
+    Backend.HeadRelay.Dismiss();
+		Unblock_(Backend.Gates);
 	qRE;
 	}
 
@@ -976,7 +1039,7 @@ namespace {
 		ProtocolVersion = Handshake_(Driver, Flavour);
 
 		if ( ( Backend = CreateBackend_(Driver, ProtocolVersion, IP, Flavour) ) != NULL ) {
-			HandleSwitching_(IP, Backend->Token, Driver, Backend->TRow, Backend->Shareds, Backend->Switch, Backend->HeadAccess, Backend->HeadContent );	// Does not return until disconnection or error.
+			HandleSwitching_(IP, Driver, *Backend);	// Does not return until disconnection or error.
 		}
 	qRR;
 		sclm::ErrorDefaultHandling();	// Also resets the error, otherwise the `WaitUntilNoMoreClient()` will lead to a deadlock on next error.
@@ -1072,7 +1135,7 @@ qRE;
 sRow faaspool::GetConnection_(
 	const str::dString &Token,
 	str::dString &IP,
-	rShared &Shared,
+	rGate &Gate,
 	rBackend_ *&Backend)
 {
 	sRow Row = qNIL;
@@ -1088,12 +1151,12 @@ qRB;
 	if ( Backend != NULL ) {
 		Mutex.InitAndLock( Backend->Access );
 
-		if ( Backend->Set(Shared) ) {
+		if ( Backend->Set(Gate) ) {
 			Row = Backend->TRow;
-			Flow.Init( *Backend->Driver );
-			IP.Append( Backend->IP );
-			PutId( upstream::CreationId, Flow );	// To signal to the back-end a new connection.
-			PutId( Shared.Id, Flow );	// The id of the new front-end.
+			Flow.Init(*Backend->Driver);
+			IP.Append(Backend->IP);
+			PutId(upstream::CreationId, Flow);	// To signal to the back-end a new connection.
+			PutId(Gate.Id(), Flow);	// The id of the new front-end.
 			Flow.Commit();
 		} else
 			Backend = NULL;
@@ -1121,25 +1184,23 @@ namespace {
     if ( Backend != NULL ) {
       Mutex.InitAndLock(Backend->Access);
 
-      if ( Backend->HeadContent != NULL )
+      if ( Backend->HeadRelay.IsBusy() )
         qRGnr();
 
       ProtocolVersion = Backend->ProtocolVersion;
 
       if ( ProtocolVersion >= 1 ) {
-        Backend->HeadContent = &Head;
         Flow.Init(*Backend->Driver);
-        PutId(upstream::HeadRetrievingId, Flow);	// To signal to the back-end a new connection.
+        Backend->HeadRelay.SetRelay(Head);
+        PutId(upstream::HeadRetrievingId, Flow);
         Flow.Commit();
-        Backend->HeadAccess.Wait();
-        Backend->HeadContent = NULL;
-        Backend->HeadAccess.Init();
-
-        Success = true;
+        Success = Backend->HeadRelay.WaitForData();
       }
     }
   qRR;
   qRT;
+    if ( !Success && ( Backend != NULL ) )
+      Backend->HeadRelay.ReleaseGuard();
   qRE;
     return Success;
   }
@@ -1152,14 +1213,14 @@ qRH
 qRB
 	Flow.Init(D_());
 
-	::Release_(Flow, Shared_.Id);
+	::Release_(Flow, Gate_.Id());
 
 	Flow.reset();	// Commits and frees the underlying driver, or the below 'Release' will block.
 qRR
-	ERRRst();
+	qRRst();
 qRT
-	B_().Release(Shared_.Id);
-	Shared_.Id = UndefinedId;
+	B_().Release(Gate_.Id());
+	Gate_.UnsetId();
 	Backend_ = NULL;
 qRE
 }

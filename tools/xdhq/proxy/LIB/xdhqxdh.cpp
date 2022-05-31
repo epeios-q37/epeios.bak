@@ -159,7 +159,14 @@ namespace {
 			str::dString &Head,
 			qRPN ) override
 		{
-			return faaspool::GetHead(Token, Head);
+		  bso::sBool Success = false;
+    qRFH;
+    qRFB;
+			Success = faaspool::GetHead(Token, Head);
+    qRR;
+    qRFT;
+    qRFE(sclm::ErrorDefaultHandling());
+      return Success;
 		}
 	public:
 		void reset( bso::bool__ P = true )

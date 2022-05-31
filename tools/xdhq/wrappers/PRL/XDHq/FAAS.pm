@@ -35,9 +35,9 @@ use threads::shared;
 use strict;
 
 use constant {
-    VERSION_ => "0.13",
+    VERSION_ => "0.13.1",
     FAAS_PROTOCOL_LABEL_ => "4c837d30-2eb5-41af-9b3d-6c8bf01d8dbf",
-    FAAS_PROTOCOL_VERSION_ => "0",
+    FAAS_PROTOCOL_VERSION_ => "1",
     MAIN_PROTOCOL_LABEL_ => "22bb5d73-924f-473f-a68a-14f41d8bfa83",
     MAIN_PROTOCOL_VERSION_ => "0",
     SCRIPTS_VERSION_ => "0",
@@ -170,9 +170,9 @@ sub _handshakes {
 
 sub _ignition {
     XDHq::FAAS::SHRD::writeString($token);
-    XDHq::FAAS::SHRD::writeString($main::headContent);
+    # XDHq::FAAS::SHRD::writeString($main::headContent); # Dedicated request since FaaS protocol v&.
     XDHq::FAAS::SHRD::writeString($wAddr);
-    XDHq::FAAS::SHRD::writeString("PRL");    
+    XDHq::FAAS::SHRD::writeString("");    
 
     $token = XDHq::FAAS::SHRD::getString();
 
@@ -200,6 +200,12 @@ use constant {
     FORBIDDEN_ID_ => -1,
     CREATION_ID_ => -2,
     CLOSING_ID_ => -3,
+    HEAD_RETRIEVING_ID_ => -4,
+};
+
+use constant {
+    BROAODCAST_ACTION_ID_ => -3,
+    HEAD_SENDING_ID_ => -4,
 };
 
 sub _dismiss {
@@ -251,6 +257,12 @@ sub _serve {
             }
 
             delete $instances{$id};
+        } elsif ( $id eq HEAD_RETRIEVING_ID_ ) {
+            {   # Lock scope;
+                lock($XDHq::FAAS::SHRD::writeLock);
+                XDHq::FAAS::SHRD::writeSInt(HEAD_SENDING_ID_);
+                XDHq::FAAS::SHRD::writeString($main::headContent);
+            }         
         } elsif ( not($instances{$id})) {
             _report("Unknown instance of id '${id}'!");
             _dismiss($id);
@@ -281,7 +293,7 @@ sub launch {
 sub broadcastAction {
     {   # Lock scope;
         lock($XDHq::FAAS::SHRD::writeLock);
-        XDHq::FAAS::SHRD::writeSInt(-3);
+        XDHq::FAAS::SHRD::writeSInt(BROAODCAST_ACTION_ID_);
         XDHq::FAAS::SHRD::writeString(shift);
         XDHq::FAAS::SHRD::writeString(shift);
     }    

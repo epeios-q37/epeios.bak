@@ -12,6 +12,12 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-05-31
+- THT: improvong blocker's rearming feature;
+
+## 2022-05-30
+- MTX: fixing innapropriate mutex unlocking;
+
 ## 2022-05-17
 - XDHCMN: [cont],
 

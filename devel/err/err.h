@@ -143,6 +143,7 @@ namespace err {
 
 
 # define ERRRst()	{ err::Unlock(); }
+# define qRRst()  ERRRst()
 
 
 # ifdef ERR__JMPUSE

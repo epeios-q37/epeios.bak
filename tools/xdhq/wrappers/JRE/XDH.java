@@ -62,13 +62,13 @@ public class XDH extends info.q37.jreq.JRE {
 
 		return content;
 	}
-	static public void launch(info.q37.xdhq.XDH_SHRD.Callback callback,String headContent, MODE mode, String dir ) {
+	static public void launch(info.q37.xdhq.XDH_SHRD.Callback callback, String headContent, MODE mode, String dir) {
 		mode_ = mode;
 		dir_ = dir;
 
 		switch ( mode ) {
 		case FAAS:
-			XDH_FAAS.launch(headContent,callback );
+			XDH_FAAS.launch(headContent, callback);
 			break;
 		case SLFH:
 			XDH_SLFH.launch();
