@@ -14,6 +14,7 @@
 
 ## 2022-06-03
 - CPE: adaptation to FreeBSD;
+- DIR: adaptation to FreeBSD;
 - MNS: fixing some -Wewtra` warnings;
 
 ## 2022-05-31

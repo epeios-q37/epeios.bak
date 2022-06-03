@@ -1,21 +1,21 @@
-#	Copyright (C) 2016 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2019 Claude SIMON (http://q37.info/contact/).
 #
-#	This file is part of eSketch.
+#	This file is part of WSq.
 #
-#	eSketch is free software: you can redistribute it and/or
+#	WSq is free software: you can redistribute it and/or
 #	modify it under the terms of the GNU Affero General Public License
 #	published by the Free Software Foundation, either version 3 of the
 #	License, or (at your option) any later version.
 #
-#	eSketch is distributed in the hope that it will be useful,
+#	WSq is distributed in the hope that it will be useful,
 #	but WITHOUT ANY WARRANTY; without even the implied warranty of
 #	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 #	Affero General Public License for more details.
 #
 #	You should have received a copy of the GNU Affero General Public License
-#	along with eSketch. If not, see <http://www.gnu.org/licenses/>.
+#	along with WSq. If not, see <http://www.gnu.org/licenses/>.
 
-name = esketchxdh
+name = wsq
 
 
 # Epeios general debugging features
@@ -38,17 +38,11 @@ mods += stkbch stkcrt stkctn str strng
 mods += stsfsm tagsbs tht thtsub tol 
 mods += txf tys uys utf xml 
 mods += xpp xtf llio dlbrry plgn 
-mods += plgncore strmrg cdgurl cnvfdr 
-mods += csdrcc 
-mods += fblcmd fblcst fblfep fblfph fblfrd 
-mods += fblfrp fblovl fbltyp 
+mods += plgncore sck sha1 websck 
 mods += scla scli sclm scle scll 
-mods += sclr sclx sclf 
-mods += xdhcdc xdhcmn xdhcuc xdhdws 
-mods += frdapi frdfrntnd frdrgstry 
-mods += sktfbc sktinf 
-mods += login main prolog 
-mods += base core global registry instc 
+mods += sclr sclt 
+mods += csdbns csdscb 
+mods += registry 
 
 pmods += pllio 
 
@@ -69,8 +63,6 @@ CXXFLAGS += -O
 
 ###############################
 	
-copt += -DQ37_LIBRARY
-
 win=win
 win32=win32
 win64=win64
@@ -85,11 +77,6 @@ MacOS=Darwin
 Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
-ifdef Q37_EPEIOS
- src += :..
- src += :../..
- src += :../../..
-endif
 
 
 ##########################
@@ -247,11 +234,7 @@ ifeq ("$(os)","$(Cygwin)")
     
 	endif
 	
-	ifneq ("$(target)","$(Android)")
-		binary=$(name).dll
-		lo += -Wl,--kill-at -shared
-	endif
-
+	binary=$(name).exe
 
 	dest=/cygdrive/h/bin/
 
@@ -283,8 +266,7 @@ ifeq ("$(os)", "$(MinGW)")
 		endif
 	endif
 
-	binary=$(name).dll
-	lo += -Wl,--kill-at -shared
+	binary=$(name).exe
 
 	dest=/h/bin/
 endif
@@ -313,9 +295,7 @@ ifeq ("$(os)","$(GNULinux)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).so
-	lo += -shared
-	co += -fPIC
+	binary=$(name)
 
 	dest=/home/csimon/bin/
 endif
@@ -344,9 +324,7 @@ ifeq ("$(os)","$(FreeBSD)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).so
-	lo += -shared
-	co += -fPIC
+	binary=$(name)
 
 	dest=/home/csimon/bin/
 endif
@@ -375,9 +353,7 @@ ifeq ("$(os)","$(Linux)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).so
-	lo += -shared
-	co += -fPIC
+	binary=$(name)
 endif
 
 #############################
@@ -402,8 +378,7 @@ ifeq ("$(os)","$(MacOS)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).dylib
-	lo += -dynamiclib
+	binary=$(name)
 
 	dest=/Users/csimon/bin/
 endif
@@ -432,9 +407,7 @@ ifeq ("$(os)","$(Android)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).so
-	lo += -shared
-	co += -fPIC
+	binary=$(name)
 endif
 
 #############################
@@ -446,8 +419,8 @@ ifeq ("$(target)","$(Android)")
 endif
 
 copt += -DVERSION=\""20220603"\"
-copt += -DCOPYRIGHT_YEARS=\""2016"\"
-copt += -DIDENTIFIER=\""c8c33276-5e09-4f11-bd1b-3283b0ef0697"\"
+copt += -DCOPYRIGHT_YEARS=\""2019"\"
+copt += -DIDENTIFIER=\""883bf800-2f86-4e34-9e46-a610642b8d58"\"
 
 ifndef Q37_EPEIOS
 	src += :src:src/epeios
