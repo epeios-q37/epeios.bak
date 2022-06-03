@@ -94,7 +94,7 @@
 
 # ifdef __FreeBSD__
 #  define CPE_SL CPE_SL_FREEBSD
-#  define CPS_S_FREEBSD
+#  define CPE_S_FREEBSD
 # endif
 
 # if defined(__APPLE__) && defined(__MACH__)
