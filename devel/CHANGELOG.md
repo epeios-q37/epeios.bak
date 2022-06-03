@@ -12,6 +12,10 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-06-03
+- CPE: adaptation to FreeBSD;
+- MNS: fixing some -Wewtra` warnings;
+
 ## 2022-05-31
 - THT: improvong blocker's rearming feature;
 

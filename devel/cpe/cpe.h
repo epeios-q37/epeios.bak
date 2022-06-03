@@ -67,6 +67,7 @@
 // OS-related macros.
 # define CPE_SL_ANDROID		"Android"
 # define CPE_SL_GNULINUX	"GNU/Linux"
+# define CPE_SL_FREEBSD	"FreeBSD"
 # define CPE_SL_LINUX		"Linux"
 # define CPE_SL_IOS			"iOS"
 # define CPE_SL_OSX			"macOS"
@@ -89,6 +90,10 @@
 #  else
 #   define CPE_SL CPE_SL_LINUX
 #  endif
+# endif
+
+# ifdef __FreeBSD__
+#  define CPE_SL CPE_SL_FREEBSD
 # endif
 
 # if defined(__APPLE__) && defined(__MACH__)

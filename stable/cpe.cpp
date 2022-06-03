@@ -43,6 +43,10 @@ const char *cpe::GetOSDigest( void )
 		C( CPE_SL_LINUX );
 #endif
 
+#ifdef CPE_S_FREEBSD
+		C( CPE_SL_FREEBSD );
+#endif
+
 #ifdef CPE_S_GNULINUX
 		C( CPE_SL_GNULINUX );
 #endif

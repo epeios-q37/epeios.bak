@@ -42,7 +42,7 @@
 /* End of automatic documentation generation part. */
 
 /* Addendum to the automatic documentation generation part. */
-//D MaiN Storage 
+//D MaiN Storage
 /* End addendum to automatic documentation generation part. */
 
 /*$BEGIN$*/
@@ -76,7 +76,8 @@ namespace mns {
 			if ( Amount )
 				Test_();
 # endif
-			memcpy( Buffer, Tampon_ + Position, Amount );
+      if ( Amount )
+        memcpy( Buffer, Tampon_ + Position, Amount );
 		}
 		// crit 'Nombre' octets  partir de 'Position' dans 'Tampon'
 		void Store(
@@ -85,10 +86,11 @@ namespace mns {
 			sdr::row_t__ Position )
 		{
 # ifdef MNS_DBG
-			if ( Amount ) 
+			if ( Amount )
 				Test_();
 # endif
-			memcpy( Tampon_ + Position, Buffer, Amount );
+      if ( Amount )
+        memcpy( Tampon_ + Position, Buffer, Amount );
 		}
 		// alloue 'Nombre' octets
 		void Allocate( sdr::size__ Size )

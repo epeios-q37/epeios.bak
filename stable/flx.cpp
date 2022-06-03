@@ -82,47 +82,47 @@ static bso::bool__ POpen2_(
 	bso::bool__ Success = false;
 qRH
 	PROCESS_INFORMATION	piProcessInfo;
-	SECURITY_ATTRIBUTES sa_attr; 
+	SECURITY_ATTRIBUTES sa_attr;
 	HANDLE hChildStdinRd, hChildStdinWr, hChildStdoutRd, hChildStdoutWr, hChildStderrRd, hChildStderrWr;
 	ntvstr::string___ Command;
 qRB
-	// Set the bInheritHandle flag so pipe handles are inherited. 
-	sa_attr.nLength              = sizeof( SECURITY_ATTRIBUTES ); 
-	sa_attr.bInheritHandle       = TRUE; 
-	sa_attr.lpSecurityDescriptor = NULL; 
- 
- 
-	// Create a pipe for the child process's STDERR. 
+	// Set the bInheritHandle flag so pipe handles are inherited.
+	sa_attr.nLength              = sizeof( SECURITY_ATTRIBUTES );
+	sa_attr.bInheritHandle       = TRUE;
+	sa_attr.lpSecurityDescriptor = NULL;
+
+
+	// Create a pipe for the child process's STDERR.
  	if ( !CreatePipe( &hChildStderrRd, &hChildStderrWr, &sa_attr, 0 ) )
 		qRSys();
- 
+
 	// Ensure that the read handle to the child process's pipe for STDOUT is not inherited.
 	if ( !SetHandleInformation( hChildStderrRd, HANDLE_FLAG_INHERIT, 0 ) )
 		qRSys();
- 
- 
-	// Create a pipe for the child process's STDOUT. 
+
+
+	// Create a pipe for the child process's STDOUT.
  	if ( !CreatePipe( &hChildStdoutRd, &hChildStdoutWr, &sa_attr, 0 ) )
 		qRSys();
-		
+
 	// Ensure that the read handle to the child process's pipe for STDOUT is not inherited.
 	if ( !SetHandleInformation( hChildStdoutRd, HANDLE_FLAG_INHERIT, 0 ) )
 		qRSys();
- 
- 
-	// Create a pipe for the child process's STDIN. 
+
+
+	// Create a pipe for the child process's STDIN.
     if ( !CreatePipe( &hChildStdinRd, &hChildStdinWr, &sa_attr, 0 ) )
 		qRSys();
 
-	// Ensure that the write handle to the child process's pipe for STDIN is not inherited. 
+	// Ensure that the write handle to the child process's pipe for STDIN is not inherited.
     if ( !SetHandleInformation( hChildStdinWr, HANDLE_FLAG_INHERIT, 0 ) )
 		qRSys();
- 
- 
+
+
 	// Startup information.
 	STARTUPINFOW  siStartupInfo;
 	ZeroMemory( &siStartupInfo, sizeof(STARTUPINFOW) );
-	siStartupInfo.cb         = sizeof( STARTUPINFOW ); 
+	siStartupInfo.cb         = sizeof( STARTUPINFOW );
 	siStartupInfo.hStdError  = hChildStderrWr;
 	siStartupInfo.hStdOutput = hChildStdoutWr;
 	siStartupInfo.hStdInput  = hChildStdinRd;
@@ -130,7 +130,7 @@ qRB
 
 	Command.Init( ConstCommand );	/* On passe par 'Command', car 'CreateProcessW(...)' est suceptible de modifier le contenu de son second paramtre ;
 									   on ne peut donc pas lui passer directement 'ConstCommand', qui est 'const' (voir doc. 'CreateProcessW(...)'. */
- 
+
 	// Launch the process.
 	if ( CreateProcessW( NULL,
 						 Command.ExposedInternal(), 0, 0, TRUE,
@@ -188,7 +188,7 @@ static bso::bool__ POpen2_(
     In = pipe_stdin[1];
     Out = pipe_stdout[0];
     Err = pipe_stderr[0];
-    return true; 
+    return true;
 }
 #else
 # error

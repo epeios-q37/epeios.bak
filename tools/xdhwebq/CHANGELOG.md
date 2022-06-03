@@ -1,5 +1,8 @@
 # *XDHWebQ* *CHANGELOG*
 
+## 2022-06-03
+- adaptation to *FreeBSD*;
+
 ## 2022-05-18
 - adaptation to changes in underlying modules,
 

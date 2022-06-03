@@ -1,5 +1,8 @@
 # *XDHq* *CHANGELOG*
 
+## 2022-06-03
+- adaptation to *FreeBSD*;
+
 ## 2022-05-18
 - adaptation to changes in underlying modules,
 - introducing new *FaaS* protocol (v1): the user content of the *HTML* *head* section is retrieved from the backend as needed and no more cached,

@@ -78,6 +78,7 @@ AMD64=x64
 Cygwin=Cygwin
 MinGW=Msys
 GNULinux=GNU/Linux
+FreeBSD=FreeBSD
 Linux=Linux
 MacOS=Darwin
 Android=Android
@@ -131,6 +132,18 @@ ifeq ("$(os)","$(GNULinux)")
 endif
 
 #############################
+	
+
+###########################
+# For FreeBSD environment #
+###########################
+
+ifeq ("$(os)","$(FreeBSD)")
+# By default, 'CXX' is set to 'clang++'.
+# 	CXX = g++
+endif
+
+###########################
 	
 
 #########################
@@ -308,6 +321,37 @@ endif
 #############################
 		
 
+###########################
+# For FreeBSD environment #
+###########################
+
+ifeq ("$(os)","$(FreeBSD)")
+ 
+	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
+	
+	mods += $(pmods)
+	
+	libs += -lpthread -ldl -lrt
+
+	ifeq ("$(target)","$(IA_32)")
+		co += -m32
+		lo += -m32
+	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900).
+		ifeq ("$(target)","$(AMD64)")
+			co += -m64
+			lo += -m64
+		endif
+	endif
+	binary=lib$(name).so
+	lo += -shared
+	co += -fPIC
+
+	dest=/home/csimon/bin/
+endif
+
+###########################
+		
+
 #########################
 # For Linux environment #
 #########################
@@ -399,7 +443,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20220518"\"
+copt += -DVERSION=\""20220603"\"
 copt += -DCOPYRIGHT_YEARS=\""2017"\"
 copt += -DIDENTIFIER=\""5f3ad6c6-4f0d-428d-9c00-678e1ed3967f"\"
 

@@ -14,6 +14,9 @@
 				<xpp:ifeq select="ostype" value="darwin17">
 					<xpp:set name="env" value="mac"/>
 				</xpp:ifeq>
+				<xpp:ifeq select="ostype" value="FreeBSD">
+					<xpp:set name="env" value="FreeBSD"/>
+				</xpp:ifeq>
 				<xpp:set name="packing" value="no"/>
 			</xpp:bloc>
 		</xpp:ifeq>
@@ -44,6 +47,9 @@
 		<xpp:ifeq select="env" value="packing">
 			<xpp:set name="HomePath" value="h:/"/>
 		</xpp:ifeq>
+		<xpp:ifeq select="env" value="FreeBSD">
+			<xpp:set name="HomePath" value="/usr/home/csimon/"/>
+		</xpp:ifeq>
 	</xpp:bloc>
 	<xpp:define name="epeios.xlcl">
 		<xpp:bloc marker="$">
@@ -67,6 +73,11 @@
 					<xpp:ifeq select="env" value="mac">
 						<xpp:bloc>
 							<xpp:set name="BinPath" value="/Users/csimon/bin/"/>
+						</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="FreeBSD">
+						<xpp:bloc>
+							<xpp:set name="BinPath" value="/usr/home/csimon/bin/"/>
 						</xpp:bloc>
 					</xpp:ifeq>
 				</xpp:bloc>
