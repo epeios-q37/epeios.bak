@@ -48,11 +48,13 @@ namespace csdbns {
 	//t The type of a port.
 	typedef bso::u16__	port__;
 
+	typedef char tIP[46]; // INET6_ADDRSTRLEN == 46
+
 	class socket_callback__ {
 	protected:
 		virtual void *CSDBNSPreProcess(
 			sck::socket__ Socket,
-			const char *IP ) = 0;	// If 'OwnerShipTaken' (initially set to 'false') is set to 'true', 'Socket' is destroyed downstream.
+			const tIP &IP ) = 0;	// If 'OwnerShipTaken' (initially set to 'false') is set to 'true', 'Socket' is destroyed downstream.
 		virtual action__ CSDBNSProcess(
 			sck::socket__ Socket,
 			void *UP ) = 0;
@@ -62,7 +64,7 @@ namespace csdbns {
 	public:
 		void *PreProcess(
 			sck::socket__ Socket,
-			const char *IP )
+			const tIP &IP )
 		{
 			return CSDBNSPreProcess( Socket, IP );
 		}
@@ -92,7 +94,7 @@ namespace csdbns {
 		socket__ _Interroger(
 			err::handling__ ErrorHandling,
 			sck::duration__ Timeout,
-			const char *&IP );
+			tIP &IP);
 	public:
 		void reset( bool P = true )
 		{
@@ -134,7 +136,7 @@ namespace csdbns {
 		}
 		//f Return the first available connection. BLOCKING FUNCTION if 'Timeout == 'SCK_INFINITE'.
 		socket__ GetConnection(
-			const char *&IP,
+			tIP &IP,
 			err::handling__ ErrorHandling = err::h_Default,
 			sck::duration__ Timeout = SCK_INFINITE )
 		{
@@ -143,7 +145,7 @@ namespace csdbns {
 		//f Initialize 'Socket' with the first connection available. BLOCKING FUNCTION if 'Timeout' == 'SCK_INFINITE'.
 		void GetConnection(
 			socket__ &Socket,
-			const char *&IP,
+			tIP &IP,
 			err::handling__ ErrorHandling = err::h_Default,
 			sck::duration__ Timeout = 0 )
 		{
@@ -183,7 +185,7 @@ namespace csdbns {
 	protected:
 		virtual void *CSDBNSPreProcess(
 			socket__ Socket,
-			const char *IP ) override
+			const tIP &IP ) override
 		{
 			rData_ *Data = NULL;
 		qRH
@@ -274,7 +276,7 @@ namespace csdbns {
 				qRFwk();
 #  endif
 			_SocketCallback = &SocketCallback;
-			
+
 			return listener___::Init( Port, Amount, ErrorHandling );
 		}
 		/*f Initialzation with 'Port' as port to listen.

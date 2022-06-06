@@ -75,7 +75,7 @@ bso::bool__ csdbns::listener___::Init(
 socket__ csdbns::listener___::_Interroger(
 	err::handling__ ErrorHandling,
 	sck::duration__ Timeout,
-	const char *&IP )
+	tIP &IP )
 {
 	fd_set fds;
 	int Reponse;
@@ -127,8 +127,8 @@ qRB
 					qRSys();
 			}
 
-			IP = inet_ntoa( SockAddr.sin_addr );
-
+			if ( inet_ntop(AF_INET, &SockAddr.sin_addr, IP, sizeof(tIP) ) == NULL )
+        qRSys();
 		}
 qRR
 	if ( ErrorHandling == err::hUserDefined )
@@ -153,10 +153,10 @@ bso::bool__ csdbns::listener___::Process(
 qRH
 	sck::socket__ Socket = SCK_INVALID_SOCKET;
 	action__ Action = a_Undefined;
-	const char *UP = NULL;
+	tIP IP = "";
 	bso::sBool CloseSocket = false;
 qRB
-	Socket = _Interroger( ErrorHandling, Timeout, UP );
+	Socket = _Interroger( ErrorHandling, Timeout, IP );
 
 	if ( Socket != SCK_INVALID_SOCKET ) {
 
@@ -166,7 +166,7 @@ qRB
 			correctement l'objet qu'il a cre (rfrenc par 'UP'), mme lors d'un ^C,
 			qui nous jecte directement de cette fonction, mais provoque quand mme un appel du destructeur. */
 
-		_UP = Callback.PreProcess( Socket, UP );
+		_UP = Callback.PreProcess( Socket, IP );
 		_Callback = &Callback;
 
 		while ( ( Action = Callback.Process( Socket, _UP ) ) == aContinue );
@@ -204,10 +204,9 @@ qRE
 
 struct socket_data__
 {
-	socket_callback__ *Callback;
-	sck::socket__ Socket;
-	const char *IP;
-	mtx::handler___ Mutex;
+	socket_callback__ *Callback = NULL;
+	sck::socket__ Socket = SCK_INVALID_SOCKET;
+	tIP IP = "";
 };
 
 /* Les objets et fonctions qui suivent sont pour permettre aux objets utilisateurs d'tre
@@ -327,7 +326,9 @@ static void ErrFinal_( void )
 		ERRRst();
 }
 
-static void Traiter_( void *PU )
+static void Traiter_(
+  void *PU,
+  mtk::gBlocker &Blocker)
 {
 	::socket_data__ &Data = *(::socket_data__ *)PU;
 qRFH
@@ -337,17 +338,14 @@ qRFH
 	action__ Action = a_Undefined;
 	rrow__ Row = qNIL;
 	csdbns_repository_item__ Item;
-	tol::E_FPOINTER___( char ) Buffer;
+	char IP[sizeof(Data.IP)] = "";
 qRFB
-	if ( ( Buffer = malloc( strlen( Data.IP ) + 1 ) ) == NULL )
-		qRAlc();
-
-	strcpy( Buffer, Data.IP );
-	mtx::Unlock( Data.Mutex );
+	strncpy(IP, Data.IP, sizeof(IP));
+	Blocker.Release();
 
 	qRH
 	qRB
-		UP = Callback.PreProcess( Socket, Buffer );
+		UP = Callback.PreProcess(Socket, IP);
 
 		Item.Callback = &Callback;
 		Item.UP = UP;
@@ -373,42 +371,32 @@ void server___::Process(
 {
 qRH
 	sck::socket__ Socket = SCK_INVALID_SOCKET;
-	const char *IP = NULL;
-	::socket_data__ Data = {NULL, SCK_INVALID_SOCKET, NULL, MTX_INVALID_HANDLER};
+	::socket_data__ Data;
 	bso::bool__ Continue = true;
 qRB
-	Socket = listener___::GetConnection( IP, ErrorHandling, Timeout );
+	Socket = listener___::GetConnection(Data.IP, ErrorHandling, Timeout);
 
 	if ( Socket != SCK_INVALID_SOCKET ) {
-
 		Data.Callback = _SocketCallback;
-		Data.Mutex = mtx::Create();
-
-		mtx::Lock( Data.Mutex );	// Unlocked by the 'Traiter_()' function.
-
 		Data.Socket = Socket;
-		Data.IP = IP;
 	} else
 		Continue = false;
 
 	while ( Continue ) {
-		mtk::RawLaunch(Traiter_, &Data, true);
+		mtk::Launch(Traiter_, &Data);
 
 //		SCKClose( Socket );	// Only needed when using processes.
 
 		Socket = SCK_INVALID_SOCKET;
 
-		Socket = listener___::GetConnection( IP, ErrorHandling, Timeout );
+		Socket = listener___::GetConnection(Data.IP, ErrorHandling, Timeout);
 
 		if ( Freeze != NULL )
 			while ( *Freeze )
 				tht::Defer( 100 );
 
 		if ( Socket != SCK_INVALID_SOCKET ) {
-			mtx::Lock( Data.Mutex );	// Unlocked by the 'Traiter_()' function.
-
 			Data.Socket = Socket;
-			Data.IP = IP;
 		} else
 			Continue = false;
 	}
@@ -416,9 +404,6 @@ qRR
 qRT
 	if ( Socket != SCK_INVALID_SOCKET )
 		sck::Close( Socket, err::h_Default );
-
-	if ( Data.Mutex != MTX_INVALID_HANDLER )
-		mtx::Delete( Data.Mutex );
 qRE
 }
 
@@ -431,6 +416,8 @@ Q37_GCTOR( csdbns )
 	Repository_.Init();
 	Mutex_ = mtx::Create();
 #endif
+  if ( sizeof( tIP ) < INET6_ADDRSTRLEN )
+    qRChk();
 }
 
 Q37_GDTOR( csdbns )

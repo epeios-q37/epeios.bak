@@ -35,7 +35,7 @@
 namespace faaspool {
 	using namespace common::faas;
 
-	void Initialize();
+	void _Initialize();
 
 	template <typename fd>  inline void PutId(
 		sId Id,
@@ -186,7 +186,7 @@ namespace faaspool {
 
 	class rBackend_;
 
-	sRow GetConnection_(
+	sRow NewSession_(
 		const str::dString &Token,
 		str::dString &IP,
 		rGate &Gate,
@@ -217,9 +217,9 @@ namespace faaspool {
 		}
 		fdr::rRWDriver &D_(void)
 		{
-			// NOTA: The underlying drive is valid as long as the backend exists,
+			// NOTA: The underlying driver is valid as long as the backend exists,
 			// hence it does not really matter if the driver becomes invalid after
-			// Calling this function.
+			// calling this function.
 			if ( !IsValid_())
 				qRGnr();
 
@@ -336,7 +336,7 @@ namespace faaspool {
 
 			IdSent_ = false;
 
-			return GetConnection_(Token, IP, Gate_, Backend_);
+			return NewSession_(Token, IP, Gate_, Backend_);
 		}
 		rGate &GetGate( void )
 		{

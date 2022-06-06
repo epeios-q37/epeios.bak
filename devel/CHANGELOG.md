@@ -12,6 +12,11 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-06-06
+- CSDBNS:
+  - using `inet_ntop(…)` instead of deprecated `inet_ntoa(…)`;
+  - changing the handling of the 'IP' parameter, to prevent problems in multi-threading;
+
 ## 2022-06-03
 - CPE: adaptation to FreeBSD;
 - DIR: adaptation to FreeBSD;

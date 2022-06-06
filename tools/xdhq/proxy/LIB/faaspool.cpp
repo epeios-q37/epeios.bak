@@ -414,7 +414,13 @@ namespace faaspool {
 	idxbtq::qINDEXw( sBRow_ ) Index_;
 	sBRow_ IRoot_ = qNIL;
 	lstbch::qLBUNCHw( rBackend_ *, sBRow_ ) Backends_;
-	csdbns::rListener Listener_;
+	namespace listener_ {
+    csdbns::rListener Channel;
+    namespace blocker {
+      tht::rBlocker Blocker;  // To avoid above channel destruction while still in use. Currently not in function.
+      bso::sBool IsInitialised = false;
+    }
+	}
 
 	namespace {
 		sBRow_ SearchInIndex_(
@@ -990,9 +996,9 @@ namespace {
         break;
 			default:
 				if ( !Backend.Gates.Exists( Id ) ) {
-            Release_(Flow, Id);
+          Release_(Flow, Id);
 				} else {
-          Backend.Gates( Id )->UnblockReading();
+          Backend.Gates(Id)->UnblockReading();
 
           Backend.Switch.Wait();	// Waits until all data in flow red.
 				}
@@ -1009,7 +1015,7 @@ namespace {
 	struct gConnectionData_
 	{
 		sck::sSocket Socket = sck::Undefined;
-		const char *IP = NULL;
+		csdbns::tIP IP = "";
 	};
 
 	void NewConnexion_(
@@ -1107,23 +1113,26 @@ namespace {
 		gConnectionData_ Data;
 	qRFB;
 		while ( true ) {
-			Data.Socket = Listener_.GetConnection( Data.IP );
+			Data.Socket = listener_::Channel.GetConnection(Data.IP);
 
 			mtk::Launch(NewConnexionRoutine_, Data);
 		}
 	qRFR;
 	qRFT;
+    listener_::blocker::Blocker.Unblock();
 	qRFE(sclm::ErrorDefaultHandling());
 	}
 }
 
-void faaspool::Initialize( void )
+void faaspool::_Initialize( void )
 {
 qRH;
 	csdbns::sService Service = csdbns::Undefined;
 qRB;
 	if ( (Service = sclm::OGetU16( registry::parameter::faas::Service, csdbns::Undefined ) ) != csdbns::Undefined ) {
-		Listener_.Init( Service );
+		listener_::Channel.Init( Service );
+    listener_::blocker::Blocker.Init();
+    listener_::blocker::IsInitialised = true;
 
 		mtk::RawLaunch(ListeningRoutine_, NULL, true);
 	}
@@ -1132,7 +1141,7 @@ qRT;
 qRE;
 }
 
-sRow faaspool::GetConnection_(
+sRow faaspool::NewSession_(
 	const str::dString &Token,
 	str::dString &IP,
 	rGate &Gate,
@@ -1267,5 +1276,9 @@ qGDTOR(faaspool)
 	}
 
 	connection_timeout_::DTor();
+  Backends_.reset();
+
+  if ( listener_::blocker::IsInitialised && false ) // To activate when listener will be aware of interruption (SIGTERM, for example).
+    listener_::blocker::Blocker.Wait();
 }
 

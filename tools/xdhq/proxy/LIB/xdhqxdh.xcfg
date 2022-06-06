@@ -63,7 +63,7 @@
 						<xpp:bloc>Forbidden/forbidden</xpp:bloc>
 					</Filename>
 					<Configuration>
-						<xpp:expand href="../plugins/token_/Forbidden/forbidden.xcfg"/>
+						<xpp:expand href="../plugins/token/Forbidden/forbidden.xcfg"/>
 					</Configuration>
 					<Locale>
 						<xpp:expand href="../plugins/token/Forbidden/forbidden.xlcl"/>

@@ -66,7 +66,7 @@ namespace {
 					sclm::ReportAndAbort("UnableToConnectTo", HostService);
 			}
 
-			faaspool::Initialize();
+			faaspool::_Initialize();
 			common::LogDriver.Init( cio::COut );
 		qRR;
 		qRT;
