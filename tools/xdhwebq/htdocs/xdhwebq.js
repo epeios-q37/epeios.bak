@@ -108,7 +108,10 @@ function displayExit(html) {
 }
 
 function connect(token, id) {
-	socket = new WebSocket((window.location.protocol === "http:" ? "ws" : "wss") + "://" + window.location.hostname + "/xdh/");
+	let location = window.location;
+	let pathname = location.pathname;
+	
+	socket = new WebSocket((location.protocol === "http:" ? "ws" : "wss") + "://" + location.hostname + pathname.substring(0, pathname.search(".php")) + "/");
 
 	socket.onopen = function (e) {
 		socket.send(token);

@@ -1,5 +1,8 @@
 # *XPPq* changelog
 
+## 2022-06-08
+- adaptation to *FreeBSD*;
+
 ## 2022-02-08
 - adaptation to changes in undelying modules,
 

@@ -4,6 +4,8 @@ Concerne actuellement le *toolkit* *Atlas* en tant que bibliothèque de prototyp
 
 ## Déploiement des binaires
 
+### Cas général
+
 Il y a deux binaires à déployer sur le serveur distant:
 
 - [*xdhwebq*](http://github.com/epeios-q37/xdhwebq-cli) (`tools/xdhwebq/CLI`),
@@ -12,6 +14,12 @@ Il y a deux binaires à déployer sur le serveur distant:
 Vérifier, avant déploiement, qu'ils compilent bien sous *Cygwin*.
 
 Mettre à jour les dépôts *GitHub*, puis les cloner sur les serveurs, les compiler et les mettre en place. Laisser tourner la version en cours.
+
+### VPS *bsddev* (*berny.mcs.com.ve*)
+
+On peut tester les binaires lancés sur *bsddev* en utilisant le serveur web local. Le fichier `xdhwebq.js` et la configuration *nginx* ont été modifiée en conséquence. Cependant, il faut :
+- sur *bsddev*, modifier `xdhqxhd.xcfg` pour que l'URL pointe sur `…xdh_bsddev.php…` au lieu de `…xdh.php…` ;
+- lancer localement `redir --lport 53700 --caddr=berny.mcs.com.ve --cport 53700` ;
 
 ## Le déploiement des bibliothèques utilisateurs
 
