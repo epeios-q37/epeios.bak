@@ -49,14 +49,9 @@ $out = str_replace(array("\r", "\n", "\t"), '',<<<MLS
 $head
 			<!-- END of the user head section -->
 			<script>
-				function adjustQRCodeIFrame()
-				{
-					let iframe = document.body.lastChild.firstChild;
-					let iframeBody = iframe.contentWindow.document.body;
-					iframe.style.height = iframeBody.scrollHeight + 'px';
-				}
 				function ignition(token,id,qrcodeOnly) {
-						document.body.lastChild.firstChild.src = "FaaSFooter.php?url=" + encodeURIComponent(window.location.href);
+						let iframe = document.body.lastElementChild.previousElementSibling.firstElementChild;
+						iframe.src = "FaaSFooter.php?url=" + encodeURIComponent(window.location.href);
 						if (!qrcodeOnly) connect(token,id);
 				}
 			</script>
@@ -75,8 +70,10 @@ $head
 				<input type="hidden" id="LoginPassword" value="$Password"/>
 			</div>
 			<div $additional>
-				<iframe style="border: none; width: 100%; height: 50px;" onload="adjustQRCodeIFrame();"/>
+				<iframe style="border: none; width: 100%; height: 50px;"></iframe>
 			</div>
+			<!-- There must be one and only one element here, even an empty one, for the 'More' section to be handled correctly. -->
+			<iframe style="border: none; width: 100%; height: 0px;" src="sponsors.php?$parameters"></iframe>
 		</body>
 	</html>
 MLS

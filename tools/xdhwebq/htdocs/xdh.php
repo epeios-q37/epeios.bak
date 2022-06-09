@@ -62,6 +62,7 @@ if (empty($token))
     $additional = ' style="display: none;"';
 
 $id = $_REQUEST["_id"];
+$parameters = $_SERVER['QUERY_STRING'];
 
 require 'prolog.php';
 
