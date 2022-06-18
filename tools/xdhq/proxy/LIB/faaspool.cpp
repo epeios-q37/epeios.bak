@@ -248,10 +248,10 @@ namespace faaspool {
       {
         return Relay_ != NULL;
       }
-      bso::sBool Dismiss(void)  // Called on error.
+      bso::sBool Dismiss(void)  // Called on error or deconnection.
       {
         if ( Relay_ != NULL ) {
-          Relay_ = NULL;  // To report the error status.
+          Relay_ = NULL;  // To report an error on head retrieving.
           Processed_.Unblock();
           Guard_.Wait();
           return true;
@@ -265,12 +265,17 @@ namespace faaspool {
     };
   }
 
+  #pragma message("Créer un 'MIMIC' dédié aux objets avec ressources.")
+  E_TRMIMIC__(mtx::rHandle, hBackendGuard_);
+
 	class rBackend_
 	{
 	private:
 		// Protects access to 'Gates' and 'PendingDismiss_';
-		mtx::rMutex Mutex_;
+		mtx::rMutex GatesAccess_;
 		bso::sBool PendingDismiss_;
+		// Protect access to backend.
+		mtx::rMutex Access_;
 		// Prevents destruction of 'Driver_' until no more client use it.
 		tht::rBlocker NoMoreClientBlocker_;
 		void InvalidAll_( void )
@@ -288,7 +293,6 @@ namespace faaspool {
 		sRow TRow; // Token row.	// Can be 'qNIL' in self-hosted mode (no/empty token).
 		fdr::rRWDriver *Driver;	// Is also set to NULL when the backend is no more present.
 		wGates_ Gates;
-		mtx::rMutex Access;
 		tht::rBlocker Switch;
 		csdcmn::sVersion ProtocolVersion;
 		str::wString
@@ -299,11 +303,11 @@ namespace faaspool {
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
-				if ( Mutex_ != mtx::Undefined)
-					mtx::Delete(Mutex_);
+				if ( GatesAccess_ != mtx::Undefined)
+					mtx::Delete(GatesAccess_);
 
-				if ( Access != mtx::Undefined )
-					mtx::Delete( Access, true );
+				if ( Access_ != mtx::Undefined )
+					mtx::Delete( Access_, true );
 
 				if ( TRow != qNIL )
           common::GetCallback().Remove(TRow);
@@ -311,13 +315,13 @@ namespace faaspool {
 				InvalidAll_();
 			}
 
-			Mutex_ = mtx::Undefined;
+			GatesAccess_ = mtx::Undefined;
 			PendingDismiss_ = false;
 			tol::reset( P, NoMoreClientBlocker_);
 			TRow = qNIL;
 			Row = qNIL;
 			Driver = NULL;
-			Access = mtx::Undefined;
+			Access_ = mtx::Undefined;
 			ProtocolVersion = csdcmn::UnknownVersion;
 			tol::reset(P, Gates, Switch, IP, Token, HeadCache, HeadRelay);
 		}
@@ -337,20 +341,24 @@ namespace faaspool {
                                                       // but retrieved on each new browser connection.
         qRGnr();
 
-			Mutex_ = mtx::Create();
+			GatesAccess_ = mtx::Create();
 			PendingDismiss_ = false;
 			tol::Init(NoMoreClientBlocker_);
 			this->Row = Row;
 			this->TRow = TRow;
 			this->Driver = &Driver;
 			Gates.Init();
-			Access = mtx::Create();
+			Access_ = mtx::Create();
 			Switch.Init();
 			this->ProtocolVersion = ProtocolVersion;
 			this->IP.Init( IP );
 			this->Token.Init(Token);
 			this->HeadCache.Init(Head);
 			HeadRelay.Init();
+		}
+		void Hold(hBackendGuard_ &Guard)
+		{
+		  Guard->InitAndLock(Access_);
 		}
 		bso::sBool Set(rGate &Gate)
 		{
@@ -379,7 +387,7 @@ namespace faaspool {
 		qRH
 			mtx::rHandle Mutex;
 		qRB
-			Mutex.InitAndLock(Mutex_);
+			Mutex.InitAndLock(GatesAccess_);
 
 			Gates.Remove((sFRow_)Id);
 
@@ -396,7 +404,7 @@ namespace faaspool {
 			mtx::rHandle Mutex;
 		qRB
 			common::GetCallback().QuitAll(TRow);
-			Mutex.InitAndLock(Mutex_);
+			Mutex.InitAndLock(GatesAccess_);
 
 			if ( Gates.Amount() ) {
 				PendingDismiss_ = true;
@@ -518,7 +526,9 @@ namespace faaspool {
 			return NULL;
 	}
 
-	rBackend_ *TSGetBackend_( const str::dString &Token )
+	rBackend_ *TSGetBackend_(
+    const str::dString &Token,
+    hBackendGuard_ &Guard)
 	{
 		rBackend_ *Backend = NULL;
 	qRH;
@@ -526,7 +536,10 @@ namespace faaspool {
 	qRB;
 		Mutex.InitAndLock( Mutex_ );
 
-		Backend = TUGetBackend_( Token );
+		Backend = TUGetBackend_(Token);
+
+		if ( Backend != NULL )
+      Backend->Hold(Guard);
 	qRR;
 	qRT;
 	qRE;
@@ -1149,17 +1162,15 @@ sRow faaspool::NewSession_(
 {
 	sRow Row = qNIL;
 qRH;
-	mtx::rHandle Mutex;
+	hBackendGuard_ Guard;
 	flw::rDressedWFlow<> Flow;
 qRB;
 	if ( Backend != NULL)
 		qRGnr();
 
-	Backend = TSGetBackend_( Token );
+	Backend = TSGetBackend_(Token, Guard);
 
 	if ( Backend != NULL ) {
-		Mutex.InitAndLock( Backend->Access );
-
 		if ( Backend->Set(Gate) ) {
 			Row = Backend->TRow;
 			Flow.Init(*Backend->Driver);
@@ -1184,15 +1195,13 @@ namespace {
   {
     bso::sBool Success = false;
   qRH;
-    mtx::rHandle Mutex;
+    hBackendGuard_ Guard;
     flw::rDressedWFlow<> Flow;
     rBackend_ *Backend = NULL;
   qRB;
-    Backend = TSGetBackend_( Token );
+    Backend = TSGetBackend_(Token, Guard);
 
     if ( Backend != NULL ) {
-      Mutex.InitAndLock(Backend->Access);
-
       if ( Backend->HeadRelay.IsBusy() )
         qRGnr();
 
