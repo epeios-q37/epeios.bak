@@ -28,168 +28,38 @@
 #ifndef FAASPOOL_INC_
 # define FAASPOOL_INC_
 
+# include "faasbkds.h"
+
 # include "common.h"
 
 # include "sck.h"
 
 namespace faaspool {
-	using namespace common::faas;
-
-	void _Initialize();
+	void Initialize();
 
 	template <typename fd>  inline void PutId(
-		sId Id,
+		faas::sId Id,
 		fd &FD )
 	{
 		dtfptb::VPut( Id, FD );
 	}
 
-	template <typename fd> inline sId GetId(
+	template <typename fd> inline faas::sId GetId(
 		fd &FD,
 		bso::sBool *IsError )
 	{
-		sId Id = UndefinedId;
+		faas::sId Id = faas::UndefinedId;
 
 		return dtfptb::VGet( FD, Id, IsError );
 	}
 
-	// Gate regulating communications between upstream (session) and downstream (backend).
-	class rGate
-	{
-	private:
-    mtx::rMutex Mutex_;	// To protect below 2 members.
-    bso::sBool Quit_;	// Set by the switcher to force closing.
-    bso::sBool Pending_;	// Set by the session when blocked for reading.
-    tht::rBlocker Read_;
-		sId Id_;
-		fdr::rRWDriver *Driver_;
-		tht::rBlocker *Switch_;
-	public:
-		void reset( bso::sBool P = true )
-		{
-			if ( P ) {
-				if (Mutex_ != mtx::Undefined)
-					mtx::Delete(Mutex_);
-
-				if ( Switch_ != NULL ) {	// At 'NULL' when destruction occurs after backend becomes unavailable.
-					if ( !Read_.IsBlocked() ) {
-							if ( Switch_->IsBlocked() )
-								Switch_->Unblock();
-							else
-								qRGnr();
-					}
-				}
-			}
-
-			Mutex_ = mtx::Undefined;
-			Quit_ = false;
-			Pending_ = false;
-			Read_.reset( P );
-			Id_ = UndefinedId;
-			Driver_ = NULL;
-			Switch_ = NULL;
-		}
-		void Init( void )
-		{
-			reset();
-
-			Mutex_ = mtx::Create();
-
-			Read_.Init();
-		}
-		qCDTOR( rGate );
-		qRODISCLOSEr(sId, Id);
-		fdr::rRWDriver &Driver(void) const
-		{
-		  return *Driver_;
-		}
-		tht::rBlocker &Switch(void) const
-		{
-		  return *Switch_;
-		}
-		void Set(
-      sId Id,
-      fdr::rRWDriver *Driver,
-      tht::rBlocker *Switch)
-    {
-      Id_ = Id;
-      Driver_ = Driver;
-      Switch_ = Switch;
-    }
-    void UnsetId(void)
-    {
-      Id_ = UndefinedId;
-    }
-		bso::sBool WaitForRead(void)
-		{
-			bso::sBool Return = true;
-		qRH
-			mtx::rHandle Mutex;
-		qRB
-			Mutex.InitAndLock(Mutex_);
-
-			if ( Quit_) {
-				Return = false;
-			} else {
-				Pending_ = true;
-				Mutex.Unlock();
-				Read_.Wait();
-				Mutex.Lock();
-				Return = !Quit_;
-			}
-		qRR
-		qRT
-		qRE
-			return Return;
-		}
-		void UnblockReading(void)
-		{
-		qRH
-			mtx::rHandle Mutex;
-		qRB
-			Mutex.InitAndLock(Mutex_);
-
-			if ( Quit_ )
-				qRGnr();
-
-			Pending_ = false;
-
-			Read_.Unblock();
-		qRR
-		qRT
-		qRE
-		}
-		void UnblockAndQuit(void)
-		{
-		qRH
-			mtx::rHandle Mutex;
-		qRB
-			Mutex.InitAndLock(Mutex_);
-
-			if ( Quit_ )
-				qRGnr();
-
-			Quit_ = true;
-			Switch_ = NULL;
-
-			if ( Pending_ )
-				Read_.Unblock();
-		qRR
-		qRT
-		qRE
-		}
-		bso::sBool IsValid( void ) const
-		{
-			return Id_ != UndefinedId;
-		}
-	};
 
 	class rBackend_;
 
-	sRow NewSession_(
+	faas::sRow NewSession_(
 		const str::dString &Token,
 		str::dString &IP,
-		rGate &Gate,
+		faasgate::rGate &Gate,
 		rBackend_ *&Backend);
 
 	class cGuard
@@ -210,7 +80,7 @@ namespace faaspool {
 		qRMV(rBackend_, B_, Backend_);
 		bso::sSize Consumed_;
 		bso::sBool IdSent_;
-		rGate Gate_;
+		faasgate::rGate Gate_;
 		bso::sBool IsValid_(void)
 		{
 			return (Backend_ != NULL) && Gate_.IsValid();
@@ -323,7 +193,7 @@ namespace faaspool {
 			IdSent_ = false;
 		}
 		qCVDTOR( rRWDriver );
-		sRow Init(
+		faas::sRow Init(
 			const str::dString &Token,
 			str::dString &IP,
 			fdr::eThreadSafety ThreadSafety = fdr::ts_Default )
@@ -338,7 +208,7 @@ namespace faaspool {
 
 			return NewSession_(Token, IP, Gate_, Backend_);
 		}
-		rGate &GetGate( void )
+		faasgate::rGate &GetGate( void )
 		{
 			return Gate_;
 		}

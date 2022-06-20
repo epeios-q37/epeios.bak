@@ -65,12 +65,7 @@ namespace {
 		}
 	}
 
-	qROW( FRow_ );	// Frontend 'Row'.
 
-	typedef lstbch::qLBUNCHd( rGate *, sFRow_ ) dGates_;
-	qW( Gates_ );
-
-	qROW( BRow_ );	// Back-end Row.
 
 	// Handling of the connection timeout.
 	namespace connection_timeout_ {
@@ -188,240 +183,6 @@ namespace {
 }
 
 namespace faaspool {
-  namespace {
-    // Head content handling since FaaS protocol v1.
-    class rHeadRelay_
-    {
-    private:
-      str::dString *Relay_;
-      tht::rBlocker
-        Processed_,  // Blocks until the relay data is processed.
-        Guard_; // Used on error, to ensure
-    public:
-      void reset(bso::sBool P = true)
-      {
-        Relay_ = NULL;
-
-        tol::reset(P, Processed_, Guard_);
-      }
-      qCDTOR(rHeadRelay_);
-      void Init(void)
-      {
-        Relay_ = NULL;
-        tol::Init(Processed_, Guard_);
-      }
-     void SetRelay(str::dString &Head)
-      {
-        if ( Relay_ != NULL )
-          qRGnr();
-
-        Relay_ = &Head;
-      }
-      // If returns false, an error occurs and the head could not be retrieved.
-      bso::sBool WaitForData(void)
-      {
-        Processed_.Wait();
-
-        if ( Relay_ != NULL ) {
-          Relay_ = NULL;
-          return true;
-        } else
-          return false;
-      }
-      str::dString &GetRelay(void) const
-      {
-        // No locking or blocking, as this is called only after a 'GetHead' request.
-
-        if ( Relay_ == NULL )
-          qRGnr();
-
-        if ( Relay_->Amount() )
-          qRGnr();
-
-        return *Relay_;
-      }
-      void ReportProcessed(void)
-      {
-        Processed_.Unblock(); // The blocker is also rearmed.
-      }
-      bso::sBool IsBusy(void) const
-      {
-        return Relay_ != NULL;
-      }
-      bso::sBool Dismiss(void)  // Called on error or deconnection.
-      {
-        if ( Relay_ != NULL ) {
-          Relay_ = NULL;  // To report an error on head retrieving.
-          Processed_.Unblock();
-          Guard_.Wait();
-          return true;
-        } else
-          return false;
-      }
-      void ReleaseGuard(void)
-     {
-        Guard_.Unblock();
-     }
-    };
-  }
-
-  #pragma message("Créer un 'MIMIC' dédié aux objets avec ressources.")
-  E_TRMIMIC__(mtx::rHandle, hBackendGuard_);
-
-	class rBackend_
-	{
-	private:
-		// Protects access to 'Gates' and 'PendingDismiss_';
-		mtx::rMutex GatesAccess_;
-		bso::sBool PendingDismiss_;
-		// Protect access to backend.
-		mtx::rMutex Access_;
-		// Prevents destruction of 'Driver_' until no more client use it.
-		tht::rBlocker NoMoreClientBlocker_;
-		void InvalidAll_( void )
-		{
-			sFRow_ Row = Gates.First();
-
-			while ( Row != qNIL ) {
-				Gates(Row)->UnsetId();
-
-				Row = Gates.Next( Row );
-			}
-		}
-	public:
-		sBRow_ Row;	// Backend row.
-		sRow TRow; // Token row.	// Can be 'qNIL' in self-hosted mode (no/empty token).
-		fdr::rRWDriver *Driver;	// Is also set to NULL when the backend is no more present.
-		wGates_ Gates;
-		tht::rBlocker Switch;
-		csdcmn::sVersion ProtocolVersion;
-		str::wString
-			IP,
-			Token,
-			HeadCache; // Head content cache on old behavior (FaaS protocol v0).
-    rHeadRelay_ HeadRelay;
-		void reset( bso::sBool P = true )
-		{
-			if ( P ) {
-				if ( GatesAccess_ != mtx::Undefined)
-					mtx::Delete(GatesAccess_);
-
-				if ( Access_ != mtx::Undefined )
-					mtx::Delete( Access_, true );
-
-				if ( TRow != qNIL )
-          common::GetCallback().Remove(TRow);
-
-				InvalidAll_();
-			}
-
-			GatesAccess_ = mtx::Undefined;
-			PendingDismiss_ = false;
-			tol::reset( P, NoMoreClientBlocker_);
-			TRow = qNIL;
-			Row = qNIL;
-			Driver = NULL;
-			Access_ = mtx::Undefined;
-			ProtocolVersion = csdcmn::UnknownVersion;
-			tol::reset(P, Gates, Switch, IP, Token, HeadCache, HeadRelay);
-		}
-		qCDTOR( rBackend_ );
-		void Init(
-			sBRow_ Row,
-			sRow TRow,
-			fdr::rRWDriver &Driver,
-			csdcmn::sVersion ProtocolVersion,
-			const str::dString &IP,
-			const str::dString &Token,
-			const str::dString &Head)
-		{
-			reset();
-
-			if ( ( ProtocolVersion > 1 ) && Head.Amount() ) // With protocol > 1, 'Head' is no more cached,
-                                                      // but retrieved on each new browser connection.
-        qRGnr();
-
-			GatesAccess_ = mtx::Create();
-			PendingDismiss_ = false;
-			tol::Init(NoMoreClientBlocker_);
-			this->Row = Row;
-			this->TRow = TRow;
-			this->Driver = &Driver;
-			Gates.Init();
-			Access_ = mtx::Create();
-			Switch.Init();
-			this->ProtocolVersion = ProtocolVersion;
-			this->IP.Init( IP );
-			this->Token.Init(Token);
-			this->HeadCache.Init(Head);
-			HeadRelay.Init();
-		}
-		void Hold(hBackendGuard_ &Guard)
-		{
-		  Guard->InitAndLock(Access_);
-		}
-		bso::sBool Set(rGate &Gate)
-		{
-			sFRow_ Row = qNIL;
-		qRH
-		qRB
-			Row = Gates.New();
-
-			if ( *Row > MaxId )
-				qRGnr();
-
-			Gates.Store( &Gate, Row );
-
-			Gate.Set(*Row, Driver, &Switch);
-		qRR
-			if ( Row != qNIL )
-				Gates.Remove(Row);
-
-			Row = qNIL;
-		qRT
-		qRE
-			return Row != qNIL;
-		}
-		void Release(sId Id)
-		{
-		qRH
-			mtx::rHandle Mutex;
-		qRB
-			Mutex.InitAndLock(GatesAccess_);
-
-			Gates.Remove((sFRow_)Id);
-
-			if ( PendingDismiss_ )
-				if ( Gates.Amount() == 0 )
-					NoMoreClientBlocker_.Unblock();
-		qRR
-		qRT
-		qRE
-		}
-		void WaitUntilNoMoreClient(void)
-		{
-		qRH
-			mtx::rHandle Mutex;
-		qRB
-			common::GetCallback().QuitAll(TRow);
-			Mutex.InitAndLock(GatesAccess_);
-
-			if ( Gates.Amount() ) {
-				PendingDismiss_ = true;
-				Mutex.Unlock();
-				NoMoreClientBlocker_.Wait();
-				Mutex.Lock();	// Otherwise 'Mutex_' could be destroyed before above 'Release' unlocks it.
-			}
-		qRR
-		qRT
-		qRE
-		}
-	};
-
-	mtx::rMutex Mutex_ = mtx::Undefined;
-	idxbtq::qINDEXw( sBRow_ ) Index_;
-	sBRow_ IRoot_ = qNIL;
-	lstbch::qLBUNCHw( rBackend_ *, sBRow_ ) Backends_;
 	namespace listener_ {
     csdbns::rListener Channel;
     namespace blocker {
@@ -430,82 +191,12 @@ namespace faaspool {
     }
 	}
 
-	namespace {
-		sBRow_ SearchInIndex_(
-			const str::dString &Token,
-			bso::sSign &Sign)
-		{
-			sBRow_ Row = IRoot_, Candidate = qNIL;
-			bso::sBool Continue = true;
+	// NOTA : TU : Thread Unsafe.
 
-			if ( !mtx::IsLocked( Mutex_ ) )
-				qRGnr();
-
-			if ( Row == qNIL)
-				qRGnr();
-
-			while ( Continue ) {
-				switch ( Sign = str::Compare(Token,Backends_(Row)->Token) ) {
-				case -1:
-					Candidate = Index_.GetLesser(Row);
-
-					if ( Candidate != qNIL )
-						Row = Candidate;
-					else
-						Continue = false;
-
-					break;
-				case 0:
-					Continue = false;
-					break;
-				case 1:
-					Candidate = Index_.GetGreater(Row);
-
-					if ( Candidate != qNIL )
-						Row = Candidate;
-					else
-						Continue = false;
-
-					break;
-				default:
-					qRUnx();
-					break;
-				}
-			}
-
-			return Row;
-		}
-
-		void PutInIndex_(
-			const str::dString &Token,
-			sBRow_ Row )
-		{
-			bso::sSign Sign = 0;
-			sBRow_ IRow = SearchInIndex_(Token, Sign);
-
-			switch ( Sign ) {
-			case -1:
-				Index_.BecomeLesser(Row,IRow,IRoot_);
-				break;
-			case 0:
-				qRGnr();
-				break;
-			case 1:
-				Index_.BecomeGreater(Row,IRow,IRoot_);
-				break;
-			default:
-				qRUnx();
-				break;
-			}
-		}
-	}
-
-	// NOTA : TU : Thread Unsafe ; TS : Thread Safe.
-
-	sBRow_ TUGetBackendRow_( const str::dString &Token )
+	faasbckd::sRow TUGetBackendRow_(const str::dString &Token)
 	{
 		bso::sSign Sign = 0;
-		sBRow_ Row = IRoot_ == qNIL ? qNIL : SearchInIndex_(Token, Sign);
+		faasbckd::sRow Row = faasbkds::index::Search(Token, Sign);
 
 		if ( Sign != 0 )
 			Row = qNIL;
@@ -513,30 +204,30 @@ namespace faaspool {
 		return Row;
 	}
 
-	rBackend_ *TUGetBackend_( const str::dString &Token )
+	faasbckd::rBackend *TUGetBackend_(
+    const str::dString &Token,
+    const faasbkds::dBackends &Backends)
 	{
-		sBRow_ Row = TUGetBackendRow_( Token );
+		faasbckd::sRow Row = TUGetBackendRow_(Token);
 
 		if ( Row != qNIL )
-			if ( Backends_ (Row)->Driver != NULL )
-				return Backends_(Row);
+			if ( Backends(Row)->Driver != NULL )
+				return Backends(Row);
 			else
 				return NULL;
 		else
 			return NULL;
 	}
 
-	rBackend_ *TSGetBackend_(
+	faasbckd::rBackend *GetBackend_(
     const str::dString &Token,
-    hBackendGuard_ &Guard)
+    faasbckd::hGuard &Guard)
 	{
-		rBackend_ *Backend = NULL;
+		faasbckd::rBackend *Backend = NULL;
 	qRH;
-		mtx::rHandle Mutex;
+		faasbkds::hGuard BackendsGuard;
 	qRB;
-		Mutex.InitAndLock( Mutex_ );
-
-		Backend = TUGetBackend_(Token);
+		Backend = TUGetBackend_(Token, faasbkds::GetBackends(BackendsGuard));
 
 		if ( Backend != NULL )
       Backend->Hold(Guard);
@@ -546,53 +237,37 @@ namespace faaspool {
 		return Backend;
 	}
 
-	bso::sBool TUGetCachedHead_(  // Old behavior.
+	bso::sBool GetCachedHead_(  // Old behavior.
 		const str::dString &Token,
-		str::dString &Head )
-	{
-		sBRow_ Row = TUGetBackendRow_( Token );
+		str::dString &Head)
+  {
+    faasbckd::rBackend *Backend = NULL;
+  qRH;
+    faasbckd::hGuard Guard;
+  qRB;
+    Backend = GetBackend_(Token, Guard);
 
-		if ( Row != qNIL ) {
-			Head = Backends_(Row)->HeadCache;
-			return true;
-     } else
-			return false;
-	}
+    if ( Backend != NULL )
+      Head = Backend->HeadCache;
+  qRR;
+  qRT;
+  qRE;
+    return Backend != NULL;
+  }
 
-	// Don't forget to lock the returned backend using 'Access' member!
-	bso::sBool TSGetCachedHead_(
-		const str::dString &Token,
-		str::dString &Head )
-	{
-		bso::sBool Found = false;
-	qRH;
-		mtx::rHandle Mutex;
-	qRB;
-		Mutex.InitAndLock( Mutex_ );
-
-		Found = TUGetCachedHead_( Token, Head );
-	qRR;
-	qRT;
-	qRE;
-		return Found;
-	}
-
-	void Remove_(sBRow_ Row)
+	void Remove_(faasbckd::sRow Row)
 	{
 	qRH;
-		mtx::rHandle Mutex;
+		faasbkds::hGuard Guard;
 	qRB;
-		Mutex.InitAndLock( Mutex_ );
+		faasbkds::dBackends &Backends = faasbkds::GetBackends(Guard);
 
 		if ( !Backends_.Exists( Row ) )
 			qRGnr();
 
 		Backends_.Remove( Row );
 
-		IRoot_ = Index_.Delete(Row, IRoot_);
-
-		if ( IRoot_ != qNIL )
-			IRoot_ = Index_.Balance(IRoot_);
+		faasbkds::index::Delete(Row);
 	qRR;
 	qRT;
 	qRE;
@@ -1217,8 +892,10 @@ namespace {
     }
   qRR;
   qRT;
-    if ( !Success && ( Backend != NULL ) )
+    if ( !Success && ( Backend != NULL ) ) {
+      Flow.reset();
       Backend->HeadRelay.ReleaseGuard();
+    }
   qRE;
     return Success;
   }

@@ -17,22 +17,6 @@
 	along with 'XDHq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef COMMON_INC_
-# define COMMON_INC_
+# include "faas.h"
 
-# include "xdhcuc.h"
-
-# include "csdmnc.h"
-# include "logq.h"
-
-namespace common {
-	extern logq::rFDriver<> LogDriver;
-
-	void SetCallback(xdhcuc::cGlobal &Callback);
-
-	xdhcuc::cGlobal &GetCallback(void);
-
-	void Handshake(flw::rRWFlow &Flow);
-}
-
-#endif
+using namespace faas;

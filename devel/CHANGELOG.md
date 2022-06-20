@@ -12,6 +12,11 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-06-20
+- TOL:
+  - adding 'qMIMICr(…)'
+  - adding operator '()' to `MIMIC…` macros;
+
 ## 2022-06-06
 - CSDBNS:
   - using `inet_ntop(…)` instead of deprecated `inet_ntoa(…)`;

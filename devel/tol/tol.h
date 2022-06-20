@@ -502,6 +502,7 @@ qTMIMICd( type, alias )\
 qTMIMICw( type, alias )
 
 # define qMIMICs( type, alias )	E_TMIMIC__( type, alias )
+# define qMIMICr( type, alias ) E_TRMIMIC__( type, alias )
 
 
 // For static objects only.
@@ -935,6 +936,14 @@ namespace tol
 			return V_;\
 		}\
 		const type &operator *( void ) const\
+		{\
+			return V_;\
+		}\
+		type &operator ()( void )\
+		{\
+			return V_;\
+		}\
+		const type &operator ()( void ) const\
 		{\
 			return V_;\
 		}\

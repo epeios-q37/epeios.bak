@@ -30,7 +30,7 @@
 
 namespace session {
 	namespace faas_ {
-		using namespace common::faas;
+		using namespace xdhcmn::faas;
 	}
 
 	qENUM( Mode_ ) {
