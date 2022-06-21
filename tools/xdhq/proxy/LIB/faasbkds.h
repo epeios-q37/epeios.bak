@@ -32,19 +32,21 @@
 # include "idxbtq.h"
 
 namespace faasbkds {
-  qMIMICr(mtx::rMutex, hGuard);
+  qMIMICr(mtx::rHandle, hGuard);
 
   typedef lstbch::qLBUNCHd( faasbckd::rBackend *, faasbckd::sRow ) dBackends;
 
   dBackends &GetBackends(hGuard &Guard);
 
   namespace index {
-   faasbckd::sRow Search(
+    faasbckd::sRow Search(
       const str::dString &Token,
+      const dBackends &Backends,
       bso::sSign &Sign);
 
     void Put(
       const str::dString &Token,
+      const dBackends &Backends,
       faasbckd::sRow Row );
 
     void Delete(faasbckd::sRow Row);

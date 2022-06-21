@@ -21,39 +21,51 @@
 
 using namespace faasbkds;
 
-
 namespace {
-  idxbtq::qINDEXw( faasbckd::sRow ) Index_;
-  faasbckd::sRow Root_ = qNIL;
-  mtx::rMutex Access_ = mtx::Undefined;
+  namespace index_ {
+    mtx::rMutex Access = mtx::Undefined;
+    idxbtq::qINDEXw( faasbckd::sRow ) Index;
+    faasbckd::sRow Root = qNIL;
+  }
 
-  inline void TestAccess_(void) {
-    if ( !mtx::IsLocked(Access_) )
-      qRGnr();
+  namespace backends_ {
+    mtx::rMutex Access = mtx::Undefined;
+    lstbch::qLBUNCHw(faasbckd::rBackend *, faasbckd::sRow) Backends;
   }
 }
 
-faasbckd::sRow index::Search(
-  const str::dString &Token,
-  bso::sSign &Sign)
+dBackends &faasbkds::GetBackends(hGuard &Guard)
+{
+  Guard().InitAndLock(backends_::Access);
+
+  return backends_::Backends;
+}
+
+namespace {
+  inline void TestAccess_(void) {
+    if ( !mtx::IsLocked(index_::Access) )
+      qRGnr();
+  }
+
+  faasbckd::sRow TUSearch_(
+    const str::dString &Token,
+    const dBackends &Backends,
+    bso::sSign &Sign)
   {
-    faasbckd::sRow Row = Root_;
-  qRH;
-    faasbckd::sRow Candidate = qNIL;
+    faasbckd::sRow
+      Row = index_::Root,
+      Candidate = qNIL;
     bso::sBool Continue = true;
-    hGuard Guard;
-  qRB;
+
     TestAccess_();
 
-    dBackends &Backends = GetBackends(Guard);
-
-    if ( Row == qNIL)
+    if ( Row == qNIL )
       return qNIL;
 
     while ( Continue ) {
       switch ( Sign = str::Compare(Token,Backends(Row)->Token) ) {
       case -1:
-        Candidate = Index_.GetLesser(Row);
+        Candidate = index_::Index.GetLesser(Row);
 
         if ( Candidate != qNIL )
           Row = Candidate;
@@ -65,7 +77,7 @@ faasbckd::sRow index::Search(
         Continue = false;
         break;
       case 1:
-        Candidate = Index_.GetGreater(Row);
+        Candidate = index_::Index.GetGreater(Row);
 
         if ( Candidate != qNIL )
           Row = Candidate;
@@ -78,47 +90,119 @@ faasbckd::sRow index::Search(
         break;
       }
     }
-  qRR;
-  qRT;
-  qRE;
+
     return Row;
+  }
+}
+
+faasbckd::sRow index::Search(
+  const str::dString &Token,
+  const dBackends &Backends,
+  bso::sSign &Sign)
+{
+  faasbckd::sRow Row = qNIL;
+qRH;
+  mtx::rHandle Guard;
+qRB;
+  Guard.InitAndLock(index_::Access);
+
+  Row = TUSearch_(Token, Backends, Sign);
+qRR;
+qRT;
+qRE;
+  return Row;
 }
 
 void index::Put(
   const str::dString &Token,
+  const dBackends &Backends,
   faasbckd::sRow Row )
 {
+qRH;
   bso::sSign Sign = 0;
-  faasbckd::sRow IRow = Search(Token, Sign);  // Tests if access locked.
+  faasbckd::sRow IRow = qNIL;
+  mtx::rHandle Guard;
+qRB;
+  Guard.InitAndLock(index_::Access);
+
+  IRow = TUSearch_(Token, Backends, Sign);
+
+  index_::Index.Allocate(Backends.Extent());
 
   if ( IRow == qNIL )
-    Root_ = Row;
+    index_::Root = Row;
   else
     switch ( Sign ) {
     case -1:
-      Index_.BecomeLesser(Row, IRow, Root_);
+      index_::Index.BecomeLesser(Row, IRow, index_::Root);
       break;
     case 0:
       qRGnr();
       break;
     case 1:
-      Index_.BecomeGreater(Row, IRow, Root_);
+      index_::Index.BecomeGreater(Row, IRow, index_::Root);
       break;
     default:
       qRUnx();
       break;
   }
+qRR;
+qRT;
+qRE;
 }
 
 void index::Delete(faasbckd::sRow Row)
 {
+qRH;
+  mtx::rHandle IndexGuard;
+qRB;
+  IndexGuard.InitAndLock(index_::Access);
+
   TestAccess_();
 
-  if ( Root_ == qNIL )
+  if ( index_::Root == qNIL )
     qRGnr();
 
-  Root_ = Index_.Delete(Row, Root_);
+  index_::Root = index_::Index.Delete(Row, index_::Root);
 
-  if ( Root_ != qNIL )
-    Root_ = Index_.Balance(Root_);
+  if ( index_::Root != qNIL )
+    index_::Root = index_::Index.Balance(index_::Root);
+qRR;
+qRT;
+qRE;
+}
+
+qGCTOR(faasbkds)
+{
+qRFH;
+qRFB;
+  backends_::Access = mtx::Create();
+	backends_::Backends.Init();
+
+	index_::Access = mtx::Create();
+	index_::Index.Init();
+qRFR;
+qRFT;
+qRFE(sclm::ErrorDefaultHandling());
+}
+
+qGDTOR(faasbkds)
+{
+	if ( index_::Access != mtx::Undefined )
+		mtx::Delete( index_::Access, true );
+
+	if ( backends_::Access != mtx::Undefined )
+		mtx::Delete( backends_::Access, true );
+
+	faasbckd::sRow Row = backends_::Backends.First();
+
+	while ( Row != qNIL ) {
+		delete backends_::Backends( Row );
+
+		Row = backends_::Backends.Next( Row );
+	}
+
+  backends_::Backends.reset();
+}
+
 

@@ -26,10 +26,10 @@ using namespace faasbckd;
 void rBackend::InvalidAll_(void)
 {
 qRH;
-  mtx::rHandle Guard;
+  hGatesGuard Guard;
   faasgate::sRow Row = qNIL;
 qRB;
-  faasgate::dGates &Gates = LockAndGetGates_(Guard);
+  faasgate::dGates &Gates = LockAndGetGates(Guard, false);
 
   Row = Gates.First();
 
@@ -46,6 +46,8 @@ qRE;
 void rBackend::reset(bso::sBool P)
 {
   if ( P ) {
+    InvalidAll_();
+
     if ( GatesAccess_ != mtx::Undefined)
       mtx::Delete(GatesAccess_);
 
@@ -54,8 +56,6 @@ void rBackend::reset(bso::sBool P)
 
     if ( TRow != qNIL )
       common::GetCallback().Remove(TRow);
-
-    InvalidAll_();
   }
 
   GatesAccess_ = mtx::Undefined;
@@ -133,9 +133,9 @@ bso::sBool rBackend::Set(faasgate::rGate &Gate)
 {
   faasgate::sRow Row = qNIL;
 qRH
-  mtx::rHandle Guard;
+  hGatesGuard Guard;
 qRB
-  Row = Set_(Gate, Driver, Switch, LockAndGetGates_(Guard));
+  Row = Set_(Gate, Driver, Switch, LockAndGetGates(Guard));
 qRR
 qRT
 qRE
@@ -145,9 +145,9 @@ qRE
 void rBackend::Release(faas::sId Id)
 {
 qRH
-  mtx::rHandle Guard;
+  hGatesGuard Guard;
 qRB
-  faasgate::dGates &Gates = LockAndGetGates_(Guard);
+  faasgate::dGates &Gates = LockAndGetGates(Guard);
 
   Gates.Remove((faasgate::sRow)Id);
 
@@ -162,17 +162,17 @@ qRE
 void rBackend::WaitUntilNoMoreClient(void)
 {
 qRH
-  mtx::rHandle Guard;
+  hGatesGuard Guard;
 qRB
   common::GetCallback().QuitAll(TRow);
 
-  faasgate::dGates &Gates = LockAndGetGates_(Guard);
+  faasgate::dGates &Gates = LockAndGetGates(Guard);
 
   if ( Gates.Amount() ) {
     PendingDismiss_ = true;
-    Guard.Unlock();
+    Guard().Unlock();
     NoMoreClientBlocker_.Wait();
-    Guard.Lock();	// Otherwise 'Mutex_' could be destroyed before above 'Release' unlocks it.
+    Guard().Lock();	// Otherwise 'Guard' could be destroyed before above 'Release' unlocks it.
   }
 qRR
 qRT

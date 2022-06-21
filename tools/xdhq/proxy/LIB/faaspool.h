@@ -53,14 +53,11 @@ namespace faaspool {
 		return dtfptb::VGet( FD, Id, IsError );
 	}
 
-
-	class rBackend_;
-
 	faas::sRow NewSession_(
 		const str::dString &Token,
 		str::dString &IP,
 		faasgate::rGate &Gate,
-		rBackend_ *&Backend);
+		faasbckd::rBackend *&Backend);
 
 	class cGuard
 	{
@@ -77,7 +74,7 @@ namespace faaspool {
 	: public fdr::rRWDressedDriver
 	{
 	private:
-		qRMV(rBackend_, B_, Backend_);
+		qRMV(faasbckd::rBackend, B_, Backend_);
 		bso::sSize Consumed_;
 		bso::sBool IdSent_;
 		faasgate::rGate Gate_;

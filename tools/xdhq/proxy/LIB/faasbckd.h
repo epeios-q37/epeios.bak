@@ -113,7 +113,8 @@ namespace faasbckd {
 
  	qROW( Row );	// Back-end Row.
 
-  qMIMICr(mtx::rHandle, hGuard);
+  qMIMICr(mtx::rHandle, hBackendGuard);
+  qMIMICr(mtx::rHandle, hGatesGuard);
 
 	class rBackend
 	{
@@ -126,12 +127,6 @@ namespace faasbckd {
 		mtx::rMutex Access_;
 		// Prevents destruction of 'Driver_' until no more client use it.
 		tht::rBlocker NoMoreClientBlocker_;
-		faasgate::dGates &LockAndGetGates_(mtx::rHandle &Guard)
-		{
-		  Guard.InitAndLock(GatesAccess_);
-
-		  return Gates_;
-		}
 		void InvalidAll_(void);
 	public:
 		sRow Row;	// Backend row.
@@ -154,7 +149,18 @@ namespace faasbckd {
 			const str::dString &IP,
 			const str::dString &Token,
 			const str::dString &Head);
-		void Hold(hGuard &Guard)
+		faasgate::dGates &LockAndGetGates(
+      hGatesGuard &Guard,
+      bso::sBool MustLock = true)
+		{
+		  if ( GatesAccess_ != mtx::Undefined)
+        Guard().InitAndLock(GatesAccess_);
+      else if ( MustLock )
+        qRGnr();
+
+		  return Gates_;
+		}
+		void Hold(hBackendGuard &Guard)
 		{
 		  Guard().InitAndLock(Access_);
 		}
