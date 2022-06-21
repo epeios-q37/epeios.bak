@@ -650,6 +650,7 @@ namespace {
 	{
 	qRH;
 		flw::rDressedRWFlow<> Flow;
+    faasbckd::hGatesGuard Guard;
 		faas::sId Id = faas::UndefinedId;
 		bso::sBool IsError = false;
 		str::wString Input;
@@ -692,22 +693,15 @@ namespace {
         Backend.HeadRelay.ReportProcessed();
         break;
 			default:
-        {
-        qRH;
-          faasbckd::hGatesGuard Guard;
-        qRB;
-          faasgate::dGates &Gates = Backend.LockAndGetGates(Guard);
+        faasgate::dGates &Gates = Backend.LockAndGetGates(Guard);
 
-          if ( !Gates.Exists( Id ) ) {
-            Release_(Flow, Id);
-          } else {
-            Gates(Id)->UnblockReading();
-
-            Backend.Switch.Wait();	// Waits until all data in flow red.
-          }
-        qRR;
-        qRT;
-        qRE;
+        if ( !Gates.Exists( Id ) ) {
+          Backend.UnlockGates(Guard);
+          Release_(Flow, Id);
+        } else {
+          Gates(Id)->UnblockReading();
+          Backend.UnlockGates(Guard);
+          Backend.Switch.Wait();	// Waits until all data in flow red.
         }
         break;
 			}

@@ -153,12 +153,19 @@ namespace faasbckd {
       hGatesGuard &Guard,
       bso::sBool MustLock = true)
 		{
-		  if ( GatesAccess_ != mtx::Undefined)
-        Guard().InitAndLock(GatesAccess_);
-      else if ( MustLock )
+		  if ( GatesAccess_ != mtx::Undefined) {
+        if ( Guard().IsInitialized() )
+          Guard().Lock();
+        else
+          Guard().InitAndLock(GatesAccess_);
+      } else if ( MustLock )
         qRGnr();
 
 		  return Gates_;
+		}
+		void UnlockGates(hGatesGuard &Guard)
+		{
+      Guard().Unlock();
 		}
 		void Hold(hBackendGuard &Guard)
 		{

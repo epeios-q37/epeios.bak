@@ -319,6 +319,10 @@ namespace mtx {
 		{
 			Init( Handler, true );
 		}
+		bso::sBool IsInitialized(void) const
+		{
+		  return Handler_ != NULL;
+		}
 		bso::bool__ TryToLock( tol::sDelay TimeOut = 0 )	// Returns 'true' if lock successful, or return false after timeout.
 		{
 			return mtx::TryToLock( H_(), TimeOut );
@@ -327,9 +331,7 @@ namespace mtx {
 		{
 			return mtx::Lock( H_() );
 		}
-		bso::sBool Lock(
-			handler___ Handler,
-			tol::sDelay TimeOut )	// Returns 'true' as soon as the lock succeeds, or false if timeout expired.
+		bso::sBool Lock(tol::sDelay TimeOut)	// Returns 'true' as soon as the lock succeeds, or false if timeout expired.
 		{
 			return mtx::Lock( H_(), TimeOut );
 		}

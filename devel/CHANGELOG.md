@@ -12,6 +12,11 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-06-21
+- MTX:
+  - fixing bad function declaration in `rHandle`;
+  - adding `rHandle::IsInitialized(…)`;
+
 ## 2022-06-20
 - TOL:
   - adding 'qMIMICr(…)'
