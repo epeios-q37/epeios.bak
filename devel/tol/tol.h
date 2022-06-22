@@ -1598,6 +1598,10 @@ namespace tol {
 		return Time;
 	}
 
+// Helps to temporary disable the 'rand' warning message when 'rand' used by underlying library.
+# define TOL_RAND_MACRO	use_Rand_from_tol_library	// To force the use of 'tol::System(...)'.
+# define rand	TOL_RAND_MACRO
+
 	/*f Initialize the random generator using the date & time.
 	The used value is returned to be used with the following
 	function to make the random generator always start with the same value. */
@@ -1615,6 +1619,8 @@ namespace tol {
 	{
 		srand( Seed );
 	}
+
+	int Rand(void);
 
 	typedef bso::uint__ delay__;
 

@@ -48,8 +48,9 @@ mods += fblfrp fblovl fbltyp
 mods += scla scli sclm scle scll 
 mods += sclr sclf 
 mods += xdhcdc xdhcmn xdhcuc xdhdws 
+mods += faas faasbckd faasbkds faasgate faaspool 
 mods += plugins prtcl 
-mods += common faaspool registry slfhlead session 
+mods += common registry slfhlead session 
 
 pmods += pllio 
 
@@ -443,7 +444,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20220606"\"
+copt += -DVERSION=\""20220621"\"
 copt += -DCOPYRIGHT_YEARS=\""2017"\"
 copt += -DIDENTIFIER=\""5f3ad6c6-4f0d-428d-9c00-678e1ed3967f"\"
 

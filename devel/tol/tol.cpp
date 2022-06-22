@@ -227,19 +227,43 @@ static inline void SetSystemCommandAvailabitity_( void )
 		SystemCommandIsAvailable_ = xbFalse;
 }
 
+
+namespace {
+  mtx::rMutex RandAccess_ = mtx::Undefined;
+}
+
+
+int tol::Rand(void)
+{
+  int Value = 0;
+qRH;
+  mtx::rHandle Guard;
+qRB;
+  Guard.InitAndLock(RandAccess_);
+
+#undef rand
+  Value = rand();
+#define rand TOL_RAND_MACRO
+qRR;
+qRT;
+qRE;
+  return Value;
+}
+
+
 const char *tol::UUIDGen( bUUID &UUID )
 {
-	InitializeRandomGenerator();
+//	InitializeRandomGenerator();  // Initialize the random generator to same seed when called in between one second.
 
 	// http://stackoverflow.com/questions/2174768/generating-random-uuids-in-linux
 	// Modified, because, with the original, the size of the UUID can vary.
 
 	sprintf(UUID, "%04x%04x-%04x-%04x-%04x-%04x%04x%04x",
-		rand()&0xffff, rand()&0xffff,
-		rand()&0xffff,
-		((rand() & 0x0fff) | 0x4000),
-		rand() % 0x3fff + 0x8000,
-		rand()&0xffff, rand()&0xffff, rand()&0xffff);
+		Rand()&0xffff, Rand()&0xffff,
+		Rand()&0xffff,
+		((Rand() & 0x0fff) | 0x4000),
+		Rand() % 0x3fff + 0x8000,
+		Rand()&0xffff, Rand()&0xffff, Rand()&0xffff);
 
 	return UUID;
 }
@@ -373,10 +397,16 @@ bso::sBool tol::GetEnv(
   return GetEnv_(Name, Value);
 }
 
-Q37_GCTOR( tol )
+qGCTOR( tol )
 {
 	SetSystemCommandAvailabitity_();
 	EnvLocker_.Init();
+	InitializeRandomGenerator();
+
+	if ( RandAccess_ != mtx::Undefined )
+    qRUnx();
+
+  RandAccess_ = mtx::Create();
 #ifdef TOL__WIN
 	if ( QueryPerformanceFrequency( &tol::_TickFrequence ) == 0 )
 		qRSys();
@@ -392,4 +422,12 @@ Q37_GCTOR( tol )
 	tol::_Numer = TimebaseInfo.numer;
 	tol::_Denom = TimebaseInfo.denom;
 #endif
+}
+
+qGDTOR(tol)
+{
+  if ( RandAccess_ != mtx::Undefined )
+    mtx::Delete(RandAccess_, true);
+
+  RandAccess_ = mtx::Undefined;
 }

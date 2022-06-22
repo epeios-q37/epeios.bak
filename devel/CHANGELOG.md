@@ -12,6 +12,9 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-06-22
+- TOL: introducing `Rand()` to deal with the non thread-safety of `rand()`;
+
 ## 2022-06-21
 - MTX:
   - fixing bad function declaration in `rHandle`;

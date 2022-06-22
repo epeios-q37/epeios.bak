@@ -347,10 +347,8 @@ namespace {
           StringFlow.Init(Token);
           EncoderFlow.Init(StringFlow, cdgb64::fURL);
 
-          tol::InitializeRandomGenerator();
-
           while ( i-- )
-            EncoderFlow.Put(rand());
+            EncoderFlow.Put(tol::Rand());
 		    qRR;
 		    qRT;
 		    qRE;
