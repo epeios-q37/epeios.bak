@@ -32,6 +32,7 @@
 				<Module>idxbtq</Module>
 				<Module>logq</Module>
 				<Module>ltf</Module>
+				<Module>rnd</Module>
 				<Module>sck</Module>
 				<Module>strmrg</Module>
 			</Modules>

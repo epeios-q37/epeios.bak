@@ -65,6 +65,11 @@
 
 # include "bso.h"
 
+// Helps to temporary disable the 'rand' warning message when 'rand' used by underlying library.
+// Here because this library is always used when using the Epeios libraries.
+# define TOL_RAND_MACRO_	use_Rand_from_rnd_library	// To force the use of 'tol::System(...)'.
+# define rand	TOL_RAND_MACRO_
+
 // Predeclarations.
 
 // Should be 'uys::sHook …", but cannot predeclare typedefs.
@@ -686,10 +691,6 @@ namespace tol {
 	};
 
 	qW1( Object );
-
-	typedef char bUUID[37];
-
-	const char *UUIDGen( bUUID &UUID );
 }
 
 # define qGCTOR(discriminator)	Q37_GCTOR( discriminator )
@@ -1128,7 +1129,7 @@ Utile pour afficher le numro de ligne dans un #pragma message (...). */
 // #pragma message(__LOC__ " : Message")
 
 // Checkpoint.
-# define CPq	cio::COut << '(' << tol::TUTime() << ") " __FILE__ ":" E_STRING(__LINE__) << txf::nl << txf::commit
+# define qCP	cio::COut << '(' << tol::TUTime() << ") " __FILE__ ":" E_STRING(__LINE__) << txf::nl << txf::commit
 
 
 # define E_AUTO_( Name )	\
@@ -1597,30 +1598,6 @@ namespace tol {
 
 		return Time;
 	}
-
-// Helps to temporary disable the 'rand' warning message when 'rand' used by underlying library.
-# define TOL_RAND_MACRO	use_Rand_from_tol_library	// To force the use of 'tol::System(...)'.
-# define rand	TOL_RAND_MACRO
-
-	/*f Initialize the random generator using the date & time.
-	The used value is returned to be used with the following
-	function to make the random generator always start with the same value. */
-	inline unsigned int InitializeRandomGenerator( void )
-	{
-		unsigned int Seed = (unsigned int)time( NULL );
-
-		srand( Seed );
-
-		return Seed;
-	}
-
-	//f Initialize the random generator with 'Seed'.
-	inline void InitializeRandomGenerator( unsigned int Seed )
-	{
-		srand( Seed );
-	}
-
-	int Rand(void);
 
 	typedef bso::uint__ delay__;
 

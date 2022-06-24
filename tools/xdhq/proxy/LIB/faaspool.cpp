@@ -32,6 +32,7 @@ using namespace faaspool;
 #include "lstbch.h"
 #include "lstcrt.h"
 #include "mtk.h"
+#include "rnd.h"
 #include "sclm.h"
 #include "str.h"
 #include "xdhdws.h"
@@ -343,12 +344,15 @@ namespace {
           flx::rStringWFlow StringFlow;
           cdgb64::rEncodingWFlow EncoderFlow;
           int i = 9;
+          rnd::hGuard Guard;
 		    qRB;
           StringFlow.Init(Token);
           EncoderFlow.Init(StringFlow, cdgb64::fURL);
 
+          rnd::LockRand(Guard);
+
           while ( i-- )
-            EncoderFlow.Put(tol::Rand());
+            EncoderFlow.Put(rnd::TURand());
 		    qRR;
 		    qRT;
 		    qRE;
@@ -761,6 +765,7 @@ namespace {
 			Backend->Driver = NULL;	// This signals that the backend is no more present.
 			Backend->WaitUntilNoMoreClient();
 			Remove_( Backend->Row );
+
 			delete Backend;
 
 			Backend = NULL;

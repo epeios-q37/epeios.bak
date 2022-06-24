@@ -48,11 +48,8 @@ void rBackend::reset(bso::sBool P)
   if ( P ) {
     InvalidAll_();
 
-    if ( GatesAccess_ != mtx::Undefined)
-      mtx::Delete(GatesAccess_);
-
-    if ( Access_ != mtx::Undefined )
-      mtx::Delete( Access_, true );
+    WaitAndDestroy_(GatesAccess_);
+    WaitAndDestroy_(Access_);
 
     if ( TRow != qNIL )
       common::GetCallback().Remove(TRow);

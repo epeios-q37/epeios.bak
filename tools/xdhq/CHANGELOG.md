@@ -1,5 +1,8 @@
 # *XDHq* changelog.
 
+## 2022-06-24
+- fixing bug introduced with *FaaS* protocol v1,
+
 ## 2022-04-24
 - *xdhqxdh*: using shorter random generated tokens,
 

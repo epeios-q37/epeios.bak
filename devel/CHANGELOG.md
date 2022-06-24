@@ -12,6 +12,13 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-06-24
+- RND, TOL: moving random generation stuff from *TOL* to newly creaeted module *RND*;
+- TOL ranaming `CPq` in `qCP`;
+
+## 2022-06-23
+- THT: `rBlocker::Wait()` and `rBlocker::Unblock()` return now a boolean, to facilate debugging;
+
 ## 2022-06-22
 - TOL: introducing `Rand()` to deal with the non thread-safety of `rand()`;
 
@@ -115,8 +122,8 @@
 - TOL: introducing `qNEW(…])` and `qDELETE(…)`,
 
 ## 2022-02-16
-- FLX: fixing first reading not blocked when no writing occured wirg *relay* object,
-- THT: using *enum* instead of *booleanù for blocker preset,
+- FLX: fixing first reading not blocked when no writing occured with *relay* object,
+- THT: using *enum* instead of *boolean* for blocker preset,
 
 ## 2022-01-13
 - TAGSBS: fixing unknown tag not detected issue when at the vary end of the input flow,

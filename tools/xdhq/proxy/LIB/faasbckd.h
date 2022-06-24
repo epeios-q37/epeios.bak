@@ -99,8 +99,10 @@ namespace faasbckd {
     {
       if ( Relay_ != NULL ) {
         Relay_ = NULL;  // To report an error on head retrieving.
+
         Processed_.Unblock();
         Guard_.Wait();
+
         return true;
       } else
         return false;
@@ -128,6 +130,19 @@ namespace faasbckd {
 		// Prevents destruction of 'Driver_' until no more client use it.
 		tht::rBlocker NoMoreClientBlocker_;
 		void InvalidAll_(void);
+		bso::sBool WaitAndDestroy_(mtx::rMutex &Mutex) {
+		  bso::sBool HasWait = false;
+
+		  if ( Mutex != mtx::Undefined ) {
+        HasWait = mtx::Lock(Mutex);
+
+        mtx::Delete(Mutex, true);
+
+        Mutex = mtx::Undefined;
+		  }
+
+		  return HasWait;
+		}
 	public:
 		sRow Row;	// Backend row.
 		faas::sRow TRow; // Token row.	// Can be 'qNIL' in self-hosted mode (no/empty token).
