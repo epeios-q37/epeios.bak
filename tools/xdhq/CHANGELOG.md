@@ -1,16 +1,4 @@
-# *XDHq* changelog.
-
-## 2022-06-24
-- fixing bug introduced with *FaaS* protocol v1,
-
-## 2022-04-24
-- *xdhqxdh*: using shorter random generated tokens,
-
-## 2021-12-10
-- *xdhqxdh*:
-  - fixing bug callback deleted while being used,
-  - new protocols (both main and *FaaS*), the main protocol being handchecked once and not on each new session,
-  - adding scripts version to handle compatibility,
+# *XDHq* changelog (client libraries only).
 
 ## 2020-12-17
 - *Python*: introducing `set_supplier(…)`, `attach_qrcode(…)` end `get_app_url(…)`,

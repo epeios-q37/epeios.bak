@@ -38,12 +38,22 @@
 #  undef system
 # endif
 
+# ifdef rand
+#  define MTX_RAND_BUFFER_ rand
+#  undef rand
+# endif
+
 # include <condition_variable>
-# include <mutex>	// Before 'tol.h', otherwise they may be some conflict.
+# include <mutex>
 
 # ifdef MTX_SYSTEM_BUFFER_
 #  define system MTX_SYSTEM_BUFFER_
 #  undef MTX_SYSTEM_BUFFER_
+# endif
+
+# ifdef MTX_RAND_BUFFER_
+#  define rand MTX_SYSTEM_BUFFER_
+#  undef MTX_RAND_BUFFER_
 # endif
 
 

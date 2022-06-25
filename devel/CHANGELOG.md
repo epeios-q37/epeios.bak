@@ -12,6 +12,9 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-06-25
+- MTX: fixing compilation isssues with *FreeBSD*;
+
 ## 2022-06-24
 - RND, TOL: moving random generation stuff from *TOL* to newly creaeted module *RND*;
 - TOL ranaming `CPq` in `qCP`;
@@ -38,8 +41,8 @@
   - changing the handling of the 'IP' parameter, to prevent problems in multi-threading;
 
 ## 2022-06-03
-- CPE: adaptation to FreeBSD;
-- DIR: adaptation to FreeBSD;
+- CPE: adaptation to *FreeBSD*;
+- DIR: adaptation to *FreeBSD*;
 - MNS: fixing some -Wewtra` warnings;
 
 ## 2022-05-31
