@@ -356,7 +356,7 @@ module XDHqFAAS
 					
 					@instances.delete(id)
 				end
-			elsif id == HEAD_RETRIEVING__ID_
+			elsif id == HEAD_RETRIEVING_ID_
 				@writeMutex.synchronize {
 					XDHqFAAS::writeSInt(HEAD_SENDING_ID_)
 					XDHqFAAS::writeString(@headContent)
