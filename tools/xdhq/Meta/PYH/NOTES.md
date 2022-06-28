@@ -142,6 +142,14 @@ Ces projets embarquent le *toolkit* *Atlas*, généralement pour en simplifier l
 
 **Attention** : mettre à jour le dépôt *GitHub*, ainsi que l'éventuel dépôt *Replit*.
 
+### 0.13.2
+
+### 0.13.1
+
+- https://girthub.com/epeios-q37/AlSweigartBigBookPython
+
+### 0.13
+
 - https://github.com/epeios-q37/atlas-python-stub ;
 - https://github.com/epeios-q37/base-exercise ;
 - https://github.com/epeios-q37/basics-exercises ;
@@ -152,17 +160,16 @@ Ces projets embarquent le *toolkit* *Atlas*, généralement pour en simplifier l
 - https://github.com/epeios-q37/term2web-python ;
 - https://github.com/epeios-q37/term2web-python-stub ;
 - https://github.com/epeios-q37/tortoise-python ;
-- https://girthub.com/epeios-q37/AlSweigartBigBookPython
 
 
 ## Publications
 
 ### Toutes les versions
 
-Liste des sites sur lesquels le *toolkit* *Atlas* est référencé, toutes version confndues :
+Liste des sites sur lesquels le *toolkit* *Atlas* est référencé, toutes version confondues :
 
 - *AlternativeTo* :https://alternativeto.net/software/atlas-toolkit/ ;
-- *Fresh(cod)e* : https://freshcode.club/search?q=atlas
+- *Fresh(code)* : https://freshcode.club/search?q=atlas
 
 ### Version *Python*
 

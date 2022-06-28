@@ -3,6 +3,11 @@
 - Common to **all** bindings,
 - does **not** concern the native code.
 
+## 2022-06-28
+- *Python*:
+  - the *camelCase* naming is now the official one (*snake_case* naming remains available),
+  - switching to v0.13.2,
+
 ## 2022-05-24
 - *Node*:
   - fixing `new Buffer(0)` deprecation,
