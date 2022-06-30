@@ -8,7 +8,17 @@ There is also a stub to for this library at address <https://q37.info/s/zzcn3wnx
 
 ## Content of the repository
 
-The `atlastk` directory contains the *Python* source code of the *Atlas* toolkit, which is the directory you have to reference in `PYTHONPATH` in order to use the *Atlas* toolkit in your own program, unless you have installed the [*atlastk* package](http://q37.info/s/9srmskcm) with `pip install atlastk`.
+The `atlastk` directory contains the *Python* source code of the *Atlas* toolkit, which is the directory you have to reference in `PYTHONPATH` in order to use the *Atlas* toolkit in your own program, unless you have installed the [*atlastk* package](http://q37.info/s/9srmskcm) (`pip install atlastk`…).
+
+You can also retrieve the `atlastk.zip` file, and add to your source code :
+
+```python
+__import__("sys").path.append("<path to>/atlastk.zip")
+
+import atlastk
+```
+
+If the `atlastk.zip` file is in the current folder, replace `<path-to>/atlastk.zip` with `./atlastk.zip` and not only `atlastk.zip`.
 
 In the `examples` directory, you will found following examples:
 
@@ -28,8 +38,7 @@ In the `examples` directory, you will found following examples:
 
 Other examples are detailed in the next section.
 
-Except for the *ErgoJr*, *GPIO* and *RGB* applications, which are detailed in the next section, to run an example, launch, from within the repository, `python main.py`, and select the example you want to run.  
-You can also directly launch, from within the `examples` directory, `python <Name>/` (don't forget the final `/`), where `<Name>` is the name of the example (`Blank`, `Chatroom`…).
+Except for the *ErgoJr*, *GPIO* and *RGB* applications, which are detailed in the next section, to run an example, launch, from within the `examples` directory, `python <Name>/` (don't forget the final `/`), where `<Name>` is the name of the example (`Blank`, `Chatroom`…).
 
 The *Stars* application is an example where the *Atlas* *toolkit* is used to control a [*Pygame*](https://en.wikipedia.org/wiki/Pygame) based application. Of course, *Pygame* needs to be installed.
 

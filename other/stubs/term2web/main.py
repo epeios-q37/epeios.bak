@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 
 # If installed with 'pip install term2web',
-# both above lines can be removed.
-import sys
-sys.path.append("./term2web.zip")
+# above lines can be removed.
+__import__("sys").path.append("./term2web.zip")
 
 from term2web import *
 
