@@ -45,6 +45,12 @@ Pour contourner ce problème, lancer avec de la manière suivante :
 
 - *POSIX*  : `.:/home/csimon/epeios/tools/jreq/classes/:/home/csimon/epeios/tools/xdhq/wrappers/JRE/classes/:/home/csimon/epeios/tools/xdhq/Atlas/JRE/classes/`.
 
+## Publication sur *GitHub*
+
+Mettre = jour version dans :
+- `Tags` ;
+- `XDHQ/DOM_FAAS.java`.
+
 ## Publication sur *Replit.com*
 
 Voir section correspondante dans le *workspace* dédié à la version *Python*.

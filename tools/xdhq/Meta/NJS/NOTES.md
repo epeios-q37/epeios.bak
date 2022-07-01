@@ -15,9 +15,10 @@ La version du wrapper binaire (*C++*) du *toolkit* *Atlas* n'est plus actuelleme
 ### Préparation
 
 - Mettre à jour :
-  - le numéro de version :
-    -  dans le fichier `Atlas/package.json`,
-    -  dans le code sours (`XDHq/XDHqFAAS.js`),
+  - le numéro de version dans :
+    -  `Atlas/package.json`,
+    -  `XDHq/XDHqFAAS.js`,
+    -  `Tags` (uniquement `<majeur>.<mineur>`) ;
   - et éventuellement la description ;
 - `ATKNJSRTW` ;
 - dans `RTW/atlas-node` : `npm pack atlastk/`.

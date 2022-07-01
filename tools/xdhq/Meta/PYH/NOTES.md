@@ -43,7 +43,9 @@ En créant, dans le répertoire de l'application, un fichier `__main__.py` conte
 - mettre à jour, dans `setup.py` :
   - le numéro de version,
   - éventuellement la description ;
-- mettre à jour le numéro de version dans `XDHqFaaS.py` ;
+- mettre à jour le numéro de version dans :
+  - `XDHqFaaS.py` ;
+  - `Tags` (uniquement `<majeur>.<mineur>`) ;
 - effacer les affichages de sortie des *notebooks* *Jupyter* ;
 - mettre à jour le dépôt *Github*. 
 
