@@ -27,6 +27,7 @@
 #ifndef FAASBCKD_INC_
 # define FAASBCKD_INC_
 
+# include "faasdpot.h"
 # include "faasgate.h"
 
 # include "csdcmn.h"
@@ -36,87 +37,9 @@
 # include "tht.h"
 
 namespace faasbckd {
-  // Head content handling since FaaS protocol v1.
-  class rHeadRelay
-  {
-  private:
-    str::dString *Relay_;
-    tht::rBlocker
-      Processed_,  // Blocks until the relay data is processed.
-      Guard_; // Used on error, to ensure
-  public:
-    void reset(bso::sBool P = true)
-    {
-      Relay_ = NULL;
-
-      tol::reset(P, Processed_, Guard_);
-    }
-    qCDTOR(rHeadRelay);
-    void Init(void)
-    {
-      Relay_ = NULL;
-      tol::Init(Processed_, Guard_);
-    }
-   void SetRelay(str::dString &Head)
-    {
-      if ( Relay_ != NULL )
-        qRGnr();
-
-      Relay_ = &Head;
-    }
-    // If returns false, an error occurs and the head could not be retrieved.
-    bso::sBool WaitForData(void)
-    {
-      Processed_.Wait();
-
-      if ( Relay_ != NULL ) {
-        Relay_ = NULL;
-        return true;
-      } else
-        return false;
-    }
-    str::dString &GetRelay(void) const
-    {
-      // No locking or blocking, as this is called only after a 'GetHead' request.
-
-      if ( Relay_ == NULL )
-        qRGnr();
-
-      if ( Relay_->Amount() )
-        qRGnr();
-
-      return *Relay_;
-    }
-    void ReportProcessed(void)
-    {
-      Processed_.Unblock(); // The blocker is also rearmed.
-    }
-    bso::sBool IsBusy(void) const
-    {
-      return Relay_ != NULL;
-    }
-    bso::sBool Dismiss(void)  // Called on error or deconnection.
-    {
-      if ( Relay_ != NULL ) {
-        Relay_ = NULL;  // To report an error on head retrieving.
-
-        Processed_.Unblock();
-        Guard_.Wait();
-
-        return true;
-      } else
-        return false;
-    }
-    void ReleaseGuard(void)
-     {
-        Guard_.Unblock();
-     }
-  };
-
  	qROW( Row );	// Back-end Row.
 
-  qMIMICr(mtx::rHandle, hBackendGuard);
-  qMIMICr(mtx::rHandle, hGatesGuard);
+  qMIMICr(mtx::rHandle, hGuard);
 
 	class rBackend
 	{
@@ -153,7 +76,8 @@ namespace faasbckd {
 			IP,
 			Token,
 			HeadCache; // Head content cache on old behavior (FaaS protocol v0).
-    rHeadRelay HeadRelay;
+    // Currently used to retrieve HTML head section from backend.
+    faasdpot::rDepot Depot;
 		void reset( bso::sBool P = true );
 		qCDTOR( rBackend );
 		void Init(
@@ -165,7 +89,7 @@ namespace faasbckd {
 			const str::dString &Token,
 			const str::dString &Head);
 		faasgate::dGates &LockAndGetGates(
-      hGatesGuard &Guard,
+      faasgate::hGuard &Guard,
       bso::sBool MustLock = true)
 		{
 		  if ( GatesAccess_ != mtx::Undefined) {
@@ -178,11 +102,11 @@ namespace faasbckd {
 
 		  return Gates_;
 		}
-		void UnlockGates(hGatesGuard &Guard)
+		void UnlockGates(faasgate::hGuard &Guard)
 		{
       Guard().Unlock();
 		}
-		void Hold(hBackendGuard &Guard)
+		void Lock(hGuard &Guard)
 		{
 		  Guard().InitAndLock(Access_);
 		}

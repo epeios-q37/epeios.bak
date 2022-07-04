@@ -89,6 +89,8 @@ namespace faasgate {
 
 	qROW( Row );
 
+  qMIMICr(mtx::rHandle, hGuard);
+
 	typedef lstbch::qLBUNCHd( rGate *, sRow ) dGates;
 	qW( Gates );
 }

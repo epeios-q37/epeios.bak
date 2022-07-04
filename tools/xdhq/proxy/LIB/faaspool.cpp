@@ -192,61 +192,15 @@ namespace faaspool {
     }
 	}
 
-	faasbckd::sRow GetBackendRow_(
-    const str::dString &Token,
-    const faasbkds::dBackends &Backends)
-	{
-		bso::sSign Sign = 0;
-		faasbckd::sRow Row = faasbkds::index::Search(Token, Backends, Sign);
-
-		if ( Sign != 0 )
-			Row = qNIL;
-
-		return Row;
-	}
-
-	faasbckd::rBackend *GetBackend_(
-    const str::dString &Token,
-    const faasbkds::dBackends &Backends)
-	{
-		faasbckd::sRow Row = GetBackendRow_(Token, Backends);
-
-		if ( Row != qNIL )
-			if ( Backends(Row)->Driver != NULL )
-				return Backends(Row);
-			else
-				return NULL;
-		else
-			return NULL;
-	}
-
-	faasbckd::rBackend *GetBackend_(
-    const str::dString &Token,
-    faasbckd::hBackendGuard &Guard)
-	{
-		faasbckd::rBackend *Backend = NULL;
-	qRH;
-		faasbkds::hGuard BackendsGuard;
-	qRB;
-		Backend = GetBackend_(Token, faasbkds::GetBackends(BackendsGuard));
-
-		if ( Backend != NULL )
-      Backend->Hold(Guard);
-	qRR;
-	qRT;
-	qRE;
-		return Backend;
-	}
-
-	bso::sBool GetCachedHead_(  // Old behavior.
+	bso::sBool GetCachedHead_(  // FaaS Protocol <1.
 		const str::dString &Token,
 		str::dString &Head)
   {
     faasbckd::rBackend *Backend = NULL;
   qRH;
-    faasbckd::hBackendGuard Guard;
+    faasbckd::hGuard Guard;
   qRB;
-    Backend = GetBackend_(Token, Guard);
+    Backend = faasbkds::GetBackend(Token, Guard);
 
     if ( Backend != NULL )
       Head = Backend->HeadCache;
@@ -255,24 +209,6 @@ namespace faaspool {
   qRE;
     return Backend != NULL;
   }
-
-	void Remove_(faasbckd::sRow Row)
-	{
-	qRH;
-		faasbkds::hGuard Guard;
-	qRB;
-		faasbkds::dBackends &Backends = faasbkds::GetBackends(Guard);
-
-		if ( !Backends.Exists( Row ) )
-			qRGnr();
-
-		Backends.Remove( Row );
-
-		faasbkds::index::Delete(Row);
-	qRR;
-	qRT;
-	qRE;
-	}
 
 	faasbckd::rBackend *Create_(
 		fdr::rRWDriver &Driver,
@@ -284,27 +220,19 @@ namespace faaspool {
 		faasbckd::rBackend *Backend = NULL;
 	qRH;
 		faasbckd::sRow Row = qNIL;
-		faasbkds::hGuard Guard;
 	qRB;
-    faasbkds::dBackends &Backends = faasbkds::GetBackends(Guard);
+		Backend = faasbkds::Create(Token, Row);
 
-		Row = GetBackendRow_(Token, Backends);
-
-		if ( Row == qNIL ) {
-			Row = Backends.New();
-
-			if ( (Backend = new faasbckd::rBackend) == NULL )
-				qRAlc();
-
+		if ( Backend != NULL ) {
+      if ( Row == qNIL )
+        qRGnr();
 			Backend->Init(Row, common::GetCallback().Create(Token), Driver, ProtocolVersion, IP, Token, Head);
-
-			Backends.Store(Backend, Row);
-
-			faasbkds::index::Put(Token, Backends, Row);
 		}
 	qRR;
-		if ( Backend != NULL )
+		if ( Backend != NULL ) {
+      faasbkds::Remove(Row);
 			delete Backend;
+		}
 	qRT;
 	qRE;
 		return Backend;
@@ -627,7 +555,7 @@ namespace {
   void UnblockGates_(faasbckd::rBackend &Backend)
   {
   qRH;
-    faasbckd::hGatesGuard Guard;
+    faasgate::hGuard Guard;
   qRB;
     Unblock_(Backend.LockAndGetGates(Guard));
   qRR;
@@ -652,7 +580,7 @@ namespace {
 	{
 	qRH;
 		flw::rDressedRWFlow<> Flow;
-    faasbckd::hGatesGuard Guard;
+    faasgate::hGuard GatesGuard;
 		faas::sId Id = faas::UndefinedId;
 		bso::sBool IsError = false;
 		str::wString Input;
@@ -691,18 +619,18 @@ namespace {
 				BroadcastAction_(Flow, Backend.TRow);
 				break;
       case faas::downstream::HeadSendingId:
-        prtcl::Get(Flow, Backend.HeadRelay.GetRelay());
-        Backend.HeadRelay.ReportProcessed();
+        prtcl::Get(Flow, Backend.Depot.GetReceptacle());
+        Backend.Depot.ReportContentAvailable();
         break;
 			default:
-        faasgate::dGates &Gates = Backend.LockAndGetGates(Guard);
+        faasgate::dGates &Gates = Backend.LockAndGetGates(GatesGuard);
 
         if ( !Gates.Exists( Id ) ) {
-          Backend.UnlockGates(Guard);
+          Backend.UnlockGates(GatesGuard);
           Release_(Flow, Id);
         } else {
           Gates(Id)->UnblockReading();
-          Backend.UnlockGates(Guard);
+          Backend.UnlockGates(GatesGuard);
           Backend.Switch.Wait();	// Waits until all data in flow red.
         }
         break;
@@ -710,7 +638,7 @@ namespace {
 		}
 	qRR;
 	qRT;
-    Backend.HeadRelay.Dismiss();
+    Backend.Depot.Dismiss();
 		UnblockGates_(Backend);
 	qRE;
 	}
@@ -764,7 +692,7 @@ namespace {
 			Log_(IP, Backend->Token, Message);
 			Backend->Driver = NULL;	// This signals that the backend is no more present.
 			Backend->WaitUntilNoMoreClient();
-			Remove_( Backend->Row );
+			faasbkds::Remove(Backend->Row);
 
 			delete Backend;
 
@@ -853,13 +781,13 @@ faas::sRow faaspool::NewSession_(
 {
 	faas::sRow Row = qNIL;
 qRH;
-	faasbckd::hBackendGuard Guard;
+	faasbckd::hGuard Guard;
 	flw::rDressedWFlow<> Flow;
 qRB;
 	if ( Backend != NULL)
 		qRGnr();
 
-	Backend = GetBackend_(Token, Guard);
+	Backend = faasbkds::GetBackend(Token, Guard);
 
 	if ( Backend != NULL ) {
 		if ( Backend->Set(Gate) ) {
@@ -886,31 +814,31 @@ namespace {
   {
     bso::sBool Success = false;
   qRH;
-    faasbckd::hBackendGuard Guard;
+    faasbckd::hGuard Guard;
     flw::rDressedWFlow<> Flow;
     faasbckd::rBackend *Backend = NULL;
   qRB;
-    Backend = GetBackend_(Token, Guard);
+    Backend = faasbkds::GetBackend(Token, Guard);
 
     if ( Backend != NULL ) {
-      if ( Backend->HeadRelay.IsBusy() )
+      if ( Backend->Depot.IsBusy() )
         qRGnr();
 
       ProtocolVersion = Backend->ProtocolVersion;
 
       if ( ProtocolVersion >= 1 ) {
         Flow.Init(*Backend->Driver);
-        Backend->HeadRelay.SetRelay(Head);
+        Backend->Depot.SetReceptacle(Head);
         PutId(faas::upstream::HeadRetrievingId, Flow);
         Flow.Commit();
-        Success = Backend->HeadRelay.WaitForData();
+        Success = Backend->Depot.WaitForContent();
       }
     }
   qRR;
   qRT;
     if ( !Success && ( Backend != NULL ) ) {
       Flow.reset();
-      Backend->HeadRelay.ReleaseGuard();
+      Backend->Depot.Release();  // Backend waits for this before being destroyed.
     }
   qRE;
     return Success;

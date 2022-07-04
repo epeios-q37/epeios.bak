@@ -26,7 +26,7 @@ using namespace faasbckd;
 void rBackend::InvalidAll_(void)
 {
 qRH;
-  hGatesGuard Guard;
+  faasgate::hGuard Guard;
   faasgate::sRow Row = qNIL;
 qRB;
   faasgate::dGates &Gates = LockAndGetGates(Guard, false);
@@ -63,7 +63,7 @@ void rBackend::reset(bso::sBool P)
   Driver = NULL;
   Access_ = mtx::Undefined;
   ProtocolVersion = csdcmn::UnknownVersion;
-  tol::reset(P, Gates_, Switch, IP, Token, HeadCache, HeadRelay);
+  tol::reset(P, Gates_, Switch, IP, Token, HeadCache, Depot);
 }
 
 void rBackend::Init(
@@ -94,7 +94,7 @@ void rBackend::Init(
   this->IP.Init( IP );
   this->Token.Init(Token);
   this->HeadCache.Init(Head);
-  HeadRelay.Init();
+  Depot.Init();
 }
 
 namespace {
@@ -130,7 +130,7 @@ bso::sBool rBackend::Set(faasgate::rGate &Gate)
 {
   faasgate::sRow Row = qNIL;
 qRH
-  hGatesGuard Guard;
+  faasgate::hGuard Guard;
 qRB
   Row = Set_(Gate, Driver, Switch, LockAndGetGates(Guard));
 qRR
@@ -142,7 +142,7 @@ qRE
 void rBackend::Release(faas::sId Id)
 {
 qRH
-  hGatesGuard Guard;
+  faasgate::hGuard Guard;
 qRB
   faasgate::dGates &Gates = LockAndGetGates(Guard);
 
@@ -159,7 +159,7 @@ qRE
 void rBackend::WaitUntilNoMoreClient(void)
 {
 qRH
-  hGatesGuard Guard;
+  faasgate::hGuard Guard;
 qRB
   common::GetCallback().QuitAll(TRow);
 
