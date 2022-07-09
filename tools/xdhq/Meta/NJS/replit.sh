@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# N'EST PLUS UTILISÉ !!!
-
-
 chr() {
   [ "$1" -lt 256 ] || return 1
   printf "\\$(printf '%03o' "$1")"
@@ -25,11 +22,13 @@ do
     printf "%s: %s\n" "$(chr $((97 + $i )))" "${DEMOS[$i]}"  
   done
 
-  echo -n -e "\nChoose example to launch ('a'…'$(chr $((96 + $DEMOS_AMOUNT)))'): "
+  echo -n -e "\nChoose demonstration to launch ('a'…'$(chr $((96 + $DEMOS_AMOUNT)))'): "
 
   read DEMO
 
   export FILE=${DEMOS[$(($(ord $DEMO) - 97))]}/main.js
+
+  npm list atlastk &>/dev/null || npm install atlastk
 
   [ -f examples/$FILE ] && node examples/$FILE
 done

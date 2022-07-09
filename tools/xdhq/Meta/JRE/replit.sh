@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# N"EST PLUS UTILISÉ !!!
-
 chr() {
   [ "$1" -lt 256 ] || return 1
   printf "\\$(printf '%03o' "$1")"
@@ -11,7 +9,7 @@ ord() {
   LC_CTYPE=C printf '%d' "'$1"
 }
 
-DEMOS=(Blank Hello Chatroom Notes)
+DEMOS=(Blank Hello Chatroom Notes TodoMVC)
 
 export DEMOS_AMOUNT=${#DEMOS[@]}
 
@@ -26,11 +24,11 @@ do
     printf "%s: %s\n" "$(chr $((97 + $i )))" "${DEMOS[$i]}"  
   done
 
-  echo -n -e "\nChoose example to launch ('a'…'$(chr $((96 + $DEMOS_AMOUNT)))'): "
+  echo -n -e "\nChoose demonstration to launch ('a'…'$(chr $((96 + $DEMOS_AMOUNT)))'): "
 
   read DEMO
 
   export FILE=${DEMOS[$(($(ord $DEMO) - 97))]}
 
-  [ -f examples/$FILE/main.pl ] && cd examples && CONT=false && perl -I ../atlastk $FILE/main.pl
+  [ -f examples/$FILE/$FILE.class ] && cd examples/$FILE && CONT=false && java -cp .:../../atlastk.jar $FILE
 done

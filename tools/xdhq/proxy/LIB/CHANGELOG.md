@@ -1,10 +1,13 @@
 # *XDHq* *CHANGELOG*
 
+## 2022-07-05
+- fixing dead lock issue,
+
 ## 2022-06-24
 - fixing bug introduced with *FaaS* protocol v1,
 
 ## 2022-06-03
-- adaptation to *FreeBSD*;
+- adaptation to *FreeBSD*,
 
 ## 2022-05-18
 - adaptation to changes in underlying modules,

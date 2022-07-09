@@ -50,7 +50,7 @@ while loop:
 		else:
 			print(letter, ": ", label, sep='')
 
-	entry = input("Select one of above demo: ").lower()
+	entry = input("Select one of above demonstration: ").lower()
    
 	try:
 		id = int(ord(entry[:1]) - ord('a'))
