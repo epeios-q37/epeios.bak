@@ -23,11 +23,11 @@ using namespace registry;
 
 // rEntry registry::parameter::Test( "Test", sclrgstry::Parameters );
 
-rEntry registry::parameter::TargetFileName( "TargetFilename", sclrgstry::Parameters );
-rEntry registry::parameter::Script( "Script", sclrgstry::Parameters );
+rEntry registry::parameter::TargetFileName( "TargetFilename", sclr::Parameters );
+rEntry registry::parameter::Script( "Script", sclr::Parameters );
 
 namespace {
-	rEntry Devices_( "Devices", sclrgstry::Parameters );
+	rEntry Devices_( "Devices", sclr::Parameters );
 	rEntry In_( "In", Devices_ );
 	rEntry Out_( "Out", Devices_ );
 }
@@ -39,7 +39,7 @@ rEntry registry::parameter::devices::out::Value = Out_;
 rEntry registry::parameter::devices::out::Policy( "@Policy", Out_ );
 
 namespace {
-	rEntry Signature_( "Signature", sclrgstry::Parameters );
+	rEntry Signature_( "Signature", sclr::Parameters );
 }
 
 rEntry registry::parameter::signature::Key( "Key", Signature_ );
@@ -52,7 +52,7 @@ rEntry registry::parameter::signature::time::Numerator( "Numerator", Time_ );
 rEntry registry::parameter::signature::time::Denominator( "Denominator", Time_ );
 
 namespace {
-	rEntry Tempo_( "Tempo", sclrgstry::Parameters );
+	rEntry Tempo_( "Tempo", sclr::Parameters );
 }
 
 rEntry registry::parameter::tempo::Value( "Value", Tempo_ );

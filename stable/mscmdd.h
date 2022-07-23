@@ -168,7 +168,7 @@ namespace mscmdd {
 			bso::bool__ Success = false;
 		qRH
 			str::string Name;
-			qCBUFFERr SBuffer;
+			qCBUFFERh SBuffer;
 		qRB
 			Name.Init( );
 
@@ -414,7 +414,7 @@ namespace mscmdd {
 			bso::bool__ Success = false;
 		qRH
 			str::string Name;
-			qCBUFFERr SBuffer;
+			qCBUFFERh SBuffer;
 		qRB
 			Name.Init( );
 

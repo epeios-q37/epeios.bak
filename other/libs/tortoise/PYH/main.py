@@ -23,7 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import os, sys
 __import__("sys").path.extend(["./atlastk.zip", "./tortoise"])
 
 import atlastk

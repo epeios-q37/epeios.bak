@@ -26,8 +26,9 @@
 #include "mscmld.h"
 #include "mscmld.h"
 
-#include "scltool.h"
-#include "sclerror.h"
+#include "sclt.h"
+#include "scle.h"
+#include "sclm.h"
 
 #include "err.h"
 #include "cio.h"
@@ -54,7 +55,7 @@ using namespace mscmld;
 
 SCLI_DEF( meldigq, NAME_LC, NAME_MC );
 
-const scli::sInfo &scltool::SCLTOOLInfo( void )
+const scli::sInfo &sclt::SCLTInfo( void )
 {
 	return meldigq::Info;
 }
@@ -392,14 +393,14 @@ qRH;
 qRB;
 	RawUnit.Init();
 
-	Missing = sclmisc::OGetValue( registry::parameter::tempo::Unit, RawUnit );
+	Missing = sclm::OGetValue( registry::parameter::tempo::Unit, RawUnit );
 
 	if ( !Missing ) {
         Base = RawUnit.ToU8( &Error, str::b10, 9 );
 
         if ( Error != qNIL ) {
             if ( RawUnit( Error ) != '.' )
-                sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::tempo::Unit );
+                sclr::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::tempo::Unit );
 
             Row = Error;
 
@@ -408,10 +409,10 @@ qRB;
                 Row = RawUnit.Next( Row );
 
                 if ( Modifier >= 4 )
-                    sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::tempo::Unit );
+                    sclr::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::tempo::Unit );
 
                 if ( Row != qNIL )
-                    sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::tempo::Unit );
+                    sclr::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::tempo::Unit );
             }
         }
 
@@ -425,7 +426,7 @@ qRE;
 
 static const sTempo &GetTempo_( sTempo &Tempo )
 {
-	Tempo.Value = sclmisc::MGetU8( registry::parameter::tempo::Value );
+	Tempo.Value = sclm::MGetU8( registry::parameter::tempo::Value );
 	GetTempoUnit_( Tempo.Unit );
 
 	return Tempo;
@@ -595,7 +596,7 @@ qRE;
 }
 
 struct shared__ {
-	mtx::rHandler Mutex;
+	mtx::rMutex Mutex;
 	dMelody *Melody;
 	sRow Row;
 	flw::oflow__ *OFlow;
@@ -637,10 +638,10 @@ qRB;
 	if ( ( Row = GetDevice_( Name, Names ) ) == qNIL ) {
 		switch ( Way ) {
 		case mscmdd::wIn:
-			sclmisc::ReportAndAbort( "NoMidiInDeviceNamed", Name );
+			sclm::ReportAndAbort( "NoMidiInDeviceNamed", Name );
 			break;
 		case mscmdd::wOut:
-			sclmisc::ReportAndAbort( "NoMidiOutDeviceNamed", Name );
+			sclm::ReportAndAbort( "NoMidiOutDeviceNamed", Name );
 			break;
 		default:
 			qRGnr();
@@ -670,14 +671,14 @@ qRH;
 qRB;
 	RawPolicy.Init();
 
-	sclmisc::MGetValue( Entry, RawPolicy );
+	sclm::MGetValue( Entry, RawPolicy );
 
 	if ( RawPolicy == "Id" )
 		Policy = pId;
 	else if ( RawPolicy == "Name" )
 		Policy = pName;
 	else
-		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+		sclr::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
 qRR;
 qRT;
 qRE;
@@ -691,14 +692,14 @@ static int GetDeviceId_(
 {
 	int Id;
 qRH;
-	qCBUFFERr Buffer;
+	qCBUFFERh Buffer;
 qRB;
 	switch ( GetPolicy_( PolicyEntry ) ) {
 	case pId:
-		Id = sclmisc::MGetU8( ValueEntry );
+		Id = sclm::MGetU8( ValueEntry );
 		break;
 	case pName:
-		Id = GetDeviceId_( Way, sclmisc::MGetValue( ValueEntry, Buffer ) );
+		Id = GetDeviceId_( Way, sclm::MGetValue( ValueEntry, Buffer ) );
 		break;
 	default:
 		qRGnr();
@@ -722,17 +723,17 @@ static int GetDeviceOutId_( void )
 
 static inline sSignatureKey GetSignatureKey_( void )
 {
-	return sclmisc::MGetS8( registry::parameter::signature::Key, -7, 7 );
+	return sclm::MGetS8( registry::parameter::signature::Key, -7, 7 );
 }
 
 inline bso::sU8 GetRawSignatureTimeDenominator( void )
 {
-	return sclmisc::MGetU8( registry::parameter::signature::time::Denominator, 8 );
+	return sclm::MGetU8( registry::parameter::signature::time::Denominator, 8 );
 }
 
 inline bso::sU8 GetRawSignatureTimeNumerator( void )
 {
-	return sclmisc::MGetU8( registry::parameter::signature::time::Numerator, 12 );
+	return sclm::MGetU8( registry::parameter::signature::time::Numerator, 12 );
 }
 
 static inline sSignatureTime GetSignatureTime_( void )
@@ -742,7 +743,7 @@ static inline sSignatureTime GetSignatureTime_( void )
 
 inline bso::sU8 GetRawSignatureKey( void )
 {
-	return sclmisc::MGetS8( registry::parameter::signature::Key, -7, 7 );
+	return sclm::MGetS8( registry::parameter::signature::Key, -7, 7 );
 }
 
 static inline sSignature GetSignature_( void )
@@ -795,7 +796,7 @@ qRFB;
 	}
 qRFR;
 qRFT;
-qRFE( sclmisc::ErrFinal() );
+qRFE( sclm::ErrorDefaultHandling() );
 }
 
 static void Save_(
@@ -809,10 +810,10 @@ qRH;
 	str::wString Buffer;
 qRB;
 	if ( Flow.Init( FileName, err::hUserDefined ) != tol::rSuccess )
-		sclmisc::ReportFileOpeningErrorAndAbort( FileName );
+		sclm::ReportFileOpeningErrorAndAbort( FileName );
 
 	Buffer.Init();
-	COut << sclmisc::GetBaseTranslation( "WritingFile", Buffer, FileName ) << "..." << txf::commit;
+	COut << sclm::GetBaseTranslation( "WritingFile", Buffer, FileName ) << "..." << txf::commit;
 
 	TFlow.Init( Flow );
 
@@ -825,7 +826,7 @@ qRB;
 	Writer.PopTag();
 
 	Buffer.Init();
-	COut << sclmisc::GetBaseTranslation( "Done", Buffer ) << '.' << txf::nl << txf::commit;
+	COut << sclm::GetBaseTranslation( "Done", Buffer ) << '.' << txf::nl << txf::commit;
 qRR;
 qRT;
 qRE;
@@ -838,16 +839,16 @@ static const str::dString &Save_(
 qRH;
 	bso::bool__ Backuped = false;
 qRB;
-	sclmisc::MGetValue( registry::parameter::TargetFileName, FileName );
+	sclm::MGetValue( registry::parameter::TargetFileName, FileName );
 
-	sclmisc::CreateBackupFile( FileName );
+	sclm::CreateBackupFile( FileName );
 
 	Backuped = true;
 
 	Save_( Melody, (const str::dString &)FileName );
 qRR;
 	if ( Backuped )
-		sclmisc::RecoverBackupFile( FileName );
+		sclm::RecoverBackupFile( FileName );
 qRT;
 qRE;
 	return FileName;
@@ -876,17 +877,17 @@ qRB;
 	Save_( Melody, FileName );
 
 	Script.Init();
-	sclmisc::MGetValue( registry::parameter::Script, Script );
+	sclm::MGetValue( registry::parameter::Script, Script );
 
 	tagsbs::SubstituteShortTag( Script, 1, FileName, '%' );
 
 	Buffer.Init();
-	COut << sclmisc::GetBaseTranslation( "ExecutingCommand", FileName ) << "..." << txf::commit;
+	COut << sclm::GetBaseTranslation( "ExecutingCommand", FileName ) << "..." << txf::commit;
 
 	tol::System( Script );
 
 	Buffer.Init();
-	COut << sclmisc::GetBaseTranslation( "Done", Buffer ) << '.' << txf::nl << txf::commit;
+	COut << sclm::GetBaseTranslation( "Done", Buffer ) << '.' << txf::nl << txf::commit;
 qRR;
 qRT;
 qRE;
@@ -957,7 +958,7 @@ qRFB;
 
 	mtx::Lock( Shared.Mutex );
 
-	mtk::RawLaunch( HandleMIDI_, &Shared );
+	mtk::RawLaunch(HandleMIDI_, &Shared, true);
 
 	while ( 1 ) {
 		mtx::Unlock( Shared.Mutex );
@@ -1060,9 +1061,9 @@ qRB;
 	Buffer.Init();
 
 	if ( Names.Amount() == 0 )
-		cio:: COut << sclmisc::GetBaseTranslation( "NoMIDIOutDevicesAvailable", Buffer );
+		cio:: COut << sclm::GetBaseTranslation( "NoMIDIOutDevicesAvailable", Buffer );
 	else
-		cio::COut << sclmisc::GetBaseTranslation( "AvailableMIDIOutDevices", Buffer );
+		cio::COut << sclm::GetBaseTranslation( "AvailableMIDIOutDevices", Buffer );
 
 	cio::COut << " : " << txf::nl;
 
@@ -1094,9 +1095,9 @@ qRB;
 	Buffer.Init();
 
 	if ( Names.Amount() == 0 )
-		cio::COut << sclmisc::GetBaseTranslation( "NoMIDIInDevicesAvailable", Buffer );
+		cio::COut << sclm::GetBaseTranslation( "NoMIDIInDevicesAvailable", Buffer );
 	else
-		cio::COut << sclmisc::GetBaseTranslation( "AvailableMIDIInDevices", Buffer );
+		cio::COut << sclm::GetBaseTranslation( "AvailableMIDIInDevices", Buffer );
 
 	cio::COut << " : " << txf::nl;
 
@@ -1130,9 +1131,9 @@ void Info_( void )
 	else if ( Command == #name )\
 		name##_()
 
-int scltool::SCLTOOLMain(
+int sclt::SCLTMain(
 	const str::dString &Command,
-	const scltool::fOddities &Oddities )
+	const sclt::fOddities &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;
 qRH;

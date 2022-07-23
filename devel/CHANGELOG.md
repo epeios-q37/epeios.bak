@@ -12,6 +12,9 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-07-15
+- MSCMDD: [adpt];
+
 ## 2022-06-25
 - MTX: fixing compilation issues with *FreeBSD*;
 

@@ -363,7 +363,7 @@ qRB
 					Name.Append( ", " );
 					Name.Append(snd_rawmidi_info_get_name( rawMidiInfo ));
 					Name.Append( ", " );
-					bso::bInteger Buffer;
+					bso::pInteger Buffer;
 					Name.Append(bso::Convert(snd_rawmidi_info_get_device( rawMidiInfo ), Buffer));
 					Name.Append( ", " );
 
