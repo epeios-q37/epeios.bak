@@ -12,6 +12,11 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-07-23
+- MSCMDD: coding;
+- RGSTRY: [adpt];
+- STR: adding returning boolean for error detection to error position for number conversion;
+
 ## 2022-07-15
 - MSCMDD: [adpt];
 

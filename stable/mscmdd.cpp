@@ -255,7 +255,6 @@ static void Convert_(
 
 }
 
-
 // Pour g++ sous 'cygwin'.
 static inline void Convert_(
 	const CHAR *RawString,

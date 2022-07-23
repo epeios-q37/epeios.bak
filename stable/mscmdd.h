@@ -83,10 +83,14 @@ namespace mscmdd {
 		}
 		qCDTOR( rOut );
 		bso::sBool Init(
-			int Device,
+			const str::dString &Id,
 			err::handling__ ErrorHandling )
 		{
 			reset();
+			
+			UINT Device = 0;
+			
+			Id.ToNumber(Device);
 
 			if ( midiOutOpen( &Handle_, Device, 0, 0, CALLBACK_NULL) != MMSYSERR_NOERROR ) {
 				if ( ErrorHandling != err::hUserDefined )
@@ -162,23 +166,18 @@ namespace mscmdd {
 			reset();
 		}
 		bso::bool__ Init(
-			int Device,
+			const str::dString &Id,
 			err::handling__ ErrorHandling )
 		{
 			bso::bool__ Success = false;
 		qRH
-			str::string Name;
 			qCBUFFERh SBuffer;
 		qRB
-			Name.Init( );
-
-			if ( GetMIDIOutDeviceName( Device, Name ) ) {
-                if ( snd_rawmidi_open( NULL, &_Handle, Name.Convert( SBuffer ), 0 ) < 0 ) {
-                    if ( ErrorHandling != err::hUserDefined )
-                        qRLbr();
-                } else
-                    Success = true;
-			}
+			if ( snd_rawmidi_open( NULL, &_Handle, Id.Convert(SBuffer), 0 ) < 0 ) {
+				if ( ErrorHandling != err::hUserDefined )
+					qRLbr();
+			} else
+				Success = true;
 		qRR
 		qRT
 		qRE
@@ -229,13 +228,13 @@ namespace mscmdd {
 		}
 		qCVDTOR( rWDriver)
 		bso::sBool Init(
-			int Device,
+			const str::dString &Id,
 			err::handling__ ErrHandling = err::h_Default,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
 			fdr::oflow_driver___<>::Init( ThreadSafety );
 
-			return Out_.Init( Device, ErrHandling );
+			return Out_.Init(Id, ErrHandling);
 		}
 	};
 
@@ -255,12 +254,12 @@ namespace mscmdd {
 		qCVDTOR( rWFlow );
 		//f Initialization with socket 'Socket' and 'Timeout' as timeout.
 		bso::bool__ Init(
-			int DeviceId,
+			const str::dString &Id,
 			err::handling__ ErrHandle = err::h_Default )
 		{
 			WFlow_::Init( Driver_ );
 
-			return Driver_.Init( DeviceId, ErrHandle );
+			return Driver_.Init(Id, ErrHandle);
 		}
 	};
 
@@ -354,7 +353,7 @@ namespace mscmdd {
 		}
 		qCDTOR( rIn );
 		bso::bool__ Init(
-			int Device,
+			const str::dString &Id,
 			err::handling__ ErrHandling );
 		void Start( void )
 		{
@@ -408,23 +407,18 @@ namespace mscmdd {
 			reset();
 		}
 		bso::bool__ Init(
-			int Device,
+			const str::dString &Id,
 			err::handling__ ErrorHandling )
 		{
 			bso::bool__ Success = false;
 		qRH
-			str::string Name;
 			qCBUFFERh SBuffer;
 		qRB
-			Name.Init( );
-
-			if ( GetMIDIInDeviceName( Device, Name ) ) {
-                if ( snd_rawmidi_open( &_Handle, NULL, Name.Convert( SBuffer ), 0 ) < 0 ) {
-                    if ( ErrorHandling != err::hUserDefined )
-                        qRLbr();
-                }
-            } else
-                Success = true;
+			if ( snd_rawmidi_open( &_Handle, NULL, Id.Convert(SBuffer), 0 ) < 0 ) {
+				if ( ErrorHandling != err::hUserDefined )
+					qRLbr();
+			} else
+				Success = true;
 		qRR
 		qRT
 		qRE
@@ -482,12 +476,12 @@ namespace mscmdd {
 		}
 		qCVDTOR( rRDriver );
 		bso::bool__ Init(
-			int Device,
+			const str::dString &Id,
 			err::handling__ ErrHandling = err::h_Default,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
 			fdr::iflow_driver___<MSCMDD__INPUT_CACHE_SIZE>::Init( ThreadSafety );
-			return _In.Init( Device, ErrHandling );
+			return _In.Init(Id, ErrHandling);
 		}
 		void Start( void )
 		{
@@ -514,12 +508,12 @@ namespace mscmdd {
 		}
 		qCVDTOR( rRFlow );
 		bso::bool__ Init(
-			int Device,
+			const str::dString &Id,
 			err::handling__ ErrHandle = err::h_Default )
 		{
 			_iflow__::Init( _Driver );
 
-			return _Driver.Init( Device, ErrHandle );
+			return _Driver.Init(Id, ErrHandle);
 		}
 		void Start( void )
 		{
@@ -594,15 +588,15 @@ namespace mscmdd {
 		}
 		qCVDTOR( rRWDriver );
 		status__ Init(
-			int DeviceIn,
-			int DeviceOut,
+			const str::dString &InId,
+			const str::dString &OutId,
 			err::handling__ ErrorHandling = err::h_Default,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
-			if ( !_In.Init( DeviceIn, ErrorHandling ) )
+			if ( !_In.Init(InId, ErrorHandling ) )
 				return sUnableToOpenMIDIInDevice;
 
-			if ( !_Out.Init( DeviceOut, ErrorHandling ) )
+			if ( !_Out.Init(OutId, ErrorHandling ) )
 				return sUnableToOpenMIDIOutDevice;
 
 			_ioflow_driver___::Init( ThreadSafety );
@@ -626,11 +620,11 @@ namespace mscmdd {
 		}
 		qCVDTOR( rRWFlow );
 		status__ Init(
-			int DeviceIn,
-			int DeviceOut,
+			const str::dString &InId,
+			const str::dString &OutId,
 			err::handling__ ErrorHandling = err::h_Default  )
 		{
-			status__ Status = _Driver.Init( DeviceIn, DeviceOut, ErrorHandling );
+			status__ Status = _Driver.Init(InId, OutId, ErrorHandling );
 
 			if ( Status != sOK )
 				return Status;

@@ -7,10 +7,10 @@
 		<Parameters>
 			<Language>fr</Language>
 			<!-- Default command -->
-			<Command>Info</Command>
+			<Command>Launch</Command>
 			<Devices>
-				<In Policy="Id">0</In>
-				<Out Policy="Id">0</Out>
+				<In Policy="Raw">hw:1,0</In>
+				<Out Policy="Raw">hw:2,0</Out>
 			</Devices>
 			<Signature>
 				<Time>

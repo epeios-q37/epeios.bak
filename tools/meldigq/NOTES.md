@@ -20,3 +20,7 @@ Ce qui fonctionne avec mon système est : `fluidsynth --audio-driver=alsa -o au
 Pour lancer le serveur : `fluidsynth --server --audio-driver=alsa -o audio.alsa.device=hw:<c>[,<d>] <soundfont>`, ce qui donne, pour mon serveur, `fluidsynth --server --audio-driver=alsa -o audio.alsa.device=hw:0,3 /usr/share/sounds/sf2/FluidR3_GM.sf2`.
 
 `aplaymidi -l` affiche maintenant le dispositif *MIDI* ainsi créer, et `aplaymidi <midifile>` interprète le fichier *MIDI* donné en paramètre.
+
+`sudo modprobe snd-virmidi midi_devs=1`
+
+`aconnect 24 28`

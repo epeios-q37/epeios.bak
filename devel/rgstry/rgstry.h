@@ -2501,7 +2501,7 @@ namespace rgstry {
 		RawValue.Init();
 
 		if ( Registry.GetValue( Path, RawValue, &GenericError ) )
-			Value = str::_SConversion( RawValue, 0, &GenericError, str::bAuto, Min, Max );
+			Value = str::SConversion( RawValue, 0, &GenericError, str::bAuto, Min, Max );
 
 		if ( ( GenericError != qNIL ) ) {
 

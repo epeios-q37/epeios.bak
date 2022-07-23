@@ -658,7 +658,8 @@ qRE;
 
 qENUM( Policy ) {
 	pId,
-	pName,
+	_pName,
+	pRaw,
 	p_amount,
 	p_Undefined
 };
@@ -676,7 +677,9 @@ qRB;
 	if ( RawPolicy == "Id" )
 		Policy = pId;
 	else if ( RawPolicy == "Name" )
-		Policy = pName;
+		Policy = _pName;
+	else if ( RawPolicy == "Raw" )
+		Policy = pRaw;
 	else
 		sclr::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
 qRR;
@@ -685,22 +688,27 @@ qRE;
 	return Policy;
 }
 
-static int GetDeviceId_(
+static const str::dString &GetDeviceId_(
 	mscmdd::eWay Way,
 	const rgstry::sTEntry &PolicyEntry,
-	const rgstry::sTEntry &ValueEntry )
+	const rgstry::sTEntry &ValueEntry,
+	str::dString &Id)
 {
-	int Id;
 qRH;
 	qCBUFFERh Buffer;
 qRB;
 	switch ( GetPolicy_( PolicyEntry ) ) {
 	case pId:
-		Id = sclm::MGetU8( ValueEntry );
+//		Id = sclm::MGetU8( ValueEntry );
+    qRVct();
 		break;
-	case pName:
-		Id = GetDeviceId_( Way, sclm::MGetValue( ValueEntry, Buffer ) );
+	case _pName:
+//		Id = GetDeviceId_( Way, sclm::MGetValue( ValueEntry, Buffer ) );
+    qRVct();
 		break;
+  case pRaw:
+    sclm::MGetValue(ValueEntry, Id);
+    break;
 	default:
 		qRGnr();
 		break;
@@ -711,14 +719,14 @@ qRE;
 	return Id;
 }
 
-static int GetDeviceInId_( void )
+static const str::dString &GetDeviceInId_(str::dString &Id)
 {
-	return GetDeviceId_( mscmdd::wIn, registry::parameter::devices::in::Policy, registry::parameter::devices::in::Value );
+	return GetDeviceId_(mscmdd::wIn, registry::parameter::devices::in::Policy, registry::parameter::devices::in::Value, Id);
 }
 
-static int GetDeviceOutId_( void )
+static const str::dString &GetDeviceOutId_(str::dString &Id)
 {
-	return GetDeviceId_( mscmdd::wOut, registry::parameter::devices::out::Policy, registry::parameter::devices::out::Value );
+	return GetDeviceId_(mscmdd::wOut, registry::parameter::devices::out::Policy, registry::parameter::devices::out::Value, Id);
 }
 
 static inline sSignatureKey GetSignatureKey_( void )
@@ -761,10 +769,13 @@ qRFH;
 	event Event;
 	sNote Note;
 	sSignature Signature;
+	str::wString DeviceId;
 qRFB;
 	Signature = GetSignature_();
 
-	IFlow.Init( GetDeviceInId_() );
+
+	DeviceId.Init();
+	IFlow.Init(GetDeviceInId_(DeviceId));
 
 	IFlow.Start();
 
@@ -944,12 +955,15 @@ qRFH;
 	mscmdd::rWFlow Flow;
 	sSignature Signature;
 	sTempo Tempo;
+	str::wString DeviceId;
 qRFB;
 	Signature = GetSignature_();
 	GetTempo_( Tempo );
 
 	Melody.Init();
-	Flow.Init( GetDeviceOutId_() );
+
+	DeviceId.Init();
+	Flow.Init(GetDeviceOutId_(DeviceId));
 
 	Shared.Mutex = mtx::Create();
 

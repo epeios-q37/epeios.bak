@@ -435,7 +435,7 @@ template <typename sint, typename uint> sint GenericSignedConversion_(
 		return (sint)GenericUnsignedConversion_( String, Begin, ErrP, Base, PositiveLimit );
 }
 
-unsigned long long int str::_UConversion(
+unsigned long long int str::UConversion(
 	const str::string_ &String,
 	sdr::row__ Begin,
 	sdr::row__ *ErrP,
@@ -445,7 +445,7 @@ unsigned long long int str::_UConversion(
 	return GenericUnsignedConversion_( String, Begin, ErrP, BaseFlag, Limit );
 }
 
-signed long long int str::_SConversion(
+signed long long int str::SConversion(
 	const class string_ &String,
 	sdr::row__ Begin,
 	sdr::row__ *ErrP,
