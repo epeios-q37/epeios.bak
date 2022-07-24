@@ -62,6 +62,10 @@ namespace stsfsm {
 
 	using bch::sHook;
 
+	class parser__;
+
+	typedef parser__ sParser;
+
 	class dCard {
 	private:
 		void _ResetTable( void )
@@ -191,13 +195,15 @@ namespace stsfsm {
 		return Add( str::string( Tag, Length ), Id, Automat );
 	}
 
-	enum status__ {
+	qENUM(Status) {
 		sPending,
 		sMatch,
 		sLost,
 		s_amount,
 		s_Undefined
 	};
+
+	typedef eStatus status__;
 
 	class parser__ {
 	private:
@@ -236,6 +242,9 @@ namespace stsfsm {
 			Card.Init( A_() );
 
 			return Card( Current_ ).GetId();
+		}
+		void Reset(void) {
+		  Current_ = qNIL;
 		}
 	};
 
@@ -294,7 +303,7 @@ namespace stsfsm {
 
 	// What to do with remaining data when no matching found.
 	qENUM( UnmatchingBehavior ) {
-		ubPurge,	// Purge remainig data (until EOF or '\0').
+		ubPurge,	// Purge remaining data (until EOF or '\0').
 		ubKeep,		// Keep remaining data.
 		ub_amount,
 		ub_Undefined,

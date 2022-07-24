@@ -42,6 +42,7 @@
 # include <conio.h>
 #elif defined( CPE_S_POSIX )
 # include <termios.h>
+# include "stsfsm.h"
 #else
 # error "Unhandled operating system!"
 #endif // CPE_S_WIN
@@ -492,8 +493,6 @@ static void Print_(
 
 }
 
-
-
 static void Play_(
 	const sNote &Note,
 	bso::sU32 Base,
@@ -925,16 +924,6 @@ namespace {
 #endif
 }
 
-int get_code ( void )
-{
-  int ch = getch_();
-
-  if ( ch == 0 || ch == 224 )
-    ch = 256 + getch_();
-
-  return ch;
-}
-
 enum
 {
   KEY_BACK = 8,
@@ -944,6 +933,77 @@ enum
   KEY_LEFT  = 256 + 75,
   KEY_RIGHT = 256 + 77
 };
+
+namespace key_ {
+  namespace {
+    stsfsm::wAutomat Automat_;
+    stsfsm::sParser Parser_;
+
+    namespace {
+      const char KeyUp_[] = {91, 65, 0};
+      const char KeyRight_[] = {91, 67, 0};
+      const char KeyLeft_[] = {91, 68, 0};
+      const char KeyDelete_[] = {91, 51, 126, 0};
+    }
+
+    struct {
+      int Id;
+      const char *Tag;
+    } Keys_ [] = {
+        {KEY_DELETE, KeyDelete_},
+        {KEY_UP, KeyUp_},
+        {KEY_RIGHT, KeyRight_},
+        {KEY_LEFT, KeyLeft_}
+    };
+  }
+
+  void SetAutomat(void) {
+    Automat_.Init();
+
+    for ( int i = 0; i < sizeof(Keys_) / sizeof(Keys_[0] ); i++)
+      stsfsm::Add(Keys_[i].Tag, Keys_[i].Id, Automat_);
+
+    Parser_.Init(Automat_);
+  }
+
+  stsfsm::eStatus GetStatus(int C) {
+    return Parser_.Handle(C);
+  }
+
+  int GetId(void) {
+    return Parser_.GetId();
+  }
+
+  void Reset(void) {
+    Parser_.Reset();
+  }
+}
+
+int get_code ( void )
+{
+  int ch = getch_();
+#ifdef CPE_S_WINDOWS
+  if ( ch == 0 || ch == 224 )
+    ch = 256 + getch_();
+#elif defined(CPE_S_POSIX)
+  if ( ch == 127 )
+    ch = KEY_BACK;
+  else if ( ch == 27 ) {
+    stsfsm::eStatus Status = stsfsm::s_Undefined;
+
+    while ( ( Status = key_::GetStatus(getch_() ) ) == stsfsm::sPending );
+
+    if ( Status == stsfsm::sMatch )
+      ch = key_::GetId();
+    else
+      ch = 0;
+
+    key_::Reset();
+  }
+#endif // defined
+
+  return ch;
+}
 
 static void Launch_( void )
 {
@@ -957,6 +1017,8 @@ qRFH;
 	sTempo Tempo;
 	str::wString DeviceId;
 qRFB;
+  key_::SetAutomat();
+
 	Signature = GetSignature_();
 	GetTempo_( Tempo );
 
@@ -980,8 +1042,9 @@ qRFB;
 
 		mtx::Lock( Shared.Mutex );
 		if ( C == KEY_RIGHT ) {
-			if ( Shared.Row != qNIL )
+			if ( Shared.Row != qNIL ) {
 				Shared.Row = Melody.Next( Shared.Row );
+			}
 		} else if ( C == KEY_LEFT ) {
 			if ( Shared.Row == qNIL )
 				Shared.Row = Melody.Last();
@@ -1025,7 +1088,7 @@ qRFB;
 			if ( Shared.Row != qNIL ) {
 				Shared.Melody->InsertAt( Note, Shared.Row );
 				Shared.Row = Shared.Melody->Next( Shared.Row );
-			}else
+			} else
 				Shared.Melody->Append( Note );
 		} else if ( C < 256 ) {
 			if ( Shared.Row == qNIL )
@@ -1128,7 +1191,6 @@ qRR;
 qRT;
 qRE;
 }
-
 
 void DisplayMidiDevices( void )
 {

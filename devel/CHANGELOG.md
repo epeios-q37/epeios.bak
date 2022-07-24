@@ -7,10 +7,15 @@
 - [crtn]: creation;
 - [obvs]: obvious modifications;
 - [rvrt]: reverting modifications;
-- [stdz]: modification to comply with current standards;
+- [stdz]: modification to comply with cusrrent standards;
 - [trvl]: trivial modifications;
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
+
+## 2022-07-24
+- STSFSM:
+  - introducing `sParser::Reset()`,
+  - [stdz];
 
 ## 2022-07-23
 - MSCMDD: coding;
