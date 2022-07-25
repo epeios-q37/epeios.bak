@@ -376,7 +376,7 @@ struct sTempo {
 	sDuration Unit;
 	sTempo( void )
 	{
-		// Par défaut : 120 à la noire.
+		// Par dÃ©faut : 120 Ã  la noire.
 		Value = 120;
 		Unit = sDuration( 4, 0 );
 	}
@@ -758,7 +758,7 @@ static inline sSignature GetSignature_( void )
 	return sSignature( GetSignatureKey_(), GetSignatureTime_() );
 }
 
-static void HandleMIDI_( void *UP )
+static void HandleMIDIInput_( void *UP )
 {
 	shared__ &Shared = *(shared__ *)UP;
 qRFH;
@@ -771,7 +771,6 @@ qRFH;
 	str::wString DeviceId;
 qRFB;
 	Signature = GetSignature_();
-
 
 	DeviceId.Init();
 	IFlow.Init(GetDeviceInId_(DeviceId));
@@ -924,37 +923,55 @@ namespace {
 #endif
 }
 
-enum
-{
-  KEY_BACK = 8,
-  KEY_DELETE = 256 + 83,
-  KEY_UP    = 256 + 72,
-  KEY_DOWN  = 256 + 80,
-  KEY_LEFT  = 256 + 75,
-  KEY_RIGHT = 256 + 77
-};
-
 namespace key_ {
+  enum eCode
+  {
+    cBack = 256,
+    cUp,
+    cDown,
+    cRight,
+    cLeft,
+    cEnd,
+    cBegin,
+    cDelete,
+    cPageUp,
+    cPageDown
+  };
+
   namespace {
     stsfsm::wAutomat Automat_;
     stsfsm::sParser Parser_;
 
-    namespace {
-      const char KeyUp_[] = {91, 65, 0};
-      const char KeyRight_[] = {91, 67, 0};
-      const char KeyLeft_[] = {91, 68, 0};
-      const char KeyDelete_[] = {91, 51, 126, 0};
+    namespace seq_ {
+      const char Up[] = {91, 65, 0};
+      const char Down[] = {91, 66, 0};
+      const char Right[] = {91, 67, 0};
+      const char Left[] = {91, 68, 0};
+      const char End[] = {91, 70, 0};
+      const char Begin[] = {91, 72, 0};
+      const char Delete[] = {91, 51, 126, 0};
+      const char PageUp[] = {91, 53, 126, 0};
+      const char PageDown[] = {91, 54, 126, 0};
     }
+
+#define K(name) {c##name, seq_::name}
 
     struct {
       int Id;
       const char *Tag;
     } Keys_ [] = {
-        {KEY_DELETE, KeyDelete_},
-        {KEY_UP, KeyUp_},
-        {KEY_RIGHT, KeyRight_},
-        {KEY_LEFT, KeyLeft_}
+      K(Up),
+      K(Down),
+      K(Right),
+      K(Left),
+      K(End),
+      K(Begin),
+      K(Delete),
+      K(PageUp),
+      K(PageDown),
     };
+
+#undef K
   }
 
   void SetAutomat(void) {
@@ -970,7 +987,7 @@ namespace key_ {
     return Parser_.Handle(C);
   }
 
-  int GetId(void) {
+  int GetCode(void) {
     return Parser_.GetId();
   }
 
@@ -979,30 +996,30 @@ namespace key_ {
   }
 }
 
-int get_code ( void )
+int GetKeyCode ( void )
 {
-  int ch = getch_();
+  int KeyCode = getch_();
 #ifdef CPE_S_WINDOWS
-  if ( ch == 0 || ch == 224 )
-    ch = 256 + getch_();
+  if ( KeyCode == 0 || KeyCode == 224 )
+    KeyCode = 256 + getch_();
 #elif defined(CPE_S_POSIX)
-  if ( ch == 127 )
-    ch = KEY_BACK;
-  else if ( ch == 27 ) {
+  if ( KeyCode == 127 )
+    KeyCode = key_::cBack;
+  else if ( KeyCode == 27 ) {
     stsfsm::eStatus Status = stsfsm::s_Undefined;
 
     while ( ( Status = key_::GetStatus(getch_() ) ) == stsfsm::sPending );
 
     if ( Status == stsfsm::sMatch )
-      ch = key_::GetId();
+      KeyCode = key_::GetCode();
     else
-      ch = 0;
+      KeyCode = 0;
 
     key_::Reset();
   }
 #endif // defined
 
-  return ch;
+  return KeyCode;
 }
 
 static void Launch_( void )
@@ -1010,12 +1027,13 @@ static void Launch_( void )
 qRFH;
 	wMelody Melody;
 	shared__ Shared;
-	int C;
 	sNote Note;
 	mscmdd::rWFlow Flow;
 	sSignature Signature;
 	sTempo Tempo;
 	str::wString DeviceId;
+	int KeyCode = 0;
+	bso::sBool Continue = true;
 qRFB;
   key_::SetAutomat();
 
@@ -1034,32 +1052,17 @@ qRFB;
 
 	mtx::Lock( Shared.Mutex );
 
-	mtk::RawLaunch(HandleMIDI_, &Shared, true);
+	mtk::RawLaunch(HandleMIDIInput_, &Shared, true);
 
-	while ( 1 ) {
+	while ( Continue ) {
 		mtx::Unlock( Shared.Mutex );
-		C = get_code();
+
+		KeyCode = GetKeyCode();
 
 		mtx::Lock( Shared.Mutex );
-		if ( C == KEY_RIGHT ) {
-			if ( Shared.Row != qNIL ) {
-				Shared.Row = Melody.Next( Shared.Row );
-			}
-		} else if ( C == KEY_LEFT ) {
-			if ( Shared.Row == qNIL )
-				Shared.Row = Melody.Last();
-			else
-				Shared.Row = Melody.Previous( Shared.Row );
-		} else if ( C == KEY_DELETE ) {
 
-			if ( Shared.Row != qNIL ) {
-				Melody.Remove( Shared.Row );
-
-				if ( !Melody.Exists( Shared.Row ) )
-					Shared.Row = Melody.Last();
-			}
-		} else if ( C == KEY_BACK ) {
-
+		switch ( KeyCode ) {
+    case key_::cBack:
 			if ( Shared.Row == qNIL )
 				Shared.Row = Melody.Last();
 			else
@@ -1071,56 +1074,114 @@ qRFB;
 				if ( !Melody.Exists( Shared.Row ) )
 					Shared.Row = qNIL;
 			}
-		} else if ( C == '+' ) {
-			if ( Tempo.Value < 241 )
-				Tempo.Value += 10;
-		} else if ( C == '-' ) {
+      break;
+    case key_::cUp:
+			if ( Shared.Row != qNIL )
+				Shared.Row = Melody.Previous(Shared.Row, 5);
+      break;
+    case key_::cDown:
+			if ( Shared.Row != qNIL )
+				Shared.Row = Melody.Next(Shared.Row, 5);
+      break;
+    case key_::cRight:
+			if ( Shared.Row != qNIL )
+				Shared.Row = Melody.Next(Shared.Row);
+      break;
+    case key_::cLeft:
+			if ( Shared.Row == qNIL )
+				Shared.Row = Melody.Last();
+			else
+				Shared.Row = Melody.Previous( Shared.Row );
+      break;
+    case key_::cEnd:
+			Shared.Row = Melody.Last();
+      break;
+    case key_::cBegin:
+			Shared.Row = Melody.First();
+      break;
+    case key_::cDelete:
+			if ( Shared.Row != qNIL ) {
+				Melody.Remove( Shared.Row );
+
+				if ( !Melody.Exists( Shared.Row ) )
+					Shared.Row = Melody.Last();
+			}
+      break;
+    case key_::cPageUp:
+			if ( Shared.Row != qNIL )
+				Shared.Row = Melody.Previous(Shared.Row, 10);
+      break;
+    case key_::cPageDown:
+			if ( Shared.Row != qNIL )
+				Shared.Row = Melody.Next(Shared.Row, 10);
+      break;
+    case '+':
+      if ( Tempo.Value < 241 )
+        Tempo.Value += 10;
+      break;
+    case '-':
 			if ( Tempo.Value > 39 )
 				Tempo.Value -= 10;
-		} else if ( C == 'p' )
+      break;
+    case 'p':
 			Play_( Melody, Tempo, *Shared.OFlow );
-		else if ( C == 's' )
+      break;
+    case 's':
 			Save_( Melody );
-		else if ( C == 'x' )
+      break;
+    case 'x':
 			Execute_( Melody );
-		else if ( C == 'r' ) {
+      break;
+    case 'r':
 			Note = sNote( sPitch( pnRest, 0 ),  sDuration( 3 ), Signature );
 			if ( Shared.Row != qNIL ) {
 				Shared.Melody->InsertAt( Note, Shared.Row );
 				Shared.Row = Shared.Melody->Next( Shared.Row );
 			} else
 				Shared.Melody->Append( Note );
-		} else if ( C < 256 ) {
+      break;
+    case 'h':
+      qRVct();
+      break;
+    case 'q':
+      Continue = false;
+      break;
+    default:
 			if ( Shared.Row == qNIL )
 				Shared.Row = Melody.Last();
 
 			if ( Shared.Row != qNIL ) {
 				Melody.Recall( Shared.Row, Note );
 
-				if ( C == '0' )
+				switch ( KeyCode ) {
+        case '0':
 					Note.Duration.Modifier = 0;
-				else if ( isdigit( C ) )
-					Note.Duration.Base = C - '0';
-				else if ( C == '.' )
+          break;
+        case '.':
 					Note.Duration.Modifier++;
-				else if ( C == '*' )
+          break;
+        case '*':
 					Note.Duration.TiedToNext = !Note.Duration.TiedToNext;
+          break;
+        default:
+          if ( isdigit( KeyCode ) )
+            Note.Duration.Base = KeyCode - '0';
+          break;
+				}
 
 				Melody.Store( Note, Shared.Row );
 
 				Shared.Row = Melody.Next( Shared.Row );
 			}
+      break;
 		}
 
 		Print_( Melody, Shared.Row );
 	}
-
 qRR;
 qRT;
 	if ( Shared.Mutex != MTX_INVALID_HANDLER )
 		mtx::Delete( Shared.Mutex );
-
-
 qRE;
 }
 

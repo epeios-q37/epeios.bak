@@ -23,4 +23,4 @@ Pour lancer le serveur : `fluidsynth --server --audio-driver=alsa -o audio.alsa
 
 `sudo modprobe snd-virmidi midi_devs=1`
 
-`aconnect 24 28`
+`aconnect 24 128`

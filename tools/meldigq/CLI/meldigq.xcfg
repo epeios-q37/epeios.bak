@@ -9,7 +9,7 @@
 			<!-- Default command -->
 			<Command>Launch</Command>
 			<Devices>
-				<In Policy="Raw">hw:1,0</In>
+				<In Policy="Raw">hw:2,0</In>
 				<Out Policy="Raw">hw:2,0</Out>
 			</Devices>
 			<Signature>
