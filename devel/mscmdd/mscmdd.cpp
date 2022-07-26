@@ -245,7 +245,7 @@ bso::bool__ mscmdd::rIn::Init(
 
 static void Convert_(
 	const WCHAR *WString,
-	dName &Name )
+	str::dString &Name )
 {
 	while ( *WString ) {
 		Name.Append( (char)*WString );
@@ -258,30 +258,29 @@ static void Convert_(
 // Pour g++ sous 'cygwin'.
 static inline void Convert_(
 	const CHAR *RawString,
-	dName &Name )
+	str::dString &Name )
 {
 	Name.Append( RawString );
 }
 #endif
 
 #ifdef MSCMDD__ALSA
-static bso::sUInt GetMIDIDevices_(
-	dNames &Names,
+static bso::sSize GetMIDIDevices_(
+	str::dStrings &Ids,
+	str::dStrings &Names,
 	snd_rawmidi_stream_t Direction )
 {
-	bso::sUInt Count = 0;
+	bso::sSize Count = 0;
 qRH
-	str::string Name;
+	str::string Id, Name;
 	bso::integer_buffer__ Buffer;
+	int	cardNum = -1;	// Start with first card
+	snd_ctl_t *cardHandle = NULL;
+	char str[64] = "";
+	int devNum = -1;	// Start with the first MIDI device.
+	snd_rawmidi_info_t *rawMidiInfo = NULL;
 qRB
-	int	cardNum;
-
-   // Start with first card
-   cardNum = -1;
-
 	for (;;) {
-		snd_ctl_t *cardHandle;
-
 		// Get next sound card's card number. When "cardNum" == -1, then ALSA
 		// fetches the first card
 		if ( snd_card_next (&cardNum ) < 0)
@@ -292,89 +291,59 @@ qRB
 
 		// Open this card's control interface. We specify only the card number -- not
 		// any device nor sub-device too
-		{
-				char   str[64];
+		sprintf(str, "hw:%i", cardNum);
 
-				sprintf(str, "hw:%i", cardNum);
+		if ( snd_ctl_open(&cardHandle, str, 0) < 0)
+			qRSys();
 
-				if ( snd_ctl_open(&cardHandle, str, 0) < 0)
-					qRSys();
-		  }
+		// Start with the first MIDI device on this card
+		devNum = -1;
 
-		{
-			int      devNum;
+		for (;;) {
+			// Get the number of the next MIDI device on this card
+			if ( snd_ctl_rawmidi_next_device(cardHandle, &devNum) )
+				qRSys();
 
-			// Start with the first MIDI device on this card
-			devNum = -1;
+			// No more MIDI devices on this card? ALSA sets "devNum" to -1 if so.
+			// NOTE: It's possible that this sound card may have no MIDI devices on it
+			// at all, for example if it's only a digital audio card
+			if (devNum < 0) break;
 
-			for (;;)
-			{
-				snd_rawmidi_info_t  *rawMidiInfo;
-				int        subDevCount, i;
+			// To get some info about the subdevices of this MIDI device (on the card), we need a
+			// snd_rawmidi_info_t, so let's allocate one on the stack
+			snd_rawmidi_info_alloca(&rawMidiInfo);
+			memset(rawMidiInfo, 0, snd_rawmidi_info_sizeof());
 
-				// Get the number of the next MIDI device on this card
-				if ( snd_ctl_rawmidi_next_device(cardHandle, &devNum) )
-					qRSys();
+			// Tell ALSA which device (number) we want info about
+			snd_rawmidi_info_set_device(rawMidiInfo, devNum);
 
-				// No more MIDI devices on this card? ALSA sets "devNum" to -1 if so.
-				// NOTE: It's possible that this sound card may have no MIDI devices on it
-				// at all, for example if it's only a digital audio card
-				if (devNum < 0) break;
+			// Get info on the MIDI outs of this device
+			snd_rawmidi_info_set_stream(rawMidiInfo, Direction);
 
-				// To get some info about the subdevices of this MIDI device (on the card), we need a
-				// snd_rawmidi_info_t, so let's allocate one on the stack
-				snd_rawmidi_info_alloca(&rawMidiInfo);
-				memset(rawMidiInfo, 0, snd_rawmidi_info_sizeof());
+			snd_rawmidi_info_set_subdevice(rawMidiInfo, 0);
 
-				// Tell ALSA which device (number) we want info about
-				snd_rawmidi_info_set_device(rawMidiInfo, devNum);
+			if ( snd_ctl_rawmidi_info(cardHandle, rawMidiInfo) < 0 )
+				qRSys();
 
-				// Get info on the MIDI outs of this device
-				snd_rawmidi_info_set_stream(rawMidiInfo, Direction );
+			Id.Init("hw:");
+			Id.Append( bso::Convert( (bso::sUInt)cardNum, Buffer ) );
+			Id.Append( ',' );
+			Id.Append( bso::Convert( (bso::sUInt)devNum, Buffer ) );
+			Ids.Append(Id);
 
-				i = -1;
-				subDevCount = 1;
+/*			Name.Append( ' ' );
+			Name.Append( bso::Convert((bso::sUInt)snd_rawmidi_info_get_subdevices_count(rawMidiInfo), Buffer ) );
+			Name.Append( ") " );
+*/			Name.Init(snd_rawmidi_info_get_name( rawMidiInfo ));
+			Name.Append( ", " );
+			Name.Append(snd_rawmidi_info_get_id( rawMidiInfo ));
 
-				// More subdevices?
-				while (++i < subDevCount) {
-					// Tell ALSA to fill in our snd_rawmidi_info_t with info on this subdevice
-					snd_rawmidi_info_set_subdevice(rawMidiInfo, i);
+			Names.Append( Name );
 
-					if ( snd_ctl_rawmidi_info(cardHandle, rawMidiInfo) < 0 )
-						qRSys();
-
-					// Print out how many subdevices (once only)
-					if (!i)
-						subDevCount = snd_rawmidi_info_get_subdevices_count(rawMidiInfo);
-
-					// NOTE: If there's only one subdevice, then the subdevice number is immaterial,
-					// and can be omitted when you specify the hardware name
-
-					Name.Init( snd_rawmidi_info_get_subdevice_name( rawMidiInfo ) );
-					Name.Append( " (hw:" );
-					Name.Append( bso::Convert( (bso::sUInt)cardNum, Buffer ) );
-					Name.Append( ',' );
-					Name.Append( bso::Convert( (bso::sUInt)devNum, Buffer ) );
-					Name.Append( ',' );
-					Name.Append( bso::Convert( (bso::sUInt)i, Buffer ) );
-					Name.Append( ") " );
-					Name.Append(snd_rawmidi_info_get_id( rawMidiInfo ));
-					Name.Append( ", " );
-					Name.Append(snd_rawmidi_info_get_name( rawMidiInfo ));
-					Name.Append( ", " );
-					bso::pInteger Buffer;
-					Name.Append(bso::Convert(snd_rawmidi_info_get_device( rawMidiInfo ), Buffer));
-					Name.Append( ", " );
-
-					Names.Append( Name );
-
-					Count++;
-
-				}
-			}
-			// Close the card's control interface after we're done with it
-			snd_ctl_close(cardHandle);
+			Count++;
 		}
+		// Close the card's control interface after we're done with it
+		snd_ctl_close(cardHandle);
 	}
 
 	snd_config_update_free_global();
@@ -386,19 +355,19 @@ qRE
 
 bso::bool__ mscmdd::GetMIDIInDeviceName(
 	int Device,
-	dName &Name )
+	str::dString &Name )
 {
 	bso::bool__ Success = false;
 qRH
-	wNames Names;
+	str::wStrings Ids, Names;
 qRB
-	Names.Init();
+  tol::Init(Ids, Names);
 
-	 if ( GetMIDIDevices_( Names, SND_RAWMIDI_STREAM_INPUT ) > Device ) {
-         Success = true;
+  if ( GetMIDIDevices_(Ids,  Names, SND_RAWMIDI_STREAM_INPUT) > Device ) {
+    Success = true;
 
-         Name = Names( Device );
-    }
+    Name = Names( Device );
+   }
 qRR
 qRT
 qRE
@@ -411,15 +380,15 @@ bso::bool__ mscmdd::GetMIDIOutDeviceName(
 {
 	bso::bool__ Success = false;
 qRH
-	wNames Names;
+	str::wStrings Ids, Names;
 qRB
-	Names.Init();
+  tol::Init(Ids, Names);
 
-	 if ( GetMIDIDevices_( Names, SND_RAWMIDI_STREAM_OUTPUT ) > Device ) {
-         Success = true;
+  if ( GetMIDIDevices_(Ids,  Names, SND_RAWMIDI_STREAM_OUTPUT) > Device ) {
+    Success = true;
 
-         Name = Names( Device );
-	 }
+    Name = Names( Device );
+   }
 qRR
 qRT
 qRE
@@ -429,9 +398,11 @@ qRE
 #endif
 
 
-bso::sUInt mscmdd::GetMidiInDeviceNames( dNames &Names )
+bso::sSize mscmdd::GetMidiInDeviceNames(
+  str::dStrings &Ids,
+  str::dStrings &Names)
 {
-	bso::sUInt Count = 0;
+	bso::sSize Count = 0;
 #ifdef MSCMDD__WINDOWS
 qRH
 	MIDIINCAPS InCaps;
@@ -453,14 +424,16 @@ qRR
 qRT
 qRE
 #elif defined( MSCMDD__ALSA )
-	Count = GetMIDIDevices_( Names, SND_RAWMIDI_STREAM_INPUT );
+	Count = GetMIDIDevices_(Ids, Names, SND_RAWMIDI_STREAM_INPUT);
 #endif
 	return Count;
 }
 
-bso::sUInt mscmdd::GetMidiOutDeviceNames( dNames &Names )
+bso::sSize mscmdd::GetMidiOutDeviceNames(
+  str::dStrings &Ids,
+  str::dStrings &Names )
 {
-	bso::sUInt Count = 0;
+	bso::sSize Count = 0;
 #ifdef MSCMDD__WINDOWS
 qRH
 	MIDIOUTCAPS OutCaps;
@@ -482,7 +455,7 @@ qRR
 qRT
 qRE
 #elif defined( MSCMDD__ALSA )
-	Count = GetMIDIDevices_( Names, SND_RAWMIDI_STREAM_OUTPUT );
+	Count = GetMIDIDevices_(Ids, Names, SND_RAWMIDI_STREAM_OUTPUT);
 #endif
 	return Count;
 }

@@ -49,9 +49,9 @@
 
 namespace mscmdm {
 
-	typedef flw::sByte event_id__;
+	typedef flw::sByte sEventId;
 
-	using flw::size__;
+	using fdr::sSize;
 
 	// Autres donnes associes aux vnements.
 	qENUM( Extraneous) {
@@ -168,10 +168,10 @@ namespace mscmdm {
 	const char *GetMetaEventLabel( eMetaEvent Event );
 
 	//t Type of the delta time ticks..
-	typedef bso::u32__ delta_time_ticks__;
+	typedef bso::u32__ sDeltaTimeTicks;
 
 	//t Type of a channel identificator.
-	typedef bso::u8__ channel_id__;
+	typedef bso::u8__ sChannelId;
 
 	qENUM( EventType ) {
 		// MIDI Event,
@@ -193,8 +193,7 @@ namespace mscmdm {
 
 	eMidiEvent DetermineMIDIEvent( flw::sByte Datum );
 
-	size__ GetMIDIEventDataSize( eMidiEvent Event );
-
+	sSize GetMIDIEventDataSize( eMidiEvent Event );
 
 	inline eEventType DetermineEvent(
 		flw::sByte Datum,
@@ -228,7 +227,7 @@ namespace mscmdm {
 		// The midi event.
 		eMidiEvent Event;
 		// The channel ID.
-		channel_id__ ChannelID;
+		sChannelId ChannelID;
 		// At true for tied event.
 		bso::bool__ Tied;
 	};
@@ -242,20 +241,20 @@ namespace mscmdm {
 		// The midi event.
 		eMetaEvent Event;
 		// Data size.
-		size__ Size;
+		sSize Size;
 		// Meta-event id.
-		event_id__ Id;
+		sEventId Id;
 	};
 
 
 	//c An event header.
 	struct sEventHeader {
 		//o The delta time ticks.
-		delta_time_ticks__ DeltaTimeTicks;
+		sDeltaTimeTicks DeltaTimeTicks;
 		//o The event.
 		eEventType EventType;
 		// Event id.
-		event_id__ Id;
+		sEventId Id;
 		union {
 			// The MIDI event, if 'EventType' == 'etMIDI'.
 			sExtendedMidiEvent MIDIEvent;
@@ -287,20 +286,20 @@ namespace mscmdm {
 		return EventHeader.EventType;
 	}
 
-	typedef str::string_ data_;
-	typedef str::string data;
+	typedef str::string_ dData;
+	qW(Data);
 
 	struct cEventHandler
 	{
 	protected:
 		virtual bso::bool__ MSCMDMHandleEvent(
 			const sEventHeader &Header,
-			const data_ &Data,
+			const dData &Data,
 			eExtraneous Extraneous ) = 0;
 	public:
 		virtual bso::bool__ HandleEvent(
 			const sEventHeader &Header,
-			const data_ &Data,
+			const dData &Data,
 			eExtraneous Extraneous )
 		{
 			return MSCMDMHandleEvent( Header, Data, Extraneous );
@@ -356,32 +355,32 @@ namespace mscmdm {
 	}
 #endif
 
-	size__ GetEventData(
+	sSize GetEventData(
 		const sEventHeader &EventHeader,
 		flw::iflow__ &IFlow,
 		eExtraneous Extraneous,
-		data_ &Data );
+		dData &Data );
 
 # ifdef MSCMDM__DEVICES_AVAILABLE
-	inline size__ GetEventData(
+	inline sSize GetEventData(
 		const sEventHeader &EventHeader,
 		mscmdd::rRFlow &IFlow,
-		data_ &Data )
+		dData &Data )
 	{
 		return GetEventData( EventHeader, IFlow, xNone, Data );
 	}
 # endif
 
-	class event_
+	class dEvent
 	{
 	public:
 		struct s
 		{
 			sEventHeader EventHeader;
-			data_::s Data;
+			dData::s Data;
 		} &S_;
-		data_ Data;
-		event_( s &S )
+		dData Data;
+		dEvent( s &S )
 		: S_( S ),
 		  Data( S.Data )
 		{}
@@ -400,7 +399,7 @@ namespace mscmdm {
 		{
 			Data.plug( AS );
 		}
-		event_ &operator =( const event_ &E )
+		dEvent &operator =( const dEvent &E )
 		{
 			S_.EventHeader = E.S_.EventHeader;
 
@@ -416,7 +415,7 @@ namespace mscmdm {
 		}
 		void Init(
 			const sEventHeader &Header,
-			const data_ &Data )
+			const dData &Data )
 		{
 			reset();
 
@@ -426,24 +425,24 @@ namespace mscmdm {
 		E_RWDISCLOSE_( sEventHeader, EventHeader )
 	};
 
-	E_AUTO( event )
+	qW(Event);
 
-	E_ROW( erow__ );	// Event row.
+	qROW( Row );	// Event row.
 
-	typedef ctn::E_MCONTAINERt_( event_, erow__ ) events_;
-	E_AUTO( events )
+	typedef ctn::E_MCONTAINERt_( dEvent, sRow ) dEvents;
+	qW(Events)
 
 	void PutEventHeader(
-		delta_time_ticks__ Ticks,
-		event_id__ Id,
-		const data_ &RawData,
+		sDeltaTimeTicks,
+		sEventId Id,
+		const dData &RawData,
 		bso::bool__ Tied,
 		eExtraneous Extraneous,
 		flw::oflow__ &OFlow );
 
 	inline void PutEventHeader(
 		const sEventHeader &Header,
-		const data_ &RawData,
+		const dData &RawData,
 		eExtraneous Extraneous,
 		flw::oflow__ &OFlow )
 	{
@@ -453,22 +452,21 @@ namespace mscmdm {
 # ifdef MSCMDM__DEVICES_AVAILABLE
 	inline void PutEventHeader(
 		const sEventHeader &Header,
-		const data_ &RawData,
+		const dData &RawData,
 		mscmdd::rRWFlow &OFlow )
 	{
 		PutEventHeader( Header, RawData, xNone, OFlow );
 	}
 # endif
 
-
 	void PutEvent(
-		const event_ &Event,
+		const dEvent &Event,
 		eExtraneous Extraneous,
 		flw::oflow__ &OFlow );
 
 # ifdef MSCMDM__DEVICES_AVAILABLE
 	inline void PutEvent(
-		const event_ &Event,
+		const dEvent &Event,
 		mscmdd::rWFlow &OFlow )
 	{
 		PutEvent( Event, xNone, OFlow );
@@ -476,30 +474,30 @@ namespace mscmdm {
 # endif
 
 	void PutEvents(
-		const events_ &Events,
+		const dEvents &Events,
 		eExtraneous Extraneous,
 		flw::oflow__ &OFlow );
 
 # ifdef MSCMDM__DEVICES_AVAILABLE
 	inline void PutEvents(
-		const events_ &Events,
+		const dEvents &Events,
 		mscmdd::rWFlow &OFlow )
 	{
 		PutEvents( Events, xNone, OFlow );
 	}
 # endif
 
-	typedef events_	track_;
-	typedef events	track;
+	typedef dEvents	dTrack;
+	qW(Track);
 
 	void PutTrack(
-		const track_ &Track,
+		const dTrack &Track,
 		eExtraneous Extraneous,
 		flw::oflow__ &OFlow );
 
 # ifdef MSCMDM__DEVICES_AVAILABLE
 	inline void PutTrack(
-		const track_ &Track,
+		const dTrack &Track,
 		mscmdd::rWFlow &OFlow )
 	{
 		PutTrack( Track, xNone, OFlow );
@@ -508,7 +506,7 @@ namespace mscmdm {
 
 	E_ROW( trow__ );	// Track row.
 
-	typedef ctn::E_CONTAINERt_( track_, trow__ ) tracks_;
+	typedef ctn::E_CONTAINERt_( dTrack, trow__ ) tracks_;
 	E_AUTO( tracks )
 
 	void PutTracks(
@@ -558,8 +556,8 @@ namespace mscmdm {
 
 
 	//t Text type.
-	typedef str::string_	text_;
-	typedef str::string		text;
+	typedef str::string_	dText;
+	qW(Text);
 /*
 	//t Type of a sequence number.
 	typedef bso::ulong__ sequence_number__;
@@ -573,10 +571,10 @@ namespace mscmdm {
 	//t Type of a key signature (would be detailed in th future).
 	typedef bso::ushort__ key_signature__;
 */
-	inline delta_time_ticks__ GetDeltaTimeTicks( flw::iflow__ &IFlow )
+	inline sDeltaTimeTicks GetDeltaTimeTicks( flw::iflow__ &IFlow )
 	{
 		flw::sByte Datum = IFlow.Get();
-		delta_time_ticks__ DeltaTimeTicks = 0;
+		sDeltaTimeTicks DeltaTimeTicks = 0;
 
 		while ( Datum & 0x80 ) {
 			DeltaTimeTicks = ( DeltaTimeTicks << 7  ) | ( Datum & 0x7f );
@@ -588,13 +586,13 @@ namespace mscmdm {
 	}
 
 	void Encode(
-		delta_time_ticks__ Ticks,
-		data_ &Data );
+		sDeltaTimeTicks Ticks,
+		dData &Data );
 
 	inline void GetText(
 		flw::iflow__ &IFlow,
-		size__ Size,
-		text_ &Text )
+		sSize Size,
+		dText &Text )
 	{
 		while( Size-- )
 			Text.Append( IFlow.Get() );
@@ -630,25 +628,25 @@ namespace mscmdm {
 */
 	void PrintMIDIEvent(
 		const sExtendedMidiEvent &Event,
-		const data_ &Data,
+		const dData &Data,
 		txf::text_oflow__ &OFlow );
 
 	//f Print to 'OFlow', which origin is 'Origin', the description of the system event 'Event' in 'IFlow'.
 	void PrintSystemEvent(
 		const sExtendedSystemEvent &Event,
-		const data_ &Data,
+		const dData &Data,
 		txf::text_oflow__ &OFlow );
 
 	//f Print to 'OFlow' the description of the meta event 'Event' in 'IFlow'.
 	void PrintMetaEvent(
 		const sExtendedMetaEvent &Event,
-		const data_ &Data,
+		const dData &Data,
 		txf::text_oflow__ &OFlow );
 
 	//f Print to 'OFlow', which origin is 'Origin', the description of the event in 'IFlow'.
 	void PrintEvent(
 		const sEventHeader &EventHeader,
-		const data_ &Data,
+		const dData &Data,
 		txf::text_oflow__ &OFlow );
 
 }

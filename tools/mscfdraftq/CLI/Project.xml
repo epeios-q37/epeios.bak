@@ -6,7 +6,7 @@
 			<xpp:bloc/>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
-			<xpp:bloc>2017</xpp:bloc>
+			<xpp:bloc>2019</xpp:bloc>
 		</xpp:define>
 		<xpp:set name="Credits" value="Epeios"/>
 		<xpp:set name="Type" value="Tool"/>
@@ -14,17 +14,15 @@
 	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
 	<xpp:expand value-of="q37.project"/>
 	<About>
-		<Program>meldigq</Program>
-		<Software>MelDigQ</Software>
-		<UUID>effd756a-a901-46e8-939f-3f2a5e7986b0</UUID>
+		<Program>mscfdraftq</Program>
+		<Software>mscfdraftq</Software>
+		<!-- Do not modify below value (used by the 'DVLSetTol' script)! -->
+		<UUID>046a0529-1dc1-4c8a-9620-0d1fb2128da1</UUID>
 	</About>
 	<Modules xpp:marker="$">
 		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
-			</Modules>
-			<Modules Group="SCL">
-				<xpp:expand select="SCL"/>
 			</Modules>
 			<Modules Group="MSC">
 				<Module>mscmdd</Module>
@@ -36,24 +34,24 @@
 				<Module>mthitg</Module>
 				<Module>mthrtn</Module>
 			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
 		</Modules>
+		<Module>keyboard</Module>
+		<Module>melody</Module>
+		<Module>midiq</Module>
 		<Module>registry</Module>
 	</Modules>
-	<Files/>
- <RTW>
-  <Dir>meldigq-cli</Dir>
- </RTW>
- <Packing>
-		<WikiFiles>
-			<File Dir="computing/epeios/tools/" WikiOddity="IsHome">meldigq</File>
-			<File Dir="computing/epeios/tools/meldigq/">Manual</File>
-			<File Dir="computing/epeios/">Compilation</File>
-			<File Dir="computing/epeios/tools/">Configuration</File>
-		</WikiFiles>
-	</Packing>
-	<SourceDirs>
-	</SourceDirs>
-	<PreprocessorDefinitions>
-		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
-	</PreprocessorDefinitions>
+	<Libraries>
+	  <Library Target="POSIX">asound</Library>
+	</Libraries>
+  <Files/>
+	<RTW Folder="mscfdraftq-cli">
+	  <!--
+      If '@Parameters'' empty, launching 'help' and 'version' GitHub actions job, but not 'test'.
+      If '@Parameters' absent no ''help', 'version' nor 'test' GitHub action jobs launched.
+    -->
+		<CI Parameters=""/>
+	</RTW>
 </Project>

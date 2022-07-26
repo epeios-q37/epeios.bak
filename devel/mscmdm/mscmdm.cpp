@@ -92,7 +92,7 @@ const char *mscmdm::GetMIDIEventLabel( eMidiEvent Event )
 	return MIDIEventLabels_[Event];
 }
 
-size__ mscmdm::GetMIDIEventDataSize( eMidiEvent Event )
+sSize mscmdm::GetMIDIEventDataSize( eMidiEvent Event )
 {
 	if ( Event >= mid_amount )
 		qRFwk();
@@ -123,10 +123,10 @@ const char *mscmdm::GetEventLabel( const sEventHeader &Event )
 		return GetMIDIEventLabel( Event.MIDIEvent.Event );
 		break;
 	case etSystem:
-		return GetSystemEventLabel( Event.SystemEvent.Event ); 
+		return GetSystemEventLabel( Event.SystemEvent.Event );
 		break;
 	case etMeta:
-		return GetMetaEventLabel( Event.MetaEvent.Event ); 
+		return GetMetaEventLabel( Event.MetaEvent.Event );
 		break;
 	default:
 		qRFwk();
@@ -147,13 +147,13 @@ const char *mscmdm::GetEventTypeLabel( eEventType Type )
 
 /*
 0000 1111 1110 0000 0000 0000 0000 0000
-   0    f    e    0    0    0    0    0 
+   0    f    e    0    0    0    0    0
 0000 0000 0001 1111 1100 0000 0000 0000
-   0    0    1    f    c    0    0    0 
+   0    0    1    f    c    0    0    0
 0000 0000 0000 0000 0011 1111 1000 0000
-   0    0    0    0    3    f    8    0 
+   0    0    0    0    3    f    8    0
 0000 0000 0000 0000 0000 0000 0111 1111
-   0    0    0    0    0    0    7    f 
+   0    0    0    0    0    0    7    f
 */
 
 #define BASE_MASK	0x7f
@@ -166,7 +166,7 @@ const char *mscmdm::GetEventTypeLabel( eEventType Type )
 #define MASK2	( BASE_MASK << POS2 )
 #define MASK3	( BASE_MASK << POS3 )
 
-static inline bso::sU8 GetDeltaTimeTicksSize_( delta_time_ticks__ Ticks )
+static inline bso::sU8 GetDeltaTimeTicksSize_( sDeltaTimeTicks Ticks )
 {
 	bso::sU8 Size = 1;
 
@@ -183,8 +183,8 @@ static inline bso::sU8 GetDeltaTimeTicksSize_( delta_time_ticks__ Ticks )
 }
 
 void mscmdm::Encode(
-	delta_time_ticks__ Ticks,
-	data_ &Data )
+	sDeltaTimeTicks Ticks,
+	dData &Data )
 {
 	if ( Ticks & MASK1 )
 		Data.Append( (bso::char__)( 0x80 | ( ( Ticks >> POS1 ) & BASE_MASK ) ) );
@@ -463,12 +463,12 @@ bso::bool__ mscmdm::GetEventHeader(
 
 void mscmdm::PrintMIDIEvent(
 	const sExtendedMidiEvent &Event,
-	const data_ &Data,
+	const dData &Data,
 	txf::text_oflow__ &OFlow )
 {
 	OFlow << GetMIDIEventLabel( Event.Event )<< ( Event.Tied ? "*" : "" ) << " (" << Event.ChannelID << ") :";
 
-	
+
 	sdr::row__ Row = Data.First();
 
 	while ( Row != qNIL ) {
@@ -480,7 +480,7 @@ void mscmdm::PrintMIDIEvent(
 
 void mscmdm::PrintSystemEvent(
 	const sExtendedSystemEvent &Event,
-	const data_ &Data,
+	const dData &Data,
 	txf::text_oflow__ &OFlow )
 {
 	OFlow << GetSystemEventLabel( Event.Event );
@@ -493,7 +493,7 @@ void mscmdm::PrintSystemEvent(
 
 void mscmdm::PrintMetaEvent(
 	const sExtendedMetaEvent &Event,
-	const data_ &Data,
+	const dData &Data,
 	txf::text_oflow__ &OFlow )
 {
 	OFlow << GetMetaEventLabel( Event.Event ) << " : ";
@@ -540,7 +540,7 @@ void mscmdm::PrintMetaEvent(
 
 void mscmdm::PrintEvent(
 	const sEventHeader &EventHeader,
-	const data_ &Data,
+	const dData &Data,
 	txf::text_oflow__ &OFlow )
 {
 	OFlow << EventHeader.DeltaTimeTicks << txf::tab;
@@ -561,12 +561,12 @@ void mscmdm::PrintEvent(
 	}
 }
 
-static size__ GetMIDIEventData_(
+static sSize GetMIDIEventData_(
 	const sExtendedMidiEvent &Event,
 	flw::iflow__ &IFlow,
-	data_ &Data )
+	dData &Data )
 {
-	size__ Counter = GetMIDIEventDataSize( Event.Event );
+	sSize Counter = GetMIDIEventDataSize( Event.Event );
 
 	while ( Counter-- )
 		Data.Append( IFlow.Get() );
@@ -574,19 +574,19 @@ static size__ GetMIDIEventData_(
 	return GetMIDIEventDataSize( Event.Event );
 }
 
-static size__ GetSystemEventData_(
+static sSize GetSystemEventData_(
 	const sExtendedSystemEvent &Event,
 	flw::iflow__ &IFlow,
 	eExtraneous Extraneous,
-	data_ &Data )
+	dData &Data )
 {
-	size__ Size = 0;
+	sSize Size = 0;
 
 	if ( Event.Event == sysExclusive ) {
 		switch( Extraneous ) {
 		case xTicks:
 		{
-			delta_time_ticks__ Counter  = GetDeltaTimeTicks( IFlow ) - 1;
+			sDeltaTimeTicks Counter  = GetDeltaTimeTicks( IFlow ) - 1;
 			Size = Counter;
 
 			while ( Counter-- )
@@ -612,12 +612,12 @@ static size__ GetSystemEventData_(
 	return Size;
 }
 
-static size__ GetMetaEventData_(
+static sSize GetMetaEventData_(
 	const sExtendedMetaEvent &Event,
 	flw::iflow__ &IFlow,
-	data_ &Data )
+	dData &Data )
 {
-	size__ Counter = Event.Size;
+	sSize Counter = Event.Size;
 
 	while ( Counter-- )
 		Data.Append( IFlow.Get() );
@@ -625,11 +625,11 @@ static size__ GetMetaEventData_(
 	return Event.Size;
 }
 
-size__ mscmdm::GetEventData(
+sSize mscmdm::GetEventData(
 	const sEventHeader &EventHeader,
 	flw::iflow__ &IFlow,
 	eExtraneous Extraneous,
-	data_ &Data )
+	dData &Data )
 {
 	switch( EventHeader.EventType ) {
 	case etMIDI:
@@ -663,9 +663,9 @@ void Write_(
 }
 
 void mscmdm::PutEventHeader(
-	delta_time_ticks__ Ticks,
-	event_id__ Id,
-	const data_ &RawData,
+	sDeltaTimeTicks Ticks,
+	sEventId Id,
+	const dData &RawData,
 	bso::bool__ Tied,
 	eExtraneous Extraneous,
 	flw::oflow__ &OFlow )
@@ -698,12 +698,12 @@ qRE
 }
 
 void mscmdm::PutEvent(
-	const event_ &Event,
+	const dEvent &Event,
 	eExtraneous Extraneous,
 	flw::oflow__ &OFlow )
 {
 qRH
-	data RawData;
+	wData RawData;
 qRB
 	RawData.Init();
 
@@ -728,11 +728,11 @@ qRE
 
 
 void mscmdm::PutEvents(
-	const events_ &Events,
+	const dEvents &Events,
 	eExtraneous Extraneous,
 	flw::oflow__ &OFlow )
 {
-	erow__ Row = Events.First();
+	sRow Row = Events.First();
 
 	while ( Row != qNIL ) {
 		PutEvent( Events( Row ), Extraneous, OFlow );
@@ -741,10 +741,10 @@ void mscmdm::PutEvents(
 	}
 }
 
-static mscmdf::track_chunk_size__ GetSize_( const events_ &Events )
+static mscmdf::track_chunk_size__ GetSize_( const dEvents &Events )
 {
 	mscmdf::track_chunk_size__ Size = 0;
-	erow__ Row = Events.First();
+	sRow Row = Events.First();
 
 	while ( Row != qNIL ) {
 		Size+= GetDeltaTimeTicksSize_( Events( Row ).EventHeader().DeltaTimeTicks );
@@ -775,11 +775,11 @@ static mscmdf::track_chunk_size__ GetSize_( const events_ &Events )
 
 
 void mscmdm::PutTrack(
-	const track_ &Track,
+	const dTrack &Track,
 	eExtraneous Extraneous,
 	flw::oflow__ &OFlow )
 {
-	erow__ Row = qNIL;
+	sRow Row = qNIL;
 	bso::bool__ LastEventIsEndOfTrack = false;
 	mscmdf::track_chunk_size__ Size = GetSize_( Track );
 
@@ -816,9 +816,9 @@ void mscmdm::PutTracks(
 
 static inline bso::bool__ EventIsDoublon_(
 	const sEventHeader &TargetEvent,
-	const data_ &TargetData,
+	const dData &TargetData,
 	const sEventHeader &SourceEvent,
-	const data_ &SourceData )
+	const dData &SourceData )
 {
 	if ( TargetEvent.EventType != etMIDI )
 		return false;
@@ -838,36 +838,35 @@ bso::bool__ mscmdm::Parse(
 {
 	bso::bool__ Success = true;
 qRH
-	data Data, PreviousData;
+	wData Data, PreviousData;
 	sEventHeader EventHeader, PreviousEventHeader;
 	bso::bool__ Continue = true;
 qRB
 	PreviousData.Init();
 
 	while ( Continue ) {
-		if ( !( Success = GetEventHeader( IFlow, Extraneous, EventHeader ) ) )
-			qRReturn;
+		if ( (Success = GetEventHeader( IFlow, Extraneous, EventHeader )) ) {
+			Data.Init();
+			GetEventData( EventHeader, IFlow, Extraneous, Data );
 
-		Data.Init();
-		GetEventData( EventHeader, IFlow, Extraneous, Data );
+			if ( Flags & fmSkipDoublons )
+				if ( EventIsDoublon_( EventHeader, Data, PreviousEventHeader, PreviousData ) )
+					continue;
 
-		if ( Flags & fmSkipDoublons )
-			if ( EventIsDoublon_( EventHeader, Data, PreviousEventHeader, PreviousData ) )
-				continue;
+			if ( Flags & fmZeroVelocityBecomesNoteOff )
+				if ( (EventHeader.EventType == etMIDI)
+					 && (EventHeader.MIDIEvent.Event == midNoteOn)
+					 && (Data( 2 ) == 0) ) { // Velocity
+					EventHeader.Id = (EventHeader.Id & 0xf) | 0x90;
+					EventHeader.MIDIEvent.Event = midNoteOff;
+					EventHeader.MIDIEvent.Tied = false;
+				}
 
-		if ( Flags & fmZeroVelocityBecomesNoteOff )
-			if ( ( EventHeader.EventType == etMIDI )
-				  && ( EventHeader.MIDIEvent.Event == midNoteOn )
-				  && ( Data( 2 ) == 0 ) ) { // Velocity
-				EventHeader.Id = ( EventHeader.Id & 0xf ) | 0x90;
-				EventHeader.MIDIEvent.Event = midNoteOff;
-				EventHeader.MIDIEvent.Tied = false;
-			}
+			Continue = Callback.HandleEvent( EventHeader, Data, Extraneous );
 
-		Continue = Callback.HandleEvent( EventHeader, Data, Extraneous );
-
-		PreviousEventHeader = EventHeader;
-		PreviousData = Data;
+			PreviousEventHeader = EventHeader;
+			PreviousData = Data;
+		}
 	}
 qRR
 qRT

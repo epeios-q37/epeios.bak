@@ -12,10 +12,14 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-07-26
+- MSCMDD: reoganization of devices fetching;
+- MSCMDM:
+
 ## 2022-07-24
 - STSFSM:
   - introducing `sParser::Reset()`,
-  - [stdz];
+  - [stdz]; [stdz];
 
 ## 2022-07-23
 - MSCMDD: coding;
@@ -30,7 +34,7 @@
 
 ## 2022-06-24
 - RND, TOL: moving random generation stuff from *TOL* to newly creaeted module *RND*;
-- TOL renaming `CPq` in `qCP`;
+- TOL: renaming `CPq` in `qCP`;
 
 ## 2022-06-23
 - THT: `rBlocker::Wait()` and `rBlocker::Unblock()` return now a boolean, to facilate debugging;

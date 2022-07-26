@@ -87,9 +87,9 @@ namespace mscmdd {
 			err::handling__ ErrorHandling )
 		{
 			reset();
-			
+
 			UINT Device = 0;
-			
+
 			Id.ToNumber(Device);
 
 			if ( midiOutOpen( &Handle_, Device, 0, 0, CALLBACK_NULL) != MMSYSERR_NOERROR ) {
@@ -635,15 +635,13 @@ namespace mscmdd {
 		}
 	};
 
+  bso::sSize GetMidiInDeviceNames(
+    str::dStrings &Ids,
+    str::dStrings &Names);
 
-	typedef str::string_	dName;
-	typedef str::string		wName;
-
-	typedef crt::qCRATEdl( dName ) dNames;
-	qW( Names );
-
-	bso::sUInt GetMidiInDeviceNames( dNames &Names );
-	bso::sUInt GetMidiOutDeviceNames( dNames &Names );
+	bso::sSize GetMidiOutDeviceNames(
+    str::dStrings &Ids,
+    str::dStrings &Names);
 
 	qENUM( Way ) {
 		wIn,
@@ -654,14 +652,15 @@ namespace mscmdd {
 
 	inline bso::sUInt GetMidiDeviceNames(
 		eWay Way,
-		dNames &Names )
+		str::dStrings &Ids,
+		str::dStrings &Names)
 	{
 		switch ( Way ) {
 		case wIn:
-			return GetMidiInDeviceNames( Names );
+			return GetMidiInDeviceNames(Ids, Names);
 			break;
 		case wOut:
-			return GetMidiOutDeviceNames( Names );
+			return GetMidiOutDeviceNames(Ids, Names);
 			break;
 		default:
 			qRFwk();

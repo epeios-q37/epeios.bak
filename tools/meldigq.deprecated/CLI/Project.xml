@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://q37.info/ns/xpp/">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc/>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2017</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="Tool"/>
+	</xpp:bloc>
+	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
+	<xpp:expand value-of="q37.project"/>
+	<About>
+		<Program>meldigq</Program>
+		<Software>MelDigQ</Software>
+		<UUID>effd756a-a901-46e8-939f-3f2a5e7986b0</UUID>
+	</About>
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+			<Modules Group="MSC">
+				<Module>mscmdd</Module>
+				<Module>mscmdf</Module>
+				<Module>mscmdm</Module>
+				<Module>mscmld</Module>
+			</Modules>
+			<Modules Group="MTH">
+				<Module>mthitg</Module>
+				<Module>mthrtn</Module>
+			</Modules>
+		</Modules>
+		<Module>registry</Module>
+	</Modules>
+	<Files/>
+	<Libraries>
+	  <Library Target="POSIX">asound</Library>
+	</Libraries>
+ <RTW>
+  <Dir>meldigq-cli</Dir>
+ </RTW>
+ <Packing>
+		<WikiFiles>
+			<File Dir="computing/epeios/tools/" WikiOddity="IsHome">meldigq</File>
+			<File Dir="computing/epeios/tools/meldigq/">Manual</File>
+			<File Dir="computing/epeios/">Compilation</File>
+			<File Dir="computing/epeios/tools/">Configuration</File>
+		</WikiFiles>
+	</Packing>
+	<SourceDirs>
+	</SourceDirs>
+	<PreprocessorDefinitions>
+		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
+	</PreprocessorDefinitions>
+</Project>

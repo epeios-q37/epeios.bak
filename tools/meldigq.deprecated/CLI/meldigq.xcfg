@@ -75,9 +75,13 @@
 		</Definitions>
 		<Locale>
 			<xpp:expand select="CLI_Locale"/>
-			<Translations text="TestCommandDescription">
-				<Translation language="fr">Commande de test.</Translation>
-				<Translation language="en">Test command.</Translation>
+			<Translations text="LaunchCommandDescription">
+				<Translation language="fr">Affiche les dispositifs MIDI disponibles.</Translation>
+				<Translation language="en">Displays available MIDI devices.</Translation>
+			</Translations>
+			<Translations text="InfoCommandDescription">
+				<Translation language="fr">Affiche les dispositifs MIDI disponbles</Translation>
+				<Translation language="en">Displays available MIDI devices</Translation>
 			</Translations>
 			<Translations text="TestFlagDescription">
 				<Translation language="fr">fanion de test.</Translation>
@@ -103,7 +107,7 @@
 		<Arguments>
 			<xpp:expand select="CLI_Arguments"/>
 			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-			<Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %TestArgument%"/>
+			<Argument id="Info" Description="InfoCommandDescription" long="info" short="i" Value="Info" Usage=""/>
 			<!-- Fanaux : 'Path', mais pas de 'Value'. -->
 			<Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
 			<!-- Options : 'Path' ET 'Value'. -->
@@ -112,10 +116,8 @@
 			<Argument id="TestArgument" Description="TestArgumentDescription" Path="Test" Label="TestArgumentLabel"/>
 			<!-- Affectations des arguments libres-->
 			<Layouts>
-				<Layout command="Test">
-					<Link index="0" Target="TestArgument"/>
-				</Layout>
-			</Layouts>
+				<Layout command="Info"/>
+ 			</Layouts>
 		</Arguments>
 	</Configuration>
 </Configurations>
