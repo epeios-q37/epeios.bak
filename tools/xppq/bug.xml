@@ -1,0 +1,7 @@
+<Root>
+  <xpp:define name="D">
+    <xpp:bloc>D</xpp:bloc>
+  </xpp:define>
+  <xpp:cdata>a </xpp:cdata>
+  <xpp:expand select="D"/>
+</Root>

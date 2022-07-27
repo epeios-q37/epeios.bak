@@ -14,10 +14,10 @@
 	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
 	<xpp:expand value-of="q37.project"/>
 	<About>
-		<Program>mscfdraftq</Program>
-		<Software>mscfdraftq</Software>
+		<Program>msfgq</Program>
+		<Software>msfgq</Software>
 		<!-- Do not modify below value (used by the 'DVLSetTol' script)! -->
-		<UUID>046a0529-1dc1-4c8a-9620-0d1fb2128da1</UUID>
+		<UUID>eb94642f-7fb0-436a-9241-b8a7c3569a2c</UUID>
 	</About>
 	<Modules xpp:marker="$">
 		<Modules Group="Epeios" Path="$EpeiosPath$/">
@@ -40,14 +40,15 @@
 		</Modules>
 		<Module>keyboard</Module>
 		<Module>melody</Module>
+		<Module>messages</Module>
 		<Module>midiq</Module>
 		<Module>registry</Module>
 	</Modules>
 	<Libraries>
 	  <Library Target="POSIX">asound</Library>
 	</Libraries>
-  <Files/>
-	<RTW Folder="mscfdraftq-cli">
+	<Files/>
+	<RTW Folder="msfgq-cli">
 	  <!--
       If '@Parameters'' empty, launching 'help' and 'version' GitHub actions job, but not 'test'.
       If '@Parameters' absent no ''help', 'version' nor 'test' GitHub action jobs launched.

@@ -1,4 +1,4 @@
-# Notes concernant l'utilitaire *mscfdraftq* (toutes variantes)
+# Notes concernant l'utilitaire *msfgq* (toutes variantes)
 
 ## Divers
 

@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Configurations xmlns:xpp="http://q37.info/ns/xpp/">
-  <Configuration target="mscfdraftq">
+  <Configuration target="msfgq">
     <xpp:set name="q37.xpp" env-var="Q37_XPP"/>
     <xpp:expand value-of="q37.xpp"/>
     <xpp:expand href="../../../CLI.xcfg"/>
     <Parameters>
       <Language>en</Language>
-			<Command>Draft</Command>
+      <Command>Draft</Command>
+      <!-- Default command -->
 			<Devices>
 				<In Policy="Id">hw:2,0</In>
 				<Out Policy="Id">hw:2,0</Out>
@@ -23,15 +24,64 @@
 				<Value>60</Value>
 			</Tempo>
 			<TargetFilename>Essai.xmld</TargetFilename>
+			<xpp:bloc>
+				<xpp:bloc><!--- Some macro for the script-->
+					<xpp:define name="xslt">
+						<xpp:bloc>/usr/bin/xsltproc</xpp:bloc>
+					</xpp:define>
+					<xpp:define  name="xmld2ly">
+						<xpp:bloc>/home/csimon/hg/epeios/stable/xmld2ly.xsl</xpp:bloc>
+					</xpp:define>
+					<xpp:define name="cat">
+						<xpp:bloc>
+							<xpp:expand select="BinDir"/>
+							<xpp:bloc>cat</xpp:bloc>
+						</xpp:bloc>
+					</xpp:define>
+					<xpp:define name="Lilypond">
+						<xpp:bloc>/usr/bin/lilypond -dbackend=eps -dno-gs-load-fonts -dinclude-eps-fonts --png </xpp:bloc>
+					</xpp:define>
+					<xpp:define name="putclip">
+						<xpp:bloc>
+							<xpp:expand select="BinDir"/>
+							<xpp:bloc>putclip</xpp:bloc>
+						</xpp:bloc>
+					</xpp:define>
+					<xpp:define name="Script">
+						<xpp:bloc>
+							<xpp:expand select="sabcmd"/>
+							<xpp:bloc> "file://</xpp:bloc>
+							<xpp:expand select="xmld2ly"/>
+							<xpp:bloc>" "%1" test.ly &amp;</xpp:bloc>
+							<xpp:expand select="cat"/>
+							<xpp:bloc> test.ly | </xpp:bloc>
+							<xpp:expand select="putclip"/>
+							<xpp:bloc> &amp; </xpp:bloc>
+							<xpp:expand select="Lilypond"/>
+							<xpp:bloc> test.ly &amp; start test.png</xpp:bloc>
+						</xpp:bloc>
+					</xpp:define>
+				</xpp:bloc>
+      </xpp:bloc>
+      <!--Script>while read x ; do echo $x ; done</Script-->
+      <Script>
+        <xpp:bloc>echo;</xpp:bloc>
+        <xpp:expand select="xslt"/>
+        <xpp:bloc> "</xpp:bloc>
+        <xpp:expand select="xmld2ly"/>
+        <xpp:bloc>" - &gt;test.ly;</xpp:bloc>
+        <xpp:expand select="Lilypond"/>
+        <xpp:bloc> test.ly &amp; viewnior test.png</xpp:bloc>
+      </Script>
     </Parameters>
     <Definitions>
     </Definitions>
     <Locale>
       <xpp:expand select="CLI_Locale"/>
       <!-- Commands -->
-      <Translations text="TestCommandDescription">
-        <Translation language="fr">Commande de test.</Translation>
-        <Translation language="en">Test command.</Translation>
+      <Translations text="InfoCommandDescription">
+        <Translation language="fr">Affiche ldes dispositifs MIDI disponibles</Translation>
+        <Translation language="en">Displays the available MIDI devices</Translation>
       </Translations>
       <!-- Flags -->
       <Translations text="TestFlagDescription">
@@ -62,7 +112,7 @@
     <Arguments>
       <xpp:expand select="CLI_Arguments"/>
       <!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-      <Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %TestArgument%"/>
+      <Argument id="InfoCommand" Description="InfoCommandDescription" long="info" Value="Info" Usage=""/>
       <!-- Fanaux : 'Path', mais pas de 'Value'. -->
       <Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
       <!-- Options : 'Path' ET 'Value'. -->
@@ -71,6 +121,7 @@
       <Argument id="TestArgument" Description="TestArgumentDescription" Path="Test" Label="TestArgumentLabel"/>
       <!-- Affectations des arguments libres-->
       <Layouts>
+        <Layout command="Info"/>
         <Layout command="Test">
           <Link index="0" Target="TestArgument"/>
         </Layout>

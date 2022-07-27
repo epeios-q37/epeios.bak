@@ -14,12 +14,12 @@
 
 ## 2022-07-26
 - MSCMDD: reoganization of devices fetching;
-- MSCMDM:
+- MSCMDM: [stdz];
 
 ## 2022-07-24
 - STSFSM:
   - introducing `sParser::Reset()`,
-  - [stdz]; [stdz];
+  - [stdz];
 
 ## 2022-07-23
 - MSCMDD: coding;
