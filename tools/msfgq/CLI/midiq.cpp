@@ -145,6 +145,8 @@ qRB;
 					}else
 						Shared.Melody->Append( Note );
 
+          melody::PrintSignature(cio::COut);
+          cio::COut << ": " << txf::commit;
 					Print(*Shared.Melody, Shared.Row, cio::COut);
 					mtx::Unlock( Shared.Mutex );
 				}

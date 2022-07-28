@@ -27,6 +27,8 @@ namespace melody {
   using mscmld::sRow;
   using mscmld::dMelody;
   using mscmld::wMelody;
+  using mscmld::sSignatureTime;
+  using mscmld::sSignatureKey;
   using mscmld::sSignature;
   using mscmld::sNote;
   using mscmld::sPitch;
@@ -54,6 +56,8 @@ namespace melody {
   mscmld::sPitch GetPitch(
     bso::sU8 Absolute,
     mscmld::sSignatureKey Key);
+
+  void PrintSignature(txf::sWFlow &Flow);
 
   void Print(
     const sNote &Note,

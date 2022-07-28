@@ -346,6 +346,7 @@ qRFB;
       break;
     case 'p':
 			melody::Play(Melody, Tempo, *Shared.OFlow);
+			COut << txf::nl;
       break;
     case 's':
 			Save_(Melody);
@@ -397,6 +398,8 @@ qRFB;
       break;
 		}
 
+		melody::PrintSignature(COut);
+		COut << ": ";
 		melody::Print(Melody, Shared.Row, cio::COut);
 	}
 qRR;

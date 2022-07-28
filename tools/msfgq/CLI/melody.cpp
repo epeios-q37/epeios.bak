@@ -275,6 +275,39 @@ sPitch melody::GetPitch(
 	return sPitch( GetOctave_( Absolute ), GetName_( Absolute, Key ), GetAccidental_( Absolute, Key ) );
 }
 
+namespace {
+  bso::sBool PrintSignaturekey_(
+    const sSignatureKey &Signature,
+    txf::sWFlow &Flow)
+  {
+    if ( Signature < 0 )
+      Flow << (bso::sUInt)-Signature << "♭";
+    else if ( Signature > 0 )
+      Flow << (bso::sUInt)Signature << "♯";
+    else
+      return false;
+
+    return true;
+  }
+
+  void PrintSignatureTime_(
+    const sSignatureTime &Signature,
+    txf::sWFlow &Flow)
+  {
+    Flow << (bso::sUInt)Signature.Numerator() << '/' << (bso::sUInt)Signature.Denominator();
+  }
+}
+
+void melody::PrintSignature(txf::sWFlow &Flow)
+{
+  const melody::sSignature Signature = GetSignature();
+
+  if ( PrintSignaturekey_(Signature.Key, Flow) )
+    Flow << ' ';
+
+  PrintSignatureTime_(Signature.Time, Flow);
+}
+
 static void Print_(
 	const sPitch &Pitch,
 	txf::text_oflow__ &Flow )
@@ -285,10 +318,10 @@ static void Print_(
 	case paNatural:
 		break;
 	case paSharp:
-		Flow << '#';
+		Flow << "♯";
 		break;
 	case paFlat:
-		Flow << 'b';
+		Flow << "♭";
 		break;
 	default:
 		qRGnr();

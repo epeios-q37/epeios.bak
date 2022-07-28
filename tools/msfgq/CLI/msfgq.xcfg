@@ -14,10 +14,10 @@
 			</Devices>
 			<Signature>
 				<Time>
-					<Numerator>7</Numerator>
+					<Numerator>3</Numerator>
 					<Denominator>4</Denominator>
 				</Time>
-				<Key>0</Key>
+				<Key>-3</Key>
 			</Signature>
 			<Tempo>
 				<Unit>3</Unit>
@@ -71,7 +71,7 @@
         <xpp:expand select="xmld2ly"/>
         <xpp:bloc>" - &gt;test.ly;</xpp:bloc>
         <xpp:expand select="Lilypond"/>
-        <xpp:bloc> test.ly &amp; viewnior test.png</xpp:bloc>
+        <xpp:bloc> test.ly; xdg-open ./test.png</xpp:bloc>
       </Script>
     </Parameters>
     <Definitions>
