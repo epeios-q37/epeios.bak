@@ -61,6 +61,133 @@ namespace flw {
 	using fdr::byte__;
 	using fdr::size__;
 
+	typedef bso::sU8 sBase;
+
+	template <typename type> struct sULimit {
+  private:
+    type Value_;
+  public:
+    sULimit(type Value)
+    {
+      Value_ = Value;
+    }
+    type Value(void) const
+    {
+      return Value_;
+    }
+    template <typename subtype> sULimit(sULimit<subtype> Limit)
+    {
+      Value_ = Limit.Value();
+    }
+	};
+
+	template <typename type> struct sSLimits {
+  private:
+    type
+      Upper_,
+      Lower_;
+  public:
+    sSLimits(type Limit)
+    {
+      Upper_ = Limit;
+      Lower_ = -Limit;
+    }
+    sSLimits(
+      type Upper,
+      type Lower)
+    {
+      Upper_ = Upper;
+      Lower = Lower_;
+    }
+    type Upper(void) const
+    {
+      return Upper_;
+    }
+    type Lower(void) const
+    {
+      return Lower_;
+    }
+    template <typename subtype> sSLimits(sSLimits<subtype> Limits)
+    {
+      Upper_ = Limits.Upper();
+      Lower_ = Limits.Lower_();
+    }
+	};
+
+	E_CDEF( char, HexadecimalMarker, '#' );
+
+	long long unsigned UConversion_(
+		class iflow__ &Flow,
+		sBase Base,
+		long long unsigned Limit,
+		bso::sBool *IsError); // Set to 'true' if != NULL and an error occurs.
+                          // If == NULL and error, throws an exception.
+                          // If != NULL and true, returns immediately.
+  // NOTA: even if an error occurs, the returned value can still be of use.
+  // For example, if The flow contains '35/28', it will report an error due to '/',
+  // The flow will be positioned at '/', and the returned value will be '35'.
+
+ 	template <typename type> type UConversion_(
+		class iflow__ &Flow,
+		sBase Base,
+		sULimit<type> Limit,
+		bso::sBool *IsError)
+  {
+    return UConversion_(Flow, Base, Limit.Value(), IsError );
+  }
+
+	template <typename uint> inline bso::sBool UConversion_(
+		class iflow__ &Flow,
+		uint &Number,
+		sBase Base,
+		sULimit<uint> Limit,
+		qRPN)
+		{
+		  bso::sBool IsError = false;
+
+		  Number = UConversion_(Flow, Base, Limit, &IsError);
+
+		  if ( qRPU )
+        if ( IsError )
+          qRFwk();
+
+      return !IsError;
+		}
+
+	long long signed SConversion_(
+		class iflow__ &Flow,
+		sBase Base,
+		long long signed UpperLimit,
+		long long signed LowerLimit,
+		bso::sBool *IsError);
+
+	template <typename sint> sint SConversion_(
+		class iflow__ &Flow,
+		sBase Base,
+		sSLimits<sint> Limits,
+		bso::sBool *IsError)
+  {
+    return SConversion_(Flow, Base, Limits.Upper(), Limits.Lower(), IsError);
+  }
+
+	template <typename sint> inline bso::sBool SConversion_(
+		class iflow__ &Flow,
+		sint &Number,
+		sBase Base,
+		sSLimits<sint> Limits,
+		qRPN)
+		{
+		  bso::sBool IsError = false;
+
+		  Number = SConversion_(Flow, Base, Limits, &IsError);
+
+		  if ( qRPU )
+        if ( IsError )
+          qRFwk();
+
+      return !IsError;
+		}
+
 	//c Base input flow.
 	class iflow__	/* Bien que cette classe ai un destructeur, elle est suffixe par '__', d'une part pour simplifier
 					son utilisation (comme dclaration de paramtre d'une fonction) et, d'autre part,
@@ -77,51 +204,6 @@ namespace flw {
 
 			return *_Driver;
 		}
-# if 0
-		size__ _ReadUpTo(
-			size__ Amount,
-			byte__ *Buffer,
-			size__ Minimum,
-			bso::bool__ Adjust,
-			bso::bool__ &CacheIsEmpty )
-		{
-			return _RawRead( Minimum, Buffer, Amount, Adjust, CacheIsEmpty );
-		}
-		// Place 'Amount' bytes in 'Buffer'.
-		void _Read(
-			size__ Amount,
-			byte__ *Buffer,
-			bso::bool__ Adjust,
-			bso::bool__ &CacheIsEmpty )
-		{
-			if ( _ReadUpTo( Amount, Buffer, Amount, Adjust, CacheIsEmpty ) != Amount )
-				qRFwk();
-		}
-		// Generic read.
-		size__ _LoopingRawRead(
-			size__ Minimum,
-			byte__ *Buffer,
-			size__ Wanted,
-			bso::bool__ Adjust,
-			bso::bool__ &CacheIsEmpty )
-		{
-			size__ PonctualAmount = _D().Read( Wanted, Buffer, Adjust, CacheIsEmpty );
-			size__ CumulativeAmount = PonctualAmount;
-
-			while ( ( PonctualAmount != 0 ) && ( Minimum > CumulativeAmount ) ) {
-				PonctualAmount = _D().Read( Wanted - CumulativeAmount, Buffer + CumulativeAmount, Adjust, CacheIsEmpty );
-				CumulativeAmount += PonctualAmount;
-			}
-
-			return CumulativeAmount;
-		}
-		size__ _RawRead(
-			size__ Minimum,
-			byte__ *Buffer,
-			size__ Wanted,
-			bso::bool__ Adjust,
-			bso::bool__ &CacheIsEmpty );
-# endif
 		byte__ Get_( bso::sBool *IsError )
 		{
 			byte__ C = 0;
@@ -268,6 +350,110 @@ namespace flw {
 		{
 			return IsLocked();
 		}
+# define FLW_UN_( name, type, limit )\
+    type Get##name(\
+			sBase Base = 0,\
+			sULimit<type> Limit = sULimit<type>(limit),\
+			bso::sBool *IsError = NULL)\
+		{\
+			return (type)UConversion_(*this, Base, Limit, IsError);\
+		}\
+    bso::sBool Get##name(\
+      type &Number,\
+			sBase Base = 0,\
+			sULimit<type> Limit = sULimit<type>(limit),\
+			qRPD)\
+		{\
+			return UConversion_(*this, Number, Base, Limit, qRP);\
+		}
+# define FLW_TUN_( type, limit )\
+		bso::sBool GetNumber(\
+      type &Number,\
+      qRPD)\
+		{\
+			return UConversion_<type>(*this, Number, 0, limit, qRP);\
+		}\
+		bso::sBool GetNumber(\
+			type &Number,\
+			sULimit<type> Limit = sULimit<type>(limit),\
+			qRPD)\
+		{\
+			return UConversion_(*this, Number, 0, Limit, qRP);\
+		}\
+		bso::sBool GetNumber(\
+			type &Number,\
+			sBase Base,\
+			sULimit<type> Limit = sULimit<type>(limit),\
+			qRPD)\
+		{\
+			return UConversion_(*this, Number, Base, Limit, qRP);\
+		}
+# define FLW_SN_( name, type, upper_limit, lower_limit )\
+    type Get##name(\
+			sBase Base,\
+			sSLimits<type> Limits = sSLimits<type>(upper_limit, lower_limit),\
+			bso::sBool *IsError = NULL)\
+		{\
+			return (type)SConversion_(*this, Base, Limits, IsError);\
+		}\
+    bso::sBool Get##name(\
+			type &Number,\
+			sBase Base,\
+			sSLimits<type> Limits = sSLimits<type>(upper_limit, lower_limit),\
+			qRPD)\
+		{\
+			return SConversion_(*this, Number, Base, Limits, qRP);\
+		}
+# define FLW_TSN_( type, lower_limit, upper_limit )\
+		void GetNumber(\
+			type &Number,\
+			bso::sBool *IsError = NULL)\
+		{\
+			Number = (type)SConversion_(*this, 0, sSLimits<type>(upper_limit, lower_limit), IsError);\
+		}\
+		bso::sBool GetNumber(\
+			type &Number,\
+			sSLimits<type> Limits = sSLimits<type>(upper_limit, lower_limit),\
+			qRPD)\
+		{\
+			return SConversion_(*this, Number, 0, Limits, qRP);\
+		}\
+		bso::sBool GetNumber(\
+			type &Number,\
+			sBase Base,\
+			sSLimits<type> Limits = sSLimits<type>(upper_limit, lower_limit),\
+			qRPD)\
+		{\
+			return SConversion_(*this, Number, Base, Limits, qRP);\
+		}
+//		FLW_UN_( Row, sdr::row_t__, SDR_ROW_T_MAX )
+		FLW_UN_( UInt, bso::uint__, BSO_UINT_MAX )
+		FLW_SN_( SInt, bso::sint__, BSO_SINT_MAX, BSO_SINT_MIN )
+# ifdef CPE_F_64BITS
+		FLW_UN_( U64, bso::u64__, BSO_U64_MAX )
+		FLW_SN_( S64, bso::s64__, BSO_S64_MAX, BSO_S64_MIN )
+# elif defined( CPE_F_32BITS )
+		FLW_UN_( U64, bso::u64__, BSO_U64_MAX )
+		FLW_SN_( S64, bso::s64__, BSO_S64_MAX, BSO_S64_MIN )
+# else
+#  error
+# endif
+		FLW_UN_( U32, bso::u32__, BSO_U32_MAX )
+		FLW_SN_( S32, bso::s32__, BSO_S32_MAX, BSO_S32_MIN )
+		FLW_UN_( U16, bso::u16__, BSO_U16_MAX )
+		FLW_SN_( S16, bso::s16__, BSO_S16_MAX, BSO_S16_MIN )
+		FLW_UN_( U8, bso::u8__, BSO_U8_MAX )
+		FLW_SN_( S8, bso::s8__, BSO_S8_MAX, BSO_S8_MIN )
+		FLW_TUN_( long long unsigned int, ULLONG_MAX )
+		FLW_TUN_( long unsigned int, ULONG_MAX )
+		FLW_TUN_( unsigned int, UINT_MAX )
+		FLW_TUN_( unsigned short, USHRT_MAX )
+		FLW_TUN_( unsigned char, UCHAR_MAX )
+		FLW_TSN_( long long signed int, LLONG_MIN, LLONG_MAX )
+		FLW_TSN_( long signed int, LONG_MIN, LONG_MAX )
+		FLW_TSN_( signed int , INT_MIN, INT_MAX )
+		FLW_TSN_( signed short, SHRT_MIN, SHRT_MAX )
+		FLW_TSN_( signed char, SCHAR_MIN, SCHAR_MAX )
 		friend class _standalone_iflow__;
 		friend class ioflow__;
 	};

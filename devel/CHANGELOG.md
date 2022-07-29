@@ -12,6 +12,10 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-07-29
+- FDR: adding `rRDriver::Skip(…)`;
+- RGSTRY: [adpt];
+
 ## 2022-07-26
 - MSCMDD: reoganization of devices fetching;
 - MSCMDM: [stdz];

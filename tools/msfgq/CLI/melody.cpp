@@ -20,6 +20,7 @@
 
 #include "melody.h"
 
+#include "messages.h"
 #include "midiq.h"
 #include "registry.h"
 
@@ -36,20 +37,30 @@ static inline sSignatureKey GetSignatureKey_( void )
 	return sclm::MGetS8( registry::parameter::signature::Key, -7, 7 );
 }
 
-inline bso::sU8 GetRawSignatureTimeNumerator( void )
-{
-	return sclm::MGetU8( registry::parameter::signature::time::Numerator, 12 );
-}
-
-inline bso::sU8 GetRawSignatureTimeDenominator( void )
-{
-	return sclm::MGetU8( registry::parameter::signature::time::Denominator, 8 );
-}
-
 static inline sSignatureTime GetSignatureTime_( void )
 {
-	return sSignatureTime( GetRawSignatureTimeNumerator(), GetRawSignatureTimeDenominator() );
+  sSignatureTime Signature;
+qRH;
+  str::wString RawTime;
+  flx::sStringRFlow Flow;
+  bso::sU8 Num = 0, Den = 4;
+qRB;
+  RawTime.Init();
+  sclm::MGetValue(registry::parameter::signature::Time, RawTime);
+
+  Flow.Init(RawTime);
+
+  if ( !Flow.GetNumber(Num, qRPU) )
+    if ( ( Flow.Get() != '/' ) || !Flow.GetNumber(Den, qRPU ) )
+      sclm::ReportAndAbort(ML(BadTimeSignature));
+
+  Signature = sSignatureTime(Num, Den);
+qRR;
+qRT;
+qRE;
+  return Signature;
 }
+
 
 sSignature melody::GetSignature( void )
 {
@@ -71,27 +82,27 @@ qRB;
 	Missing = sclm::OGetValue( registry::parameter::tempo::Unit, RawUnit );
 
 	if ( !Missing ) {
-        Base = RawUnit.ToU8( &Error, str::b10, 9 );
+    Base = RawUnit.ToU8( &Error, 10, 9 );
 
-        if ( Error != qNIL ) {
-            if ( RawUnit( Error ) != '.' )
+    if ( Error != qNIL ) {
+        if ( RawUnit( Error ) != '.' )
+            sclr::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::tempo::Unit );
+
+        Row = Error;
+
+        while ( (Row != qNIL) && (RawUnit( Row ) == '.') ) {
+            Modifier++;
+            Row = RawUnit.Next( Row );
+
+            if ( Modifier >= 4 )
                 sclr::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::tempo::Unit );
 
-            Row = Error;
-
-            while ( (Row != qNIL) && (RawUnit( Row ) == '.') ) {
-                Modifier++;
-                Row = RawUnit.Next( Row );
-
-                if ( Modifier >= 4 )
-                    sclr::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::tempo::Unit );
-
-                if ( Row != qNIL )
-                    sclr::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::tempo::Unit );
-            }
+            if ( Row != qNIL )
+                sclr::ReportBadOrNoValueForEntryErrorAndAbort( registry::parameter::tempo::Unit );
         }
+    }
 
-        Unit = sDuration ( Base, Modifier );
+    Unit = sDuration ( Base, Modifier );
 	}
 qRR;
 qRT;

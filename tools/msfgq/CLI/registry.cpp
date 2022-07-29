@@ -42,14 +42,7 @@ namespace {
 }
 
 rEntry registry::parameter::signature::Key( "Key", Signature_ );
-
-namespace {
-	rEntry Time_( "Time", Signature_ );
-}
-
-
-rEntry registry::parameter::signature::time::Numerator( "Numerator", Time_ );
-rEntry registry::parameter::signature::time::Denominator( "Denominator", Time_ );
+rEntry registry::parameter::signature::Time( "Time", Signature_ );
 
 namespace {
 	rEntry Tempo_( "Tempo", sclr::Parameters );

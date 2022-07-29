@@ -39,6 +39,10 @@
 		<Translation language="fr">Script exécuté</Translation>
 		<Translation language="en">Script excuted</Translation>
 	</Translations>
+	<Translations text="BadTimeSignature">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
 	<!--
 	<Translations text="">
 		<Translation language="fr"></Translation>

@@ -27,6 +27,121 @@
 
 using namespace flw;
 
+namespace {
+  static bso::u8__ Convert_(bso::char__ C)
+  {
+    if ( isdigit(C) )
+      return C - '0';
+    else
+      return tolower(C)- 'a' + 10;
+  }
+}
+
+unsigned long long flw::UConversion_(
+  iflow__ &Flow,
+	sBase Base,
+	unsigned long long Limit,
+  bso::sBool *IsError)
+{
+	uint Result = 0;
+	bso::u8__ C;
+	uint OtherLimit = 0;
+
+	if ( ( IsError != NULL ) && *IsError )
+    return 0;
+
+	if ( Base == 0 ) {
+		if ( !Flow.EndOfFlow() && ( Flow.Get() == HexadecimalMarker ) )
+			Base = 16;
+		else
+			Base = 10;
+  } else if ( Base == 1 )
+    qRFwk();
+
+  if ( Flow.EndOfFlow() ) {
+    if ( IsError != NULL ) {
+      *IsError = true;
+      return 0;
+    } else
+      qRFwk();
+  }
+
+	OtherLimit = Limit / Base;
+
+  while( !Flow.EndOfFlow() ) {
+    C = Convert_(Flow.View());
+
+    if ( ( C >= Base ) || ( Result > OtherLimit ) ) {
+      if ( IsError != NULL ) {
+        *IsError = true;
+        return Result;
+      } else
+        qRFwk();
+    }
+
+    Result *= Base;
+
+    if ( ( Limit - Result ) < C ) {
+      if ( IsError != NULL ) {
+        *IsError = true;
+        return Result / Base;
+      } else
+        qRFwk();
+    }
+
+    Result += C;
+
+    Flow.Skip();
+  }
+
+	return Result;
+}
+
+signed long long flw::SConversion_(
+  iflow__ &Flow,
+	sBase Base,
+	signed long long PositiveLimit,
+	signed long long NegativeLimit,
+  bso::sBool *IsError)
+{
+	if ( PositiveLimit < 0 )
+		qRFwk();
+
+	if ( NegativeLimit > 0 )
+		qRFwk();
+
+  if ( ( IsError != NULL ) && *IsError )
+    return 0;
+
+  if ( Flow.EndOfFlow() ) {
+    if ( IsError != NULL ) {
+      *IsError = true;
+      return 0;
+    } else
+      qRFwk();
+  }
+
+  if ( strchr("+-", Flow.View() ) == NULL )
+    return (signed long long)UConversion_(Flow, Base, PositiveLimit, IsError);
+  else {
+    switch ( Flow.Get() ) {
+    case '-':
+      return (signed long long)UConversion_(Flow, Base, -NegativeLimit, IsError);
+      break;
+    case '+':
+      return (signed long long)UConversion_(Flow, Base, PositiveLimit, IsError);
+      break;
+    default:
+      qRUnx();
+      break;
+    }
+  }
+
+  qRFwk();
+
+  return 0; // To avoid a warning.
+}
+
 bso::sBool flw::oflow__::_Write(
 	const byte__ *Buffer,
 	size__ Amount,

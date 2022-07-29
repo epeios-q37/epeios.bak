@@ -60,14 +60,6 @@ static inline int toxupper_( int C )
 	return toupper( GetAccentFree_( C ) );
 }
 
-static bso::u8__ Convert_( bso::char__ C )
-{
-	if ( isdigit( C ) )
-		return C - '0';
-	else
-		return tolower( C )- 'a' + 10;
-}
-
 template <class ostream> static void Put_(
 	const string_ &String,
 	ostream &OStream )		// Can be optimized by using a buffer.
@@ -347,6 +339,8 @@ sdr::row__ string_::Search(
 		return Start;
 }
 
+// Moved to 'FLW'
+#if 0
 template <typename uint> static uint GenericUnsignedConversion_(
 	const str::string_ &String,
 	sdr::row__ Begin,
@@ -434,26 +428,124 @@ template <typename sint, typename uint> sint GenericSignedConversion_(
 	else
 		return (sint)GenericUnsignedConversion_( String, Begin, ErrP, Base, PositiveLimit );
 }
+#endif
+
+namespace {
+  namespace {
+    namespace {
+      namespace untemplated_ {
+        bso::sBool Conversion(
+          flw::rRFlow &Flow,
+          unsigned long long int &Number,
+          sBase Base,
+          unsigned long long int Limit,
+          unsigned long long int Dummy,
+          qRPN)
+        {
+          return Flow.GetNumber(Number, Base, Limit, qRP);
+        }
+
+        bso::sBool Conversion(
+          flw::rRFlow &Flow,
+          signed long long int &Number,
+          sBase Base,
+          signed long long int PositiveLimit,
+          signed long long int NegativeLimit,
+          qRPN)
+        {
+          return Flow.GetNumber(Number, Base, PositiveLimit, NegativeLimit, qRP);
+        }
+      }
+
+      template <typename type> bso::sBool FlowConversion_(
+        flw::rRFlow &Flow,
+        type &Number,
+        sBase Base,
+        type PositiveLimit,
+        type NegativeLimit,
+        qRPN)
+      {
+        return untemplated_::Conversion(Flow, Number, Base, PositiveLimit, NegativeLimit, qRP);
+      }
+    }
+
+    template <typename type> sdr::sRow StringConversion_(
+      const str::string_ &String,
+      type &Number,
+      sdr::row__ Begin,
+      sBase Base,
+      type PositiveLimit,
+      type NegativeLimit,
+      qRPN)
+    {
+      flx::sStringRFlow Flow;
+      bso::sBool IsError = false;
+
+      if ( *Begin >= String.Amount() ) {
+        if ( qRPT )
+          qRFwk();
+        else
+          return false;
+      }
+
+      Flow.Init(String);
+      Flow.Skip(*Begin, &IsError);
+
+      if ( IsError )
+        qRUnx();
+
+      if ( FlowConversion_(Flow, Number, Base, PositiveLimit, NegativeLimit, qRP) )
+        return qNIL;
+      else
+        return Flow.AmountRed();
+    }
+  }
+
+  template <typename type> type StringConversion_(
+    const str::string_ &String,
+    sdr::row__ Begin,
+    sdr::row__ *ErrP,
+    sBase Base,
+    type PositiveLimit,
+    type NegativeLimit )
+  {
+    type Result = 0;
+    sdr::sRow ErrorPointer = qNIL;
+
+    if ( ( ErrP != NULL ) && ( *ErrP != qNIL ) )
+      return 0;
+
+    if ( ( ErrorPointer = StringConversion_(String, Result, Begin, Base, PositiveLimit, NegativeLimit, qRPU ) ) != qNIL ) {
+      if ( ErrP != NULL )
+        *ErrP = ErrorPointer;
+      else
+        qRFwk();
+    }
+
+    return Result;
+  }
+}
 
 unsigned long long int str::UConversion(
 	const str::string_ &String,
 	sdr::row__ Begin,
 	sdr::row__ *ErrP,
-	base__ BaseFlag,
-	unsigned long long int Limit )
+	sBase Base,
+	unsigned long long int Limit)
 {
-	return GenericUnsignedConversion_( String, Begin, ErrP, BaseFlag, Limit );
+  return StringConversion_(String, Begin, ErrP, Base, Limit, 0ULL);
 }
 
+
 signed long long int str::SConversion(
-	const class string_ &String,
+	const str::string_ &String,
 	sdr::row__ Begin,
 	sdr::row__ *ErrP,
-	base__ Base,
+	sBase Base,
 	signed long long int PositiveLimit,
-	signed long long int NegativeLimit )
+	signed long long int NegativeLimit)
 {
-	return GenericSignedConversion_<bso::s64__, bso::u64__>( String, Begin, ErrP, Base, PositiveLimit, NegativeLimit );
+  return StringConversion_(String, Begin, ErrP, Base, PositiveLimit, NegativeLimit);
 }
 /*
 uint__ str::_UIntConversion(

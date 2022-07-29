@@ -613,6 +613,24 @@ namespace fdr {
 
 			_Available = _Position = 0;
 		}
+		// To optimize using the internal cache!
+		bso::sBool Skip(fdr::size__ Size = 1)
+		{
+		  bso::sByte Dummy;
+
+		  if ( Size == 0 )
+        return true;
+
+      while ( Size-- ) {
+        if ( EndOfFlow() )
+          return false;
+
+        if ( Read(1, &Dummy, bBlocking) != 1 )
+          qRUnx();
+      }
+
+      return true;
+		}
 	};
 
 	template <int cache_size = FDR__DEFAULT_CACHE_SIZE> class iflow_driver___

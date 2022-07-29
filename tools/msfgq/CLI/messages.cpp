@@ -35,6 +35,7 @@ const char *messages::GetLabel( eName Name )
 	C( FileSavingDone );
   C( ExecutingScript );
   C( ScriptExecutionDone );
+  C( BadTimeSignature );
 	default:
 		qRFwk();
 		break;

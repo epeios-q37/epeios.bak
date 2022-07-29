@@ -33,6 +33,7 @@ namespace messages {
     nFileSavingDone,
     nExecutingScript,
     nScriptExecutionDone,
+    nBadTimeSignature,
     n_amount,
     n_Undefined
   };

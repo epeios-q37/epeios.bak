@@ -48,12 +48,9 @@ namespace registry {
 		}
 
 		namespace signature {
-			namespace time {
-				extern rEntry
-					Numerator,
-					Denominator;
-			}
-			extern rEntry Key;
+			extern rEntry
+        Key,
+        Time;
 		}
 
 		namespace tempo {
