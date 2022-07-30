@@ -796,7 +796,7 @@ qRB
 	RawValue.Init();
 
 	if ( ( Present = BGetValue(Registry, Entry, RawValue, qRP) ) ) {
-		RawValue.ToNumber( Value, Limit, &Error );
+ 		RawValue.ToNumber( Value, str::sULimit<t>(Limit), &Error );
 
 		if ( Error != qNIL )
 			sclr::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
@@ -823,7 +823,7 @@ qRB
 	RawValue.Init();
 
 	if ( ( Present = BGetValue(Registry, Entry, RawValue, qRP) ) ) {
-		RawValue.ToNumber( Value, UpperLimit, LowerLimit, &Error );
+		RawValue.ToNumber( Value, str::sSLimits<t>(UpperLimit, LowerLimit), &Error );
 
 		if ( Error != qNIL )
 			sclr::ReportBadOrNoValueForEntryErrorAndAbort( Entry );

@@ -124,7 +124,7 @@ namespace lst {
 		}
 		void plug(
 			sHook &Hook,
-			sdr::bRow FirstUnused )
+			sdr::tRow FirstUnused )
 		{
 			Locations.plug( Hook, FirstUnused );
 		}
@@ -370,7 +370,7 @@ namespace lst {
 		{
 			sdr::row_t__ Position = qNIL;
 
-			if ( Nombre_ == t ) 
+			if ( Nombre_ == t )
 			{
 				if ( ErrorHandling == err::hThrowException )
 					qRFwk();

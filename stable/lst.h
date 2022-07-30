@@ -124,7 +124,7 @@ namespace lst {
 		}
 		void plug(
 			sHook &Hook,
-			sdr::bRow FirstUnused )
+			sdr::tRow FirstUnused )
 		{
 			Locations.plug( Hook, FirstUnused );
 		}
@@ -314,7 +314,7 @@ namespace lst {
 #define E_LIST	E_LISTt( sdr::row__ )
 #define E_LIST_	E_LISTt_( sdr::row__ )
 
-#ifndef FLM_COMPILATION_
+#ifndef FLM__COMPILATION
 	using idsq::rRH;
 
 	using idsq::rHF;
@@ -370,7 +370,7 @@ namespace lst {
 		{
 			sdr::row_t__ Position = qNIL;
 
-			if ( Nombre_ == t ) 
+			if ( Nombre_ == t )
 			{
 				if ( ErrorHandling == err::hThrowException )
 					qRFwk();

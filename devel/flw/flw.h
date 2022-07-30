@@ -61,13 +61,27 @@ namespace flw {
 	using fdr::byte__;
 	using fdr::size__;
 
-	typedef bso::sU8 sBase;
+	typedef bso::sU8 tBase;
+
+	struct sBase {
+  private:
+    tBase Value_;
+  public:
+    explicit sBase(tBase Value = 0) // '0' means that the base will be deduced.
+    {
+      Value_ = Value;
+    }
+    tBase Value(void) const
+    {
+      return Value_;
+    }
+	};
 
 	template <typename type> struct sULimit {
   private:
     type Value_;
   public:
-    sULimit(type Value)
+    explicit sULimit(type Value)
     {
       Value_ = Value;
     }
@@ -87,17 +101,12 @@ namespace flw {
       Upper_,
       Lower_;
   public:
-    sSLimits(type Limit)
-    {
-      Upper_ = Limit;
-      Lower_ = -Limit;
-    }
     sSLimits(
       type Upper,
       type Lower)
     {
       Upper_ = Upper;
-      Lower = Lower_;
+      Lower_ = Lower;
     }
     type Upper(void) const
     {
@@ -110,7 +119,7 @@ namespace flw {
     template <typename subtype> sSLimits(sSLimits<subtype> Limits)
     {
       Upper_ = Limits.Upper();
-      Lower_ = Limits.Lower_();
+      Lower_ = Limits.Lower();
     }
 	};
 
@@ -118,7 +127,7 @@ namespace flw {
 
 	long long unsigned UConversion_(
 		class iflow__ &Flow,
-		sBase Base,
+		tBase Base,
 		long long unsigned Limit,
 		bso::sBool *IsError); // Set to 'true' if != NULL and an error occurs.
                           // If == NULL and error, throws an exception.
@@ -133,7 +142,7 @@ namespace flw {
 		sULimit<type> Limit,
 		bso::sBool *IsError)
   {
-    return UConversion_(Flow, Base, Limit.Value(), IsError );
+    return UConversion_(Flow, Base.Value(), Limit.Value(), IsError );
   }
 
 	template <typename uint> inline bso::sBool UConversion_(
@@ -147,7 +156,7 @@ namespace flw {
 
 		  Number = UConversion_(Flow, Base, Limit, &IsError);
 
-		  if ( qRPU )
+		  if ( qRPT )
         if ( IsError )
           qRFwk();
 
@@ -156,7 +165,7 @@ namespace flw {
 
 	long long signed SConversion_(
 		class iflow__ &Flow,
-		sBase Base,
+		tBase Base,
 		long long signed UpperLimit,
 		long long signed LowerLimit,
 		bso::sBool *IsError);
@@ -167,7 +176,7 @@ namespace flw {
 		sSLimits<sint> Limits,
 		bso::sBool *IsError)
   {
-    return SConversion_(Flow, Base, Limits.Upper(), Limits.Lower(), IsError);
+    return SConversion_(Flow, Base.Value(), Limits.Upper(), Limits.Lower(), IsError);
   }
 
 	template <typename sint> inline bso::sBool SConversion_(
@@ -176,17 +185,17 @@ namespace flw {
 		sBase Base,
 		sSLimits<sint> Limits,
 		qRPN)
-		{
-		  bso::sBool IsError = false;
+  {
+    bso::sBool IsError = false;
 
-		  Number = SConversion_(Flow, Base, Limits, &IsError);
+    Number = SConversion_(Flow, Base, Limits, &IsError);
 
-		  if ( qRPU )
-        if ( IsError )
-          qRFwk();
+    if ( qRPT )
+      if ( IsError )
+        qRFwk();
 
-      return !IsError;
-		}
+    return !IsError;
+  }
 
 	//c Base input flow.
 	class iflow__	/* Bien que cette classe ai un destructeur, elle est suffixe par '__', d'une part pour simplifier
@@ -352,7 +361,7 @@ namespace flw {
 		}
 # define FLW_UN_( name, type, limit )\
     type Get##name(\
-			sBase Base = 0,\
+			sBase Base = sBase(),\
 			sULimit<type> Limit = sULimit<type>(limit),\
 			bso::sBool *IsError = NULL)\
 		{\
@@ -360,7 +369,7 @@ namespace flw {
 		}\
     bso::sBool Get##name(\
       type &Number,\
-			sBase Base = 0,\
+			sBase Base = sBase(),\
 			sULimit<type> Limit = sULimit<type>(limit),\
 			qRPD)\
 		{\
@@ -371,14 +380,14 @@ namespace flw {
       type &Number,\
       qRPD)\
 		{\
-			return UConversion_<type>(*this, Number, 0, limit, qRP);\
+			return UConversion_<type>(*this, Number, sBase(), sULimit<type>(limit), qRP);\
 		}\
 		bso::sBool GetNumber(\
 			type &Number,\
 			sULimit<type> Limit = sULimit<type>(limit),\
 			qRPD)\
 		{\
-			return UConversion_(*this, Number, 0, Limit, qRP);\
+			return UConversion_(*this, Number, sBase(), Limit, qRP);\
 		}\
 		bso::sBool GetNumber(\
 			type &Number,\
@@ -409,14 +418,14 @@ namespace flw {
 			type &Number,\
 			bso::sBool *IsError = NULL)\
 		{\
-			Number = (type)SConversion_(*this, 0, sSLimits<type>(upper_limit, lower_limit), IsError);\
+			Number = (type)SConversion_(*this, sBase(), sSLimits<type>(upper_limit, lower_limit), IsError);\
 		}\
 		bso::sBool GetNumber(\
 			type &Number,\
 			sSLimits<type> Limits = sSLimits<type>(upper_limit, lower_limit),\
 			qRPD)\
 		{\
-			return SConversion_(*this, Number, 0, Limits, qRP);\
+			return SConversion_(*this, Number, sBase(), Limits, qRP);\
 		}\
 		bso::sBool GetNumber(\
 			type &Number,\

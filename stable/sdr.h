@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// Storage DRiver 
+// Storage DRiver
 
 #ifndef SDR_INC_
 # define SDR_INC_
@@ -41,11 +41,11 @@ namespace sdr {
 	using bso::sByte;
 	using bso::sSize;
 
-	typedef bso::sSize bRow;
+	typedef bso::sSize tRow;
 
-	typedef bRow	row_t__;
+	typedef tRow	row_t__;
 
-	E_TMIMIC__( bRow, sRow );
+	E_TMIMIC__( tRow, sRow );
 
 	class storage_driver__;
 
@@ -160,7 +160,7 @@ namespace sdr {
 namespace tol {
 	inline void reset(
 		bso::sBool,
-		sdr::bRow &Row )
+		sdr::tRow &Row )
 	{
 		Row = qNIL;
 	}

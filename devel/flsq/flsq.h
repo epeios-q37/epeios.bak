@@ -690,7 +690,7 @@ namespace flsq {
 		}
 		//v Recall 'Amount' at position 'Position' and put them in 'Buffer'.
 		void OSDRecall(
-			sdr::bRow Position,
+			sdr::tRow Position,
 			sdr::sSize Amount,
 			sdr::sByte *Buffer )
     {
@@ -700,7 +700,7 @@ namespace flsq {
 		void OSDStore(
 			const sdr::sByte *Buffer,
 			sdr::sSize Amount,
-			sdr::bRow Position )
+			sdr::tRow Position )
 		{
 		  return S_.Write_(Buffer, Amount, Position);
 		}

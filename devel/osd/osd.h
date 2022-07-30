@@ -52,7 +52,7 @@ namespace osd {
 		}
 		//v Recall 'Amount' at position 'Position' and put them in 'Buffer'.
 		virtual void SDRRecall(
-			sdr::bRow Position,
+			sdr::tRow Position,
 			sdr::sSize Amount,
 			sdr::sByte *Buffer ) override
     {
@@ -62,7 +62,7 @@ namespace osd {
 		virtual void SDRStore(
 			const sdr::sByte *Buffer,
 			sdr::sSize Amount,
-			sdr::bRow Position ) override
+			sdr::tRow Position ) override
 		{
 		  return S_().OSDStore(Buffer, Amount, Position + offset);
 		}

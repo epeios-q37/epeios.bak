@@ -82,7 +82,7 @@ qRB;
 	Missing = sclm::OGetValue( registry::parameter::tempo::Unit, RawUnit );
 
 	if ( !Missing ) {
-    Base = RawUnit.ToU8( &Error, 10, 9 );
+    Base = RawUnit.ToU8(&Error, str::sBase(10), str::sULimit<bso::sU8>(9));
 
     if ( Error != qNIL ) {
         if ( RawUnit( Error ) != '.' )

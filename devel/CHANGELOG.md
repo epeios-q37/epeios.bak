@@ -12,9 +12,16 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-07-30
+- FLSQ, LST, OSD, RGSTRY, SCLR, TOL: [adpt];
+- FLW, STR: [cont];
+- SDR: [stdz];
+
 ## 2022-07-29
 - FDR: adding `rRDriver::Skip(…)`;
+- FLW: implmentinf number conversion;
 - RGSTRY: [adpt];
+- STR: moving number conversion to 'FDR' and using it;
 
 ## 2022-07-26
 - MSCMDD: reoganization of devices fetching;

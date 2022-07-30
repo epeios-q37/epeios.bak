@@ -39,7 +39,7 @@ namespace {
 
 unsigned long long flw::UConversion_(
   iflow__ &Flow,
-	sBase Base,
+	tBase Base,
 	unsigned long long Limit,
   bso::sBool *IsError)
 {
@@ -51,9 +51,10 @@ unsigned long long flw::UConversion_(
     return 0;
 
 	if ( Base == 0 ) {
-		if ( !Flow.EndOfFlow() && ( Flow.Get() == HexadecimalMarker ) )
+		if ( !Flow.EndOfFlow() && ( Flow.View() == HexadecimalMarker ) ) {
+      Flow.Skip();
 			Base = 16;
-		else
+		} else
 			Base = 10;
   } else if ( Base == 1 )
     qRFwk();
@@ -99,7 +100,7 @@ unsigned long long flw::UConversion_(
 
 signed long long flw::SConversion_(
   iflow__ &Flow,
-	sBase Base,
+	tBase Base,
 	signed long long PositiveLimit,
 	signed long long NegativeLimit,
   bso::sBool *IsError)
@@ -126,7 +127,7 @@ signed long long flw::SConversion_(
   else {
     switch ( Flow.Get() ) {
     case '-':
-      return (signed long long)UConversion_(Flow, Base, -NegativeLimit, IsError);
+      return -(signed long long)UConversion_(Flow, Base, -NegativeLimit, IsError);
       break;
     case '+':
       return (signed long long)UConversion_(Flow, Base, PositiveLimit, IsError);

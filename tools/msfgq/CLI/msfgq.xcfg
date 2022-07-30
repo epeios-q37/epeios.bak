@@ -13,10 +13,7 @@
 				<Out Policy="Id">hw:2,0</Out>
 			</Devices>
 			<Signature>
-				<Time>
-					<Numerator>3</Numerator>
-					<Denominator>4</Denominator>
-				</Time>
+				<Time>3/4</Time>
 				<Key>-3</Key>
 			</Signature>
 			<Tempo>
