@@ -12,6 +12,9 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-07-31
+- FLSQ, FLW, MSCMDD, OSD: fixing *VC++* issues;
+
 ## 2022-07-30
 - FLSQ, LST, OSD, RGSTRY, SCLR, TOL: [adpt];
 - FLW, STR: [cont];
@@ -19,7 +22,7 @@
 
 ## 2022-07-29
 - FDR: adding `rRDriver::Skip(…)`;
-- FLW: implmentinf number conversion;
+- FLW: implmenting number conversion;
 - RGSTRY: [adpt];
 - STR: moving number conversion to 'FDR' and using it;
 
