@@ -43,9 +43,9 @@ unsigned long long flw::UConversion_(
 	unsigned long long Limit,
   bso::sBool *IsError)
 {
-	uint Result = 0;
+	unsigned long long Result = 0;
 	bso::u8__ C;
-	uint OtherLimit = 0;
+	unsigned long long OtherLimit = 0;
 
 	if ( ( IsError != NULL ) && *IsError )
     return 0;

@@ -118,7 +118,7 @@ qRH;
 qRB;
 	tol::Init(Ids, Names);
 
-	mscmdd::GetMidiOutDeviceNames(Ids, Names);
+	mscmdd::GetMidiInDeviceNames(Ids, Names);
 
 	DisplayMidiDevices(Ids, Names, ML( NoAvailableMIDIInDevices ), ML( AvailableMIDIInDevices ));
 qRR;

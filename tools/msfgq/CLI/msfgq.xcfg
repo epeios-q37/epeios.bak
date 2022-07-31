@@ -6,12 +6,23 @@
     <xpp:expand href="../../../CLI.xcfg"/>
     <Parameters>
       <Language>en</Language>
-      <Command>Draft</Command>
+      <Command>Info</Command>
       <!-- Default command -->
 			<Devices>
-				<In Policy="Id">hw:2,0</In>
-				<Out Policy="Id">hw:2,0</Out>
-			</Devices>
+        <xpp:define name="LinuxDevices">
+          <xpp:bloc>
+            <In Policy="Id">hw:2,0</In>
+            <Out Policy="Id">hw:2,0</Out>
+          </xpp:bloc>
+        </xpp:define>
+        <xpp:define name="WindowsDevices">
+          <xpp:bloc>
+            <In Policy="Id">0</In>
+            <Out Policy="Id">0</Out>
+          </xpp:bloc>
+        </xpp:define>
+        <xpp:expand select="WindowsDevices"/>
+      </Devices>
 			<Signature>
 				<Time>3/4</Time>
 				<Key>-3</Key>

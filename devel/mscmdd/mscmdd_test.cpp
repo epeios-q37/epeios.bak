@@ -39,17 +39,36 @@ qRT
 qRE
 }
 
+namespace {
+	void ErrFinal_( void )
+	{
+		if ( ERRType != err::t_Abort ) {
+			err::buffer__ Buffer;
+
+			const char *Message = err::Message( Buffer );
+
+			ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
+
+			cio::COut << txf::commit;
+			cio::CErr << txf::nl << txf::tab << "{ " << Message << " }" << txf::nl << txf::commit;
+		} else
+			ERRRst();
+	}
+}
+
 int main( int argc, char *argv[] )
 {
 	int ExitValue = EXIT_SUCCESS;
 qRFH
 qRFB
-	COut << "Test of library " << MSCMDD_NAME << ' ' << __DATE__" "__TIME__"\n";
+	cio::Initialize( cio::t_Default );
+
+	COut << "Test of library " << MSCMDD_NAME << ' ' << __DATE__ " " __TIME__ "\n";
 
 	Generic( argc, argv );
 qRFR
 	ExitValue = EXIT_FAILURE;
 qRFT
-qRFE
+qRFE( ErrFinal_() )
 	return ExitValue;
 }

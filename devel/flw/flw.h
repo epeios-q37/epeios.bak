@@ -136,13 +136,13 @@ namespace flw {
   // For example, if The flow contains '35/28', it will report an error due to '/',
   // The flow will be positioned at '/', and the returned value will be '35'.
 
- 	template <typename type> type UConversion_(
+ 	template <typename uint> uint UConversion_(
 		class iflow__ &Flow,
 		sBase Base,
-		sULimit<type> Limit,
+		sULimit<uint> Limit,
 		bso::sBool *IsError)
   {
-    return UConversion_(Flow, Base.Value(), Limit.Value(), IsError );
+    return (uint)UConversion_(Flow, Base.Value(), Limit.Value(), IsError );
   }
 
 	template <typename uint> inline bso::sBool UConversion_(
@@ -176,7 +176,7 @@ namespace flw {
 		sSLimits<sint> Limits,
 		bso::sBool *IsError)
   {
-    return SConversion_(Flow, Base.Value(), Limits.Upper(), Limits.Lower(), IsError);
+    return (sint)SConversion_(Flow, Base.Value(), Limits.Upper(), Limits.Lower(), IsError);
   }
 
 	template <typename sint> inline bso::sBool SConversion_(

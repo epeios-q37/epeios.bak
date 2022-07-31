@@ -686,7 +686,16 @@ namespace flsq {
     }
     sdr::sSize OSDSize( void ) const
 		{
-		  return S_.FileSize();
+#ifdef CPE_F_32BITS
+      fil::sSize Size = S_.FileSize();
+
+      if ( Size > SDR_SIZE_MAX )
+        qRFwk();
+
+      return (sdr::sSize)Size;
+#else
+      return S_.FileSize();
+#endif
 		}
 		//v Recall 'Amount' at position 'Position' and put them in 'Buffer'.
 		void OSDRecall(

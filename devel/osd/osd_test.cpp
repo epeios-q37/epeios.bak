@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "flw.h"
+#include "osd.h"
 
 #include "err.h"
 #include "cio.h"
@@ -63,7 +63,7 @@ qRFH
 qRFB
 	cio::Initialize( cio::t_Default );
 
-	COut << "Test of library " << FLW_NAME << ' ' << __DATE__ " " __TIME__ "\n";
+	COut << "Test of library " << OSD_NAME << ' ' << __DATE__ " " __TIME__ "\n";
 
 	Generic( argc, argv );
 qRFR

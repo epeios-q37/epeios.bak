@@ -20,16 +20,17 @@
 
 #include "keyboard.h"
 
-using namespace keyboard;
+# include "stsfsm.h"
 
 #ifdef CPE_S_WIN
 # include <conio.h>
 #elif defined( CPE_S_POSIX )
 # include <termios.h>
-# include "stsfsm.h"
 #else
 # error "Unhandled operating system!"
 #endif
+
+using namespace keyboard;
 
 namespace {
 #ifdef CPE_S_WIN

@@ -202,11 +202,15 @@ fdr::size__ mscmdd::rIn::Read(
 }
 
 bso::bool__ mscmdd::rIn::Init(
-	int Device,
+	const str::dString &Id,
 	err::handling__ ErrHandling )
 {
 	bso::u8__ Amount = sizeof( _Header ) / sizeof( *_Header );
 	reset();
+
+  int Device = 0;
+
+  Id.ToNumber(Device);
 
 	// '_Data' n'est pas initialis, mais ce n'est pas grave, car ne sera ps utilis tant qu'un 'Start' n'aura pas t lanc.
 	if ( midiInOpen( &_Handle, Device, (DWORD)MidiInProc_, (DWORD)&_Data, CALLBACK_FUNCTION ) != MMSYSERR_NOERROR ) {
@@ -407,19 +411,24 @@ bso::sSize mscmdd::GetMidiInDeviceNames(
 qRH
 	MIDIINCAPS InCaps;
 	bso::u32__ Counter = 0;
-	wName Name;
-qRB
+  str::wString Name, Id;
+  bso::pInteger Buffer;
+  qRB
 	Count =  midiInGetNumDevs();
 
 	while ( Counter < Count ) {
-		midiInGetDevCaps( Counter++, &InCaps, sizeof( InCaps ) );
+		midiInGetDevCaps( Counter, &InCaps, sizeof( InCaps ) );
 
-		Name.Init();
+    tol::Init(Name, Id);
 
-		Convert_( InCaps.szPname, Name );
-
+    Convert_( InCaps.szPname, Name );
 		Names.Append( Name );
-	}
+
+    Id.Init(bso::Convert(Counter, Buffer));
+    Ids.Append(Id);
+
+    Counter++;
+  }
 qRR
 qRT
 qRE
@@ -438,18 +447,23 @@ bso::sSize mscmdd::GetMidiOutDeviceNames(
 qRH
 	MIDIOUTCAPS OutCaps;
 	bso::u32__ Counter = 0;
-	wName Name;
+	str::wString Name, Id;
+  bso::pInteger Buffer;
 qRB
 	Count =  midiOutGetNumDevs();
 
 	while ( Counter < Count ) {
-		midiOutGetDevCaps( Counter++, &OutCaps, sizeof( OutCaps ) );
+		midiOutGetDevCaps( Counter, &OutCaps, sizeof( OutCaps ) );
 
-		Name.Init();
+    tol::Init(Name, Id);
 
 		Convert_( OutCaps.szPname, Name );
-
 		Names.Append( Name );
+
+    Id.Init(bso::Convert(Counter, Buffer));
+    Ids.Append(Id);
+
+    Counter++;
 	}
 qRR
 qRT
