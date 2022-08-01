@@ -24,3 +24,5 @@ Pour lancer le serveur : `fluidsynth --server --audio-driver=alsa -o audio.alsa
 `sudo modprobe snd-virmidi midi_devs=1`
 
 `aconnect 24 128`
+
+Sous *Windows*, on peut également utiliser *VMPK* en conjonction avec *loopMIDI*. `chcp 65001` pour basculer la console en *UTF-8*, et utilisation d'e la'une police adaptée.

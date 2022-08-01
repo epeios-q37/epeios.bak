@@ -12,6 +12,9 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-08-01
+- MSCMDM: fixing 64 bits issues;
+
 ## 2022-07-31
 - FLSQ, FLW, MSCMDD, OSD: fixing *VC++* issues;
 
