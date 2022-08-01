@@ -110,7 +110,7 @@ namespace mscmdd {
 
 			midiHdr.lpData = (LPSTR)Buffer;
 
-			midiHdr.dwBufferLength = Maximum;
+			midiHdr.dwBufferLength = Maximum > 4294967295 ? 4294967295 : (DWORD)Maximum;
 
 			midiHdr.dwFlags = 0;
 

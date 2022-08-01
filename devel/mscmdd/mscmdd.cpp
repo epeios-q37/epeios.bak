@@ -25,10 +25,6 @@ using namespace mscmdd;
 
 #include "mscmdm.h"
 
-#ifdef MSCMDD__ALSA
-
-#endif
-
 #ifdef MSCMDD__WINDOWS
 static void Fill_(
 	const char *Buffer,
@@ -45,7 +41,7 @@ static void Fill_(
 		mtx::Lock( Data.Full );	// On attend tant que 'Data.Buffer' est plein.
 		mtx::Unlock( Data.Full );
 
-		mtx::Lock( Data.Access ) ;
+		mtx::Lock( Data.Access );
 
 		AwareAmount = Emptyness_( Data );
 
@@ -72,9 +68,9 @@ static void Fill_(
 static void CALLBACK MidiInProc_(
   HMIDIIN hMidiIn,
   UINT wMsg,
-  DWORD dwInstance,
-  DWORD dwParam1,
-  DWORD dwParam2 )
+  DWORD_PTR dwInstance,
+  DWORD_PTR dwParam1,
+  DWORD_PTR dwParam2 )
 {
 qRH
 	rData_ &Data = *(rData_ *)dwInstance;
@@ -213,7 +209,7 @@ bso::bool__ mscmdd::rIn::Init(
   Id.ToNumber(Device);
 
 	// '_Data' n'est pas initialis, mais ce n'est pas grave, car ne sera ps utilis tant qu'un 'Start' n'aura pas t lanc.
-	if ( midiInOpen( &_Handle, Device, (DWORD)MidiInProc_, (DWORD)&_Data, CALLBACK_FUNCTION ) != MMSYSERR_NOERROR ) {
+	if ( midiInOpen( &_Handle, Device, (DWORD_PTR)MidiInProc_, (DWORD_PTR)&_Data, CALLBACK_FUNCTION ) != MMSYSERR_NOERROR ) {
 		if ( ErrHandling != err::hUserDefined )
 			qRFwk();
 		else

@@ -120,11 +120,11 @@ namespace {
 }
 #endif
 
-bso::sUInt keyboard::GetCode(void)
+int keyboard::GetCode(void)
 {
-  bso::sUInt KeyCode = getch_();
+  int KeyCode = getch_();
 #ifdef CPE_S_WIN
-  if (KeyCode == 9)
+  if (KeyCode == 8)
     KeyCode = cBack;
   else if ( ( KeyCode == 0 ) || ( KeyCode == 224 ) ) {
     const char *P = strchr(SubCodes_, getch_());
@@ -132,7 +132,7 @@ bso::sUInt keyboard::GetCode(void)
     if ( P == NULL )
       KeyCode = 0;
     else
-      KeyCode = P - SubCodes_ + c_Marker;
+      KeyCode = (int)(P - SubCodes_) + c_Marker;
   }
 #elif defined(CPE_S_POSIX)
   if ( KeyCode == 127 )

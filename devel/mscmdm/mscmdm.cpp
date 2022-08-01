@@ -166,36 +166,60 @@ const char *mscmdm::GetEventTypeLabel( eEventType Type )
 #define MASK2	( BASE_MASK << POS2 )
 #define MASK3	( BASE_MASK << POS3 )
 
-static inline bso::sU8 GetDeltaTimeTicksSize_( sDeltaTimeTicks Ticks )
+static inline bso::sU32 MIDITestAndConvert_(bso::sUHuge Value)
 {
-	bso::sU8 Size = 1;
+  if ( Value > ( MASK1 | MASK2 | MASK3 ) )
+    qRFwk();
 
-	if ( Ticks & MASK1 )
-		Size++;
-
-	if ( Ticks & MASK2 )
-		Size++;
-
-	if ( Ticks & MASK3 )
-		Size++;
-
-	return Size;
+  return (bso::sU32)Value;
 }
 
-void mscmdm::Encode(
-	sDeltaTimeTicks Ticks,
+namespace {
+  inline bso::sU8 RawGetMidiSize_(bso::sU32 Value)
+  {
+    bso::sU8 Size = 1;
+
+    if ( Value & MASK1 )
+      Size++;
+
+    if ( Value & MASK2 )
+      Size++;
+
+    if ( Value & MASK3 )
+      Size++;
+
+    return Size;
+  }
+}
+
+static inline bso::sU8 GetMIDISize_( bso::sUHuge Value )
+{
+  return RawGetMidiSize_(MIDITestAndConvert_(Value));
+}
+
+namespace {
+  inline void RawMIDIEncode_(
+    bso::sU32 Value,
+    dData &Data)
+  {
+    if ( Value & MASK1 )
+      Data.Append(( bso::char__ )( 0x80 | ( ( Value >> POS1 ) & BASE_MASK ) ));
+
+    if ( Value & MASK2 )
+      Data.Append(( bso::char__ )( 0x80 | ( ( Value >> POS2 ) & BASE_MASK ) ));
+
+    if ( Value & MASK3 )
+      Data.Append(( bso::char__ )( 0x80 | ( ( Value >> POS3 ) & BASE_MASK ) ));
+
+    Data.Append(( bso::char__ )( Value & BASE_MASK ));
+  }
+}
+
+void mscmdm::MIDIEncode(
+	bso::sUHuge Value,
 	dData &Data )
 {
-	if ( Ticks & MASK1 )
-		Data.Append( (bso::char__)( 0x80 | ( ( Ticks >> POS1 ) & BASE_MASK ) ) );
-
-	if ( Ticks & MASK2 )
-		Data.Append( (bso::char__)( 0x80 | ( ( Ticks >> POS2 ) & BASE_MASK ) ) );
-
-	if ( Ticks & MASK3 )
-		Data.Append( (bso::char__)( 0x80 | ( ( Ticks >> POS3 ) & BASE_MASK ) ) );
-
-	Data.Append( (bso::char__)( Ticks & BASE_MASK ) );
+  return RawMIDIEncode_(MIDITestAndConvert_(Value), Data);
 }
 
 eMidiEvent mscmdm::DetermineMIDIEvent( flw::sByte Datum )
@@ -680,7 +704,7 @@ qRB
 		break;
 	case xTicks:
 		EncodedTicks.Init();
-		Encode( Ticks, EncodedTicks );
+		MIDIEncode( Ticks, EncodedTicks );
 		Write_( EncodedTicks, OFlow );
 		break;
 	default:
@@ -710,10 +734,10 @@ qRB
 	if ( Event.EventHeader().EventType == etMeta ) {
 		RawData.Append( Event.EventHeader().MetaEvent.Id );
 
-		Encode( Event.Data.Amount(), RawData );
+		MIDIEncode( Event.Data.Amount(), RawData );
 		RawData.Append( Event.Data );
 	} else if ( ( Event.EventHeader().EventType == etSystem ) && ( Event.EventHeader().SystemEvent.Event == sysExclusive ) ) {
-		Encode( Event.Data.Amount() + 1, RawData );
+		MIDIEncode( Event.Data.Amount() + 1, RawData );
 		RawData.Append( Event.Data );
 		RawData.Append( '\xf7' );
 	} else {
@@ -747,7 +771,7 @@ static mscmdf::track_chunk_size__ GetSize_( const dEvents &Events )
 	sRow Row = Events.First();
 
 	while ( Row != qNIL ) {
-		Size+= GetDeltaTimeTicksSize_( Events( Row ).EventHeader().DeltaTimeTicks );
+		Size+= GetMIDISize_( Events( Row ).EventHeader().DeltaTimeTicks );
 
 		switch( Events().EventHeader().EventType ) {
 		case etMIDI:
@@ -755,17 +779,17 @@ static mscmdf::track_chunk_size__ GetSize_( const dEvents &Events )
 				Size += 1;
 			break;
 		case etSystem:
-			Size += 2 + GetDeltaTimeTicksSize_( Events().Data.Amount() );
+			Size += 2 + GetMIDISize_( Events().Data.Amount() );
 			break;
 		case etMeta:
-			Size += 2 + GetDeltaTimeTicksSize_( Events().Data.Amount() );
+			Size += 2 + GetMIDISize_( Events().Data.Amount() );
 			break;
 		default:
 			qRFwk();
 			break;
 		}
 
-		Size += Events().Data.Amount();
+		Size += MIDITestAndConvert_(Events().Data.Amount());
 
 		Row = Events.Next( Row );
 	}

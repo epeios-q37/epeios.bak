@@ -585,8 +585,8 @@ namespace mscmdm {
 		return  ( DeltaTimeTicks << 7 ) | Datum;
 	}
 
-	void Encode(
-		sDeltaTimeTicks Ticks,
+	void MIDIEncode(
+		bso::sUHuge Value,
 		dData &Data );
 
 	inline void GetText(

@@ -39,7 +39,7 @@ namespace keyboard {
     cPageDown
   };
 
-  bso::sUInt GetCode(void);
+  int GetCode(void);
 }
 
 #endif
