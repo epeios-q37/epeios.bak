@@ -6,7 +6,7 @@
     <xpp:expand href="../../../CLI.xcfg"/>
     <Parameters>
       <Language>en</Language>
-      <Command>Info</Command>
+      <Command>Draft</Command>
       <!-- Default command -->
 			<Devices>
         <xpp:define name="LinuxDevices">

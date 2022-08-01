@@ -27,7 +27,8 @@ namespace keyboard {
   enum eCode
   {
     cBack = 256,
-    cUp,
+    c_Marker,
+    cUp = c_Marker,
     cDown,
     cRight,
     cLeft,

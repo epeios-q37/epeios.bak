@@ -54,6 +54,13 @@ namespace {
 # error
 #endif
 }
+
+#ifdef CPE_S_WIN
+namespace {
+  const char SubCodes_[] = { 72, 80, 77, 75, 79, 71,83,73, 81, 0 };
+}
+
+#elif defined(CPE_S_POSIX)
 namespace {
   namespace {
     stsfsm::wAutomat Automat_;
@@ -71,7 +78,7 @@ namespace {
       const char PageDown[] = {91, 54, 126, 0};
     }
 
-#define K(name) {c##name, seq_::name}
+# define K(name) {c##name, seq_::name}
 
     struct {
       int Id;
@@ -87,7 +94,7 @@ namespace {
       K(PageUp),
       K(PageDown),
     };
-#undef K
+# undef K
   }
 
   void SetAutomat_(void) {
@@ -111,13 +118,22 @@ namespace {
     Parser_.Reset();
   }
 }
+#endif
 
 bso::sUInt keyboard::GetCode(void)
 {
   bso::sUInt KeyCode = getch_();
-#ifdef CPE_S_WINDOWS
-  if ( KeyCode == 0 || KeyCode == 224 )
-    KeyCode = 256 + getch_();
+#ifdef CPE_S_WIN
+  if (KeyCode == 9)
+    KeyCode = cBack;
+  else if ( ( KeyCode == 0 ) || ( KeyCode == 224 ) ) {
+    const char *P = strchr(SubCodes_, getch_());
+
+    if ( P == NULL )
+      KeyCode = 0;
+    else
+      KeyCode = P - SubCodes_ + c_Marker;
+  }
 #elif defined(CPE_S_POSIX)
   if ( KeyCode == 127 )
     KeyCode = cBack;
@@ -133,12 +149,14 @@ bso::sUInt keyboard::GetCode(void)
 
     Reset_();
   }
-#endif // defined
+#endif
 
   return KeyCode;
 }
 
 qGCTOR(keyboard) {
+#ifdef CPE_S_POSIX
   SetAutomat_();
+#endif
 }
 
