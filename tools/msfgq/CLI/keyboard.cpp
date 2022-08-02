@@ -100,7 +100,7 @@ namespace {
   void SetAutomat_(void) {
     Automat_.Init();
 
-    for ( int i = 0; i < sizeof(Keys_) / sizeof(Keys_[0] ); i++)
+    for ( unsigned int i = 0; i < sizeof(Keys_) / sizeof(Keys_[0] ); i++)
       stsfsm::Add(Keys_[i].Tag, Keys_[i].Id, Automat_);
 
     Parser_.Init(Automat_);
