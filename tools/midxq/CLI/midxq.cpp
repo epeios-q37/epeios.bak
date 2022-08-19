@@ -24,8 +24,9 @@
 #include "registry.h"
 #include "x2mid.h"
 
-#include "scltool.h"
-#include "sclerror.h"
+#include "sclt.h"
+#include "scle.h"
+#include "sclm.h"
 
 #include "err.h"
 #include "cio.h"
@@ -40,7 +41,7 @@ using cio::CIn;
 
 SCLI_DEF( midxq, NAME_LC, NAME_MC );
 
-const scli::sInfo &scltool::SCLTOOLInfo( void )
+const scli::sInfo &sclt::SCLTInfo( void )
 {
 	return midxq::Info;
 }
@@ -60,8 +61,8 @@ namespace {
 	qRB;
         tol::Init(MIDISource, XMIDTarget);
 
-        sclmisc::MGetValue(registry::parameter::MIDISource, MIDISource);
-        sclmisc::OGetValue(registry::parameter::XMIDTarget, XMIDTarget);
+        sclm::MGetValue(registry::parameter::MIDISource, MIDISource);
+        sclm::OGetValue(registry::parameter::XMIDTarget, XMIDTarget);
 
         mid2x::Convert(MIDISource, XMIDTarget);
 	qRR;
@@ -76,8 +77,8 @@ namespace {
 	qRB;
         tol::Init(XMIDSource, MIDITarget);
 
-        sclmisc::MGetValue(registry::parameter::XMIDSource, XMIDSource);
-        sclmisc::MGetValue(registry::parameter::MIDITarget, MIDITarget);
+        sclm::MGetValue(registry::parameter::XMIDSource, XMIDSource);
+        sclm::MGetValue(registry::parameter::MIDITarget, MIDITarget);
 
         x2mid::Convert(XMIDSource, MIDITarget);
 	qRR;
@@ -90,9 +91,9 @@ namespace {
 	else if ( Command == #name )\
 		name##_()
 
-int scltool::SCLTOOLMain(
+int sclt::SCLTMain(
 	const str::dString &Command,
-	const scltool::fOddities &Oddities )
+	const sclt::fOddities &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;
 qRH;

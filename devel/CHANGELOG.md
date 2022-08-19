@@ -12,6 +12,10 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-08-19
+- STR: introducing `sPos::sPos(sdr::sRow)`;
+- MSCMDX: [adpt];
+
 ## 2022-08-01
 - MSCMDM: fixing 64 bits issues;
 

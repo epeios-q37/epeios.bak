@@ -27,7 +27,7 @@
 #include "txf.h"
 #include "xml.h"
 
-#include "sclmisc.h"
+#include "sclm.h"
 
 namespace {
     void Convert_(
@@ -50,7 +50,7 @@ namespace {
         const fnm::rName &Target )
     {
     qRH
-        sclmisc::rTextWFlowRack Rack;
+        sclm::rTextWFlowRack Rack;
     qRB
         Convert_( RFlow, Rack.Init(Target) );
     qRR
@@ -68,7 +68,7 @@ qRH
 	flf::file_iflow___ IFlow;
 qRB
 	if ( IFlow.Init( Source, err::hUserDefined ) != tol::rSuccess ) {
-        sclmisc::ReportFileOpeningErrorAndAbort(Source);
+        sclm::ReportFileOpeningErrorAndAbort(Source);
 	}
 
 	Convert_( IFlow, Target );

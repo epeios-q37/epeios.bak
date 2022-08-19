@@ -22,7 +22,7 @@
 
 #include "mscmdx.h"
 
-#include "sclmisc.h"
+#include "sclm.h"
 
 #include "xml.h"
 #include "xtf.h"
@@ -35,7 +35,7 @@ namespace {
         xml::status__ Status = xml::s_Undefined;
 
         if ( ( Status = mscmdx::XMIDToMIDI( RFlow, mscmdm::xTicks, WFlow ) ) != xml::sOK )
-            sclmisc::ReportAndAbort("XMIDError", xml::GetLabel( Status ), RFlow.Position().Line, RFlow.Position().Column );
+            sclm::ReportAndAbort("XMIDError", xml::GetLabel( Status ), RFlow.Position().Line, RFlow.Position().Column );
     }
 
     void Convert_(
@@ -43,7 +43,7 @@ namespace {
         const fnm::rName &Target )
     {
     qRH
-        sclmisc::rWFlowRack Rack;
+        sclm::rWFlowRack Rack;
     qRB
         Convert_( RFlow, Rack.Init(Target) );
     qRR
@@ -63,7 +63,7 @@ qRH;
 	xtf::sRFlow TFlow;
 qRB;
 	if ( RFlow.Init( Source, err::hUserDefined ) != tol::rSuccess ) {
-        sclmisc::ReportFileOpeningErrorAndAbort(Source);
+        sclm::ReportFileOpeningErrorAndAbort(Source);
 	}
 
 	TFlow.Init( RFlow, utf::f_Guess );

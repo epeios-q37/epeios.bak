@@ -68,6 +68,10 @@ namespace str {
     {
       Value_ = Value;
     }
+    sPos(sdr::sRow Row)
+    {
+      Value_ = *Row;
+    }
     sdr::tRow Value(void) const
     {
       return Value_;

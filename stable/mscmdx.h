@@ -63,11 +63,11 @@ namespace mscmdx {
 
 	status__ ParseEvent(
 		xml::parser___ &Parser,
-		mscmdm::event_ &Event );
+		mscmdm::dEvent &Event );
 
 	status__ ParseEvents(
 		xml::parser___ &Parser,
-		mscmdm::events_ &Events );
+		mscmdm::dEvents &Events );
 
 }
 

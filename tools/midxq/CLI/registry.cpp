@@ -22,8 +22,8 @@
 
 using namespace registry;
 
-rEntry registry::parameter::MIDISource( "MIDISource", sclrgstry::Parameters );
-rEntry registry::parameter::MIDITarget( "MIDITarget", sclrgstry::Parameters );
-rEntry registry::parameter::XMIDSource( "XMIDSource", sclrgstry::Parameters );
-rEntry registry::parameter::XMIDTarget( "XMIDTarget", sclrgstry::Parameters );
+rEntry registry::parameter::MIDISource( "MIDISource", sclr::Parameters );
+rEntry registry::parameter::MIDITarget( "MIDITarget", sclr::Parameters );
+rEntry registry::parameter::XMIDSource( "XMIDSource", sclr::Parameters );
+rEntry registry::parameter::XMIDTarget( "XMIDTarget", sclr::Parameters );
 

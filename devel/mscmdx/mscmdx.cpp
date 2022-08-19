@@ -51,7 +51,7 @@ static const char *GetHex_( flw::sByte Datum )
 }
 
 static void GetHex_(
-	const mscmdm::data_ &Data,
+	const mscmdm::dData &Data,
 	str::string_ &Result )
 {
 	sdr::sRow Row = Data.First();
@@ -82,7 +82,7 @@ qRH
 	bso::integer_buffer__ Buffer;
 	mscmdf::track_chunk_size__ TrackChunkSize = 0;
 	mscmdm::sEventHeader EventHeader;
-	mscmdm::data Data, EncodedSize;
+	mscmdm::wData Data, EncodedSize;
 	str::string HexBuffer;
 qRB
 	TrackChunkSize = mscmdf::GetTrackChunkSize( IFlow, ErrHandling );
@@ -121,7 +121,7 @@ qRB
 
                 EncodedSize.Init();
 
-                mscmdm::Encode( EventHeader.MetaEvent.Size, EncodedSize );
+                mscmdm::MIDIEncode( EventHeader.MetaEvent.Size, EncodedSize );
 
                 GetHex_( EncodedSize, HexBuffer );
 
@@ -188,24 +188,24 @@ struct callback
 private:
 	mscmdf::sSMFType _SMFType;
 	mscmdf::sDeltaTimeTicks _HeaderChunkDeltaTimeTicks;
-	mscmdm::event_id__ _Id, _MetaId;
+	mscmdm::sEventId _Id, _MetaId;
 	bso::bool__ _TiedEvent;
-	mscmdm::delta_time_ticks__ _EventDeltaTimeTicks;
+	mscmdm::sDeltaTimeTicks _EventDeltaTimeTicks;
 	flw::oflow__ *_OFlow;
-	mscmdm::data _RawData, _MetaData;
-	mscmdm::events _Events;
+	mscmdm::wData _RawData, _MetaData;
+	mscmdm::wEvents _Events;
 	mscmdm::tracks _Tracks;
 	eExtraneous _Extraneous;
 	bso::bool__ _GetData(
 		const str::string_ &Value,
-		mscmdm::data_ &Data )
+		mscmdm::dData &Data )
 	{
 		sdr::sRow Error = qNIL, Row = Value.First();
 
 		while ( Row != qNIL ) {
 			Error = qNIL;
 
-			Data.Append( Value.ToU8( Row, &Error, str::b16 ) );
+			Data.Append(Value.ToU8(Row, &Error, str::sBase(16)));
 
 			if ( Error != qNIL ) {
 				if ( Value( Error ) != ' ' )
@@ -261,11 +261,11 @@ protected:
 				if ( Name == DELTA_TIME_TICKS_ATTRIBUTE )
 					_EventDeltaTimeTicks = Value.ToU32( &Error );
 				else if ( Name == ID_ATTRIBUTE )
-					_Id = Value.ToU8( &Error, str::b16 );
+					_Id = Value.ToU8(&Error, str::sBase(16));
 				else if ( Name == TIED_ATTRIBUTE )
 					_TiedEvent = true;
 				else if ( Name == META_ID_ATTRIBUTE ) {
-					_MetaId = Value.ToU8( &Error, str::b16 );
+					_MetaId = Value.ToU8(&Error, str::sBase(16));
 				} else if ( Name == DATA_ATTRIBUTE )
 					if ( !_GetData( Value, _RawData ) )
 						return false;
@@ -291,7 +291,7 @@ protected:
 			const dump_ &Dump )
 		{
 		qRH
-			mscmdm::event Event;
+			mscmdm::wEvent Event;
 			mscmdm::sEventHeader EventHeader;
 		qRB
 			if ( Name == EVENT_TAG ) {
@@ -394,7 +394,7 @@ qRE
 
 static inline bso::bool__ GetData_(
 	const str::string_ &Value,
-	mscmdm::data_ &Data )
+	mscmdm::dData &Data )
 {
 	sdr::sRow Error = qNIL;
 
@@ -403,7 +403,7 @@ static inline bso::bool__ GetData_(
 	while ( Row != qNIL ) {
 		Error = qNIL;
 
-		Data.Append( Value.ToU8( Row, &Error, str::b16 ) );
+		Data.Append(Value.ToU8(Row, &Error, str::sBase(16)));
 
 		if ( Error != qNIL ) {
 			if ( Value( Error ) != ' ' )
@@ -420,14 +420,14 @@ static inline bso::bool__ GetData_(
 
 status__ mscmdx::ParseEvent(
 	xml::parser___ &Parser,
-	mscmdm::event_ &Event )
+	mscmdm::dEvent &Event )
 {
 	status__ Status = s_Undefined;
 qRH
 	bso::bool__ TiedEvent = false;
-	mscmdm::data RawData, MetaData;
-	mscmdm::delta_time_ticks__ EventDeltaTimeTicks;
-	mscmdm::event_id__ Id, MetaId;
+	mscmdm::wData RawData, MetaData;
+	mscmdm::sDeltaTimeTicks EventDeltaTimeTicks;
+	mscmdm::sEventId Id, MetaId;
 	bso::bool__ InProgress = false;
 qRB
 	RawData.Init();
@@ -455,11 +455,11 @@ qRB
 				if ( Parser.AttributeName() == DELTA_TIME_TICKS_ATTRIBUTE )
 					EventDeltaTimeTicks = Parser.Value().ToU32( &Error );
 				else if ( Parser.AttributeName() == ID_ATTRIBUTE )
-					Id = Parser.Value().ToU8( &Error, str::b16 );
+					Id = Parser.Value().ToU8(&Error,str::sBase(16));
 				else if ( Parser.AttributeName() == TIED_ATTRIBUTE )
 					TiedEvent = true;
 				else if ( Parser.AttributeName() == META_ID_ATTRIBUTE ) {
-					MetaId = Parser.Value().ToU8( &Error, str::b16 );
+					MetaId = Parser.Value().ToU8(&Error, str::sBase(16));
 				} else if ( Parser.AttributeName() == DATA_ATTRIBUTE )
 					if ( !GetData_( Parser.Value(), RawData ) )
 						return Status = sBadDataAttributeValue;
@@ -540,14 +540,14 @@ qRE
 
 status__ mscmdx::ParseEvents(
 	xml::parser___ &Parser,
-	mscmdm::events_ &Events )
+	mscmdm::dEvents &Events )
 {
 	status__ Status = s_Undefined;
 qRH
 	bso::bool__ TiedEvent = false;
-	mscmdm::data RawData, MetaData;
-	mscmdm::delta_time_ticks__ EventDeltaTimeTicks;
-	mscmdm::event_id__ Id, MetaId;
+	mscmdm::wData RawData, MetaData;
+	mscmdm::sDeltaTimeTicks EventDeltaTimeTicks;
+	mscmdm::sEventId Id, MetaId;
 	bso::bool__ InProgress = false;
 qRB
 	RawData.Init();
@@ -575,11 +575,11 @@ qRB
 				if ( Parser.AttributeName() == DELTA_TIME_TICKS_ATTRIBUTE )
 					EventDeltaTimeTicks = Parser.Value().ToU32( &Error );
 				else if ( Parser.AttributeName() == ID_ATTRIBUTE )
-					Id = Parser.Value().ToU8( &Error, str::b16 );
+					Id = Parser.Value().ToU8(&Error, str::sBase(16));
 				else if ( Parser.AttributeName() == TIED_ATTRIBUTE )
 					TiedEvent = true;
 				else if ( Parser.AttributeName() == META_ID_ATTRIBUTE ) {
-					MetaId = Parser.Value().ToU8( &Error, str::b16 );
+					MetaId = Parser.Value().ToU8(&Error, str::sBase(16));
 				} else if ( Parser.AttributeName() == DATA_ATTRIBUTE )
 					if ( !GetData_( Parser.Value(), RawData ) )
 						return Status = sBadDataAttributeValue;
@@ -607,7 +607,7 @@ qRB
 		case xml::tEndTag:
 			if ( Parser.TagName() == EVENT_TAG ) {
 			qRH
-				mscmdm::event Event;
+				mscmdm::wEvent Event;
 				mscmdm::sEventHeader EventHeader;
 			qRB
 				mscmdm::PartiallyFillEventHeader( Id, MetaId, EventHeader );
