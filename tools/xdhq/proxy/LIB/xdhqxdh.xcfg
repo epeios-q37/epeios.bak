@@ -22,7 +22,7 @@
 		</Parameters>
 		<Definitions>
 			<FaaS>
-				<URL>http://%Address%%Service%/xdh.php?_token=%Token%</URL>
+				<URL>https://%Address%%Service%/xdh.php?_token=%Token%</URL>
 				<xpp:define name="CommonNotification">
 					<xpp:cdata>
 ****************************************************************************
