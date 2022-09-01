@@ -22,34 +22,63 @@
 using namespace faasbkds;
 
 namespace {
-  namespace backends_ {
-    mtx::rMutex Access = mtx::Undefined;
-    lstbch::qLBUNCHw(faasbckd::rBackend *, faasbckd::sRow) Backends;
-  }
-}
-
-namespace {
-  qMIMICr(mtx::rHandle, hGuard_);
-
   typedef lstbch::qLBUNCHd( faasbckd::rBackend *, faasbckd::sRow ) dBackends_;
-
-  dBackends_ &GetBackends_(hGuard_ &Guard)
-  {
-    Guard().InitAndLock(backends_::Access);
-
-    return backends_::Backends;
-  }
 }
 
-namespace index_ {
+namespace backends_ {
   namespace {
     mtx::rMutex Access_ = mtx::Undefined;
+    lstbch::qLBUNCHw(faasbckd::rBackend *, faasbckd::sRow) Backends_;
+  }
+
+  void CTor(void)
+  {
+    Access_ = mtx::Create();
+    Backends_.Init();
+  }
+
+  void DTor(void)
+  {
+    if ( Access_ != mtx::Undefined )
+      mtx::Delete( Access_, true );
+
+    Access_ = mtx::Undefined;
+
+    faasbckd::sRow Row = Backends_.First();
+
+    while ( Row != qNIL ) {
+      delete Backends_( Row );
+
+      Row = Backends_.Next( Row );
+    }
+
+    Backends_.reset();
+  }
+
+  qMIMICr(mtx::rHandle, hGuard);
+
+  inline dBackends_ &Get(hGuard &Guard)
+  {
+    Guard().InitAndLock(Access_);
+
+    return Backends_;
+  }
+
+  inline void TestLocking(void)
+  {
+    if ( !mtx::IsLocked(Access_) )
+      qRGnr();
+  }
+}
+
+// Index thread safety is ensured with the locking of the 'backends_::Backends_'.
+namespace index_ {
+  namespace {
     idxbtq::qINDEXw( faasbckd::sRow ) Index_;
     faasbckd::sRow Root_ = qNIL;
 
-    inline void TestAccess_(void) {
-      if ( !mtx::IsLocked(Access_) )
-        qRGnr();
+    inline void TestLocking_(void) {
+      backends_::TestLocking();
     }
 
     faasbckd::sRow TUSearch_(
@@ -61,8 +90,6 @@ namespace index_ {
         Row = Root_,
         Candidate = qNIL;
       bso::sBool Continue = true;
-
-      TestAccess_();
 
       if ( Row == qNIL )
         return qNIL;
@@ -105,17 +132,9 @@ namespace index_ {
     const dBackends_ &Backends,
     bso::sSign &Sign)
   {
-    faasbckd::sRow Row = qNIL;
-  qRH;
-    mtx::rHandle Guard;
-  qRB;
-    Guard.InitAndLock(Access_);
+    TestLocking_();
 
-    Row = TUSearch_(Token, Backends, Sign);
-  qRR;
-  qRT;
-  qRE;
-    return Row;
+    return TUSearch_(Token, Backends, Sign);
   }
 
   void Put(
@@ -123,12 +142,10 @@ namespace index_ {
     const dBackends_ &Backends,
     faasbckd::sRow Row )
   {
-  qRH;
     bso::sSign Sign = 0;
     faasbckd::sRow IRow = qNIL;
-    mtx::rHandle Guard;
-  qRB;
-    Guard.InitAndLock(Access_);
+
+    TestLocking_();
 
     IRow = TUSearch_(Token, Backends, Sign);
 
@@ -151,19 +168,11 @@ namespace index_ {
         qRUnx();
         break;
     }
-  qRR;
-  qRT;
-  qRE;
   }
 
   void Delete(faasbckd::sRow Row)
   {
-  qRH;
-    mtx::rHandle IndexGuard;
-  qRB;
-    IndexGuard.InitAndLock(Access_);
-
-    TestAccess_();
+    TestLocking_();
 
     if ( Root_ == qNIL )
       qRGnr();
@@ -172,47 +181,40 @@ namespace index_ {
 
     if ( Root_ != qNIL )
       Root_ = Index_.Balance(Root_);
-  qRR;
-  qRT;
-  qRE;
   }
 
   void CTor(void)
   {
-    Access_ = mtx::Create();
     Root_ = qNIL;
     Index_.Init();
   }
 
   void DTor(void)
   {
-    if (Access_ != mtx::Undefined )
-      mtx::Delete(Access_, true);
-
-    Access_ = mtx::Undefined;
+    // Nothing to do.
   }
 }
 
-namespace {
+namespace backend_{
+  faasbckd::sRow GetRow(
+    const str::dString &Token,
+    const dBackends_ &Backends)
+  {
+    bso::sSign Sign = 0;
+    faasbckd::sRow Row = index_::Search(Token, Backends, Sign);
+
+    if ( Sign != 0 )
+      Row = qNIL;
+
+    return Row;
+  }
+
   namespace {
-    faasbckd::sRow GetBackendRow_(
+    faasbckd::rBackend *Get_(
       const str::dString &Token,
       const dBackends_ &Backends)
     {
-      bso::sSign Sign = 0;
-      faasbckd::sRow Row = index_::Search(Token, Backends, Sign);
-
-      if ( Sign != 0 )
-        Row = qNIL;
-
-      return Row;
-    }
-
-    faasbckd::rBackend *GetBackend_(
-      const str::dString &Token,
-      const dBackends_ &Backends)
-    {
-      faasbckd::sRow Row = GetBackendRow_(Token, Backends);
+      faasbckd::sRow Row = GetRow(Token, Backends);
 
       if ( Row != qNIL )
         if ( Backends(Row)->Driver != NULL )
@@ -224,15 +226,13 @@ namespace {
     }
   }
 
-  faasbckd::rBackend *GetBackend_(
-    const str::dString &Token,
-    faasbckd::hGuard &Guard)
+  faasbckd::rBackend *TUGet(const str::dString &Token)
   {
     faasbckd::rBackend *Backend = NULL;
   qRH;
-    hGuard_ BackendsGuard;
+    backends_::hGuard Guard;
   qRB;
-    Backend = GetBackend_(Token, GetBackends_(BackendsGuard));
+    Backend = Get_(Token, backends_::Get(Guard));
   qRR;
   qRT;
   qRE;
@@ -244,7 +244,7 @@ faasbckd::rBackend *faasbkds::GetBackend(
   const str::dString &Token,
   faasbckd::hGuard &Guard)
 {
-  faasbckd::rBackend *Backend = GetBackend_(Token, Guard);
+  faasbckd::rBackend *Backend = backend_::TUGet(Token);
 
   if ( Backend != NULL )
     Backend->Lock(Guard);
@@ -258,11 +258,11 @@ faasbckd::rBackend *faasbkds::Create(
 {
   faasbckd::rBackend *Backend = NULL;
 qRH;
-  hGuard_ Guard;
+  backends_::hGuard Guard;
 qRB;
-  dBackends_ &Backends = GetBackends_(Guard);
+  dBackends_ &Backends = backends_::Get(Guard);
 
-  Row = GetBackendRow_(Token, Backends);
+  Row = backend_::GetRow(Token, Backends);
 
   if ( Row == qNIL ) {
     Row = Backends.New();
@@ -277,6 +277,8 @@ qRB;
 qRR;
   if ( Backend != NULL )
     delete Backend;
+
+  Backend = NULL;
 qRT;
 qRE;
   return Backend;
@@ -285,9 +287,9 @@ qRE;
 void faasbkds::Remove(faasbckd::sRow Row)
 {
 qRH;
-  hGuard_ Guard;
+  backends_::hGuard Guard;
 qRB;
-  dBackends_ &Backends = GetBackends_(Guard);
+  dBackends_ &Backends = backends_::Get(Guard);
 
   if ( !Backends.Exists( Row ) )
     qRGnr();
@@ -305,9 +307,7 @@ qGCTOR(faasbkds)
 {
 qRFH;
 qRFB;
-  backends_::Access = mtx::Create();
-	backends_::Backends.Init();
-
+  backends_::CTor();
 	index_::CTor();
 qRFR;
 qRFT;
@@ -317,19 +317,7 @@ qRFE(sclm::ErrorDefaultHandling());
 qGDTOR(faasbkds)
 {
   index_::DTor();
-
-	if ( backends_::Access != mtx::Undefined )
-		mtx::Delete( backends_::Access, true );
-
-	faasbckd::sRow Row = backends_::Backends.First();
-
-	while ( Row != qNIL ) {
-		delete backends_::Backends( Row );
-
-		Row = backends_::Backends.Next( Row );
-	}
-
-  backends_::Backends.reset();
+  backends_::DTor();
 }
 
 

@@ -31,8 +31,8 @@
 
 namespace faasdpot {
   // For use in FaaS protocol v1.
-  // Request dor data send by a thread, answer handled by another.
-  // Data is sored in this object. Used for the handling oh HTML head.
+  // Request for data send by a thread, answer handled by another.
+  // Data is stored in this object. Used for the handling oh HTML head.
   class rDepot
   {
   private:
