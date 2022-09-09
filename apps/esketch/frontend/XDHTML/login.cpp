@@ -34,7 +34,7 @@ namespace {
 			core::rSession &Session,
 			xml::rWriter &Writer )
 		{
-			sclx::login::WriteLayout(Session, Writer);
+			scls::login::WriteLayout(Session, Writer);
 		}
 	}
 }
@@ -48,7 +48,7 @@ void login::Display( core::rSession &Session )
 {
 	SetLayout( Session );
 
-	sclx::login::HandleBackendTypeSwitching( Session );
+	scls::login::HandleBackendTypeSwitching( Session );
 
 	Session.SwitchTo( base::pLogin );
 }
@@ -57,12 +57,12 @@ void login::Display( core::rSession &Session )
 
 A( SwitchBackendType )
 {
-	sclx::login::HandleBackendTypeSwitching( Session );
+	scls::login::HandleBackendTypeSwitching( Session );
 }
 
 A( DisplayEmbeddedBackendFilename )
 {
-	sclx::login::DisplaySelectedEmbeddedBackendFilename( Session, Id );
+	scls::login::DisplaySelectedEmbeddedBackendFilename( Session, Id );
 }
 
 #if 1

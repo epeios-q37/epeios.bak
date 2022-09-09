@@ -34,7 +34,7 @@ namespace {
 			core::rSession &Session,
 			xml::rWriter &Writer )
 		{
-			sclx::prolog::WriteLayout( Session, Writer );
+			scls::prolog::WriteLayout( Session, Writer );
 		}
 	}
 }
@@ -53,24 +53,24 @@ void prolog::Display( core::rSession &Session )
 	Session.Execute( "var s = document.createElement('script'); s.setAttribute('src','https://code.jquery.com/ui/1.12.1/jquery-ui.js');document.head.appendChild(s);" );
 */
 	Session.SwitchTo( base::pProlog );
-	sclx::prolog::HandlePresetSwitching( Session );
+	scls::prolog::HandlePresetSwitching( Session );
 }
 
 #define A( name ) BASE_ADef( prolog, name )
 
 A( SwitchPreset )
 {
-	sclx::prolog::HandlePresetSwitching( Session );
+	scls::prolog::HandlePresetSwitching( Session );
 }
 
 A( DisplayProjectFilename )
 {
-	sclx::prolog::DisplaySelectedProjectFilename( Session, Id );
+	scls::prolog::DisplaySelectedProjectFilename( Session, Id );
 }
 
 A( LoadPreset )
 {
-	if ( sclx::prolog::LoadPreset( Session ) )
+	if ( scls::prolog::LoadPreset( Session ) )
 		main::Display(Session);
 	else
 		login::Display(Session);

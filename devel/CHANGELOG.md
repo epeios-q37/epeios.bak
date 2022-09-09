@@ -12,6 +12,10 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-09-09
+- SCLS: creation;
+- SCLX: moving all the frontend/backend stuff to *SCLS*:
+
 ## 2022-08-19
 - STR: introducing `sPos::sPos(sdr::sRow)`;
 - MSCMDX: [adpt];

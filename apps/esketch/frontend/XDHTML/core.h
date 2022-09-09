@@ -40,7 +40,7 @@ namespace core {
 			xml::rWriter &Writer );
 	};
 
-	typedef sclx::rSession < rInstances, frdfrntnd::rFrontend, base::ePage, base::p_Undefined, sDump > rSession;
+	typedef scls::rSession < rInstances, frdfrntnd::rFrontend, base::ePage, base::p_Undefined, sDump > rSession;
 
 	class sActionHelper
 	: public sclx::cActionHelper<core::rSession>
@@ -55,7 +55,7 @@ namespace core {
 	};
 
 	class rCore
-	: public sclx::rCore<rSession>
+	: public scls::rCore<rSession>
 	{
 	private:
 		sActionHelper ActionHelperCallback_;

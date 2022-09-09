@@ -66,7 +66,7 @@ BASE_AD( OnNewSession_ );
 void core::rCore::Init( xdhcdc::eMode Mode )
 {
 	ActionHelperCallback_.Init();
-	sclx::rCore<rSession>::Init( Mode, global::OnNewSession, ActionHelperCallback_ );
+	scls::rCore<rSession>::Init( Mode, global::OnNewSession, ActionHelperCallback_ );
 	Register_();
 }
 
@@ -120,7 +120,7 @@ qRB
   if ( Mode == xdhcdc::mMonoUser ) {
 		Features.Init();
 		if ( FromUI )
-			sclx::login::GetBackendFeatures(Session, Features);
+			scls::login::GetBackendFeatures(Session, Features);
 		else
 			sclf::GuessBackendFeatures(Features);
 		core::Kernel().Init( Features, plgn::EmptyAbstracts );

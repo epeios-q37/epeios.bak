@@ -4,7 +4,7 @@
         <ModuleFilename>/home/csimon/bin/esketchxdh</ModuleFilename>
     </xpp:define>
  <Project target="faasq">
-    <Parameters Setup="localhost">
+    <Parameters Setup="faas">
         <xpp:expand select="Module"/>
     </Parameters>
  </Project>

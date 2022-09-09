@@ -41,7 +41,7 @@ A( OnNewSession )
 			::login::Display( Session );
 			break;
 		case sclf::phLogin:
-			Session.SetBackendVisibility( sclx::bvHide );
+			Session.SetBackendVisibility( scls::bvHide );
 			::login::Display( Session );
 			break;
 		case sclf::phRun:
@@ -54,7 +54,7 @@ A( OnNewSession )
 		}
 		break;
 	case xdhcdc::mMultiUser:
-		Session.SetBackendVisibility(sclx::bvHide);
+		Session.SetBackendVisibility(scls::bvHide);
 		switch ( sclf::HandlePreset(Session.Info()) ) {
 		case sclf::phShow:	// In this context (multi-user), same as 'phLogin'.
 		case sclf::phLoad:	// Idem.

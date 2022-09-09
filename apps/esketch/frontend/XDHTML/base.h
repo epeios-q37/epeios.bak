@@ -22,7 +22,7 @@
 
 # include "esketchxdh.h"
 
-# include "sclx.h"
+# include "scls.h"
 
 # include "sktfbc.h"
 
@@ -61,7 +61,7 @@ namespace instc {
 namespace core {
 	using instc::rInstances;
 	class sDump;
-	typedef sclx::rSession<rInstances, frdfrntnd::rFrontend, base::ePage, base::p_Undefined, sDump> rSession;
+	typedef scls::rSession<rInstances, frdfrntnd::rFrontend, base::ePage, base::p_Undefined, sDump> rSession;
 }
 
 namespace base {
