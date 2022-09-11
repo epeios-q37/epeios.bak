@@ -29,13 +29,8 @@ namespace registry {
 	namespace parameter {
 		using namespace sclr::parameter;
 
-		namespace proxy {
-            extern rEntry
-                Host,
-                Service;
-        }
-
-         extern rEntry ModuleFilename;
+    extern rEntry Proxy;
+    extern rEntry XDHLibrary;
 	}
 
 	namespace definition {

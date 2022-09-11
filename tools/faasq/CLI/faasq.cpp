@@ -64,20 +64,18 @@ namespace {
 		void Initialize_(csdbnc::rRWDriver &Proxy)
 		{
 		qRH
-			str::wString Host, Service;
-			qCBUFFERh HostBuffer, ServiceBuffer;
+			str::wString ProxyHostService;
+			qCBUFFERh Buffer;
 		qRB
-			tol::Init(Host, Service);
-			sclm::MGetValue(registry::parameter::proxy::Host, Host);
-			sclm::MGetValue(registry::parameter::proxy::Service, Service);
+			ProxyHostService.Init();
 
-			sclc::Display("ConnectingTo", cio::COut, Host, Service);
+			sclc::Display("ConnectingTo", cio::COut, ProxyHostService);
 			cio::COut.Commit();
 
-			if (!Proxy.Init(Host.Convert(HostBuffer), Service.Convert(ServiceBuffer), SCK__DEFAULT_TIMEOUT, qRPU))
-				sclc::ReportAndAbort("UnableToConnectTo", Host, Service);
+			if (!Proxy.Init(ProxyHostService.Convert(Buffer), SCK__DEFAULT_TIMEOUT, qRPU))
+				sclc::ReportAndAbort("UnableToConnectTo", ProxyHostService);
 
-			sclc::Display("ConnectedTo", cio::COut, Host, Service);
+			sclc::Display("ConnectedTo", cio::COut, ProxyHostService);
 			cio::COut.Commit();
 		qRR
 		qRT
@@ -178,16 +176,16 @@ namespace {
 						xdhups::rAgent &Agent)
 				{
 				qRH
-					str::wString Identification, ModuleFilename;
+					str::wString Identification, XDHLibrary;
 					qCBUFFERh Buffer;
 				qRB
 					Identification.Init( NAME_LC " V" VERSION " Build " __DATE__ " " __TIME__ " - " );
 					Identification.Append( cpe::GetDescription() );
 
-					ModuleFilename.Init();
-					sclm::MGetValue( registry::parameter::ModuleFilename, ModuleFilename );
+					XDHLibrary.Init();
+					sclm::MGetValue(registry::parameter::XDHLibrary, XDHLibrary);
 
-					if ( !Agent.Init(Upstream, xdhcdc::mMultiUser, ModuleFilename, dlbrry::n_Default, Identification.Convert(Buffer)) )
+					if ( !Agent.Init(Upstream, xdhcdc::mMultiUser, XDHLibrary, dlbrry::n_Default, Identification.Convert(Buffer)) )
             qRGnr();
 				qRR
 				qRT

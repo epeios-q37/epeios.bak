@@ -6,22 +6,24 @@
 			<xpp:bloc>(Obsolete ; generated automatically)</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
-			<xpp:bloc>2016-2017</xpp:bloc>
+			<xpp:bloc>2016</xpp:bloc>
 		</xpp:define>
 	</xpp:bloc>
 	<xpp:set name="Credits" value="Epeios"/>
-	<xpp:set name="Type" value="XDHTML"/>
-	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<xpp:set name="Type" value="GUI"/>
+	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
+	<xpp:expand value-of="q37.project"/>
 	<About>
-		<Program>xdhdqxdh</Program>
-		<Software>XDHDq</Software>
+		<Program>taskqxdh</Program>
+		<Software>TaskQ</Software>
 		<UUID>c8c33276-5e09-4f11-bd1b-3283b0ef0697</UUID>
 	</About>
 	<Modules xpp:marker="$">
 		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
-				<Module>strmrg</Module>
+				<Module>cdgurl</Module>
+				<Module>cnvfdr</Module>
 			</Modules>
 			<Modules Group="CSD">
 				<xpp:expand select="CSDF"/>
@@ -41,18 +43,14 @@
 			<Module>frdfrntnd</Module>
 			<Module>frdrgstry</Module>
 		</Modules>
-		<Modules Group="XDD" Path="../../">
-			<Module>xddfbc</Module>
-			<Module>xddinf</Module>
+		<Modules Group="TSK" Path="../../">
+			<Module>tskfbc</Module>
+			<Module>tskinf</Module>
 		</Modules>
 		<Modules Group="Pages">
 			<Module>login</Module>
 			<Module>main</Module>
 			<Module>prolog</Module>
-		</Modules>
-		<Modules Group="Frames">
-			<Module>Frame</Module>
-			<Module>Fields</Module>
 		</Modules>
 		<Module>base</Module>
 		<Module>core</Module>
@@ -66,47 +64,38 @@
 		<SourceDir>../../..</SourceDir>
 	</SourceDirs>
 	<Files>
-		<Files Group="XSL" Path="XSL/">
-			<Files Group="Frames">
-				<Files Group="Fields">
-					<File>FieldsLayout.xsl</File>
-					<File>FieldsCasting.xsl</File>
-					<File>FieldsLocale.xml</File>
-				</Files>
-				<Files Group="Frame">
-					<File>FrameLayout.xsl</File>
-					<File>FrameCasting.xsl</File>
-					<File>FrameLocale.xml</File>
-				</Files>
-			</Files>
+		<Files Group="XML" Path="XML/">
+			<File>Head.xhtml</File>
 			<Files Group="Global">
 				<File>About.xsl</File>
 			</Files>
 			<Files Group="Pages">
-				<Files Group="Login">
-					<File>LoginLayout.xsl</File>
-					<File>LoginCasting.xsl</File>
-				</Files>
-				<Files Group="Main">
-					<File>MainLayout.xsl</File>
-					<File>MainCasting.xsl</File>
-					<File>MainLocale.xml</File>
-				</Files>
-				<Files Group="Prolog">
-					<File>PrologLayout.xsl</File>
-					<File>PrologCasting.xsl</File>
-				</Files>
+					<File>Login.xsl</File>
+					<File>Main.xsl</File>
+					<File>Main.xlcl</File>
+					<File>Prolog.xsl</File>
 			</Files>
 		</Files>
-		<File>../xdhdqfrd.xcfg</File>
-		<File>../xdhdqfrd.xlcl</File>
+		<File>../taskqfrd.xcfg</File>
+		<File>../taskqfrd.xlcl</File>
 	</Files>
-	<RTW Description="XDHDq" Keywords="keyword1,keyword2">
-		<Dir>xdhdqxdh</Dir>
+	<Misc>
+	    <CB>
+	        <Arguments>
+	            <xpp:cdata>
+                    <Option parameters='--#Project=Testing.xprj' />
+                    <Option host_application="faasq" />
+                    <Option run_host_application_in_terminal="1" />
+	            </xpp:cdata>
+	        </Arguments>
+	    </CB>
+	</Misc>
+    <RTW Description="TaskQ" Keywords="keyword1,keyword2">
+		<Dir>taskqxdh</Dir>
 	</RTW>
 	<Packing>
 		<WikiFiles>
-			<File Dir="computing/epeios/apps/xdhdq/" Desc="general description of xdhdqxdh" Oddity="IsHome">xdhdqxdh</File>
+			<File Dir="computing/epeios/apps/taskq/" Desc="general description of taskqxdh" Oddity="IsHome">taskqxdh</File>
 			<File Dir="computing/epeios/" Desc="the XDHTML technology" Oddity="IsHome">XDHTML</File>
 		</WikiFiles>
 	</Packing>

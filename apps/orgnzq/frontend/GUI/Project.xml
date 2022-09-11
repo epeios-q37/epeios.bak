@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>(Version)</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2016</xpp:bloc>
+		</xpp:define>
+	</xpp:bloc>
+	<xpp:set name="Credits" value="Epeios"/>
+	<xpp:set name="Type" value="GUI"/>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<About>
+		<Program>orgnzqxdh</Program>
+		<Software>orgnzq</Software>
+		<UUID>c8c33276-5e09-4f11-bd1b-3283b0ef0697</UUID>
+	</About>
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+				<Module>strmrg</Module>
+			</Modules>
+			<Modules Group="CSD">
+				<xpp:expand select="CSDF"/>
+			</Modules>
+			<Modules Group="FBL">
+				<xpp:expand select="FBLF"/>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+			<Modules Group="XDHTML">
+				<xpp:expand select="XDH"/>
+			</Modules>
+		</Modules>
+		<Modules Group="FRD" Path="../">
+			<Module>frdapi</Module>
+			<Module>frdcllbck</Module>
+			<Module>frdfrntnd</Module>
+			<Module>frdmisc</Module>
+			<Module>frdplgn</Module>
+			<Module>frdrgstry</Module>
+			<Module>frdinstc</Module>
+		</Modules>
+		<Modules Group="OGZ" Path="../../">
+			<Module>ogzfbc</Module>
+			<Module>ogzinf</Module>
+		</Modules>
+		<Modules Group="Pages">
+			<Module>login</Module>
+			<Module>main</Module>
+			<Module>prolog</Module>
+		</Modules>
+		<Modules Group="Frames">
+			<Module>column</Module>
+			<Module>field</Module>
+			<Module>fields</Module>
+			<Module>record</Module>
+			<Module>records</Module>
+			<Module>Frame</Module>
+		</Modules>
+		<Module>base</Module>
+		<Module>core</Module>
+		<Module>global</Module>
+		<Module>registry</Module>
+	</Modules>
+	<SourceDirs>
+		<SourceDir>..</SourceDir>
+		<SourceDir>../..</SourceDir>
+		<SourceDir>../../..</SourceDir>
+	</SourceDirs>
+	<Files>
+		<Files Group="XSL" Path="XSL/" Pack="no">
+			<Files Group="Frames">
+				<Files Group="Column">
+					<File>ColumnLayout.xsl</File>
+					<File>ColumnCasting.xsl</File>
+					<File>ColumnLocale.xml</File>
+				</Files>
+				<Files Group="Field">
+					<File>FieldLayout.xsl</File>
+					<File>FieldCasting.xsl</File>
+					<File>FieldLocale.xml</File>
+				</Files>
+				<Files Group="Fields">
+					<File>FieldsLayout.xsl</File>
+					<File>FieldsCasting.xsl</File>
+					<File>FieldsLocale.xml</File>
+				</Files>
+				<Files Group="Record">
+					<File>RecordLayout.xsl</File>
+					<File>RecordCasting.xsl</File>
+					<File>RecordLocale.xml</File>
+				</Files>
+				<Files Group="Records">
+					<File>RecordsLayout.xsl</File>
+					<File>RecordsCasting.xsl</File>
+					<File>RecordsLocale.xml</File>
+				</Files>
+			</Files>
+			<Files Group="Global">
+				<File>About.xsl</File>
+				<File>functions.xsl</File>
+				<File>functionsLocale.xml</File>
+			</Files>
+			<Files Group="Pages">
+				<Files Group="Login">
+					<File>LoginLayout.xsl</File>
+					<File>LoginCasting.xsl</File>
+				</Files>
+				<Files Group="Main">
+					<File>MainLayout.xsl</File>
+					<File>MainCasting.xsl</File>
+					<File>MainLocale.xml</File>
+				</Files>
+				<Files Group="Prolog">
+					<File>PrologLayout.xsl</File>
+					<File>PrologCasting.xsl</File>
+				</Files>
+			</Files>
+		</Files>
+		<File>../../../FRD.xcfg</File>
+		<File>../../../XDH.xcfg</File>
+		<File>../orgnzqfrd.xcfg</File>
+		<File>../orgnzqfrd.xlcl</File>
+	</Files>
+	<Packing>
+		<WikiFiles>
+			<File Dir="computing/epeios/apps/orgnzq/" Desc="general description of orgnzqxdh" Oddity="IsHome">orgnzqxdh</File>
+			<File Dir="computing/epeios/" Desc="the XDHTML technology" Oddity="IsHome">XDHTML</File>
+		</WikiFiles>
+	</Packing>
+	<PreprocessorDefinitions>
+	</PreprocessorDefinitions>
+</Project>

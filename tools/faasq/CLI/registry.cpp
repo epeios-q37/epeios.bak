@@ -22,19 +22,20 @@
 
 #include "sclm.h"
 
+#include "csdbnc.h"
+
 using namespace registry;
 
-namespace {
-    rEntry Proxy_("Proxy", sclr::Parameters);
+rEntry registry::parameter::Proxy( "Proxy", sclr::Parameters);
+rEntry registry::parameter::XDHLibrary( "XDHLibrary", sclr::Parameters );
+
+const str::dString &registry::GetWebHost(str::dString &Host){
+qRH;
+  qCBUFFERh ProxyBuffer, HostBuffer;
+  str::wString Proxy;
+qRB;
+  Host.Append(csdbnc::Host(sclm::MGetValue(parameter::Proxy, ProxyBuffer), HostBuffer));
+qRR;
+qRT;
+qRE;
 }
-
-rEntry registry::parameter::proxy::Host( "Host", Proxy_);
-rEntry registry::parameter::proxy::Service( "Service", Proxy_ );
-
-rEntry registry::parameter::ModuleFilename( "ModuleFilename", sclr::Parameters );
-
-const str::dString &registry::GetWebHost(str::dString &Host)
-{
-    return sclm::MGetValue(parameter::proxy::Host, Host);
-}
-

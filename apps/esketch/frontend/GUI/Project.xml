@@ -10,7 +10,7 @@
 		</xpp:define>
 	</xpp:bloc>
 	<xpp:set name="Credits" value="Epeios"/>
-	<xpp:set name="Type" value="XDHTML"/>
+	<xpp:set name="Type" value="GUI"/>
 	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
 	<xpp:expand value-of="q37.project"/>
 	<About>
