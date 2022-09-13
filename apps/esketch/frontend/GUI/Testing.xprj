@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Projects>
-    <xpp:define name="Module">
-        <ModuleFilename>/home/csimon/bin/esketchxdh</ModuleFilename>
-    </xpp:define>
+  <xpp:define name="Module">
+      <XDHLibrary>/home/csimon/bin/esketchxdh</XDHLibrary>
+  </xpp:define>
  <Project target="faasq">
     <Parameters Setup="faas">
         <xpp:expand select="Module"/>

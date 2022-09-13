@@ -11,7 +11,7 @@
 				<xpp:define name="XSLRootDir">
 					<xpp:bloc>
 						<xpp:expand select="XSLRootDirHeader"/>
-						<xpp:bloc>epeios/apps/mmuaq/frontend/XDHTML/XSL/</xpp:bloc>
+						<xpp:bloc>epeios/apps/mmuaq/frontend/GUI/XSL/</xpp:bloc>
 					</xpp:bloc>
 				</xpp:define>
 				<xpp:define name="XSLRootDirHeader">

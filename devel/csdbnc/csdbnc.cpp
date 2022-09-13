@@ -30,6 +30,9 @@ const char *csdbnc::Host(
 {
 	char *P;
 
+	if ( Buffer == NULL )
+    qRFwk();
+
 	if ( strlen( HostService ) >= CSDBNC_ADDRESS_SIZE_MAX )
 		qRLmt();
 

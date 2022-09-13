@@ -12,6 +12,11 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-09-13
+- CSDBNC:
+  - [stdz],
+  - some extra testing,
+
 ## 2022-09-09
 - SCLS: creation;
 - SCLX: moving all the frontend/backend stuff to *SCLS*:

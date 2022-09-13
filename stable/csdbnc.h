@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// Client-Server Base Network Client 
+// Client-Server Base Network Client
 
 #ifndef CSDBNC_INC_
 # define CSDBNC_INC_
@@ -136,7 +136,7 @@ namespace csdbnc {
 			return SCK_INVALID_SOCKET;	// Error parameters handled by downstream functions.
 		else
 			return Connect( Host, Service, Desc, qRP );
-	} 
+	}
 	/*f Return a descriptot to a socket connected to 'HostService'.
 	'HostService' can be in '212.95.72.3:80' format, or in 'www.ensd.net:http' format.
 	If connection failed, and 'ErrHandler' == 'err::hSkip', return 'SCK_INVALID'. */
@@ -276,5 +276,7 @@ namespace csdbnc {
 	};
 
 	typedef flow___ rRWFlow;
+
+	typedef buffer__ pBuffer;
 }
 #endif

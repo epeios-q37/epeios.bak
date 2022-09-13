@@ -26,14 +26,14 @@
         </Setup>
         <Setup id="faas-2">
             <Proxy>
-                <xpp:bloc>faas-2.q37.info</xpp:bloc>
+              <xpp:bloc>faas-2.q37.info</xpp:bloc>
               <xpp:expand select="DefaultService"/>
             </Proxy>
         </Setup>
         <Setup id="localhost">
             <Proxy>
-                <xpp:bloc>localhost</xpp:bloc>
-                <xpp:expand select="DefaultService"/>
+              <xpp:bloc>localhost</xpp:bloc>
+              <xpp:expand select="DefaultService"/>
             </Proxy>
         </Setup>
     </Setups>
@@ -88,7 +88,7 @@
 		<Arguments>
 			<xpp:expand select="CLI_Arguments"/>
 			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="[%ProjectOption%] [%SetupOption%] %XDHLibraryArgument%"/>
+			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" Value="Process" Usage="[%ProjectOption%] [%SetupOption%] %XDHLibraryArgument%"/>
 			<!-- Fanaux : 'Path', mais pas de 'Value'. -->
 			<!--
 			<Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
@@ -101,7 +101,7 @@
 			<!-- Affectations des arguments libres-->
 			<Layouts>
 				<Layout command="Process">
-					<Link index="0" Target="XDHLibrary"/>
+					<Link index="0" Target="XDHLibraryArgument"/>
 				</Layout>
 			</Layouts>
 		</Arguments>

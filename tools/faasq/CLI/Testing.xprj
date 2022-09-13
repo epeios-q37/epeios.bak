@@ -1,3 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xpp:expand href="/home/csimon/epeios/apps/esketch/frontend/XDHTML/faasq.xprj"/>
+<Projects>
+  <Project target="faasq">
+    <Parameters>
+    <XDHLibrary>/home/csimon/bin/esketchxdh</XDHLibrary>
+    </Parameters>
+  </Project>
+</Projects>
 

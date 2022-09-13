@@ -7,7 +7,7 @@
 	<Configuration target="orgnzqxdh">
 		<xpp:bloc><!-- Macros and variables -->
 			<xpp:define name="PathToXSL">
-				<xpp:bloc>epeios/apps/orgnzq/frontend/XDHTML/XSL/</xpp:bloc>
+				<xpp:bloc>epeios/apps/orgnzq/frontend/GUI/XSL/</xpp:bloc>
 			</xpp:define>
 			<xpp:ifeq select="packing" value="yes">
 				<xpp:bloc>

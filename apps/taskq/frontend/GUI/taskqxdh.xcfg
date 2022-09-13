@@ -11,7 +11,7 @@
 				<xpp:define name="XMLRootDir">
 					<xpp:bloc>
 						<xpp:expand select="XMLRootDirHeader"/>
-						<xpp:bloc>epeios/apps/taskq/frontend/XDHTML/XML/</xpp:bloc>
+						<xpp:bloc>epeios/apps/taskq/frontend/GUI/XML/</xpp:bloc>
 					</xpp:bloc>
 				</xpp:define>
 				<xpp:define name="XMLRootDirHeader">

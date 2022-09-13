@@ -29,13 +29,16 @@ using namespace registry;
 rEntry registry::parameter::Proxy( "Proxy", sclr::Parameters);
 rEntry registry::parameter::XDHLibrary( "XDHLibrary", sclr::Parameters );
 
-const str::dString &registry::GetWebHost(str::dString &Host){
+const str::dString &registry::GetWebHost(str::dString &Host)
+{
 qRH;
-  qCBUFFERh ProxyBuffer, HostBuffer;
+  qCBUFFERh ProxyBuffer;
+  csdbnc::pBuffer HostBuffer;
   str::wString Proxy;
 qRB;
   Host.Append(csdbnc::Host(sclm::MGetValue(parameter::Proxy, ProxyBuffer), HostBuffer));
 qRR;
 qRT;
 qRE;
+  return Host;
 }

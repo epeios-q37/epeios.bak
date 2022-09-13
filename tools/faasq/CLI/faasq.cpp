@@ -68,6 +68,7 @@ namespace {
 			qCBUFFERh Buffer;
 		qRB
 			ProxyHostService.Init();
+			sclm::MGetValue(registry::parameter::Proxy, ProxyHostService);
 
 			sclc::Display("ConnectingTo", cio::COut, ProxyHostService);
 			cio::COut.Commit();
