@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>(Obsolete ; generated automatically)</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2016</xpp:bloc>
+		</xpp:define>
+	</xpp:bloc>
+	<xpp:set name="Credits" value="Epeios"/>
+	<xpp:set name="Type" value="ToolGUI"/>
+	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
+	<xpp:expand value-of="q37.project"/>
+	<About>
+		<Program>msfgqxdh</Program>
+		<Software>MSFGq</Software>
+		<UUID>c8c33276-5e09-4f11-bd1b-3283b0ef0697</UUID>
+	</About>
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+			<Modules Group="XDHTML">
+				<xpp:expand select="XDH"/>
+			</Modules>
+		</Modules>
+		<Module>registry</Module>
+	</Modules>
+	<SourceDirs>
+		<SourceDir>..</SourceDir>
+	</SourceDirs>
+	<Files>
+		<Files Group="XML" Path="XML/">
+			<File>Head.xhtml</File>
+			<File>Body.xhtml</File>
+		</Files>
+	</Files>
+	<Misc>
+	    <CB>
+	        <Arguments>
+	            <xpp:cdata>
+                    <Option parameters='--#Project=Testing.xprj' />
+                    <Option host_application="faasq" />
+                    <Option run_host_application_in_terminal="1" />
+	            </xpp:cdata>
+	        </Arguments>
+	    </CB>
+	</Misc>
+    <RTW Description="MSFGq" Keywords="keyword1,keyword2">
+		<Dir>msfgqxdh</Dir>
+	</RTW>
+	<Packing>
+	</Packing>
+	<PreprocessorDefinitions>
+	</PreprocessorDefinitions>
+</Project>
