@@ -56,7 +56,7 @@
 		<Module>core</Module>
 		<Module>global</Module>
 		<Module>registry</Module>
-  <Module>instc</Module>
+    <Module>instc</Module>
  </Modules>
 	<SourceDirs>
 		<SourceDir>..</SourceDir>

@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2022 Claude SIMON (http://zeusw.org/epeios/contact.html).
+  Copyright (C) 2022 Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	This file is part of 'MSFGq' software.
+  This file is part of 'MSFGq' software.
 
   'MSFGq' is free software: you can redistribute it and/or modify it
   under the terms of the GNU Affero General Public License as published
@@ -19,7 +19,7 @@
 
 #include "msfgqxdh.h"
 
-#include "sclx.h"
+#include "main.h"
 
 SCLI_DEF( msfgqxdh, NAME_LC	SCLX_DEFAULT_SUFFIX, NAME_MC );
 
@@ -34,27 +34,43 @@ void sclx::SCLXInitialization( xdhcdc::eMode Mode )
 
 namespace {
   typedef xdhcdc::cSingle cXDHCallback_;
+}
 
+namespace {
 	class rXDHCallback
 	: public xdhcdc::cSingle
 	{
+  private:
+    main::sSession Session_;
 	protected:
 		virtual bso::sBool XDHCDCInitialize(
 			xdhcuc::cSingle &Callback,
 			const char *Language,
 			const str::dString &Token) override
 			{
+			  Session_.Init(Callback, msfgqxdh::Info);
 			  return true;
 			}
 		virtual bso::bool__ XDHCDCHandle(
       const str::dString &Id,
       const str::dString &Action) override
-			{
-			  qRVct();
-			}
+      {
+      qRH;
+			  qCBUFFERh IdBuffer, ActionBuffer;
+      qRB;
+        Action.Convert(ActionBuffer);
+
+			  main::Core.Launch(Session_, Id.Convert(IdBuffer), ActionBuffer == NULL || ActionBuffer[0] == 0 ? "OnNewSession" : ActionBuffer, xdhcdc::m_Undefined); // Last parameter is not used.
+      qRR;
+      qRT;
+      qRE;
+        return true;
+      }
   public:
-    void reset(bso::sBool = true)
-    {}
+    void reset(bso::sBool P = true)
+    {
+      tol::reset(P, Session_);
+    }
     qCVDTOR(rXDHCallback);
     void Init(void)
     {

@@ -1,7 +1,7 @@
 /*
-	Copyright (C) 2022 Claude SIMON (http://zeusw.org/epeios/contact.html).
+  Copyright (C) 2022 Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	This file is part of 'MSFGq' software.
+  This file is part of 'MSFGq' software.
 
   'MSFGq' is free software: you can redistribute it and/or modify it
   under the terms of the GNU Affero General Public License as published

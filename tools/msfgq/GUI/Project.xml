@@ -30,6 +30,7 @@
 				<xpp:expand select="XDH"/>
 			</Modules>
 		</Modules>
+		<Module>main</Module>
 		<Module>registry</Module>
 	</Modules>
 	<SourceDirs>

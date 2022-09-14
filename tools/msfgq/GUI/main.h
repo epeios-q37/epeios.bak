@@ -16,3 +16,36 @@
   You should have received a copy of the GNU Affero General Public License
   along with 'MSFGq'.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+#ifndef MAIN_INC_
+# define MAIN_INC_
+
+# include "sclx.h"
+
+# include "bso.h"
+# include "tol.h"
+
+namespace main {
+  class sSession
+  : public sclx::sProxy
+  {
+  public:
+    void reset(bso::sBool P = true)
+    {
+      sProxy::reset(P);
+    }
+    qCDTOR( sSession );
+    void Init(
+			xdhcuc::cSingle &Callback,
+			const scli::sInfo &Info)
+    {
+      reset();
+
+      sProxy::Init(Callback, Info, sclx::xfh_Default);
+    }
+  };
+
+  extern sclx::action_handler<sSession> Core;
+}
+
+#endif // MAIN_INC_

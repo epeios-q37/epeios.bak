@@ -458,6 +458,19 @@ namespace sclx {
 		qRT;
 		qRE;
 		}
+		void HandleLayout_(
+      const str::dString &Id,
+      const str::dString &Variant,
+      const str::dString &XML,
+      const str::dString &XSL)
+    {
+
+      str::wString Dummy;
+
+      Dummy.Init();
+
+      Process_("HandleLayout_1", Dummy, Variant, XML, XSL);
+    }
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -556,6 +569,13 @@ namespace sclx {
 		bso::bool__ ConfirmU(
 			const str::dString &Message,
 			const char *Language );	// Displays 'Message' as is. 'Language' is used for the closing text message.
+    void Inner(
+      const str::dString &Id,
+      const str::dString &XML,
+      const str::dString &XSL = str::Empty)
+    {
+      return HandleLayout_(str::wString("inner"), Id, XML, XSL);
+    }
 		template <typename s, typename t, typename u> void SetAttribute(
 			const s &Id,
 			const t &Name,
