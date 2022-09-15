@@ -12,6 +12,13 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-09-15
+- ERR: 'qRPT tests now also bad 'err::handling__' value;
+- MTX:
+  - replacing `sFree` by existing but not used `s(_)Release`,
+  - introducing `IsLockedFlag`;
+- THT: introducing `IsBockedFlag`;
+
 ## 2022-09-13
 - CSDBNC:
   - [stdz],

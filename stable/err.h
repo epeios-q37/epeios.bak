@@ -262,7 +262,7 @@ namespace err {
 # define qRPN	err::handling__ qRP
 
 // For testing
-# define qRPT ( qRP == err::hThrowException )
+# define qRPT ( qRP != err::hUserDefined )
 
 // For reference.
 # define qRP ErrHandling

@@ -313,14 +313,16 @@ namespace tht {
 			Local_ = Main_ = mtx::Undefined;
 		}
 		qCDTOR( rBlocker );
-		void Init(eBlockerPreset Preset = bp_Default)
+		void Init(
+      eBlockerPreset Preset = bp_Default,
+      bso::sBool *IsBlockedFlag = NULL)
 		{
 		qRH;
 		qRB;
 			ReleaseMutexes_();
 
 			Local_ = mtx::Create();
-			Main_ = mtx::Create();
+			Main_ = mtx::Create(IsBlockedFlag);
 
 			if ( Preset >= bp_amount )
         qRFwk();
@@ -332,6 +334,10 @@ namespace tht {
 			ReleaseMutexes_();
 		qRT;
 		qRE;
+		}
+		void Init(bso::sBool *IsBlockedFlag)
+		{
+		  return Init(bp_Default, IsBlockedFlag);
 		}
 		// NOTA: rearms also the blocker.
 		// Returns true if had to wait, or false if it returned immediately.

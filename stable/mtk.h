@@ -137,27 +137,57 @@ namespace mtk {
 	using tht::thread_id__;
 	using tht::GetTID;
 
+  class rXBlocker_
+  {
+  private:
+    tht::rBlocker Blocker_;
+    bso::sBool Error_;
+  public:
+    void reset(bso::sBool P = true)
+    {
+      Blocker_.reset(P);
+      Error_ = false;
+    }
+    qCDTOR(rXBlocker_);
+    void Init(void)
+    {
+      Blocker_.Init();
+      Error_ = false;
+    }
+    void Release(void)
+    {
+      Blocker_.Unblock();
+    }
+    bso::sBool Wait(void)
+    {
+      Blocker_.Wait();
+
+      return !Error_;
+    }
+  };
+
+
 	class gBlocker {
 	private:
-		qRMV( tht::rBlocker, B_, Blocker_ );
+		qRMV( rXBlocker_, B_, Blocker_ );
+		bso::sBool Released_;
 	protected:
-		void Init( tht::rBlocker &Blocker )
+		void Init(rXBlocker_ &Blocker)
 		{
 			Blocker_ = &Blocker;
+			Released_ = false;
 		}
 	public:
 		void reset( bso::sBool P = true )
 		{
 			tol::reset( P, Blocker_ );
+			Released_ = true;
 		}
 		qCDTOR( gBlocker );
 		void Release( void )
 		{
-			B_().Unblock();
-		}
-		tht::rBlocker &Blocker(void)
-		{
-			return B_();
+			B_().Release();
+			Released_ = true;
 		}
 	};
 

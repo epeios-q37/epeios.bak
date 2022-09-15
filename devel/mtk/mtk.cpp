@@ -314,7 +314,7 @@ namespace {
 	struct sData_ {
 		sXRoutine Routine;
 		void *UP;
-		tht::rBlocker *Blocker;
+		rXBlocker_ *Blocker;
 		void reset( bso::sBool P = true )
 		{
 			tol::reset( P, Routine, UP, Blocker );
@@ -326,21 +326,21 @@ namespace {
 	: public gBlocker
 	{
 	public:
-		void Init( tht::rBlocker &Blocker )
+		void Init( rXBlocker_ &Blocker )
 		{
-			gBlocker::Init( Blocker );
+			gBlocker::Init(Blocker);
 		}
 	};
 
-	void Routine_( void *UP )
+	void Routine_(void *UP)
 	{
 	qRFH
 		sData_ &Data = *(sData_ *)UP;
 		gBlocker_ Blocker;
    qRFB
-		Blocker.Init( *Data.Blocker );
+		Blocker.Init(*Data.Blocker);
 
-		Data.Routine( Data.UP, Blocker );
+		Data.Routine(Data.UP, Blocker);
 
 		// 'Blocker.Blocker_' is no more valid here !!!
 	qRFR
@@ -351,10 +351,10 @@ namespace {
 	void Launch_(
 		sXRoutine Routine,
 		void(* Launch)( routine__, void *,bso::sBool),
-		void *UP )
+		void *UP)
 	{
 	qRH
-		tht::rBlocker Blocker;
+		rXBlocker_ Blocker;
 		sData_ Data;
 	qRB
 		Blocker.Init();
@@ -364,7 +364,8 @@ namespace {
 
 		Launch(Routine_, &Data, true);
 
-		Blocker.Wait();
+		if ( !Blocker.Wait() )
+      qRFwk();
 	qRR
 	qRT
 	qRE
