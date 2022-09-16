@@ -322,6 +322,7 @@ namespace {
 		qCDTOR( sData_ )
 	};
 
+	// Make protected members public.
 	class gBlocker_
 	: public gBlocker
 	{
@@ -329,6 +330,10 @@ namespace {
 		void Init( rXBlocker_ &Blocker )
 		{
 			gBlocker::Init(Blocker);
+		}
+		bso::sBool IsBlocked(void) const
+		{
+		  return IsBlocked_;
 		}
 	};
 
@@ -342,8 +347,18 @@ namespace {
 
 		Data.Routine(Data.UP, Blocker);
 
+		if ( Blocker.IsBlocked() ) {
+      Data.Blocker->Error = true;
+      Data.Blocker->Release();
+      qRFwk();
+		}
+
 		// 'Blocker.Blocker_' is no more valid here !!!
 	qRFR
+		if ( Blocker.IsBlocked() ) {
+      Data.Blocker->Error = true;
+      Data.Blocker->Release();
+		}
   qRFT
   qRFE(mtk::MTKErrorHandling())
 	}
@@ -364,7 +379,7 @@ namespace {
 
 		Launch(Routine_, &Data, true);
 
-		if ( !Blocker.Wait() )
+		if ( !Blocker.Wait() )  // Returns false when an error occured
       qRFwk();
 	qRR
 	qRT

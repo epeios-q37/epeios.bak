@@ -21,8 +21,21 @@
 			</Plugins>
 		</Parameters>
 		<Definitions>
+      <xpp:ifeq select="packing" value="no">
+        <xpp:define name="Protocol">
+          <xpp:bloc>http</xpp:bloc>
+        </xpp:define>
+      </xpp:ifeq>
+      <xpp:ifeq select="packing" value="yes">
+        <xpp:define name="Protocol">
+          <xpp:bloc>https</xpp:bloc>
+        </xpp:define>
+      </xpp:ifeq>
 			<FaaS>
-				<URL>https://%Address%%Service%/xdh.php?_token=%Token%</URL>
+				<URL>
+				  <xpp:expand select="Protocol"/>
+          <xpp:bloc>://%Address%%Service%/xdh.php?_token=%Token%</xpp:bloc>
+        </URL>
 				<xpp:define name="CommonNotification">
 					<xpp:cdata>
 ****************************************************************************

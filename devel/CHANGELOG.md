@@ -12,8 +12,15 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-09-16
+- MTK, MTX, THT: [cont];
+- THT: [cont];
+
 ## 2022-09-15
 - ERR: 'qRPT tests now also bad 'err::handling__' value;
+- MTK: reports an error in the calling thread when, in the asynchrone thread:
+  - the routine returns without releasing the shared data,
+  - an error occurs before the shared data were released;
 - MTX:
   - replacing `sFree` by existing but not used `s(_)Release`,
   - introducing `IsLockedFlag`;
@@ -25,7 +32,7 @@
   - some extra testing,
 
 ## 2022-09-09
-- SCLS: creation;
+- SCLS: [crtn];
 - SCLX: moving all the frontend/backend stuff to *SCLS*:
 
 ## 2022-08-19

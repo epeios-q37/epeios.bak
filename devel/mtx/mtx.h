@@ -79,20 +79,20 @@ namespace mtx {
 	private:
 		std::mutex Mutex_;
 		std::condition_variable Core_;
-		eState_ _State_;
+		eState_ State_;
     bso::sBool *IsLockedFlag_; // '*IsLockedFlag_' (the boolean) reflects the status (locked or not) if != NULL.
                                 // 'IsLockedFlag_' (the pointer) is potentially set by user.
 		bso::bool__ IsReleased_( void ) const
 		{
-			return _State_ == s_Released;
+			return State_ == s_Released;
 		}
 		bso::bool__ IsDisabled_( void ) const
 		{
-			return _State_ == sDisabled;
+			return State_ == sDisabled;
 		}
 		bso::bool__ IsLocked_( void ) const
 		{
-			return _State_ == sLocked;
+			return State_ == sLocked;
 		}
 		void SetState_(eState_ State)
 		{
@@ -111,7 +111,7 @@ namespace mtx {
         }
 		  }
 
-		  _State_ = State;
+		  State_ = State;
 		}
 	public:
 #ifdef MTX__CONTROL
@@ -119,7 +119,7 @@ namespace mtx {
 		{
 			ststd::unique_lock<decltype(Mutex_)> Lock( Mutex_ );
 
-			State_ = sReleased;
+			SetState_(s_Released);;
 		}
 		bso::bool__ IsReleased( void ) const
 		{
@@ -144,6 +144,12 @@ namespace mtx {
 
 			return IsLocked_();
 		}
+		void SetIsLockedFlag(bso::sBool *IsLockedFlag)
+		{
+		  IsLockedFlag_ = IsLockedFlag;
+
+		  SetState_(State_);  // Sets '*IsLockedFlag_'.
+		}
 		bso::sBool Lock( void ) // Returns true when the lock was obtained immediately.
 		{
 		  bso::sBool WasNotLocked = false;
@@ -158,7 +164,7 @@ namespace mtx {
 				return true;
 
 			if ( IsLocked_() )
-				Core_.wait( Lock, [this]() {return _State_ == s_Released;} );	// third parameter to handle spurious awake.
+				Core_.wait( Lock, [this]() {return State_ == s_Released;} );	// third parameter to handle spurious awake.
       else
         WasNotLocked = true;
 
@@ -179,7 +185,7 @@ namespace mtx {
 				return true;
 
 			if ( IsLocked_() ) {
-				if ( ( TimeOut == 0 ) || !Core_.wait_for( Lock, std::chrono::milliseconds( TimeOut ), [this]() {return _State_ == s_Released;} ) )	// third parameter to handle spurious awake.
+				if ( ( TimeOut == 0 ) || !Core_.wait_for( Lock, std::chrono::milliseconds( TimeOut ), [this]() {return State_ == s_Released;} ) )	// third parameter to handle spurious awake.
 					return false;
 			}
 
@@ -259,6 +265,12 @@ namespace mtx {
 		return Handler->IsLocked();
 	}
 
+	inline void SetIsLockedFlag(
+    handler___ Handler,
+    bso::sBool *IsLockedFlag)
+  {
+    return Handler->SetIsLockedFlag(IsLockedFlag);
+  }
 
 	inline bso::bool__ TryToLock(
 		handler___ Handler,

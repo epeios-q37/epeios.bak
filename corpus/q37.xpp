@@ -4,7 +4,7 @@
 		<xpp:set name="q37_packing" env-var="Q37_PACKING"/>
 		<xpp:ifeq select="q37_packing" value="">
 			<xpp:bloc>
-				<xpp:set name="ostype" env-var="OSTYPE"/>
+				<xpp:set name="ostype" env-var="OSTYPE"/><!-- DO NOT WORK UNDER UNIX; missing 'export OSTYPE' -->
 				<xpp:ifeq select="ostype" value="">
 					<xpp:set name="env" value="windows"/>
 				</xpp:ifeq>
@@ -53,7 +53,8 @@
 	</xpp:bloc>
 	<xpp:define name="epeios.xlcl">
 		<xpp:bloc marker="$">
-			<xpp:expand href="$HomePath$hg/epeios/corpus/epeios.xlcl"/>
+			<!--xpp:expand href="$HomePath$hg/epeios/corpus/epeios.xlcl"/-->
+			<xpp:expand href="/home/csimon/hg/epeios/corpus/epeios.xlcl"/>
 		</xpp:bloc>
 	</xpp:define>
 	<xpp:bloc>

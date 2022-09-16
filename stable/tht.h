@@ -339,6 +339,10 @@ namespace tht {
 		{
 		  return Init(bp_Default, IsBlockedFlag);
 		}
+		void SetIsBlockedFlag(bso::sBool *IsBlockedFlag)
+		{
+      mtx::SetIsLockedFlag(Main_, IsBlockedFlag);
+		}
 		// NOTA: rearms also the blocker.
 		// Returns true if had to wait, or false if it returned immediately.
 		bso::sBool Wait( void )
