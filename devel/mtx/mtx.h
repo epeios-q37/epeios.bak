@@ -66,10 +66,18 @@
 
 namespace mtx {
 
+  qENUM( Behavior ) {
+    bKeep, // The lock is keeped once obtained.
+    bRelease, // The lock is released once obtained,
+    b_amount,
+    b_Undefined,
+    b_Default = bKeep
+  };
+
 	qENUM( State_ )	{
 //		sFree,  //: Replaced by already existing but obviously not used 'sRelease'.
 		sLocked,
-		s_Released, // '_' to test if not otherwise used.
+		sReleased, // '_' to test if not otherwise used.
 		sDisabled,
 		s_amount,
 		s_Undefined
@@ -77,14 +85,14 @@ namespace mtx {
 
 	typedef struct _mutex__ {
 	private:
-		std::mutex Mutex_;
+		std::mutex Guard_;
 		std::condition_variable Core_;
 		eState_ State_;
     bso::sBool *IsLockedFlag_; // '*IsLockedFlag_' (the boolean) reflects the status (locked or not) if != NULL.
                                 // 'IsLockedFlag_' (the pointer) is potentially set by user.
 		bso::bool__ IsReleased_( void ) const
 		{
-			return State_ == s_Released;
+			return State_ == sReleased;
 		}
 		bso::bool__ IsDisabled_( void ) const
 		{
@@ -94,11 +102,16 @@ namespace mtx {
 		{
 			return State_ == sLocked;
 		}
-		void SetState_(eState_ State)
+		void SetState_(
+      eState_ State,
+      eBehavior Behavior)
 		{
+		  if ( ( State == sLocked ) && ( Behavior == bRelease ) )
+        State = sReleased;
+
 		  if ( IsLockedFlag_ != NULL ) {
         switch ( State ) {
-        case s_Released:
+        case sReleased:
         case sDisabled:
           *IsLockedFlag_ = false;
           break;
@@ -117,7 +130,7 @@ namespace mtx {
 #ifdef MTX__CONTROL
 		void Release( void )
 		{
-			ststd::unique_lock<decltype(Mutex_)> Lock( Mutex_ );
+			ststd::unique_lock<decltype(Guard_)> Guard(Guard_);
 
 			SetState_(s_Released);;
 		}
@@ -132,7 +145,7 @@ namespace mtx {
 		}
 		bso::bool__ IsLocked( void )
 		{
-			std::unique_lock<decltype(Mutex_)> Lock( Mutex_ );
+			std::unique_lock<decltype(Guard_)> Guard(Guard_);
 #ifdef MTX__CONTROL
 			if ( IsReleased_() ) {
 				Lock.unlock();	// In case of the use of the 'setjmp' version or the error library.
@@ -146,14 +159,16 @@ namespace mtx {
 		}
 		void SetIsLockedFlag(bso::sBool *IsLockedFlag)
 		{
+			std::unique_lock<decltype(Guard_)> Guard(Guard_);
+
 		  IsLockedFlag_ = IsLockedFlag;
 
-		  SetState_(State_);  // Sets '*IsLockedFlag_'.
+		  SetState_(State_, b_Undefined);  // Sets '*IsLockedFlag_'.
 		}
-		bso::sBool Lock( void ) // Returns true when the lock was obtained immediately.
+		bso::sBool Lock(eBehavior Behavior) // Returns true when the lock was obtained immediately.
 		{
 		  bso::sBool WasNotLocked = false;
-			std::unique_lock<decltype(Mutex_)> Lock( Mutex_ );
+			std::unique_lock<decltype(Guard_)> Guard(Guard_);
 #ifdef MTX__CONTROL
 			if ( IsReleased_() ) {
 				Lock.unlock();	// In case of the use of the 'setjmp' version or the error library.
@@ -164,17 +179,19 @@ namespace mtx {
 				return true;
 
 			if ( IsLocked_() )
-				Core_.wait( Lock, [this]() {return State_ == s_Released;} );	// third parameter to handle spurious awake.
+				Core_.wait(Guard, [this]() {return State_ == sReleased;});	// third parameter to handle spurious awake.
       else
         WasNotLocked = true;
 
-			SetState_(sLocked);
+			SetState_(sLocked, Behavior);
 
 			return WasNotLocked;
 		}
-		bso::bool__ TryToLock( tol::sDelay TimeOut )
+		bso::bool__ TryToLock(
+      eBehavior Behavior,
+      tol::sDelay TimeOut )
 		{
-			std::unique_lock<decltype(Mutex_)> Lock( Mutex_ );
+			std::unique_lock<decltype(Guard_)> Guard(Guard_);
 #ifdef MTX__CONTROL
 			if ( IsReleased_() ) {
 				Lock.unlock();	// In case of the use of the 'setjmp' version or the error library.
@@ -185,32 +202,32 @@ namespace mtx {
 				return true;
 
 			if ( IsLocked_() ) {
-				if ( ( TimeOut == 0 ) || !Core_.wait_for( Lock, std::chrono::milliseconds( TimeOut ), [this]() {return State_ == s_Released;} ) )	// third parameter to handle spurious awake.
+				if ( ( TimeOut == 0 ) || !Core_.wait_for(Guard, std::chrono::milliseconds(TimeOut), [this]() {return State_ == sReleased;}) )	// third parameter to handle spurious awake.
 					return false;
 			}
 
-			SetState_(sLocked);
+			SetState_(sLocked, Behavior);
 
 			return true;
 		}
 		bso::sBool Unlock( qRPN )
 		{
-			std::unique_lock<decltype(Mutex_)> Lock( Mutex_ );
+			std::unique_lock<decltype(Guard_)> Guard(Guard_);
 
 			if ( IsDisabled_() )
 				return true;
 
 			if ( !IsLocked_() ) {
 				if ( ErrHandling == err::hThrowException ) {
-					Lock.unlock();	// In case of the use of the 'setjmp' version or the error library.
+					Guard.unlock();	// In case of the use of the 'setjmp' version or the error library.
 					qRFwk();
 				} else
 					return false;
 			}
 
-			SetState_(s_Released);
+			SetState_(sReleased, b_Undefined);
 
-			Lock.unlock();
+			Guard.unlock();
 
 			Core_.notify_one();
 
@@ -221,7 +238,7 @@ namespace mtx {
       bso::sBool *IsLockedFlag )
 		{
 		  IsLockedFlag_ = IsLockedFlag;
-			SetState_(Disabled ? sDisabled : s_Released);
+			SetState_(Disabled ? sDisabled : sReleased, b_Undefined);
 		}
 		~_mutex__( void )
 		{
@@ -274,27 +291,39 @@ namespace mtx {
 
 	inline bso::bool__ TryToLock(
 		handler___ Handler,
-		tol::sDelay TimeOut = 0 )	// Returns 'true' if lock successful, or return false after timeout.
+		eBehavior Behavior = b_Default,
+		tol::sDelay TimeOut = 0)	// Returns 'true' if lock successful, or return false after timeout.
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
 			qRFwk();
 #endif
-		return Handler->TryToLock( TimeOut );
+		return Handler->TryToLock(Behavior, TimeOut);
 	}
 
-	inline bso::sBool Lock( handler___ Handler )
+	inline bso::bool__ TryToLock(
+		handler___ Handler,
+		tol::sDelay TimeOut,
+		eBehavior Behavior = b_Default)	// Returns 'true' if lock successful, or return false after timeout.
+  {
+    return TryToLock(Handler, Behavior, TimeOut);
+  }
+
+	inline bso::sBool Lock(
+    handler___ Handler,
+    eBehavior Behavior = b_Default)
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
 			qRFwk();
 #endif
-		return Handler->Lock();
+		return Handler->Lock(Behavior);
 	}
 
 	inline bso::sBool Lock(
 		handler___ Handler,
-		tol::sDelay TimeOut )	// Returns 'true' as soon as the lock succeeds, or false if timeout expired.
+		tol::sDelay TimeOut,
+		eBehavior Behavior = b_Default)	// Returns 'true' as soon as the lock succeeds, or false if timeout expired.
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
@@ -303,7 +332,7 @@ namespace mtx {
 		if ( TimeOut == 0 )
 			qRFwk();
 
-		return Handler->TryToLock( TimeOut );
+		return Handler->TryToLock(Behavior, TimeOut);
 	}
 
 	//f Unlock 'Handler'.
@@ -371,7 +400,7 @@ namespace mtx {
 			if ( Lock )
 				this->Lock();
 		}
-		void InitAndLock( handler___ Handler )
+		void InitAndLock(handler___ Handler)
 		{
 			Init( Handler, true );
 		}
@@ -379,17 +408,27 @@ namespace mtx {
 		{
 		  return Handler_ != NULL;
 		}
-		bso::bool__ TryToLock( tol::sDelay TimeOut = 0 )	// Returns 'true' if lock successful, or return false after timeout.
+		bso::bool__ TryToLock(
+      eBehavior Behavior = b_Default,
+      tol::sDelay TimeOut = 0)	// Returns 'true' if lock successful, or return false after timeout.
 		{
-			return mtx::TryToLock( H_(), TimeOut );
+			return mtx::TryToLock( H_(), Behavior, TimeOut );
 		}
-		bso::sBool Lock( void )
+		bso::bool__ TryToLock(
+      tol::sDelay TimeOut,
+      eBehavior Behavior = b_Default)	// Returns 'true' if lock successful, or return false after timeout.
+    {
+      return TryToLock(Behavior, TimeOut);
+    }
+		bso::sBool Lock(eBehavior Behavior = b_Default)
 		{
-			return mtx::Lock( H_() );
+			return mtx::Lock(H_(), Behavior);
 		}
-		bso::sBool Lock(tol::sDelay TimeOut)	// Returns 'true' as soon as the lock succeeds, or false if timeout expired.
+		bso::sBool Lock(
+      tol::sDelay TimeOut,
+      eBehavior Behavior = b_Default)	// Returns 'true' as soon as the lock succeeds, or false if timeout expired.
 		{
-			return mtx::Lock( H_(), TimeOut );
+			return mtx::Lock(H_(), TimeOut, Behavior);
 		}
 		bso::sBool Unlock( qRPD )
 		{

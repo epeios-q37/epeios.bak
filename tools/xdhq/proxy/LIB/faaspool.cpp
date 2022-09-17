@@ -600,29 +600,29 @@ namespace {
 				qRGnr();
 
 			switch( Id ) {
-    case faas::UndefinedId:
-			  Input.Init();
-			  prtcl::Get(Flow, Input);
+      case faas::UndefinedId:
+        Input.Init();
+        prtcl::Get(Flow, Input);
 
-				if ( Input != xdhcmn::ScriptNameForInform )
+        if ( Input != xdhcmn::ScriptNameForInform )
           qRGnr();
 
         Input.Init();
         prtcl::Get(Flow, Input);
 
         Log_(IP, Backend.Token, Input);
-				break;
-			case faas::downstream::BroadcastScriptId:
-				BroadcastScript_(Flow, Backend.TRow);
-				break;
-			case faas::downstream::BroadcastActionId:
-				BroadcastAction_(Flow, Backend.TRow);
-				break;
+        break;
+      case faas::downstream::BroadcastScriptId:
+        BroadcastScript_(Flow, Backend.TRow);
+        break;
+      case faas::downstream::BroadcastActionId:
+        BroadcastAction_(Flow, Backend.TRow);
+        break;
       case faas::downstream::HeadSendingId:
         prtcl::Get(Flow, Backend.Depot.GetReceptacle());
         Backend.Depot.ReportContentAvailable();
         break;
-			default:
+      default:
         faasgate::dGates &Gates = Backend.LockAndGetGates(GatesGuard);
 
         if ( !Gates.Exists( Id ) ) {
@@ -634,7 +634,7 @@ namespace {
           Backend.Switch.Wait();	// Waits until all data in flow red.
         }
         break;
-			}
+      }
 		}
 	qRR;
 	qRT;

@@ -12,6 +12,11 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-09-17
+- MTK: [cont];
+- MTX: introducing 'eBahvior';
+- THT: introducing 'eBlockerBahvior';
+
 ## 2022-09-16
 - MTK, MTX, THT: [cont];
 - THT: [cont];

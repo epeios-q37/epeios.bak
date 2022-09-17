@@ -159,7 +159,7 @@ namespace mtk {
     }
     bso::sBool Wait(void)
     {
-      Blocker.Wait();
+      Blocker.Wait(tht::bbDismiss);
 
       return !Error;
     }
