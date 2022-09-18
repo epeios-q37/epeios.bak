@@ -54,8 +54,10 @@ qRB
 
 	if ( ReturnedValue != NULL) {
  		B_().WaitSelf();
-		csdcmn::Get(Proxy, *ReturnedValue);
-		Proxy.Dismiss();
+ 		if ( !IsQuitting_() ) {
+      csdcmn::Get(Proxy, *ReturnedValue);
+      Proxy.Dismiss();
+ 		}
 		B_().UnblockGlobal();
 	}
 qRR

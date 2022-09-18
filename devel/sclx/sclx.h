@@ -459,17 +459,20 @@ namespace sclx {
 		qRE;
 		}
 		void HandleLayout_(
-      const str::dString &Id,
       const str::dString &Variant,
+      const str::dString &Id,
       const str::dString &XML,
       const str::dString &XSL)
     {
-
+    qRH;
       str::wString Dummy;
-
+    qRB;
       Dummy.Init();
 
-      Process_("HandleLayout_1", Dummy, Variant, XML, XSL);
+      Process_("HandleLayout_1", &Dummy, Variant, Id, XML, XSL); // The primitive returns a string, but which is not handled by the user.
+    qRR;
+    qRT;
+    qRE;
     }
 	public:
 		void reset( bso::sBool P = true )

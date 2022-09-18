@@ -17,7 +17,6 @@
     along with 'FaaSq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef REGISTRY_INC_
 # define REGISTRY_INC_
 

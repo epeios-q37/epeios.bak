@@ -79,7 +79,6 @@ namespace {
 	};
 }
 
-
 xdhcdc::cSingle *sclx::SCLXFetchCallback(void)
 {
 	rXDHCallback *Callback = new rXDHCallback;

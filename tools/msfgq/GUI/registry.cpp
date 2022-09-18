@@ -16,3 +16,9 @@
   You should have received a copy of the GNU Affero General Public License
   along with 'MSFGq'.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+#include "registry.h"
+
+using namespace registry;
+
+rEntry registry::definition::Body( "Body", sclr::Definitions);

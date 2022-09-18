@@ -65,9 +65,14 @@ namespace session {
 	: public cUpstream_
 	{
 	private:
-		qRMV(rBlockers_, B_, Blockers_);
-		qRMV(fdr::rRWDriver, P_, Proxy_);
+		qRMV( rBlockers_, B_, Blockers_ );
+		qRMV( fdr::rRWDriver, P_, Proxy_ );
+		qRMV( bso::sBool, Q_, Quit_ );
 		faas_::sId Id_;
+		bso::sBool IsQuitting_(void) const
+		{
+		  return Q_();
+		}
 	protected:
 		virtual bso::sBool XDHCUCProcess(
 			const str::string_ &Primitive,
@@ -76,19 +81,20 @@ namespace session {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			Blockers_ = NULL;
-			Proxy_ = NULL;
+			tol::reset(P, Blockers_, Proxy_, Quit_);
 			Id_ = faas_::UndefinedId;
 		}
 		E_CVDTOR( sUpstream_ );
 		void Init(
 			fdr::rRWDriver &Proxy,
 			faas_::sId Id,
-			rBlockers_ &Blockers)
+			rBlockers_ &Blockers,
+			bso::sBool *Quit)
 		{
 			Blockers_ = &Blockers;
 			Proxy_ = &Proxy;
 			Id_ = Id;
+			Quit_ = Quit;
 		}
 	};
 
@@ -132,7 +138,7 @@ namespace session {
 
 			Proxy_.Init(ProxyDriver);
 			Session_.Init(C_());
-			Upstream_.Init(ProxyDriver, Id, Blockers_);
+			Upstream_.Init(ProxyDriver, Id, Blockers_, &Quit);
 			Session_.Initialize(Upstream_, "", str::Empty);
 			Handshaked = false;
 			Quit = false;

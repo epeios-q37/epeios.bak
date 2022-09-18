@@ -17,7 +17,9 @@
   along with 'MSFGq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-# include "main.h"
+#include "main.h"
+
+#include "registry.h"
 
 using namespace main;
 
@@ -30,7 +32,16 @@ sclx::action_handler<sSession> main::Core;
   SCLX_ADef( sSession, actions_, name )
 
 D_( OnNewSession ) {
-  Session.Inner(str::Empty, str::wString("<button>Hello</button>"));
+  str::wString Body;
+
+  Body.Init();
+  sclm::MGetValue(registry::definition::Body, Body);
+
+  Session.Inner(str::Empty, Body);
+}
+
+D_( Hello ) {
+  Session.AlertB(str::wString("Hello!!!"));
 }
 
 #define R_( name ) Core.Add(#name, actions_::name)
@@ -38,4 +49,5 @@ D_( OnNewSession ) {
 qGCTOR( main ) {
   Core.Init();
   R_( OnNewSession );
+  R_(Hello);
 }

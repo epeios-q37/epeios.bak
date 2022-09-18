@@ -85,6 +85,23 @@
     <Definitions>
 			<XDHTML xpp:attribute="ScriptsVersion,XDHScriptsVersion"/>
 			<HeadFile>Head.xhtml</HeadFile>
+			<Body>
+			  <xpp:cdata>
+<fieldset>
+  <fieldset style="display: grid; grid-gap: 10px;">
+    <label style="margin: auto 0">Midi in:</label>
+    <select id="" style="grid-column: 2;">
+      <option value="test">test</option>
+    </select>
+    <label style="margin: auto 0" style="grid-row: 2;">Midi out:</label>
+    <select name="MidiOut" id=""></select>
+  </fieldset>
+  <div style="width: 100%; text-align: center;margin-top: 10px;">
+    <button style="">Refresh</button>
+  </div>
+</fieldset>
+        </xpp:cdata>
+			</Body>
     </Definitions>
     <Locale>
     </Locale>

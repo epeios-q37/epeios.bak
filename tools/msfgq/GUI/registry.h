@@ -16,3 +16,26 @@
   You should have received a copy of the GNU Affero General Public License
   along with 'MSFGq'.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+#ifndef REGISTRY_INC_
+# define REGISTRY_INC_
+
+# include "sclr.h"
+
+namespace registry {
+	using namespace sclr;
+
+	namespace parameter {
+		using namespace sclr::parameter;
+	}
+
+	namespace definition {
+		using namespace sclr::definition;
+
+		extern rEntry Body;
+	}
+
+	const str::dString &GetWebHost(str::dString &Host);
+}
+
+#endif
