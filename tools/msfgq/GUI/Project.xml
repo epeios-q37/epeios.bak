@@ -23,6 +23,12 @@
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 			</Modules>
+			<Modules Group="MSC">
+				<Module>mscmdd</Module>
+				<Module>mscmdf</Module>
+				<Module>mscmdm</Module>
+				<Module>mscmld</Module>
+			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>
 			</Modules>
@@ -31,12 +37,17 @@
 			</Modules>
 		</Modules>
 		<Module>main</Module>
+		<Module>melody</Module>
+		<Module>midiq</Module>
 		<Module>registry</Module>
 	</Modules>
 	<SourceDirs>
 		<SourceDir>..</SourceDir>
 	</SourceDirs>
-	<Files>
+	<Libraries>
+	  <Library Target="POSIX">asound</Library>
+	</Libraries>
+  <Files>
 		<Files Group="XML" Path="XML/">
 			<File>Head.xhtml</File>
 			<File>Body.xhtml</File>

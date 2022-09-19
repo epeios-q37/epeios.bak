@@ -161,6 +161,11 @@ namespace mscmld {
 		bso::u8__ GetChromatic( void ) const;
 	};
 
+	inline const char *GetPitchNameLabel(const sPitch &Pitch)
+	{
+	  return GetPitchNameLabel(Pitch.Name);
+	}
+
 	inline int operator ==(
 		const sPitch &Op1,
 		const sPitch &Op2 )
@@ -510,7 +515,6 @@ namespace mscmld {
 	typedef bch::qBUNCHd( sSignature, sSRow ) dSignatures;
 	qW( Signatures )
 
-
 	struct sNote {
 		sPitch Pitch;
 		sDuration Duration;
@@ -544,6 +548,11 @@ namespace mscmld {
 			return ( Pitch.IsValid() && Duration.IsValid() && Signature.IsValid() );
 		}
 	};
+
+	inline const char *GetPitchNameLabel(const sNote &Note)
+	{
+	  return GetPitchNameLabel(Note.Pitch);
+	}
 
 	qROW( Row );
 

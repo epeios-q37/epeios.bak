@@ -65,7 +65,7 @@ namespace sclx {
 
 			extern rEntry XMLFilesHandling;
 			extern rEntry XSLFile;	// To style XML data tagged.
-			extern rEntry _HeadFile;	// For the head section of the HTML main page. One page only.
+			extern rEntry HeadFile;	// For the head section of the HTML main page. One page only.
 		}
 	}
 

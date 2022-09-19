@@ -20,6 +20,7 @@
 #include "msfgqxdh.h"
 
 #include "main.h"
+#include "midiq.h"
 
 SCLI_DEF( msfgqxdh, NAME_LC	SCLX_DEFAULT_SUFFIX, NAME_MC );
 
@@ -30,6 +31,7 @@ const scli::sInfo &sclx::SCLXInfo( void )
 
 void sclx::SCLXInitialization( xdhcdc::eMode Mode )
 {
+	mtk::Launch(midiq::HandleInput, NULL);
 }
 
 namespace {

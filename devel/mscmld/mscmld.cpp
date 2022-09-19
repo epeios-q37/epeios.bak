@@ -785,8 +785,6 @@ static void WriteXML_(
 	Writer.PopTag();
 }
 
-
-
 static void WriteXML_(
 	const sNote &Note,
 	const sNote &PreviousNote,

@@ -22,8 +22,18 @@
 
 # include "sclx.h"
 
+# include "melody.h"
+
 # include "bso.h"
 # include "tol.h"
+
+
+	inline void reset(
+		bso::sBool,
+		mscmld::sRow &Row )
+	{
+		Row = qNIL;
+	}
 
 namespace main {
   class sSession
@@ -46,6 +56,28 @@ namespace main {
   };
 
   extern sclx::action_handler<sSession> Core;
+
+
+  struct rXMelody {
+  public:
+    melody::wMelody Melody;
+    mscmld::sRow Row;
+    void reset(bso::sBool P = true)
+    {
+      Melody.reset(P);
+      Row = qNIL;
+    }
+    qCDTOR(rXMelody);
+    void Init(void)
+    {
+      Melody.Init();
+      Row = qNIL;
+    }
+  };
+
+  typedef mtx::rHandle hGuard;
+
+  rXMelody &Get(hGuard &Guard);
 }
 
 #endif // MAIN_INC_
