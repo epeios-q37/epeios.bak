@@ -25,7 +25,7 @@
       </Devices>
 			<Signature>
 				<Time>3/4</Time>
-				<Key>-3</Key>
+				<Key>-2</Key>
 			</Signature>
 			<Tempo>
 				<Unit>3</Unit>
@@ -72,6 +72,85 @@
 				</xpp:bloc>
       </xpp:bloc>
       <!--Script>while read x ; do echo $x ; done</Script-->
+    </Parameters>
+    <Definitions>
+			<XDHTML xpp:attribute="ScriptsVersion,XDHScriptsVersion"/>
+			<HeadFile>Head.xhtml</HeadFile>
+			<Body>
+			  <xpp:cdata>
+<fieldset>
+  <fieldset>
+    <legend>Midi in</legend>
+    <select id="MidiIn">
+      <option value="test">test</option>
+    </select>
+    <button xdh:onevent="Refresh">Refresh</button>
+  </fieldset>
+  <fieldset>
+    <legend>Signature</legend>
+    <fieldset>
+      <legend>Key</legend>
+      <select id="Key">
+        <option value="-7">-7</option>
+        <option value="-6">-6</option>
+        <option value="-5">-5</option>
+        <option value="-4">-4</option>
+        <option value="-3">-3</option>
+        <option value="-2">-2</option>
+        <option value="-1">-1</option>
+        <option value="0" selected="selected">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+      </select>
+    </fieldset>
+    <fieldset>
+      <legend>Time</legend>
+      <input id="Numerator" type="number" max="12" min="1" value="4" size="2"/>
+      <span>/</span>
+      <select id="Denominator">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="4" selected="selected">4</option>
+        <option value="8">8</option>
+        <option value="16">16</option>
+      </select>
+    </fieldset>
+  </fieldset>
+  <fieldset >
+    <div id="Score"></div>
+  </fieldset>
+  <div id="audio"></div><button class="activate-audio">Activate Audio</button>
+  <fieldset>
+    <button id="-2" xdh:onevent="Duration">4Ronde</button>
+    <button id="-1" xdh:onevent="Duration">2Ronde</button>
+    <button id="1" xdh:onevent="Duration">Ronde</button>
+    <button id="2" xdh:onevent="Duration">Blanche</button>
+    <button id="3" xdh:onevent="Duration">Noire</button>
+    <button id="4" xdh:onevent="Duration">Croche</button>
+    <button id="5" xdh:onevent="Duration">Double</button>
+    <button id="6" xdh:onevent="Duration">Triple</button>
+    <button id="7" xdh:onevent="Duration">Quadruple</button>
+  </fieldset>
+  <button xdh:onevent="Execute">Execute</button>
+</fieldset>
+        </xpp:cdata>
+			</Body>
+			<!--Script>while read x ; do echo $x ; done</Script-->
+      <Script>
+        <xpp:bloc>rm test.xml;</xpp:bloc>
+        <xpp:bloc>while read x ; do echo $x&gt;&gt;test.xml ; done;</xpp:bloc>
+        <xpp:expand select="xslt"/>
+        <xpp:bloc> "</xpp:bloc>
+        <xpp:expand select="xmld2ly"/>
+        <xpp:bloc>" test.xml &gt;test.ly;</xpp:bloc>
+        <xpp:expand select="Lilypond"/>
+        <xpp:bloc> test.ly; xdg-open ./test.png</xpp:bloc>
+      </Script>
       <Script>
         <xpp:bloc>echo;</xpp:bloc>
         <xpp:expand select="xslt"/>
@@ -81,33 +160,6 @@
         <xpp:expand select="Lilypond"/>
         <xpp:bloc> test.ly; xdg-open ./test.png</xpp:bloc>
       </Script>
-    </Parameters>
-    <Definitions>
-			<XDHTML xpp:attribute="ScriptsVersion,XDHScriptsVersion"/>
-			<HeadFile>Head.xhtml</HeadFile>
-			<Body>
-			  <xpp:cdata>
-<fieldset>
-  <fieldset style="display: grid; grid-gap: 10px;">
-    <label style="margin: auto 0">Midi in:</label>
-    <select id="MidiIn" style="grid-column: 2;">
-      <option value="test">test</option>
-    </select>
-    <label style="margin: auto 0" style="grid-row: 2;">Midi out:</label>
-    <select id="MidiOut"></select>
-  </fieldset>
-  <div style="width: 100%; text-align: center;margin-top: 10px;">
-    <button style="">Refresh</button>
-  </div>
-  <fieldset>
-    <div id="paper"></div>
-  </fieldset>
-  <fieldset>
-    <div id="Hit"></div>
-  </fieldset>
-</fieldset>
-        </xpp:cdata>
-			</Body>
     </Definitions>
     <Locale>
     </Locale>

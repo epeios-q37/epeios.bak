@@ -62,16 +62,19 @@ namespace main {
   public:
     melody::wMelody Melody;
     mscmld::sRow Row;
+    bso::sU8 BaseOctave;
     void reset(bso::sBool P = true)
     {
       Melody.reset(P);
       Row = qNIL;
+      BaseOctave = 0;
     }
     qCDTOR(rXMelody);
     void Init(void)
     {
       Melody.Init();
       Row = qNIL;
+      BaseOctave = 2;
     }
   };
 

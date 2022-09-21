@@ -22,3 +22,14 @@
 using namespace registry;
 
 rEntry registry::definition::Body( "Body", sclr::Definitions);
+
+rEntry registry::definition::Script( "Script", sclr::Definitions );
+
+namespace {
+	rEntry Signature_( "Signature", sclr::Parameters );
+}
+
+rEntry registry::parameter::signature::Key( "Key", Signature_ );
+rEntry registry::parameter::signature::Time( "Time", Signature_ );
+
+

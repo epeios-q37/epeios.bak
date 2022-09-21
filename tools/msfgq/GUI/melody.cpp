@@ -32,14 +32,12 @@ using namespace melody;
 
 using namespace mscmld;
 
-static inline sSignatureKey GetSignatureKey_( void )
+sSignatureKey melody::GetSignatureKey( void )
 {
-  return 0;
-//	return sclm::MGetS8( registry::parameter::signature::Key, -7, 7 );
+	return sclm::MGetS8( registry::parameter::signature::Key, -7, 7 );
 }
 
-/*
-static inline sSignatureTime GetSignatureTime_( void )
+sSignatureTime melody::GetSignatureTime( void )
 {
   sSignatureTime Signature;
 qRH;
@@ -62,13 +60,10 @@ qRT;
 qRE;
   return Signature;
 }
-*/
 
 sSignature melody::GetSignature( void )
 {
-//	return sSignature(GetSignatureKey_(), GetSignatureTime_());
-	return sSignature(GetSignatureKey_(), sSignatureTime(2, 4));
-
+	return sSignature(GetSignatureKey(), GetSignatureTime());
 }
 /*
 static const sDuration &GetTempoUnit_( sDuration &Unit )

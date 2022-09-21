@@ -29,6 +29,10 @@
 				<Module>mscmdm</Module>
 				<Module>mscmld</Module>
 			</Modules>
+			<Modules Group="MTH">
+				<Module>mthitg</Module>
+				<Module>mthrtn</Module>
+			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>
 			</Modules>

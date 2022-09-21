@@ -49,6 +49,11 @@ namespace melody {
     }
   };
 
+  sSignatureKey GetSignatureKey( void );
+
+  sSignatureTime GetSignatureTime( void );
+
+
   sSignature GetSignature(void);
 
 //  sTempo &GetTempo(sTempo &Tempo);

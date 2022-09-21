@@ -27,12 +27,20 @@ namespace registry {
 
 	namespace parameter {
 		using namespace sclr::parameter;
+
+		namespace signature {
+			extern rEntry
+        Key,
+        Time;
+		}
 	}
 
 	namespace definition {
 		using namespace sclr::definition;
 
-		extern rEntry Body;
+		extern rEntry
+      Body,
+      Script;
 	}
 
 	const str::dString &GetWebHost(str::dString &Host);

@@ -107,15 +107,34 @@ const str::dString &midiq::GetDeviceOutId(str::dString &Id)
 }
 
 namespace {
-  void Append_(sNote Note)
+  bso::sS8 Append_(
+    sNote Note,
+    main::rXMelody &XMelody)
   {
+    bso::sS8 RelativeOctave = Note.Pitch.Octave - XMelody.BaseOctave;
+
+    if ( RelativeOctave < 0 )
+      return RelativeOctave;
+
+    if ( RelativeOctave > 3)
+      return RelativeOctave - 3;
+
+    XMelody.Melody.Append(Note);
+
+    return 0;
+  }
+
+  bso::sS8 Append_(sNote Note)
+  {
+    bso::sS8 OctaveOverflow = 0;
   qRH;
     main::hGuard Guard;
   qRB;
-    main::Get(Guard).Melody.Append(Note);
+    OctaveOverflow = Append_(Note, main::Get(Guard));
   qRR;
   qRT;
   qRE;
+    return OctaveOverflow;
   }
 }
 
@@ -159,8 +178,8 @@ qRB;
 			if ( Header.MIDIEvent.Event == midNoteOn )
 				if  ( Data( Data.Last() ) != 0 ) {
 					Note = sNote(melody::GetPitch(Data(Data.First()), Signature.Key), sDuration(3), Signature);
-					Append_(Note);
-          sclx::Broadcast(str::wString("Hit"), str::Empty);
+					if ( Append_(Note) == 0)
+            sclx::Broadcast(str::wString("Hit"), str::Empty);
 //					mtx::Lock( Shared.Mutex );
 					/*if ( Shared.Row != qNIL ) {
 						Shared.Melody->InsertAt(Note, Shared.Row);

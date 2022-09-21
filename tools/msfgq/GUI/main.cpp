@@ -114,71 +114,174 @@ namespace {
 
 namespace {
   namespace {
-    void Convert_(
+    bso::sS8 Convert_(
       const melody::sNote &Note,
+      bso::sU8 BaseOctave,
       txf::sWFlow &Flow)
     {
-      const char *SName = mscmld::GetPitchNameLabel(Note);
+      const char *Label = mscmld::GetPitchNameLabel(Note);
+      const bso::sS8 RawDuration = Note.Duration.Base;
+      bso::sU8 Duration = RawDuration > 0 ? 1 << (RawDuration - 1) : 2 >> -RawDuration;
+      bso::sS8 RelativeOctave = Note.Pitch.Octave - BaseOctave;
+      bso::pInteger Buffer;
+      bso::sChar Accidental = 0;
+      char Pitch[] = {0,0,0};
 
-      if ( strlen(SName) != 1 )
+      if ( RelativeOctave < 0 )
+        return RelativeOctave;
+
+      if ( RelativeOctave > 3 )
+        return RelativeOctave - 3;
+
+      if ( strlen(Label) != 1 )
         qRGnr();
 
-      int Name = SName[0];
+      switch ( RelativeOctave ) {
+      case 0:
+        Pitch[1] = ',';
+      case 1:
+        Pitch[0] = toupper(Label[0]);
+        break;
+      case 3:
+        Pitch[1] = '\'';
+      case 2:
+        Pitch[0] = tolower(Label[0]);
+        break;
+      default:
+        qRGnr();
+        break;
+      }
 
-      Flow << (char)toupper(Name) << ' ';
+      switch ( Note.Pitch.Accidental ) {
+      case mscmld::paSharp:
+        Accidental = '^';
+        break;
+      case mscmld::paFlat:
+        Accidental = '_';
+        break;
+      case mscmld::paNatural:
+        Accidental = ' ';
+        break;
+      default:
+        qRGnr();
+        break;
+      }
+
+      Flow << Accidental << Pitch << '/' << bso::Convert(Duration, Buffer) << ' ';
+
+      return 0;
     }
 
-    void Convert_(
+    bso::sS8 Convert_(
       const melody::dMelody &Melody,
+      bso::sU8 BaseOctave,
       txf::sWFlow &Flow)
     {
-      Flow << "X: 1\\nT: Preview\\nK: G\\n";
-
+      bso::sS8 Return = 0;
       melody::sRow Row = Melody.First();
+
+      Flow << "X: 1\\nT: Preview\\nL: 1\\nK: \\n";
 
       if ( Row == qNIL )
         Flow << "[|]";
 
-      while ( Row != qNIL ) {
-        Convert_(Melody(Row), Flow);
+      while ( ( Return == 0 ) && ( Row != qNIL ) ) {
+        Return = Convert_(Melody(Row), BaseOctave, Flow);
 
         Row = Melody.Next(Row);
       }
+
+      return Return;
     }
   }
 
-  str::dString &GetABC(str::dString &ABC)
+  bso::sS8 GetABC_(
+    const melody::dMelody &Melody,
+    bso::sU8 BaseOctave,
+    str::dString &ABC)
   {
+    bso::sS8 Return = 0;
   qRH;
-    main::hGuard Guard;
     flx::rStringTWFlow Flow;
   qRB;
-    const main::rXMelody &XMelody = main::Get(Guard);
-
     Flow.Init(ABC);
 
-    Convert_(XMelody.Melody, Flow);
+    Return = Convert_(Melody, BaseOctave, Flow);
   qRR;
   qRT;
   qRE;
-    return ABC;
+    return Return;
+  }
+
+  bso::sS8 GetABC_(
+    const main::rXMelody &XMelody,
+    str::dString &ABC)
+  {
+    return GetABC_(XMelody.Melody, XMelody.BaseOctave, ABC);
+  }
+
+  bso::sS8 GetABC_(str::dString &ABC)
+  {
+    bso::sS8 Return = 0;
+  qRH;
+    main::hGuard Guard;
+  qRB;
+    Return = GetABC_(main::Get(Guard), ABC);
+  qRR;
+  qRT;
+  qRE;
+    return Return;
   }
 
   namespace {
-    void DisplayMelody_(main::sSession &Session)
+    namespace {
+      void HighlightNote_(
+        melody::sRow Row,
+        str::dString &Script)
+      {
+        bso::pInt Buffer;
+
+        Script.Append("highlightNote(\"");
+        if ( Row != qNIL)
+          Script.Append(bso::Convert(*Row, Buffer));
+        Script.Append("\");");
+      }
+    }
+
+    void DisplayMelody_(
+      const main::rXMelody &XMelody,
+      main::sSession &Session)
     {
     qRH;
       str::wString ABC, Script;
+      bso::sS8 OctaveOverflow = 0;
     qRB;
       tol::Init(ABC, Script);
 
-      GetABC(ABC);
+      OctaveOverflow = GetABC_(XMelody, ABC);
 
-      Script.Init("load(\"");
-      Script.Append(ABC);
-      Script.Append("\");");
+      if ( OctaveOverflow != 0 )
+        Session.AlertB(str::wString("Octave error !!!"));
+      else {
+        Script.Init("load(\"");
+        Script.Append(ABC);
+        Script.Append("\");");
 
-      Session.Execute(Script);
+        HighlightNote_(XMelody.Row, Script);
+
+        Session.Execute(Script);
+      }
+    qRR;
+    qRT;
+    qRE;
+    }
+
+    void DisplayMelody_(main::sSession &Session)
+    {
+    qRH;
+      main::hGuard Guard;
+    qRB;
+      DisplayMelody_(Get(Guard), Session);
     qRR;
     qRT;
     qRE;
@@ -187,8 +290,11 @@ namespace {
 }
 
 D_( OnNewSession ) {
-  str::wString Body;
-  str::wString XHTML;
+  str::wString Body, XHTML, Key;
+  bso::pInt Buffer;
+
+  Session.Execute("createStylesheet();");
+//  Session.Execute("activate();");
 
   Body.Init();
   sclm::MGetValue(registry::definition::Body, Body);
@@ -199,15 +305,114 @@ D_( OnNewSession ) {
   FillMidiInDevices_(XHTML);
   Session.Inner(str::wString("MidiIn"), XHTML);
 
+  /*
   XHTML.Init();
   FillMidiOutDevices_(XHTML);
   Session.Inner(str::wString("MidiOut"), XHTML);
-
+*/
   DisplayMelody_(Session);
+  Session.Execute("document.querySelector(\".activate-audio\").addEventListener(\"click\", activate);");
+
+  Key.Init();
+  if ( sclm::OGetValue(registry::parameter::signature::Key, Key) )
+    Session.SetValue("Key", Key);
+
+  melody::sSignatureTime SignatureTime = melody::GetSignatureTime();
+
+  Session.SetValue("Numerator", bso::Convert(SignatureTime.Numerator(), Buffer));
+  Session.SetValue("Denominator", bso::Convert(SignatureTime.Denominator(), Buffer));
+
+//  Session.Execute("setMyKeyDownListener();");
 }
 
 D_( Hit ) {
   DisplayMelody_(Session);
+}
+
+D_( Key )
+{
+
+}
+
+D_( Refresh )
+{
+  Session.Log("Refresh");
+}
+
+D_( SelectNote )
+{
+  main::hGuard Guard;
+
+  main::rXMelody &XMelody = main::Get(Guard);
+
+  str::wString(Id).ToNumber(*XMelody.Row);
+  DisplayMelody_(XMelody, Session);
+}
+
+D_( Duration )
+{
+qRH;
+  main::hGuard Guard;
+qRB;
+  main::rXMelody &XMelody = main::Get(Guard);
+
+  if ( XMelody.Row != qNIL ) {
+    melody::sNote Note = XMelody.Melody(XMelody.Row);
+
+    str::wString(Id).ToNumber(Note.Duration.Base);
+
+    XMelody.Melody.Store(Note, XMelody.Row);
+
+    XMelody.Row = XMelody.Melody.Next(XMelody.Row);
+
+    DisplayMelody_(XMelody, Session);
+  }
+qRR;
+qRT;
+qRE;
+}
+
+namespace {
+  static void ToXML_(
+    const melody::dMelody &Melody,
+    txf::sWFlow &Flow)
+  {
+  qRH;
+    xml::rWriter Writer;
+  qRB;
+    Writer.Init(Flow, xml::oIndent, xml::e_Default);
+
+    Writer.PushTag("Melody");
+
+    mscmld::WriteXML(Melody, Writer);
+
+    Writer.PopTag();
+  qRR;
+  qRT;
+  qRE;
+  }
+}
+
+D_( Execute )
+{
+qRH;
+	str::wString Script;
+	flx::rExecWDriver XDriver;
+	txf::rWFlow TFlow;
+	main::hGuard Guard;
+qRB;
+	Script.Init();
+	sclm::MGetValue(registry::definition::Script, Script);
+
+	XDriver.Init(Script);
+	TFlow.Init(XDriver);
+
+	ToXML_(main::Get(Guard).Melody, TFlow);
+
+	TFlow.Commit();
+qRR;
+qRT;
+qRE;
 }
 
 #define R_( name ) Core.Add(#name, actions_::name)
@@ -216,6 +421,11 @@ qGCTOR( main ) {
   Core.Init();
   R_( OnNewSession );
   R_( Hit );
+  R_( Key );
+  R_( Refresh );
+  R_( SelectNote );
+  R_( Duration );
+  R_( Execute );
 
   Melody_.Init();
   Mutex_ = mtx::Create();
