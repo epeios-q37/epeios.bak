@@ -94,9 +94,7 @@ qRE;
 
 const str::dString &midiq::GetDeviceInId(str::dString &Id)
 {
-  Id.Append("hw:1,0");
-  return Id;
-//	return GetDeviceId_(mscmdd::wIn, registry::parameter::devices::in::Policy, registry::parameter::devices::in::Value, Id);
+	return GetDeviceId_(mscmdd::wIn, registry::parameter::devices::in::Policy, registry::parameter::devices::in::Value, Id);
 }
 
 const str::dString &midiq::GetDeviceOutId(str::dString &Id)
@@ -107,7 +105,7 @@ const str::dString &midiq::GetDeviceOutId(str::dString &Id)
 }
 
 namespace {
-  bso::sS8 Append_(
+  bso::sS8 Handle_(
     sNote Note,
     main::rXMelody &XMelody)
   {
@@ -119,18 +117,24 @@ namespace {
     if ( RelativeOctave > 3)
       return RelativeOctave - 3;
 
-    XMelody.Melody.Append(Note);
+    if ( XMelody.Row == qNIL )
+      XMelody.Melody.Append(Note);
+    else if ( XMelody.Overwrite ) {
+      XMelody.Melody.Store(Note, XMelody.Row);
+      XMelody.Row = XMelody.Melody.Next(XMelody.Row);
+    } else
+      XMelody.Melody.InsertAt(Note, XMelody.Row);
 
     return 0;
   }
 
-  bso::sS8 Append_(sNote Note)
+  bso::sS8 Handle_(sNote Note)
   {
     bso::sS8 OctaveOverflow = 0;
   qRH;
     main::hGuard Guard;
   qRB;
-    OctaveOverflow = Append_(Note, main::Get(Guard));
+    OctaveOverflow = Handle_(Note, main::Get(Guard));
   qRR;
   qRT;
   qRE;
@@ -151,6 +155,7 @@ qRH;
 	sSignature Signature;
 	str::wString DeviceId;
 	flw::rWFlow &Flow = flx::VoidOFlow;
+	bso::pInt Buffer;
 qRB;
 	sShared &Shared = *(sShared *)UP;
 
@@ -178,8 +183,8 @@ qRB;
 			if ( Header.MIDIEvent.Event == midNoteOn )
 				if  ( Data( Data.Last() ) != 0 ) {
 					Note = sNote(melody::GetPitch(Data(Data.First()), Signature.Key), sDuration(3), Signature);
-					if ( Append_(Note) == 0)
-            sclx::Broadcast(str::wString("Hit"), str::Empty);
+					if ( Handle_(Note) == 0)
+            sclx::Broadcast(str::wString("Hit"), str::wString(bso::Convert(Data(Data.First()), Buffer)));
 //					mtx::Lock( Shared.Mutex );
 					/*if ( Shared.Row != qNIL ) {
 						Shared.Melody->InsertAt(Note, Shared.Row);

@@ -424,6 +424,7 @@ public:\
 	qCRM( type, method, variable )
 
 # define qCDEF( type, name, value ) const type name = value
+# define qCDEFC(name, value) qCDEF(char *, name, value)
 # define qCDEFS(name, value) qCDEF(str::wString, name, value)
 
 # define qFLAG( name, value )	qCDEF( bso::sFlag, f##name, 2 << ( value ) )

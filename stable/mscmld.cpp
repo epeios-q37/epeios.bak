@@ -35,8 +35,11 @@ using namespace mscmld;
 #define TIME_TAG							"Time"
 
 #define ANACROUSIS_TAG						"Anacrousis"
-E_CDEF( char *, AnacrousisBaseAttribute_, "Base" );
-E_CDEF( char *, AnacrousisAmountAttribute_, "Amount" );
+
+namespace {
+  qCDEFC( AnacrousisBaseAttributeLabel_, "Base" );
+  qCDEFC( AnacrousisAmountAttributeLabel_, "Amount" );
+}
 
 
 #define NOTE_TAG							"Note"
@@ -70,7 +73,10 @@ E_CDEF( char *, AnacrousisAmountAttribute_, "Amount" );
 #define YES_VALUE							"yes"
 #define NO_VALUE							"no"
 
-
+namespace {
+  qCDEFC( ChromaticAttributeLabel_, "Chromatic" );
+  qCDEFC( DiatonicAttributeLabel_, "Diatonic" );
+}
 
 const char *mscmld::GetPitchNameLabel( ePitchName Name )
 {
@@ -347,7 +353,7 @@ qRT
 qRE
 }
 
-static bso::u8__ GetChromaticAbsolute_( const sPitch &Pitch )
+static bso::u8__ GetChromaticAbsolute_( const sAltPitch &Pitch )
 {
 	if ( ( BSO_U8_MAX / 12 ) < Pitch.Octave )
 		qRFwk();
@@ -404,13 +410,12 @@ static bso::u8__ GetChromaticAbsolute_( const sPitch &Pitch )
 	return Absolute;
 }
 
-bso::u8__ mscmld::sPitch::GetChromatic( void ) const
+bso::u8__ mscmld::sAltPitch::GetChromatic( void ) const
 {
 	return GetChromaticAbsolute_( *this );
 }
 
-
-static bso::u8__ GetDiatonicAbsolute_( const sPitch &Pitch )
+static bso::u8__ GetDiatonicAbsolute_( const sAltPitch &Pitch )
 {
 	if ( ( BSO_U8_MAX / 7 ) < Pitch.Octave )
 		qRFwk();
@@ -590,9 +595,9 @@ qRE
 	return !BarIsComplete;
 }
 
-static void WriteXML_(
-	const sPitch &Pitch,
-	const sPitch &PreviousPitch,
+static void WriteXMLAltPitch_(
+	const sAltPitch &Pitch,
+	const sAltPitch &PreviousPitch,
 	xml::rWriter &Writer )
 {
 	bso::integer_buffer__ Buffer;
@@ -605,9 +610,9 @@ static void WriteXML_(
 
 	Writer.PutAttribute( OCTAVE_ATTRIBUTE, bso::Convert( Pitch.Octave, Buffer ) );
 
-	Writer.PutAttribute( "Diatonic", bso::Convert( GetDiatonicAbsolute_( Pitch ), Buffer ) );
+	Writer.PutAttribute( DiatonicAttributeLabel_, bso::Convert( GetDiatonicAbsolute_( Pitch ), Buffer ) );
 
-	Writer.PutAttribute( "Chromatic", bso::Convert( GetChromaticAbsolute_( Pitch ), Buffer ) );
+	Writer.PutAttribute( ChromaticAttributeLabel_, bso::Convert( GetChromaticAbsolute_( Pitch ), Buffer ) );
 
 	if ( PreviousPitch.Name != pn_Undefined ) {
 		bso::s16__ DiatonicDelta = (bso::s16__)GetDiatonicAbsolute_( Pitch ) - GetDiatonicAbsolute_( PreviousPitch );
@@ -615,13 +620,123 @@ static void WriteXML_(
 
 		Writer.PushTag( DIFF_TAG );
 
-		Writer.PutAttribute( "Diatonic", bso::Convert( DiatonicDelta, Buffer ) );
-		Writer.PutAttribute( "Chromatic", bso::Convert( ChromaticDelta, Buffer ) );
+		Writer.PutAttribute( DiatonicAttributeLabel_, bso::Convert( DiatonicDelta, Buffer ) );
+		Writer.PutAttribute( ChromaticAttributeLabel_, bso::Convert( ChromaticDelta, Buffer ) );
 
 		Writer.PopTag();
 	}
 
 	Writer.PopTag();
+}
+
+namespace {
+  void Convert_(
+    sPitch Pitch,
+    sSignatureKey Key,
+    ePitchAccidental Accidental,  // Accidental to use if key = 0 (C key).
+    sAltPitch &AltPitch)
+  {
+    bso::sU8 RelChromatic = Pitch % 12;
+    bso::sBool IsSharp = Key > 0;
+
+    // In this context 'key' can noy be 0 (C key).
+    // It should be instead -8 or 8 to indicate which of flat or sharp should be
+    // used for alterate note.
+
+    if ( Key == 0 )
+      switch ( Accidental ) {
+      case paSharp:
+        IsSharp = true;
+        break;
+      case paFlat:
+        IsSharp = false;
+        break;
+      default:
+        qRFwk();
+          break;
+      }
+    else
+      IsSharp = Key > 0;
+
+    switch ( RelChromatic ) {
+    case 0:
+      AltPitch.Name = pnC;
+      break;
+    case 1:
+      AltPitch.Name = IsSharp ? pnC : pnD;
+      break;
+    case 2:
+      AltPitch.Name = pnD;
+      break;
+    case 3:
+      AltPitch.Name = IsSharp ? pnD : pnE;
+      break;
+    case 4:
+      AltPitch.Name = pnE;
+      break;
+    case 5:
+      AltPitch.Name = pnF;
+      break;
+    case 6:
+      AltPitch.Name = IsSharp ? pnF : pnG;
+      break;
+    case 7:
+      AltPitch.Name = pnG;
+      break;
+    case 8:
+      AltPitch.Name = IsSharp ? pnG : pnA;
+      break;
+    case 9:
+      AltPitch.Name = pnA;
+      break;
+    case 10:
+      AltPitch.Name = IsSharp ? pnA : pnB;
+      break;
+    case 11:
+      AltPitch.Name = pnB;
+      break;
+    default:
+      qRFwk();
+      break;
+    }
+
+    AltPitch.Octave = Pitch / 12;
+    AltPitch.Accidental = Key % 8 ? IsSharp ? paSharp : paFlat : paNatural;
+
+    if ( GetChromaticAbsolute_(AltPitch) != Pitch)
+      qRFwk();
+  }
+}
+
+const char *mscmld::GetPitchNameLabel(
+    sPitch Pitch,
+    sSignatureKey Key,
+    ePitchAccidental Accidental)
+{
+  sAltPitch AltPitch;
+
+  AltPitch.Init();
+
+  Convert_(Pitch, Key, Accidental, AltPitch);
+
+  return GetPitchNameLabel(AltPitch.Name);
+}
+
+static void WriteXMLPitch_(
+  sPitch Pitch,
+  sPitch PreviousPitch,
+  sSignatureKey Key,
+  ePitchAccidental Accidental,
+  xml::rWriter &Writer)
+{
+  sAltPitch AltPitch, PreviousAltPitch;
+
+  tol::Init(AltPitch, PreviousAltPitch);
+
+  Convert_(Pitch, Key, Accidental, AltPitch);
+  Convert_(PreviousPitch, Key, Accidental, PreviousAltPitch);
+
+  WriteXMLAltPitch_(AltPitch, PreviousAltPitch, Writer);
 }
 
 static void WriteXMLDurationCoreAttributes_(
@@ -636,7 +751,7 @@ static void WriteXMLDurationCoreAttributes_(
 		Writer.PutAttribute( "Modifier", bso::Convert( Duration.Modifier, Buffer ) );
 }
 
-static void WriteXML_(
+static void WriteXMLDuration_(
 	const sDuration &Duration,
 	const sDuration &PreviousDuration,
 	xml::rWriter &Writer )
@@ -656,7 +771,7 @@ static void WriteXML_(
 
 }
 
-static void WriteXML_(
+static void WriteXMLSignatureKey_(
 	const sSignatureKey &Key,
 	const sSignatureKey &PreviousKey,
 	xml::rWriter &Writer )
@@ -744,7 +859,7 @@ static void WriteXML_(
 	Writer.PopTag();
 }
 
-static void WriteXML_(
+static void WriteXMLSignatureTime_(
 	const sSignatureTime &Time,
 	const sSignatureTime &PreviousTime,
 	xml::rWriter &Writer )
@@ -769,7 +884,7 @@ static void WriteXML_(
 	Writer.PopTag();
 }
 
-static void WriteXML_(
+static void WriteXMLSignature_(
 	const sSignature &Signature,
 	const sSignature &PreviousSignature,
 	xml::rWriter &Writer )
@@ -778,27 +893,28 @@ static void WriteXML_(
 
 //	Writer.PutAttribute( "Diff", ( Signature != PreviousSignature ) ? "yes" : "no" );
 
-	WriteXML_( Signature.Key, PreviousSignature.Key, Writer );
+	WriteXMLSignatureKey_( Signature.Key, PreviousSignature.Key, Writer );
 
-	WriteXML_( Signature.Time, PreviousSignature.Time, Writer );
+	WriteXMLSignatureTime_( Signature.Time, PreviousSignature.Time, Writer );
 
 	Writer.PopTag();
 }
 
-static void WriteXML_(
+static void WriteXMLNote_(
 	const sNote &Note,
 	const sNote &PreviousNote,
+	ePitchAccidental Accidental,
 	xml::rWriter &Writer )
 {
-	if ( Note.Pitch.Name == pnRest )
+	if ( Note.Pitch == pRest )
 		Writer.PushTag( REST_TAG );
 	else {
 		Writer.PushTag( NOTE_TAG );
 
-		WriteXML_( Note.Pitch, PreviousNote.Pitch, Writer );
+		WriteXMLPitch_( Note.Pitch, PreviousNote.Pitch, Note.Signature.Key, Accidental, Writer );
 	}
 
-	WriteXML_( Note.Duration, PreviousNote.Duration, Writer );
+	WriteXMLDuration_( Note.Duration, PreviousNote.Duration, Writer );
 
 	Writer.PopTag();
 }
@@ -806,6 +922,7 @@ static void WriteXML_(
 
 write_status__ mscmld::WriteXML(
 	const dMelody &Melody,
+	ePitchAccidental Accidental,
 	xml::rWriter &Writer )
 {
 	write_status__ Status = wsOK;
@@ -827,8 +944,8 @@ qRB
 
 	if ( ( Melody.Anacrousis().IsValid() ) && (Melody.Anacrousis().Amount != 0 ) ) {
 		Writer.PushTag( ANACROUSIS_TAG );
-		xml::PutAttribute( AnacrousisBaseAttribute_, Melody.Anacrousis().Base, Writer );
-		xml::PutAttribute( AnacrousisAmountAttribute_, Melody.Anacrousis().Amount, Writer );
+		xml::PutAttribute( AnacrousisBaseAttributeLabel_, Melody.Anacrousis().Base, Writer );
+		xml::PutAttribute( AnacrousisAmountAttributeLabel_, Melody.Anacrousis().Amount, Writer );
 		Writer.PopTag();
 		HandleAnacrousis = true;
 	}
@@ -838,7 +955,7 @@ qRB
 			qRFwk();
 
 		if ( Note.IsValid() ) {
-			if ( Note.Pitch.Name != pnRest ) {
+			if ( Note.Pitch != pRest ) {
 				PreviousNote = Note;
 			} else {
 				PreviousNote.Duration = Note.Duration;
@@ -886,7 +1003,7 @@ qRB
                     }
 
                     if ( WriteSignature )
-                        WriteXML_( Note.Signature, PreviousNote.Signature, Writer );
+                        WriteXMLSignature_( Note.Signature, PreviousNote.Signature, Writer );
 
                     TupletControl = Writer.PushTag( TUPLET_TAG );
                     xml::PutAttribute( NUMERATOR_ATTRIBUTE, Note.Duration.Tuplet.Numerator, Writer );
@@ -901,7 +1018,7 @@ qRB
                 }
 
                 if ( WriteSignature )
-                    WriteXML_( Note.Signature, PreviousNote.Signature, Writer );
+                    WriteXMLSignature_( Note.Signature, PreviousNote.Signature, Writer );
 
             } else {
                 if ( WriteBar ) {
@@ -910,13 +1027,13 @@ qRB
                 }
 
                 if ( WriteSignature )
-                    WriteXML_( Note.Signature, PreviousNote.Signature, Writer );
+                    WriteXMLSignature_( Note.Signature, PreviousNote.Signature, Writer );
             }
 
             WriteBar = false;
             WriteSignature = false;
 
-            WriteXML_( Note, PreviousNote, Writer );
+            WriteXMLNote_( Note, PreviousNote, Accidental, Writer );
 
             NoteFraction.Init();
 
@@ -1178,7 +1295,7 @@ static sPitchOctave GetPitchOctave_( const str::string_ &Octave )
 
 static parse_status__ ParsePitch_(
 	xml::parser___ &Parser,
-	sPitch &Pitch )
+	sAltPitch &Pitch )
 {
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;
@@ -1386,7 +1503,7 @@ static parse_status__ ParseNote_(
 {
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;
-	sPitch Pitch;
+	sAltPitch Pitch;
 	sDuration Duration;
 
 	Pitch.Init();
@@ -1423,7 +1540,7 @@ static parse_status__ ParseNote_(
 			else if ( !Signature.IsValid() )
 				Status = psMissingSignature;
 			else {
-				Note.Pitch = Pitch;
+				Note.Pitch = GetChromaticAbsolute_(Pitch);
 				Note.Duration = Duration;
 				Note.Signature = Signature;
 			}
@@ -1457,7 +1574,7 @@ static parse_status__ ParseRest_(
 {
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;
-	sPitch Pitch;
+	sAltPitch Pitch;
 	sDuration Duration;
 
 	Pitch.Init();
@@ -1492,7 +1609,7 @@ static parse_status__ ParseRest_(
 			else if ( !Signature.IsValid() )
 				Status = psMissingSignature;
 			else {
-				Note.Pitch = Pitch;
+				Note.Pitch = pRest;
 				Note.Duration = Duration;
 			}
 
@@ -1644,7 +1761,7 @@ static parse_status__ ParseAnacrousis_(
 			Status = psUnexpectedTag;
 			break;
 		case xml::tAttribute:
-			if ( Parser.AttributeName() == AnacrousisBaseAttribute_ ) {
+			if ( Parser.AttributeName() == AnacrousisBaseAttributeLabel_ ) {
 				if ( Base != AnacrousisUndefinedBase )
 					Status = psAlreadyDefined;
 				else
@@ -1652,7 +1769,7 @@ static parse_status__ ParseAnacrousis_(
 
 				if ( (Error != qNIL) || ( Base == AnacrousisUndefinedBase ) )
 					Status = psBadValue;
-			} else if ( Parser.AttributeName() == AnacrousisAmountAttribute_ ) {
+			} else if ( Parser.AttributeName() == AnacrousisAmountAttributeLabel_ ) {
 				if ( Amount != 0 )
 					Status = psAlreadyDefined;
 				else

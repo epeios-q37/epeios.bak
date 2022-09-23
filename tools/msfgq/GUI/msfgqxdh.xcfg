@@ -11,7 +11,7 @@
 			<Devices>
         <xpp:define name="LinuxDevices">
           <xpp:bloc>
-            <In Policy="Id">hw:2,0</In>
+            <In Policy="Id">hw:1,0</In>
             <Out Policy="Id">hw:2,0</Out>
           </xpp:bloc>
         </xpp:define>
@@ -21,11 +21,11 @@
             <Out Policy="Id">0</Out>
           </xpp:bloc>
         </xpp:define>
-        <xpp:expand select="WindowsDevices"/>
+        <xpp:expand select="LinuxDevices"/>
       </Devices>
 			<Signature>
-				<Time>3/4</Time>
-				<Key>-2</Key>
+				<Time>4/4</Time>
+				<Key>3</Key>
 			</Signature>
 			<Tempo>
 				<Unit>3</Unit>
@@ -79,66 +79,90 @@
 			<Body>
 			  <xpp:cdata>
 <fieldset>
-  <fieldset>
-    <legend>Midi in</legend>
-    <select id="MidiIn">
-      <option value="test">test</option>
-    </select>
-    <button xdh:onevent="Refresh">Refresh</button>
-  </fieldset>
-  <fieldset>
-    <legend>Signature</legend>
-    <fieldset>
-      <legend>Key</legend>
-      <select id="Key">
-        <option value="-7">-7</option>
-        <option value="-6">-6</option>
-        <option value="-5">-5</option>
-        <option value="-4">-4</option>
-        <option value="-3">-3</option>
-        <option value="-2">-2</option>
-        <option value="-1">-1</option>
-        <option value="0" selected="selected">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
+  <fieldset style="display: flex; ">
+    <legend>Parameters</legend>
+    <fieldset style="display: flex; flex-direction: column; justify-content: space-evenly;">
+      <legend>Midi in</legend>
+      <select id="MidiIn">
+        <option value="test">test</option>
       </select>
+      <span style="display: flex; justify-content: center;">
+        <button xdh:onevent="Refresh">Refresh</button>
+      </span>
     </fieldset>
+    <fieldset style="display: flex;">
+      <legend>Signature</legend>
+      <fieldset>
+        <legend>Key</legend>
+        <select id="Key">
+          <option value="-7">-7</option>
+          <option value="-6">-6</option>
+          <option value="-5">-5</option>
+          <option value="-4">-4</option>
+          <option value="-3">-3</option>
+          <option value="-2">-2</option>
+          <option value="-1">-1</option>
+          <option value="0" selected="selected">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </fieldset>
+      <fieldset>
+        <legend>Time</legend>
+        <input id="Numerator" type="number" max="12" min="1" value="4" size="2"/>
+        <span>/</span>
+        <select id="Denominator">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="4" selected="selected">4</option>
+          <option value="8">8</option>
+          <option value="16">16</option>
+        </select>
+      </fieldset>
+    </fieldset>
+  </fieldset>
+  <fieldset style="display: flex; flex-direction: column; gap: 5px">
+    <fieldset >
+      <div id="Score"></div>
+    </fieldset>
+    <div id="audio"></div>
+    <span>
+      <button class="activate-audio">Activate Audio</button>
+      <button xdh:onevent="Execute">Execute</button>
+    </span>
+  </fieldset>
+  <fieldset style="display: flex; flex-direction: column;">
     <fieldset>
-      <legend>Time</legend>
-      <input id="Numerator" type="number" max="12" min="1" value="4" size="2"/>
-      <span>/</span>
-      <select id="Denominator">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="4" selected="selected">4</option>
-        <option value="8">8</option>
-        <option value="16">16</option>
-      </select>
+      <legend>Duration</legend>
+      <button id="-2" xdh:onevent="Rest">Rest</button>
+      <button id="1" xdh:onevent="Duration">Ronde</button>
+      <button id="2" xdh:onevent="Duration">Blanche</button>
+      <button id="3" xdh:onevent="Duration">Noire</button>
+      <button id="4" xdh:onevent="Duration">Croche</button>
+      <button id="5" xdh:onevent="Duration">Double</button>
+      <button id="6" xdh:onevent="Duration">Triple</button>
+      <button id="7" xdh:onevent="Duration">Quadruple</button>
+      <button id="Dot" xdh:onevent="Dot">Dot</button>
+      <button id="Tie" xdh:onevent="Tie">Tie</button>
     </fieldset>
+    <fieldset style="display: flex; align-items: center; gap:5px;">
+      <legend>Cursor</legend>
+      <fieldset xdh:radio="Cursor" xdh:onevent="Cursor">
+        <label><input name="Cursor" type="radio" value="Insert" checked="checked">Insert</input></label>
+      <label><input name="Cursor" type="radio" value="Overwrite">Overwrite</input></label>
+    </fieldset>
+    <button xdh:onevent="Append">Append</button>
+    <button xdh:onevent="Suppr">Suppr.</button>
+    <button xdh:onevent="Clear">Clear all</button>
+     </fieldset>
   </fieldset>
-  <fieldset >
-    <div id="Score"></div>
-  </fieldset>
-  <div id="audio"></div><button class="activate-audio">Activate Audio</button>
-  <fieldset>
-    <button id="-2" xdh:onevent="Duration">4Ronde</button>
-    <button id="-1" xdh:onevent="Duration">2Ronde</button>
-    <button id="1" xdh:onevent="Duration">Ronde</button>
-    <button id="2" xdh:onevent="Duration">Blanche</button>
-    <button id="3" xdh:onevent="Duration">Noire</button>
-    <button id="4" xdh:onevent="Duration">Croche</button>
-    <button id="5" xdh:onevent="Duration">Double</button>
-    <button id="6" xdh:onevent="Duration">Triple</button>
-    <button id="7" xdh:onevent="Duration">Quadruple</button>
-  </fieldset>
-  <button xdh:onevent="Execute">Execute</button>
 </fieldset>
-        </xpp:cdata>
+      </xpp:cdata>
 			</Body>
 			<!--Script>while read x ; do echo $x ; done</Script-->
       <Script>

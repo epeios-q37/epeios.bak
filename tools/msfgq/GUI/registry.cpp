@@ -32,4 +32,13 @@ namespace {
 rEntry registry::parameter::signature::Key( "Key", Signature_ );
 rEntry registry::parameter::signature::Time( "Time", Signature_ );
 
+namespace {
+	rEntry Devices_( "Devices", sclr::Parameters );
+	rEntry In_( "In", Devices_ );
+	rEntry Out_( "Out", Devices_ );
+}
+
+rEntry registry::parameter::devices::in::Value = In_;
+rEntry registry::parameter::devices::in::Policy( "@Policy", In_ );
+
 

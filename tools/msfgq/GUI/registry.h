@@ -28,6 +28,14 @@ namespace registry {
 	namespace parameter {
 		using namespace sclr::parameter;
 
+    namespace devices	{
+			namespace in {
+				extern rEntry
+					Policy,
+					Value;
+			}
+    }
+
 		namespace signature {
 			extern rEntry
         Key,

@@ -12,6 +12,10 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-09-23
+- MSCMLD: the default pitch is now the MIDI note,
+- TOL: adding `qCDEFC(…)`;
+
 ## 2022-09-17
 - MTK: [cont];
 - MTX: introducing 'eBahvior';

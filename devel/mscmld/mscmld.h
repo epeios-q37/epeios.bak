@@ -105,7 +105,7 @@ namespace mscmld {
 	typedef bso::u8__ sPitchOctave;
 #define MSCMLD_UNDEFINED_PITCH_OCTAVE BSO_U8_MAX
 
-	struct sPitch {
+	struct sAltPitch {
 		ePitchName Name;
 		ePitchAccidental Accidental;
 		sPitchOctave Octave;
@@ -115,8 +115,8 @@ namespace mscmld {
 			Accidental = pa_Undefined;
 			Octave = MSCMLD_UNDEFINED_PITCH_OCTAVE;
 		}
-		qCTOR( sPitch );
-		sPitch(
+		qCTOR( sAltPitch );
+		sAltPitch(
 			sPitchOctave Octave,
 			ePitchName Name,
 			ePitchAccidental Accidental = paNatural )
@@ -127,7 +127,7 @@ namespace mscmld {
 			this->Accidental = Accidental;
 			this->Octave = Octave;
 		}
-		sPitch(
+		sAltPitch(
 			ePitchName Name,
 			sPitchOctave Octave,
 			ePitchAccidental Accidental = paNatural )
@@ -138,7 +138,7 @@ namespace mscmld {
 			this->Accidental = Accidental;
 			this->Octave = Octave;
 		}
-		sPitch(
+		sAltPitch(
 			ePitchName Name,
 			ePitchAccidental Accidental,
 			sPitchOctave Octave )
@@ -161,29 +161,29 @@ namespace mscmld {
 		bso::u8__ GetChromatic( void ) const;
 	};
 
-	inline const char *GetPitchNameLabel(const sPitch &Pitch)
+	inline const char *GetPitchNameLabel(const sAltPitch &Pitch)
 	{
 	  return GetPitchNameLabel(Pitch.Name);
 	}
 
 	inline int operator ==(
-		const sPitch &Op1,
-		const sPitch &Op2 )
+		const sAltPitch &Op1,
+		const sAltPitch &Op2 )
 	{
 		return ( Op1.Name == Op2.Name ) && ( Op1.Accidental == Op2.Accidental ) && ( Op1.Octave == Op2.Octave );
 	}
 
 	inline int operator !=(
-		const sPitch &Op1,
-		const sPitch &Op2 )
+		const sAltPitch &Op1,
+		const sAltPitch &Op2 )
 	{
 		return ( Op1.Name != Op2.Name ) || ( Op1.Accidental != Op2.Accidental ) || ( Op1.Octave != Op2.Octave );
 	}
 
 	qROW( PRow );
 
-	typedef bch::qBUNCHd( sPitch, sPRow ) dPitches;
-	qW( Pitches )
+	typedef bch::qBUNCHd( sAltPitch, sPRow ) dAltPitches;
+	qW( AltPitches )
 
 # define MSCMLD_UNDEFINED_TUPLET_NUMERATOR		BSO_U8_MAX
 # define MSCMLD_UNDEFINED_TUPLET_DENOMINATOR	BSO_U8_MAX
@@ -515,13 +515,34 @@ namespace mscmld {
 	typedef bch::qBUNCHd( sSignature, sSRow ) dSignatures;
 	qW( Signatures )
 
+	typedef bso::sU8 sPitch;
+
+	typedef bch::qBUNCHd( sPitch, sPRow ) dPitches;
+	qW( Pitches );
+
+	qENUM( Pitch )	{
+	  pRest = 128,
+	  p_amount,
+	  p_Undefined
+	};
+
+	const char *GetPitchNameLabel(
+    sPitch Pitch,
+    sSignatureKey Key,
+    ePitchAccidental Accidental);
+
+	inline bso::sBool IsPitchValid(sPitch Pitch)
+	{
+	  return Pitch < p_amount;
+	}
+
 	struct sNote {
 		sPitch Pitch;
 		sDuration Duration;
 		sSignature Signature;
 		void reset( bso::bool__ P = true )
 		{
-			Pitch.reset( P );
+			Pitch = p_Undefined;
 			Duration.reset( P );
 			Signature.reset( P );
 		}
@@ -539,25 +560,27 @@ namespace mscmld {
 		}
 		void Init( void )
 		{
-			Pitch.Init();
+			Pitch = p_Undefined;
 			Duration.Init();
 			Signature.Init();
 		}
 		bso::bool__ IsValid( void ) const
 		{
-			return ( Pitch.IsValid() && Duration.IsValid() && Signature.IsValid() );
+			return ( IsPitchValid(Pitch) && Duration.IsValid() && Signature.IsValid() );
 		}
 	};
-
-	inline const char *GetPitchNameLabel(const sNote &Note)
-	{
-	  return GetPitchNameLabel(Note.Pitch);
-	}
 
 	qROW( Row );
 
 	typedef bch::qBUNCHd( sNote, sRow ) dNotes;
 	qW( Notes );
+
+	inline const char *GetPitchNameLabel(
+    const sNote Note,
+    ePitchAccidental Accidental)
+	{
+	  return GetPitchNameLabel(Note.Pitch, Note.Signature.Key, Accidental);
+	}
 
 	void Merge(
 		const dPitches &Pitches,
@@ -645,6 +668,7 @@ namespace mscmld {
 
 	write_status__ WriteXML(
 		const dMelody &Melody,
+		ePitchAccidental Accidental,  // Indicates which accidental to use as alteration in C key.
 		xml::rWriter &Writer );
 
 	enum parse_status__ {

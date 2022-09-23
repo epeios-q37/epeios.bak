@@ -63,11 +63,13 @@ namespace main {
     melody::wMelody Melody;
     mscmld::sRow Row;
     bso::sU8 BaseOctave;
+    bso::sBool Overwrite;
     void reset(bso::sBool P = true)
     {
       Melody.reset(P);
       Row = qNIL;
       BaseOctave = 0;
+      Overwrite = false;
     }
     qCDTOR(rXMelody);
     void Init(void)
@@ -75,6 +77,7 @@ namespace main {
       Melody.Init();
       Row = qNIL;
       BaseOctave = 2;
+      Overwrite = false;
     }
   };
 

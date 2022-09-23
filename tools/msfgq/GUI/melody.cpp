@@ -278,13 +278,6 @@ ePitchAccidental GetAccidental_(
 	return pa_Undefined;	// To avoid a wanrning.
 }
 
-sPitch melody::GetPitch(
-	bso::sU8 Absolute,
-	sSignatureKey Key )
-{
-	return sPitch( GetOctave_( Absolute ), GetName_( Absolute, Key ), GetAccidental_( Absolute, Key ) );
-}
-
 namespace {
   bso::sBool PrintSignaturekey_(
     const sSignatureKey &Signature,
@@ -319,10 +312,10 @@ void melody::PrintSignature(txf::sWFlow &Flow)
 }
 
 static void Print_(
-	const sPitch &Pitch,
+	const sAltPitch &Pitch,
 	txf::text_oflow__ &Flow )
 {
-	Flow << GetPitchNameLabel( Pitch.Name );
+	Flow << GetPitchNameLabel( Pitch);
 
 	switch ( Pitch.Accidental ) {
 	case paNatural:
