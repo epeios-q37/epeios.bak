@@ -33,9 +33,9 @@ namespace melody {
   using mscmld::sNote;
   using mscmld::sAltPitch;
   using mscmld::sDuration;
-  using mscmld::paFlat;
-  using mscmld::paSharp;
-  using mscmld::paNatural;
+  using mscmld::aFlat;
+  using mscmld::aSharp;
+  using mscmld::aNatural;
   using mscmld::pnRest;
 
   struct sTempo {
@@ -49,26 +49,11 @@ namespace melody {
     }
   };
 
-  sSignatureKey GetSignatureKey( void );
+  sSignatureKey _GetSignatureKey( void );
 
   sSignatureTime GetSignatureTime( void );
 
-
-  sSignature GetSignature(void);
-
-//  sTempo &GetTempo(sTempo &Tempo);
-
-  void PrintSignature(txf::sWFlow &Flow);
-
-  void Print(
-    const sNote &Note,
-    txf::sWFlow &Flow,
-    bso::bool__ Selected);
-
-  void Print(
-    const dMelody &Melody,
-    sRow Current,
-    txf::sWFlow &Flow);
+  sSignature _GetSignature(void);
 
   void Play(
     const dMelody &Melody,

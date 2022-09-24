@@ -92,34 +92,34 @@ namespace mscmld {
 
 	const char *GetPitchNameLabel( ePitchName Name );
 
-	qENUM( PitchAccidental ) {
-		paFlat,
-		paNatural,
-		paSharp,
-		pa_amount,
-		pa_Undefined
+	qENUM( Accidental ) {
+		aFlat,
+		aNatural,
+		aSharp,
+		a_amount,
+		a_Undefined
 	};
 
-	const char *GetPitchAccidentalLabel( ePitchAccidental Accidental );
+	const char *GetPitchAccidentalLabel( eAccidental Accidental );
 
-	typedef bso::u8__ sPitchOctave;
+	typedef bso::u8__ sOctave;
 #define MSCMLD_UNDEFINED_PITCH_OCTAVE BSO_U8_MAX
 
 	struct sAltPitch {
 		ePitchName Name;
-		ePitchAccidental Accidental;
-		sPitchOctave Octave;
+		eAccidental Accidental;
+		sOctave Octave;
 		void reset( bso::bool__ P = true )
 		{
 			Name = pn_Undefined;
-			Accidental = pa_Undefined;
+			Accidental = a_Undefined;
 			Octave = MSCMLD_UNDEFINED_PITCH_OCTAVE;
 		}
 		qCTOR( sAltPitch );
 		sAltPitch(
-			sPitchOctave Octave,
+			sOctave Octave,
 			ePitchName Name,
-			ePitchAccidental Accidental = paNatural )
+			eAccidental Accidental = aNatural )
 		{
 			reset( false );
 
@@ -129,8 +129,8 @@ namespace mscmld {
 		}
 		sAltPitch(
 			ePitchName Name,
-			sPitchOctave Octave,
-			ePitchAccidental Accidental = paNatural )
+			sOctave Octave,
+			eAccidental Accidental = aNatural )
 		{
 			reset( false );
 
@@ -140,8 +140,8 @@ namespace mscmld {
 		}
 		sAltPitch(
 			ePitchName Name,
-			ePitchAccidental Accidental,
-			sPitchOctave Octave )
+			eAccidental Accidental,
+			sOctave Octave )
 		{
 			this->Name = Name;
 			this->Accidental = Accidental;
@@ -154,7 +154,7 @@ namespace mscmld {
 		bso::bool__ IsValid( void ) const
 		{
 			return ( Name != pn_Undefined )
-				   && ( ( ( Accidental != pa_Undefined )
+				   && ( ( ( Accidental != a_Undefined )
 				          && ( Octave != MSCMLD_UNDEFINED_PITCH_OCTAVE ) )
 				        || ( Name == pnRest ) );
 		}
@@ -526,10 +526,21 @@ namespace mscmld {
 	  p_Undefined
 	};
 
+  const sAltPitch &Convert(
+    sPitch Pitch,
+    sSignatureKey Key,
+    eAccidental Accidental,  // Accidental to use if key = 0 (C key).
+    sAltPitch &AltPitch);
+
 	const char *GetPitchNameLabel(
     sPitch Pitch,
     sSignatureKey Key,
-    ePitchAccidental Accidental);
+    eAccidental Accidental);
+
+	sOctave GetPitchOctave(
+    sPitch Pitch,
+    sSignatureKey Key,
+    eAccidental Accidental);
 
 	inline bso::sBool IsPitchValid(sPitch Pitch)
 	{
@@ -575,11 +586,26 @@ namespace mscmld {
 	typedef bch::qBUNCHd( sNote, sRow ) dNotes;
 	qW( Notes );
 
+  inline const sAltPitch &Convert(
+    const sNote &Note,
+    eAccidental Accidental,  // Accidental to use if key = 0 (C key).
+    sAltPitch &AltPitch)
+  {
+    return Convert(Note.Pitch, Note.Signature.Key, Accidental, AltPitch);
+  }
+
 	inline const char *GetPitchNameLabel(
     const sNote Note,
-    ePitchAccidental Accidental)
+    eAccidental Accidental)
 	{
 	  return GetPitchNameLabel(Note.Pitch, Note.Signature.Key, Accidental);
+	}
+
+	inline sOctave GetPitchOctave(
+    const sNote Note,
+    eAccidental Accidental)
+	{
+	  return GetPitchOctave(Note.Pitch, Note.Signature.Key, Accidental);
 	}
 
 	void Merge(
@@ -668,7 +694,7 @@ namespace mscmld {
 
 	write_status__ WriteXML(
 		const dMelody &Melody,
-		ePitchAccidental Accidental,  // Indicates which accidental to use as alteration in C key.
+		eAccidental Accidental,  // Indicates which accidental to use as alteration in C key.
 		xml::rWriter &Writer );
 
 	enum parse_status__ {

@@ -113,16 +113,16 @@ const char *mscmld::GetPitchNameLabel( ePitchName Name )
 	return NULL;	// To avoir a 'warning'.
 }
 
-const char *mscmld::GetPitchAccidentalLabel( ePitchAccidental Accidental )
+const char *mscmld::GetPitchAccidentalLabel( eAccidental Accidental )
 {
 	switch( Accidental ) {
-	case paFlat:
+	case aFlat:
 		return "Flat";
 		break;
-	case paNatural:
+	case aNatural:
 		return "Natural";
 		break;
-	case paSharp:
+	case aSharp:
 		return "Sharp";
 		break;
 	default:
@@ -390,14 +390,14 @@ static bso::u8__ GetChromaticAbsolute_( const sAltPitch &Pitch )
 	}
 
 	switch ( Pitch.Accidental ) {
-		case paFlat:
+		case aFlat:
 			if ( Absolute == 0 )
 				qRFwk();
 			Absolute--;
 			break;
-		case paNatural:
+		case aNatural:
 			break;
-		case paSharp:
+		case aSharp:
 			if ( Absolute == BSO_U8_MAX )
 				qRFwk();
 			Absolute++;
@@ -452,6 +452,87 @@ static bso::u8__ GetDiatonicAbsolute_( const sAltPitch &Pitch )
 	}
 
 	return Absolute;
+}
+
+const sAltPitch &mscmld::Convert(
+  sPitch Pitch,
+  sSignatureKey Key,
+  eAccidental Accidental,  // Accidental to use if key = 0 (C key).
+  sAltPitch &AltPitch)
+{
+  if ( Pitch != p_Undefined ) {
+    bso::sU8 RelChromatic = Pitch % 12;
+    bso::sBool IsSharp = Key > 0;
+
+    // In this context 'key' can not be 0 (C key).
+    // It should be instead -8 or 8 to indicate which of flat or sharp should be
+    // used for alterated note.
+
+    if ( Key == 0 )
+      switch ( Accidental ) {
+      case aSharp:
+        IsSharp = true;
+        break;
+      case aFlat:
+        IsSharp = false;
+        break;
+      default:
+        qRFwk();
+          break;
+      }
+    else
+      IsSharp = Key > 0;
+
+    switch ( RelChromatic ) {
+    case 0:
+      AltPitch.Name = pnC;
+      break;
+    case 1:
+      AltPitch.Name = IsSharp ? pnC : pnD;
+      break;
+    case 2:
+      AltPitch.Name = pnD;
+      break;
+    case 3:
+      AltPitch.Name = IsSharp ? pnD : pnE;
+      break;
+    case 4:
+      AltPitch.Name = pnE;
+      break;
+    case 5:
+      AltPitch.Name = pnF;
+      break;
+    case 6:
+      AltPitch.Name = IsSharp ? pnF : pnG;
+      break;
+    case 7:
+      AltPitch.Name = pnG;
+      break;
+    case 8:
+      AltPitch.Name = IsSharp ? pnG : pnA;
+      break;
+    case 9:
+      AltPitch.Name = pnA;
+      break;
+    case 10:
+      AltPitch.Name = IsSharp ? pnA : pnB;
+      break;
+    case 11:
+      AltPitch.Name = pnB;
+      break;
+    default:
+      qRFwk();
+      break;
+    }
+
+    AltPitch.Octave = Pitch / 12;
+    AltPitch.Accidental = Key % 8 ? IsSharp ? aSharp : aFlat : aNatural;
+
+    if ( GetChromaticAbsolute_(AltPitch) != Pitch)
+      qRFwk();
+  }
+
+  return AltPitch;
 }
 
 void mscmld::Merge(
@@ -629,112 +710,43 @@ static void WriteXMLAltPitch_(
 	Writer.PopTag();
 }
 
-namespace {
-  void Convert_(
-    sPitch Pitch,
-    sSignatureKey Key,
-    ePitchAccidental Accidental,  // Accidental to use if key = 0 (C key).
-    sAltPitch &AltPitch)
-  {
-    bso::sU8 RelChromatic = Pitch % 12;
-    bso::sBool IsSharp = Key > 0;
-
-    // In this context 'key' can noy be 0 (C key).
-    // It should be instead -8 or 8 to indicate which of flat or sharp should be
-    // used for alterate note.
-
-    if ( Key == 0 )
-      switch ( Accidental ) {
-      case paSharp:
-        IsSharp = true;
-        break;
-      case paFlat:
-        IsSharp = false;
-        break;
-      default:
-        qRFwk();
-          break;
-      }
-    else
-      IsSharp = Key > 0;
-
-    switch ( RelChromatic ) {
-    case 0:
-      AltPitch.Name = pnC;
-      break;
-    case 1:
-      AltPitch.Name = IsSharp ? pnC : pnD;
-      break;
-    case 2:
-      AltPitch.Name = pnD;
-      break;
-    case 3:
-      AltPitch.Name = IsSharp ? pnD : pnE;
-      break;
-    case 4:
-      AltPitch.Name = pnE;
-      break;
-    case 5:
-      AltPitch.Name = pnF;
-      break;
-    case 6:
-      AltPitch.Name = IsSharp ? pnF : pnG;
-      break;
-    case 7:
-      AltPitch.Name = pnG;
-      break;
-    case 8:
-      AltPitch.Name = IsSharp ? pnG : pnA;
-      break;
-    case 9:
-      AltPitch.Name = pnA;
-      break;
-    case 10:
-      AltPitch.Name = IsSharp ? pnA : pnB;
-      break;
-    case 11:
-      AltPitch.Name = pnB;
-      break;
-    default:
-      qRFwk();
-      break;
-    }
-
-    AltPitch.Octave = Pitch / 12;
-    AltPitch.Accidental = Key % 8 ? IsSharp ? paSharp : paFlat : paNatural;
-
-    if ( GetChromaticAbsolute_(AltPitch) != Pitch)
-      qRFwk();
-  }
-}
-
 const char *mscmld::GetPitchNameLabel(
     sPitch Pitch,
     sSignatureKey Key,
-    ePitchAccidental Accidental)
+    eAccidental Accidental)
 {
   sAltPitch AltPitch;
 
   AltPitch.Init();
 
-  Convert_(Pitch, Key, Accidental, AltPitch);
+  return GetPitchNameLabel(Convert(Pitch, Key, Accidental, AltPitch).Name);
+}
 
-  return GetPitchNameLabel(AltPitch.Name);
+sOctave mscmld::GetPitchOctave(
+    sPitch Pitch,
+    sSignatureKey Key,
+    eAccidental Accidental)
+{
+  sAltPitch AltPitch;
+
+  AltPitch.Init();
+
+  return Convert(Pitch, Key, Accidental, AltPitch).Octave;
 }
 
 static void WriteXMLPitch_(
   sPitch Pitch,
   sPitch PreviousPitch,
   sSignatureKey Key,
-  ePitchAccidental Accidental,
+  eAccidental Accidental,
   xml::rWriter &Writer)
 {
   sAltPitch AltPitch, PreviousAltPitch;
 
   tol::Init(AltPitch, PreviousAltPitch);
 
-  Convert_(Pitch, Key, Accidental, AltPitch);
-  Convert_(PreviousPitch, Key, Accidental, PreviousAltPitch);
+  Convert(Pitch, Key, Accidental, AltPitch);
+  Convert(PreviousPitch, Key, Accidental, PreviousAltPitch);
 
   WriteXMLAltPitch_(AltPitch, PreviousAltPitch, Writer);
 }
@@ -777,7 +789,7 @@ static void WriteXMLSignatureKey_(
 	xml::rWriter &Writer )
 {
 	ePitchName Name = pn_Undefined;
-	ePitchAccidental Accidental = pa_Undefined;
+	eAccidental Accidental = a_Undefined;
 	bso::integer_buffer__ Buffer;
 
 	Writer.PushTag( KEY_TAG );
@@ -785,63 +797,63 @@ static void WriteXMLSignatureKey_(
 	switch ( Key ) {
 	case -7:
 		Name = pnC;
-		Accidental = paFlat;
+		Accidental = aFlat;
 		break;
 	case -6:
 		Name = pnG;
-		Accidental = paFlat;
+		Accidental = aFlat;
 		break;
 	case -5:
 		Name = pnD;
-		Accidental = paFlat;
+		Accidental = aFlat;
 		break;
 	case -4:
 		Name = pnA;
-		Accidental = paFlat;
+		Accidental = aFlat;
 		break;
 	case -3:
 		Name = pnE;
-		Accidental = paFlat;
+		Accidental = aFlat;
 		break;
 	case -2:
 		Name = pnB;
-		Accidental = paFlat;
+		Accidental = aFlat;
 		break;
 	case -1:
 		Name = pnF;
-		Accidental = paNatural;
+		Accidental = aNatural;
 		break;
 	case 0:
 		Name = pnC;
-		Accidental = paNatural;
+		Accidental = aNatural;
 		break;
 	case 1:
 		Name = pnG;
-		Accidental = paNatural;
+		Accidental = aNatural;
 		break;
 	case 2:
 		Name = pnD;
-		Accidental = paNatural;
+		Accidental = aNatural;
 		break;
 	case 3:
 		Name = pnA;
-		Accidental = paNatural;
+		Accidental = aNatural;
 		break;
 	case 4:
 		Name = pnE;
-		Accidental = paNatural;
+		Accidental = aNatural;
 		break;
 	case 5:
 		Name = pnB;
-		Accidental = paNatural;
+		Accidental = aNatural;
 		break;
 	case 6:
 		Name = pnF;
-		Accidental = paSharp;
+		Accidental = aSharp;
 		break;
 	case 7:
 		Name = pnC;
-		Accidental = paSharp;
+		Accidental = aSharp;
 		break;
 	default:
 		qRFwk();
@@ -903,7 +915,7 @@ static void WriteXMLSignature_(
 static void WriteXMLNote_(
 	const sNote &Note,
 	const sNote &PreviousNote,
-	ePitchAccidental Accidental,
+	eAccidental Accidental,
 	xml::rWriter &Writer )
 {
 	if ( Note.Pitch == pRest )
@@ -922,7 +934,7 @@ static void WriteXMLNote_(
 
 write_status__ mscmld::WriteXML(
 	const dMelody &Melody,
-	ePitchAccidental Accidental,
+	eAccidental Accidental,
 	xml::rWriter &Writer )
 {
 	write_status__ Status = wsOK;
@@ -1267,23 +1279,23 @@ static ePitchName GetPitchName_( const str::string_ &Name )
 	return (ePitchName)i;
 }
 
-static ePitchAccidental GetPitchAccidental_( const str::string_ &Accidental )
+static eAccidental GetPitchAccidental_(const str::string_ &Accidental)
 {
 	int i = 0;
 
-	while ( ( i < pa_amount ) && ( Accidental != GetPitchAccidentalLabel( (ePitchAccidental)i ) ) )
+	while ( ( i < a_amount ) && ( Accidental != GetPitchAccidentalLabel( (eAccidental)i ) ) )
 		i++;
 
-	if ( i > pa_amount )
-		i = pa_Undefined;
+	if ( i > a_amount )
+		i = a_Undefined;
 
-	return (ePitchAccidental)i;
+	return (eAccidental)i;
 }
 
-static sPitchOctave GetPitchOctave_( const str::string_ &Octave )
+static sOctave GetPitchOctave_( const str::string_ &Octave )
 {
 	sdr::row__ Error = qNIL;
-	sPitchOctave O = Octave.ToU8( &Error );
+	sOctave O = Octave.ToU8( &Error );
 
 	if ( Error != qNIL )
 		O = MSCMLD_UNDEFINED_PITCH_OCTAVE;
@@ -1300,8 +1312,8 @@ static parse_status__ ParsePitch_(
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;
 	ePitchName Name = pn_Undefined;
-	ePitchAccidental Accidental = pa_Undefined;
-	sPitchOctave Octave = MSCMLD_UNDEFINED_PITCH_OCTAVE;
+	eAccidental Accidental = a_Undefined;
+	sOctave Octave = MSCMLD_UNDEFINED_PITCH_OCTAVE;
 
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfObvious ) ) {
@@ -1322,12 +1334,12 @@ static parse_status__ ParsePitch_(
 						Status = psBadValue;
 				}
 			} else if ( Parser.AttributeName() == ACCIDENTAL_ATTRIBUTE ) {
-				if ( Accidental != pa_Undefined )
+				if ( Accidental != a_Undefined )
 					Status = psAlreadyDefined;
 				else {
 					Accidental = GetPitchAccidental_( Parser.Value() );
 
-					if ( Accidental == pa_Undefined )
+					if ( Accidental == a_Undefined )
 						Status = psBadValue;
 				}
 			} else if ( Parser.AttributeName() == OCTAVE_ATTRIBUTE ) {
@@ -1350,7 +1362,7 @@ static parse_status__ ParsePitch_(
 
 			if ( Name == pn_Undefined )
 				Status = psMissingPitchName;
-			else if ( Accidental == pa_Undefined )
+			else if ( Accidental == a_Undefined )
 				Status = psMissingPitchAccidental;
 			else if ( Octave == MSCMLD_UNDEFINED_PITCH_OCTAVE )
 				Status = psMissingPitchOctave;

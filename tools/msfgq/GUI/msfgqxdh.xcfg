@@ -25,7 +25,7 @@
       </Devices>
 			<Signature>
 				<Time>4/4</Time>
-				<Key>3</Key>
+				<Key>0</Key>
 			</Signature>
 			<Tempo>
 				<Unit>3</Unit>
@@ -95,6 +95,7 @@
       <fieldset>
         <legend>Key</legend>
         <select id="Key">
+          <option value="-8">-8</option>
           <option value="-7">-7</option>
           <option value="-6">-6</option>
           <option value="-5">-5</option>
@@ -102,7 +103,7 @@
           <option value="-3">-3</option>
           <option value="-2">-2</option>
           <option value="-1">-1</option>
-          <option value="0" selected="selected">0</option>
+          <option value="0">0</option>
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -110,6 +111,7 @@
           <option value="5">5</option>
           <option value="6">6</option>
           <option value="7">7</option>
+          <option value="8">8</option>
         </select>
       </fieldset>
       <fieldset>

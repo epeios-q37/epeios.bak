@@ -46,7 +46,7 @@ qENUM( Policy_ ) {
 
 static ePolicy_ GetPolicy_(const rgstry::sTEntry &Entry)
 {
-	ePolicy_ Policy = p_Undefined;
+	ePolicy_ Policy = ::p_Undefined;
 qRH;
 	str::wString RawPolicy;
 qRB;
@@ -109,7 +109,7 @@ namespace {
     sNote Note,
     main::rXMelody &XMelody)
   {
-    bso::sS8 RelativeOctave = Note.Pitch.Octave - XMelody.BaseOctave;
+    bso::sS8 RelativeOctave = mscmld::GetPitchOctave(Note, XMelody.Accidental) - XMelody.BaseOctave;
 
     if ( RelativeOctave < 0 )
       return RelativeOctave;
@@ -128,7 +128,7 @@ namespace {
     return 0;
   }
 
-  bso::sS8 Handle_(sNote Note)
+  bso::sS8 Handle_(const sNote &Note)
   {
     bso::sS8 OctaveOverflow = 0;
   qRH;
@@ -161,7 +161,7 @@ qRB;
 
 	Blocker.Release();
 
-	Signature = melody::GetSignature();
+	Signature = melody::_GetSignature();
 
 	DeviceId.Init();
 	IFlow.Init(GetDeviceInId(DeviceId));
@@ -182,7 +182,7 @@ qRB;
 		if ( Header.EventType == etMIDI )
 			if ( Header.MIDIEvent.Event == midNoteOn )
 				if  ( Data( Data.Last() ) != 0 ) {
-					Note = sNote(melody::GetPitch(Data(Data.First()), Signature.Key), sDuration(3), Signature);
+					Note = sNote(Data(Data.First()), sDuration(3), Signature);
 					if ( Handle_(Note) == 0)
             sclx::Broadcast(str::wString("Hit"), str::wString(bso::Convert(Data(Data.First()), Buffer)));
 //					mtx::Lock( Shared.Mutex );
@@ -204,7 +204,7 @@ qRT;
 qRE;
 }
 
-static bso::sU8 GetAbsolute_(const sPitch &Pitch)
+static bso::sU8 GetAbsolute_(const sAltPitch &Pitch)
 {
 	if ( ( BSO_U8_MAX / 12 ) < Pitch.Octave )
 		qRGnr();
@@ -241,14 +241,14 @@ static bso::sU8 GetAbsolute_(const sPitch &Pitch)
 	}
 
 	switch ( Pitch.Accidental ) {
-		case paFlat:
+		case aFlat:
 			if ( Absolute == 0 )
 				qRGnr();
 			Absolute--;
 			break;
-		case paNatural:
+		case aNatural:
 			break;
-		case paSharp:
+		case aSharp:
 			if ( Absolute == BSO_U8_MAX )
 				qRGnr();
 			Absolute++;
@@ -340,8 +340,8 @@ qRB;
 
 	Data.Init();
 
-	Data.Append( GetAbsolute_( Note.Pitch ) );
-	Data.Append( 120 );
+	Data.Append(Note.Pitch);
+	Data.Append(120);
 
 	Event.Init( Header, Data );
 
@@ -349,8 +349,6 @@ qRB;
 		mscmdm::PutEvent( Event, mscmdm::xNone, Flow );
 		Flow.Commit();
 	}
-
-	melody::Print(Note, cio::COut, false);
 
 	tht::Suspend( ComputeTime_( Note.Duration, Base ) );
 

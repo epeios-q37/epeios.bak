@@ -63,12 +63,14 @@ namespace main {
     melody::wMelody Melody;
     mscmld::sRow Row;
     bso::sU8 BaseOctave;
+    mscmld::eAccidental Accidental; // Accidental to use for alterate notes when in C key.
     bso::sBool Overwrite;
     void reset(bso::sBool P = true)
     {
       Melody.reset(P);
       Row = qNIL;
       BaseOctave = 0;
+      Accidental = mscmld::a_Undefined;
       Overwrite = false;
     }
     qCDTOR(rXMelody);
@@ -77,6 +79,7 @@ namespace main {
       Melody.Init();
       Row = qNIL;
       BaseOctave = 2;
+      Accidental = mscmld::aSharp;
       Overwrite = false;
     }
   };

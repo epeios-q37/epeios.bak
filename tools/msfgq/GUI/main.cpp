@@ -118,19 +118,31 @@ namespace {
   namespace {
     bso::sS8 Convert_(
       const melody::sNote &Note,
-      mscmld::ePitchAccidental Accidental,
       bso::sU8 BaseOctave,
+      mscmld::eAccidental Accidental,
       txf::sWFlow &Flow)
     {
-      const char *Label = mscmld::GetPitchNameLabel(Note, Accidental);
-      const bso::sS8 RawDuration = Note.Duration.Base;
-      mthrtn::wRational Duration = mthrtn::wRational(1,1 << (RawDuration - 1)) * mthrtn::wRational(( 2 << Note.Duration.Modifier ) - 1, 1 << Note.Duration.Modifier);
-      bso::sS8 RelativeOctave = Note.Pitch.Octave - BaseOctave;
+      const char *Label = NULL;
+      bso::sS8 RawDuration = 0;
+      mthrtn::wRational Duration;
+      bso::sS8 RelativeOctave;
       bso::pInteger Buffer;
-      bso::sChar Accidental = 0;
-      char Pitch[] = {0,0,0};
+      bso::sChar AccidentalMark = 0;
+      char PitchNotation[] = {0,0,0};
+      mscmld::sAltPitch Pitch;
 
-      if ( Note.Pitch.Name == mscmld::pnRest ) {
+      Pitch.Init();
+
+      mscmld::Convert(Note, Accidental, Pitch);
+
+      Label = mscmld::GetPitchNameLabel(Pitch);
+      RawDuration = Note.Duration.Base;
+
+      Duration.Init(mthrtn::wRational(1,1 << (RawDuration - 1)) * mthrtn::wRational(( 2 << Note.Duration.Modifier ) - 1, 1 << Note.Duration.Modifier));
+      RelativeOctave = Pitch.Octave - BaseOctave;
+
+
+      if ( Pitch.Name == mscmld::pnRest ) {
         Flow << "z";
       } else {
         if ( RelativeOctave < 0 )
@@ -144,36 +156,36 @@ namespace {
 
         switch ( RelativeOctave ) {
         case 0:
-          Pitch[1] = ',';
+          PitchNotation[1] = ',';
         case 1:
-          Pitch[0] = toupper(Label[0]);
+          PitchNotation[0] = toupper(Label[0]);
           break;
         case 3:
-          Pitch[1] = '\'';
+          PitchNotation[1] = '\'';
         case 2:
-          Pitch[0] = tolower(Label[0]);
+          PitchNotation[0] = tolower(Label[0]);
           break;
         default:
           qRGnr();
           break;
         }
 
-        switch ( Note.Pitch.Accidental ) {
-        case mscmld::paSharp:
-          Accidental = '^';
+        switch ( Pitch.Accidental ) {
+        case mscmld::aSharp:
+          AccidentalMark = '^';
           break;
-        case mscmld::paFlat:
-          Accidental = '_';
+        case mscmld::aFlat:
+          AccidentalMark = '_';
           break;
-        case mscmld::paNatural:
-          Accidental = ' ';
+        case mscmld::aNatural:
+          AccidentalMark = ' ';
           break;
         default:
           qRGnr();
           break;
         }
 
-        Flow << Accidental << Pitch;
+        Flow << AccidentalMark << PitchNotation;
       }
 
       Flow << bso::Convert(Duration.N.GetU32(), Buffer) << '/' << bso::Convert(Duration.D.GetU32(), Buffer);
@@ -189,6 +201,7 @@ namespace {
     bso::sS8 Convert_(
       const melody::dMelody &Melody,
       bso::sU8 BaseOctave,
+      mscmld::eAccidental Accidental,
       txf::sWFlow &Flow)
     {
       bso::sS8 Return = 0;
@@ -200,7 +213,7 @@ namespace {
         Flow << "[|]";
 
       while ( ( Return == 0 ) && ( Row != qNIL ) ) {
-        Return = Convert_(Melody(Row), BaseOctave, Flow);
+        Return = Convert_(Melody(Row), BaseOctave, Accidental, Flow);
 
         Row = Melody.Next(Row);
       }
@@ -212,6 +225,7 @@ namespace {
   bso::sS8 GetABC_(
     const melody::dMelody &Melody,
     bso::sU8 BaseOctave,
+    mscmld::eAccidental Accidental,
     str::dString &ABC)
   {
     bso::sS8 Return = 0;
@@ -220,7 +234,7 @@ namespace {
   qRB;
     Flow.Init(ABC);
 
-    Return = Convert_(Melody, BaseOctave, Flow);
+    Return = Convert_(Melody, BaseOctave, Accidental, Flow);
   qRR;
   qRT;
   qRE;
@@ -231,7 +245,7 @@ namespace {
     const main::rXMelody &XMelody,
     str::dString &ABC)
   {
-    return GetABC_(XMelody.Melody, XMelody.BaseOctave, ABC);
+    return GetABC_(XMelody.Melody, XMelody.BaseOctave, XMelody.Accidental, ABC);
   }
 
   bso::sS8 GetABC_(str::dString &ABC)
@@ -389,7 +403,7 @@ qRB;
   if ( XMelody.Row != qNIL ) {
     melody::sNote Note = XMelody.Melody(XMelody.Row);
 
-    Note.Pitch.Name=(mscmld::pnRest);
+    Note.Pitch = mscmld::pRest;
     Note.Duration.TiedToNext = false;
 
     XMelody.Melody.Store(Note, XMelody.Row);
@@ -460,7 +474,7 @@ qRB;
   if ( XMelody.Row != qNIL ) {
     melody::sNote Note = XMelody.Melody(XMelody.Row);
 
-    if ( Note.Pitch.Name != mscmld::pnRest ) {
+    if ( Note.Pitch != mscmld::pRest ) {
       if ( Note.Duration.TiedToNext ) {
         Note.Duration.TiedToNext = false;
         XMelody.Melody.Store(Note, XMelody.Row);
@@ -488,8 +502,9 @@ qRE;
 }
 
 namespace {
-  static void ToXML_(
+  void ToXML_(
     const melody::dMelody &Melody,
+    mscmld::eAccidental Accidental,
     txf::sWFlow &Flow)
   {
   qRH;
@@ -499,12 +514,19 @@ namespace {
 
     Writer.PushTag("Melody");
 
-    mscmld::WriteXML(Melody, Writer);
+    mscmld::WriteXML(Melody, Accidental, Writer);
 
     Writer.PopTag();
   qRR;
   qRT;
   qRE;
+  }
+
+  void ToXML_(
+    const main::rXMelody &XMelody,
+    txf::sWFlow &Flow)
+  {
+    ToXML_(XMelody.Melody, XMelody.Accidental, Flow);
   }
 }
 
@@ -522,7 +544,7 @@ qRB;
 	XDriver.Init(Script);
 	TFlow.Init(XDriver);
 
-	ToXML_(main::Get(Guard).Melody, TFlow);
+	ToXML_(main::Get(Guard), TFlow);
 
 	TFlow.Commit();
 qRR;

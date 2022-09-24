@@ -32,9 +32,9 @@ using namespace melody;
 
 using namespace mscmld;
 
-sSignatureKey melody::GetSignatureKey( void )
+sSignatureKey melody::_GetSignatureKey( void )
 {
-	return sclm::MGetS8( registry::parameter::signature::Key, -7, 7 );
+	return sclm::MGetS8( registry::parameter::signature::Key, -8, 8 );
 }
 
 sSignatureTime melody::GetSignatureTime( void )
@@ -61,9 +61,9 @@ qRE;
   return Signature;
 }
 
-sSignature melody::GetSignature( void )
+sSignature melody::_GetSignature( void )
 {
-	return sSignature(GetSignatureKey(), GetSignatureTime());
+	return sSignature(_GetSignatureKey(), GetSignatureTime());
 }
 /*
 static const sDuration &GetTempoUnit_( sDuration &Unit )
@@ -117,7 +117,7 @@ sTempo &melody::GetTempo(sTempo &Tempo)
 	return Tempo;
 }
 */
-static sPitchOctave GetOctave_(bso::sU8 Absolute)
+static sOctave GetOctave_(bso::sU8 Absolute)
 {
 	return Absolute / 12;
 }
@@ -200,73 +200,73 @@ static ePitchName GetName_(
 	return pn_Undefined;	// To avoid a warning.
 }
 
-ePitchAccidental GetAccidental_(
+eAccidental GetAccidental_(
 	bso::sU8 Absolute,
 	sSignatureKey Key )
 {
 	switch ( Absolute %12 ) {
 	case 0:
 		if ( Key >= 7 )
-			return paSharp;
+			return aSharp;
 		else
-			return paNatural;
+			return aNatural;
 		break;
 	case 1:
 		if ( Key <= -4 )
-			return paFlat;
+			return aFlat;
 		else
-			return paSharp;
+			return aSharp;
 		break;
 	case 2:
-		return paNatural;
+		return aNatural;
 		break;
 	case 3:
 		if ( Key <= -2 )
-			return paFlat;
+			return aFlat;
 		else
-			return paSharp;
+			return aSharp;
 		break;
 	case 4:
 		if ( Key <= -7 )
-			return paFlat;
+			return aFlat;
 		else
-			return paNatural;
+			return aNatural;
 		break;
 	case 5:
 		if ( Key >= 6 )
-			return paSharp;
+			return aSharp;
 		else
-			return paNatural;
+			return aNatural;
 		break;
 	case 6:
 		if ( Key <= -5 )
-			return paFlat;
+			return aFlat;
 		else
-			return paSharp;
+			return aSharp;
 		break;
 	case 7:
-		return paNatural;
+		return aNatural;
 		break;
 	case 8:
 		if ( Key <= -3 )
-			return paFlat;
+			return aFlat;
 		else
-			return paSharp;
+			return aSharp;
 		break;
 	case 9:
-		return paNatural;
+		return aNatural;
 		break;
 	case 10:
 		if ( Key <= -1 )
-			return paFlat;
+			return aFlat;
 		else
-			return paSharp;
+			return aSharp;
 		break;
 	case 11:
 		if ( Key <= -6 )
-			return paFlat;
+			return aFlat;
 		else
-			return paNatural;
+			return aNatural;
 		break;
 	default:
 		qRGnr();
@@ -275,7 +275,7 @@ ePitchAccidental GetAccidental_(
 
 	qRGnr();
 
-	return pa_Undefined;	// To avoid a wanrning.
+	return a_Undefined;	// To avoid a wanrning.
 }
 
 namespace {
@@ -299,92 +299,6 @@ namespace {
   {
     Flow << (bso::sUInt)Signature.Numerator() << '/' << (bso::sUInt)Signature.Denominator();
   }
-}
-
-void melody::PrintSignature(txf::sWFlow &Flow)
-{
-  const melody::sSignature Signature = GetSignature();
-
-  if ( PrintSignaturekey_(Signature.Key, Flow) )
-    Flow << ' ';
-
-  PrintSignatureTime_(Signature.Time, Flow);
-}
-
-static void Print_(
-	const sAltPitch &Pitch,
-	txf::text_oflow__ &Flow )
-{
-	Flow << GetPitchNameLabel( Pitch);
-
-	switch ( Pitch.Accidental ) {
-	case paNatural:
-		break;
-	case paSharp:
-		Flow << "♯";
-		break;
-	case paFlat:
-		Flow << "♭";
-		break;
-	default:
-		qRGnr();
-		break;
-	}
-}
-
-static void Print_(
-	const sDuration &Duration,
-	txf::text_oflow__ &Flow )
-{
-	bso::sU8 Modifier = Duration.Modifier;
-
-	Flow << (char)((bso::sU8)Duration.Base + '0');
-
-	while ( Modifier-- )
-		Flow << '.';
-
-	if ( Duration.TiedToNext )
-		Flow << '-';
-}
-
-void melody::Print(
-	const sNote &Note,
-	txf::sWFlow &Flow,
-	bso::bool__ Selected)
-{
-	if ( Selected )
-		Flow << '<';
-
-	Print_( Note.Pitch, Flow );
-
-	Print_( Note.Duration, Flow );
-
-	if ( Selected )
-		Flow << '>';
-
-	Flow << ' ' << txf::commit;
-}
-
-void melody::Print(
-	const dMelody &Melody,
-	sRow Current,
-	txf::sWFlow &Flow)
-{
-qRH;
-	sRow Row = qNIL;
-qRB;
-	Row = Melody.First();
-
-	while ( Row != qNIL ) {
-		Print(Melody( Row ), Flow, Current == Row);
-
-		Row = Melody.Next( Row );
-	}
-
-	Flow << txf::commit << txf::nl;
-qRR;
-qRT;
-qRE;
 }
 
 bso::sU32 ComputeTime_(
