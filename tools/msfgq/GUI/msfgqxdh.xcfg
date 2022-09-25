@@ -95,14 +95,6 @@
       <fieldset>
         <legend>Key</legend>
         <select id="Key">
-          <option value="-8">-8</option>
-          <option value="-7">-7</option>
-          <option value="-6">-6</option>
-          <option value="-5">-5</option>
-          <option value="-4">-4</option>
-          <option value="-3">-3</option>
-          <option value="-2">-2</option>
-          <option value="-1">-1</option>
           <option value="0">0</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -113,6 +105,10 @@
           <option value="7">7</option>
           <option value="8">8</option>
         </select>
+        <div xdh:radio="Accidental">
+          <label><input type="radio" name="Accidental" value="Sharp"/>♯</label>
+          <label><input type="radio" name="Accidental" value="Flat"/>♭</label>
+        </div>
       </fieldset>
       <fieldset>
         <legend>Time</legend>
@@ -141,14 +137,13 @@
   <fieldset style="display: flex; flex-direction: column;">
     <fieldset>
       <legend>Duration</legend>
-      <button id="-2" xdh:onevent="Rest">Rest</button>
-      <button id="1" xdh:onevent="Duration">Ronde</button>
-      <button id="2" xdh:onevent="Duration">Blanche</button>
-      <button id="3" xdh:onevent="Duration">Noire</button>
-      <button id="4" xdh:onevent="Duration">Croche</button>
-      <button id="5" xdh:onevent="Duration">Double</button>
-      <button id="6" xdh:onevent="Duration">Triple</button>
-      <button id="7" xdh:onevent="Duration">Quadruple</button>
+      <input xdh:onevent="Rest" type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAUCAQAAAAaErTgAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAD4gAAA+IARbIpYYAAAAHdElNRQflCBQAGTGviAK6AAAAEGNhTnYAAANDAAAEnQAAAE8AAAAqHDn8TwAAAKBJREFUGNNVkFERwkAMRN91KqCV0OIAcFALIOGQgIZaKBJAApWABZBwSHh89K5Tko8km51sEkRGo7J4DtHRPyDZeHcDyGDjyw2wFztTKZ85OVkBPDyzWA8yFZpR4b2WY1HZr90MvGwkbyEVHMIMfPPYPGByKIybwYNv4CIAcVXBSal3QMcMzIz0ksSr5eZk3YZoEWgDIGnzL6mgDUc+K+sHnoCSnIQFiOMAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMDgtMjBUMDA6MjU6NDkrMDA6MDBpvrbcAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIxLTA4LTIwVDAwOjI1OjQ5KzAwOjAwGOMOYAAAAC10RVh0aWNjOmNvcHlyaWdodABDb3B5cmlnaHQgQXJ0aWZleCBTb2Z0d2FyZSAyMDExCLrFtAAAADF0RVh0aWNjOmRlc2NyaXB0aW9uAEFydGlmZXggU29mdHdhcmUgc1JHQiBJQ0MgUHJvZmlsZRMMAYYAAAAddEVYdFNvZnR3YXJlAEdQTCBHaG9zdHNjcmlwdCA5LjI3L5deIQAAAABJRU5ErkJggg=="/>
+      <input id="1" xdh:onevent="Duration" type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAICAQAAABjGAZHAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAD4gAAA+IARbIpYYAAAAHdElNRQflCBQAGSTCVeZRAAAAEGNhTnYAAANDAAAEnQAAAFAAAAA1c4Hx6QAAAHhJREFUCNddj2ENwjAYRF9R0EkYEkDCMgcEB7WAhlnAAkjAQidhSCgSHj9ou4T7873k8l3uggA8zbz5AANHrpwDAPJwFJMiL08iTmaFu4i4+YNiFDGaJVazHuRWIXmgarXRTFeLvfTfZY9thTBZlOLYC4V9ygp/U778rWDCqA7aKQAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMS0wOC0yMFQwMDoyNTozNiswMDowMJUzzywAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjEtMDgtMjBUMDA6MjU6MzYrMDA6MDDkbneQAAAALXRFWHRpY2M6Y29weXJpZ2h0AENvcHlyaWdodCBBcnRpZmV4IFNvZnR3YXJlIDIwMTEIusW0AAAAMXRFWHRpY2M6ZGVzY3JpcHRpb24AQXJ0aWZleCBTb2Z0d2FyZSBzUkdCIElDQyBQcm9maWxlEwwBhgAAAB10RVh0U29mdHdhcmUAR1BMIEdob3N0c2NyaXB0IDkuMjcvl14hAAAAAElFTkSuQmCC"/>
+      <input id="2" xdh:onevent="Duration" type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAdCAQAAAA56DUVAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAD4gAAA+IARbIpYYAAAAHdElNRQflCBQAGSYsW4d9AAAAEGNhTnYAAANDAAAEnQAAAFAAAAAgHlwVAgAAAIBJREFUKM/tkUENwkAQRV8bBCypggYHixZwUAuroRbWAkiohbXQSthKeBy2ISFBAAfmHyZ5eZk5fOQzi9jzZf7wp+Cprc0nhR0YAKQ6iTialXsrNYqYrIo8TJLF6GITisEs0elwJInBKuHttDOzwmhxPV4FsyJdcWYHrly4ce4AXunVXnPK1fDUAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIxLTA4LTIwVDAwOjI1OjM4KzAwOjAwxQy0cQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMS0wOC0yMFQwMDoyNTozOCswMDowMLRRDM0AAAAtdEVYdGljYzpjb3B5cmlnaHQAQ29weXJpZ2h0IEFydGlmZXggU29mdHdhcmUgMjAxMQi6xbQAAAAxdEVYdGljYzpkZXNjcmlwdGlvbgBBcnRpZmV4IFNvZnR3YXJlIHNSR0IgSUNDIFByb2ZpbGUTDAGGAAAAHXRFWHRTb2Z0d2FyZQBHUEwgR2hvc3RzY3JpcHQgOS4yNy+XXiEAAAAASUVORK5CYII="/>
+      <input id="3" xdh:onevent="Duration" type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAdCAQAAADfwf5RAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAD4gAAA+IARbIpYYAAAAHdElNRQflCBQAGSjL46p6AAAAEGNhTnYAAANDAAAEnQAAAFAAAAAgHlwVAgAAAN1JREFUKM990sFtwjAYhuE3KAMkEyAyQlJxRgojUDbICmlHoCNU3YCswAhw5wBBvdFL2nsPXw+NUtu1bZ8+Pbbs/7cR9qzV6i/NcMbFSv8Y7nH+iPM5zu8cNAX35nOherq7l9FeAa61FFpokLduWNFwY+c/+7drpdBV3t0AHRk7f2EARfLMG58KMDwlGR1BhkeOMc7pYxzoubk/wieKOD+EudMXa9JxpfacgIrvkXsa8gQxqDWanls/lUGl8yqvJrcOZjIjC4cbm20sx18ycWOkjYMifSEfS9pSJW71P/izzc8YcPbcAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIxLTA4LTIwVDAwOjI1OjQwKzAwOjAw/CbzDwAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMS0wOC0yMFQwMDoyNTo0MCswMDowMI17S7MAAAAtdEVYdGljYzpjb3B5cmlnaHQAQ29weXJpZ2h0IEFydGlmZXggU29mdHdhcmUgMjAxMQi6xbQAAAAxdEVYdGljYzpkZXNjcmlwdGlvbgBBcnRpZmV4IFNvZnR3YXJlIHNSR0IgSUNDIFByb2ZpbGUTDAGGAAAAHXRFWHRTb2Z0d2FyZQBHUEwgR2hvc3RzY3JpcHQgOS4yNy+XXiEAAAAASUVORK5CYII="/>
+      <input id="4" xdh:onevent="Duration" type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAdCAQAAADfwf5RAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAD4gAAA+IARbIpYYAAAAHdElNRQflCBQAGSol7ctWAAAAEGNhTnYAAANDAAAEnQAAAFAAAAAgHlwVAgAAAP1JREFUKM990jFOwzAYhuG3qBJrMzGiVOxIrcQFitQLFG4QjhA4QnOEXoErFG6Q7iBRsTK5YmZ4GQht6jqxp9+PbH+/bOR4ziw9VGdE4+OoOmH46ue3fn7v528e3Rdx8ktx5LZJn+C5OLOjMbhgySuVHYffKEVzQYLPDQZzizRjqazFrUnGWsldmYg2B+7Yecs2lfyaFZ8syYBhjFfAw2DnEyOq02j/770QQ+ruv1EBL3TyeLCg7mYYs+ljDsk3PrMBpvy0MAMJlq3o2f6nziwlOIl6WykSxFrKCEfN3qW5Qh5x0XBtrfF/mBhsL1C0qkWEMqzImpbumQ7ivn8BMnQGSbgKlR0AAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMDgtMjBUMDA6MjU6NDIrMDA6MDBrueImAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIxLTA4LTIwVDAwOjI1OjQyKzAwOjAwGuRamgAAAC10RVh0aWNjOmNvcHlyaWdodABDb3B5cmlnaHQgQXJ0aWZleCBTb2Z0d2FyZSAyMDExCLrFtAAAADF0RVh0aWNjOmRlc2NyaXB0aW9uAEFydGlmZXggU29mdHdhcmUgc1JHQiBJQ0MgUHJvZmlsZRMMAYYAAAAddEVYdFNvZnR3YXJlAEdQTCBHaG9zdHNjcmlwdCA5LjI3L5deIQAAAABJRU5ErkJggg=="/>
+      <input id="5" xdh:onevent="Duration" type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAiCAQAAAAq7UspAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAD4gAAA+IARbIpYYAAAAHdElNRQflCBQAGSzMjm5jAAAAEGNhTnYAAANDAAAEnQAAAFAAAAAbr1f8JgAAARRJREFUOMt9k7FNw0AUQF9QJFqnokRGTJBIUFKAxAIxGyRsYDECGcGMYNggKxCJBRyJjsoJNcWjwHKMc+d/zX29u6/3/+mQ/+vc3EN2wlF8dfYB/DmMP4bxNyvb5FgNE2ujavfsWcaLn7HgjVcjxa+UW1PFED61tjLxWcNquZKbxjCurcTKoDlkTEjZhs2LQ2th80LEyoi5zE2GzGuxNGouc/OQ+Q2QsfMiPPNrCvZkbIExgViO8BEoj29fNgdy4C5U/C+eSHmJ48ko4z2OAXbDuDXfWLIBZvy0aMsMpDbvjG3SfqLEUmqnvbkWihQm1pL3YNLcXVsopD28sJv2XnTa/o8GLzrZvAdlvGLStPTAbNTv+xfJLiuvxf+xMgAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMS0wOC0yMFQwMDoyNTo0NCswMDowMAhp1xwAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjEtMDgtMjBUMDA6MjU6NDQrMDA6MDB5NG+gAAAALXRFWHRpY2M6Y29weXJpZ2h0AENvcHlyaWdodCBBcnRpZmV4IFNvZnR3YXJlIDIwMTEIusW0AAAAMXRFWHRpY2M6ZGVzY3JpcHRpb24AQXJ0aWZleCBTb2Z0d2FyZSBzUkdCIElDQyBQcm9maWxlEwwBhgAAAB10RVh0U29mdHdhcmUAR1BMIEdob3N0c2NyaXB0IDkuMjcvl14hAAAAAElFTkSuQmCC"/>
+      <input id="6" xdh:onevent="Duration" type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAoCAQAAACLdmhPAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAD4gAAA+IARbIpYYAAAAHdElNRQflCBQAGS4igA9PAAAAEGNhTnYAAANDAAAEnQAAAFAAAAAa2FDMsAAAAWZJREFUOMt9lDtu20AUAIeBACNVVlUCpDBk9ynIwE4ZwAJygSg5gXwEy0eQdQPZN1Aa96RvYAm5AA24cyUmdYpJEUqhyaV3m32cXXDe2w/yvC/N/R/RxodeNPArOu2pMY7gx5fxz5fxb67dB101DG7tVTvhF/P+1edOpc4+gr8oqWkffqPci0uNq82VqWkfDpaWYmkEfxDPlGDuoJvYZ065YeYREMGP3Ca4AIaxfx8qW1NHfWq5kvepUZckdW6k5m/ZMBPGbGNb8p2UBYVVfL+fKEg5p+CYaFmkNIjbuFqpLPvxmSIjlzHzA+64EsaUcfPAJWuHcfN3FAQmXPOxi18DWVJQccQk6eD3AGTJJRseYmr/2iwZ8YNeDBPy3XFYu2INZPx5NmUAlXMWdXjHkE9NXDlm0/hQcVyPHsjgolXVsH8bgisZtfDU3RsTtH0H0/3VzV0pTBvw6x7u+uCKYZ3SN7KknftfVfxxDp3t+y4AAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMDgtMjBUMDA6MjU6NDYrMDA6MDCf9sY1AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIxLTA4LTIwVDAwOjI1OjQ2KzAwOjAw7qt+iQAAAC10RVh0aWNjOmNvcHlyaWdodABDb3B5cmlnaHQgQXJ0aWZleCBTb2Z0d2FyZSAyMDExCLrFtAAAADF0RVh0aWNjOmRlc2NyaXB0aW9uAEFydGlmZXggU29mdHdhcmUgc1JHQiBJQ0MgUHJvZmlsZRMMAYYAAAAddEVYdFNvZnR3YXJlAEdQTCBHaG9zdHNjcmlwdCA5LjI3L5deIQAAAABJRU5ErkJggg=="/>
       <button id="Dot" xdh:onevent="Dot">Dot</button>
       <button id="Tie" xdh:onevent="Tie">Tie</button>
     </fieldset>

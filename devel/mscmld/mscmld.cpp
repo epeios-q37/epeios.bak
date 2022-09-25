@@ -462,63 +462,62 @@ const sAltPitch &mscmld::Convert(
 {
   if ( Pitch != p_Undefined ) {
     bso::sU8 RelChromatic = Pitch % 12;
-    bso::sBool IsSharp = Key > 0;
+
+    if ( Key != 0 )
+      if ( Key > 0 )
+        Accidental = aSharp;
+      else
+        Accidental = aFlat;
+    else if ( ( Accidental != aSharp ) && ( Accidental != aFlat ) )
+      qRFwk();
 
     // In this context 'key' can not be 0 (C key).
     // It should be instead -8 or 8 to indicate which of flat or sharp should be
     // used for alterated note.
 
-    if ( Key == 0 )
-      switch ( Accidental ) {
-      case aSharp:
-        IsSharp = true;
-        break;
-      case aFlat:
-        IsSharp = false;
-        break;
-      default:
-        qRFwk();
-          break;
-      }
-    else
-      IsSharp = Key > 0;
-
     switch ( RelChromatic ) {
     case 0:
       AltPitch.Name = pnC;
+      Accidental = aNatural;
       break;
     case 1:
-      AltPitch.Name = IsSharp ? pnC : pnD;
+      AltPitch.Name = Accidental == aSharp ? pnC : pnD;
       break;
     case 2:
       AltPitch.Name = pnD;
+      Accidental = aNatural;
       break;
     case 3:
-      AltPitch.Name = IsSharp ? pnD : pnE;
+      AltPitch.Name = Accidental == aSharp ? pnD : pnE;
       break;
     case 4:
       AltPitch.Name = pnE;
+      Accidental = aNatural;
       break;
     case 5:
       AltPitch.Name = pnF;
+      Accidental = aNatural;
       break;
     case 6:
-      AltPitch.Name = IsSharp ? pnF : pnG;
+      AltPitch.Name = Accidental == aSharp ? pnF : pnG;
       break;
     case 7:
       AltPitch.Name = pnG;
+      Accidental = aNatural;
       break;
     case 8:
-      AltPitch.Name = IsSharp ? pnG : pnA;
+      AltPitch.Name = Accidental == aSharp ? pnG : pnA;
       break;
     case 9:
       AltPitch.Name = pnA;
+      Accidental = aNatural;
       break;
     case 10:
-      AltPitch.Name = IsSharp ? pnA : pnB;
+      AltPitch.Name = Accidental == aSharp ? pnA : pnB;
       break;
     case 11:
       AltPitch.Name = pnB;
+      Accidental = aNatural;
       break;
     default:
       qRFwk();
@@ -526,7 +525,7 @@ const sAltPitch &mscmld::Convert(
     }
 
     AltPitch.Octave = Pitch / 12;
-    AltPitch.Accidental = Key % 8 ? IsSharp ? aSharp : aFlat : aNatural;
+    AltPitch.Accidental = Accidental;
 
     if ( GetChromaticAbsolute_(AltPitch) != Pitch)
       qRFwk();

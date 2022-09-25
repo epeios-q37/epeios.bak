@@ -193,7 +193,7 @@ namespace {
       if ( Note.Duration.TiedToNext )
         Flow << '-';
 
-      Flow << ' ';
+      Flow << "[|]" << ' ';
 
       return 0;
     }
