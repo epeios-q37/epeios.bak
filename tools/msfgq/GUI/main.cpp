@@ -209,8 +209,7 @@ namespace {
 
       Flow << "X: 1\\nT: Preview\\nL: 1\\nK: \\n";
 
-      if ( Row == qNIL )
-        Flow << "[|]";
+      Flow << "[|]";
 
       while ( ( Return == 0 ) && ( Row != qNIL ) ) {
         Return = Convert_(Melody(Row), BaseOctave, Accidental, Flow);

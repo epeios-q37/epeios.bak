@@ -460,7 +460,11 @@ const sAltPitch &mscmld::Convert(
   eAccidental Accidental,  // Accidental to use if key = 0 (C key).
   sAltPitch &AltPitch)
 {
-  if ( Pitch != p_Undefined ) {
+  if ( Pitch == pRest ) {
+    AltPitch.Name = pnRest;
+    AltPitch.Accidental = a_Undefined;
+    AltPitch.Octave = 0;
+  } else if ( Pitch != p_Undefined ) {
     bso::sU8 RelChromatic = Pitch % 12;
 
     if ( Key != 0 )
