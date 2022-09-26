@@ -13,7 +13,7 @@
       </fieldset>
       <fieldset style="display: flex;">
         <legend>Signature</legend>
-        <fieldset>
+        <fieldset style="display: flex;">
           <legend>Key</legend>
           <select id="Key">
             <option value="0">0</option>
@@ -42,6 +42,28 @@
             <option value="8">8</option>
             <option value="16">16</option>
           </select>
+        </fieldset>
+      </fieldset>
+        <fieldset style="display: flex; align-items: center;">
+          <legend>Clef</legend>
+          <label class="clef">
+            <input name="clef" type="radio"/>
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAkCAYAAABSSLCCAAAABHNCSVQICAgIfAhkiAAAAmZJREFUOE+NlduLT1EUx3+M3MptQiNkGEUjIg8uUZrkyZOEPCgSqXErRZEXyqMHf4KkeFLkUnIpEkLukmheXHMZRBh8Pj9rH8fROTOrPrP2Xmt9z95n7X1+U6tVWy/Su+AuDK4u/Zvdy/AXXIPtPREtpKgLLsBA8AHd2i0qOmFMVO7HN1SpZpB0W5tyRYcYN1WJ1pF8AwOiSP8axjrvXaIcTfwgfIn8KvwweFklstU2QGuGfXAdvhkoW8kGPAC7dgRcxUZU2hKybXAGbMhNKFsge9BMRu5fwSeYkmVKBiOIe0YKfsKykros7N7dShJs6E7gS18JgaLTZYI+kbDFh2FWzHfjP5eJUnw9A58unom2Ajzk/8wVhsNjGAqnYDEo9irNhXfwEI6CV6tu7WBRB9iIIXAuYml1vWIfWLfLYHB1zI/H3JiX9CnYeufexVbrPLzvYPdmR/I5fh7ssABrgYug0IbVvsI9B9hOMLEg5knkdCR4Jzu9Ty/Az1rzy/Rlz8fctveP8Su8N3+QoqswHhSkzyFdzifEJoZId98/FrrkGjgJl2AC2P7b8AO8rLZcWw7m6nYCPAfNs/MYPFgfuuVPuNYX783fHPP62dyAPSmQ81tjfAB/DBrS3j8wmQ8e7lnwc5gKkwN34eEuhS63UrRGAj7Ad7Or08Atep49trVU+j6ZVf5iRpXv647eJlVR5DvNAX+qPkaRNaOgI4nyvpmJdy5d1JZIjsMvyhem7hnbCE2R9BtLPyiTGP+zSl7k1vL2LCbT8Y8KuWya/h+9J7ItoivxbUVB8ZwUWuR/vn5wB9Jnk2l/Aw8lhcbwdz2RAAAAAElFTkSuQmCC" alt=""/>
+          </label>
+          <label class="clef" style="margin: 0px 3px;">
+            <input name="clef" type="radio"/>
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAVCAYAAACZm7S3AAAABHNCSVQICAgIfAhkiAAAAZNJREFUOE+FlDsohlEYx1+3UhQhYrHJbSSLSMokKYMiWSVGi8WkDEakJBlk+MrAJCkZmJQVZaEIJUpCLr//2/PpfKfvPd9Tv/c557mc23POG0VR9GuMoMtgCySlsAQrsAZnMAmFcqYlKVmDyLdtgePWX3VyE2e+s2ANoBXlwYPZujVAvjuK196z/gn6xZLOzaYtBpMn8DdAlyVIPVu7UTpj806Qmj9w5dkqrP8mHVp2Nf4BL7nG+se5kocJWIASS6hDt8A9rMuWtOxKfLPwDotwCkNwCxr0EWLx65zCdmj2ebRK1A59oIuTIX7yB17ZvqHKD3b72Q5sl4B9kK8ftLUO6ITiXMmfBIyCDmYONqAJZuAC2uBf/GWnH8Y0EZegqylR6b5Ag5bLkG3ZcSSiB6ET19WU6F5fg2qt1xVMfsK/oyBHbqzdIx2aWb56KHCSNbukSJ9Q8jJ+LVMnr1pL0qXTwQWTBy2hF60bpwFazRb/IEIzH1jgJlr7H4Na0J/kSL6kuy3fFLyClqpaN4PeuP5nsfwBTdRVUl6D03gAAAAASUVORK5CYII=" alt=""/>
+          </label>
+          <label class="clef">
+            <input name="clef" type="radio"/>
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAARCAYAAAACCvahAAAABHNCSVQICAgIfAhkiAAAATtJREFUOE+Vkz8vg1EUh98KHcVCQpuqhFFilcbiA9gFA59A0o9g8g2YRCISbUp0MOiki83CKDEY0EFTC02oPj89rfM2pX1P8uT8ub9z73vvfW8Q/FqKcA8u4Boe4BBmnaZnOE/1FKbd6ALxM3zAsqsniDdgpF0rEUxA9yrr1L7hFcZMfGK1VeVz8AQVKx6ZSC4O71bPWn0Ffw4/X5mxQa3QZsqEcrdWV0PIhsjuoO6qmuDL5fcWz4Rbg0DNNdiFhg3u41+cUAfmTZNsQefANDgJ6ZCslejq9DWXNpazfG3YiXVovUyTynT3sgPQZFeW/+nUqP1rS/oXItk2aq2Sj9SFeByqoPtPRmnWWRThDRajNOoKjuER/t2n7tmbXlYZPkEPQ39XXxtFsQNnsNRXbYIYfhP0mgpwM2ijdE3G7D5kEdnBWAAAAABJRU5ErkJggg==" alt=""/>
+          </label>
+        </fieldset>
+      <fieldset style="display: flex;">
+        <legend>Tweak</legend>
+        <fieldset>
+          <legend>Base octave</legend>
+          <input type="number" size="1" min="0" max="9" value="4"/>
         </fieldset>
       </fieldset>
     </fieldset>
