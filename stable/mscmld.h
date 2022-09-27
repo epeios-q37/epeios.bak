@@ -77,6 +77,7 @@ namespace mscmld {
 		return 0;	// To avoid a warning;
 	}
 
+	// If modified, modify 'const char *mscmld::GetLabel(ePitchName Name)' !!!
 	qENUM( PitchName ) {
 		pnA,
 		pnB,
@@ -90,7 +91,7 @@ namespace mscmld {
 		pn_Undefined
 	};
 
-	const char *GetPitchNameLabel( ePitchName Name );
+	const char *GetLabel( ePitchName Name );
 
 	qENUM( Accidental ) {
 		aFlat,
@@ -100,7 +101,9 @@ namespace mscmld {
 		a_Undefined
 	};
 
-	const char *GetPitchAccidentalLabel( eAccidental Accidental );
+	const char *GetLabel( eAccidental Accidental );
+
+  eAccidental GetAccidental(const str::dString &Pattern);
 
 	typedef bso::u8__ sOctave;
 #define MSCMLD_UNDEFINED_PITCH_OCTAVE BSO_U8_MAX
@@ -161,9 +164,9 @@ namespace mscmld {
 		bso::u8__ GetChromatic( void ) const;
 	};
 
-	inline const char *GetPitchNameLabel(const sAltPitch &Pitch)
+	inline const char *GetLabel(const sAltPitch &Pitch)
 	{
-	  return GetPitchNameLabel(Pitch.Name);
+	  return GetLabel(Pitch.Name);
 	}
 
 	inline int operator ==(
@@ -532,12 +535,12 @@ namespace mscmld {
     eAccidental Accidental,  // Accidental to use if key = 0 (C key).
     sAltPitch &AltPitch);
 
-	const char *GetPitchNameLabel(
+	const char *GetLabel(
     sPitch Pitch,
     sSignatureKey Key,
     eAccidental Accidental);
 
-	sOctave GetPitchOctave(
+	sOctave GetOctave(
     sPitch Pitch,
     sSignatureKey Key,
     eAccidental Accidental);
@@ -594,18 +597,18 @@ namespace mscmld {
     return Convert(Note.Pitch, Note.Signature.Key, Accidental, AltPitch);
   }
 
-	inline const char *GetPitchNameLabel(
+	inline const char *GetLabel(
     const sNote Note,
     eAccidental Accidental)
 	{
-	  return GetPitchNameLabel(Note.Pitch, Note.Signature.Key, Accidental);
+	  return GetLabel(Note.Pitch, Note.Signature.Key, Accidental);
 	}
 
-	inline sOctave GetPitchOctave(
+	inline sOctave GetOctave(
     const sNote Note,
     eAccidental Accidental)
 	{
-	  return GetPitchOctave(Note.Pitch, Note.Signature.Key, Accidental);
+	  return GetOctave(Note.Pitch, Note.Signature.Key, Accidental);
 	}
 
 	void Merge(

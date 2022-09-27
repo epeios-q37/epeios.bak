@@ -1,4 +1,5 @@
-<iframe style="border: none;" src="FaaSDesc.php?text=WW91IHdpbGwgc2VlIGhlcmUgc29tZSB3aWRnZXRzIGluIGFjdGlvbi4gQ29ycmVzcG9uZGluZyBIVE1MIGNvZGUgd2lsbCBiZSBkaXNwbGF5ZWQu"></iframe>
+<iframe style="border: none;"
+  src="FaaSDesc.php?text=WW91IHdpbGwgc2VlIGhlcmUgc29tZSB3aWRnZXRzIGluIGFjdGlvbi4gQ29ycmVzcG9uZGluZyBIVE1MIGNvZGUgd2lsbCBiZSBkaXNwbGF5ZWQu"></iframe>
 <div>
   <center id="Regular" class="hidden">
     <select id="List" xdh:onevent="Select">
@@ -9,7 +10,7 @@
     <output id="RetrievedWidget">(please wait…)</output>
     <span> widget HTML code. </span>
   </div>
-  <br/>
+  <br />
 </div>
 <fieldset class="hidden" id="button">
   <fieldset>
@@ -39,13 +40,13 @@ callbacks = {
   <fieldset>
     <div>
       <p>Specify the type of vehicle you own:</p>
-      <input type="checkbox" id="cbBicycle" xdh:onevent="cbSelect"/>
+      <input type="checkbox" id="cbBicycle" xdh:onevent="cbSelect" />
       <label for="cbBicycle">Bicycle</label>
       <br />
-      <input type="checkbox" id="cbCar" xdh:onevent="cbSelect"/>
+      <input type="checkbox" id="cbCar" xdh:onevent="cbSelect" />
       <label for="cbCar">Car</label>
       <br />
-      <input type="checkbox" id="cbPirogue" xdh:onevent="cbSelect"/>
+      <input type="checkbox" id="cbPirogue" xdh:onevent="cbSelect" />
       <label for="cbPirogue">Pirogue</label>
     </div>
     <p></p>
@@ -71,32 +72,35 @@ callbacks = {
   <fieldset>
     <div>
       <div>How to contact you:</p>
-      <span id="rdRadios" xdh:radio="rdContact"  xdh:onevent="rdCheck">
-        <label>
-          <input type="radio" name="rdContact" value="Email">Email</input>
-        </label>
-        <label>
-          <input type="radio" name="rdContact" value="Phone">Phone</input>
-        </label>
-        <label>
-          <input type="radio" name="rdContact" value="Mail">Mail (post)</input>
-        </label>
-      </span>
-      <span>&nbsp;</span>
-      <span>
-        <button xdh:onevent="rdReset">Reset</button>
-      </span>
-    </div>
-    <p></p>
-    <div>
-    <span>Selected contact method: </span>
-      <select id="rdSelect" xdh:onevent="rdSelect">
-        <option selected="" disabled="" value="None">Check above or select below</option>
-        <option value="Email">Email</option>
-        <option value="Phone">Phone</option>
-        <option value="Mail">Mail (post)</option>
-      </select>
-    </div>
+        <span id="rdRadios" xdh:radio="rdContact" xdh:onevent="rdCheck">
+          <label>
+            <input type="radio" name="rdContact" value="Email" />
+            <span>Email</span>
+          </label>
+          <label>
+            <input type="radio" name="rdContact" value="Phone" />
+            <span>Phone</span>
+          </label>
+          <label>
+            <input type="radio" name="rdContact" value="Mail" />
+            <span>Mail (post)</span>
+          </label>
+        </span>
+        <span>&nbsp;</span>
+        <span>
+          <button xdh:onevent="rdReset">Reset</button>
+        </span>
+      </div>
+      <p></p>
+      <div>
+        <span>Selected contact method: </span>
+        <select id="rdSelect" xdh:onevent="rdSelect">
+          <option selected="" disabled="" value="None">Check above or select below</option>
+          <option value="Email">Email</option>
+          <option value="Phone">Phone</option>
+          <option value="Mail">Mail (post)</option>
+        </select>
+      </div>
   </fieldset>
   <pre class="lang-xml"></pre>
   <pre class="lang-python">
@@ -217,7 +221,8 @@ callbacks = {
       </label>
     </div>
     <p></p>
-    <div>Select the above <a href="#" target="_self" xdh:onevent="slRadio">radio widget</a> to see how to programmatically select an item from a list box.</div>
+    <div>Select the above <a href="#" target="_self" xdh:onevent="slRadio">radio widget</a> to see how to
+      programmatically select an item from a list box.</div>
   </fieldset>
   <pre class="lang-html"></pre>
   <pre class="lang-python">

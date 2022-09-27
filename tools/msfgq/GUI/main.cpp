@@ -135,7 +135,7 @@ namespace {
 
       mscmld::Convert(Note, Accidental, Pitch);
 
-      Label = mscmld::GetPitchNameLabel(Pitch);
+      Label = mscmld::GetLabel(Pitch);
       RawDuration = Note.Duration.Base;
 
       Duration.Init(mthrtn::wRational(1,1 << (RawDuration - 1)) * mthrtn::wRational(( 2 << Note.Duration.Modifier ) - 1, 1 << Note.Duration.Modifier));
@@ -207,7 +207,7 @@ namespace {
       bso::sS8 Return = 0;
       melody::sRow Row = Melody.First();
 
-      Flow << "X: 1\\nT: Preview\\nL: 1\\nK: \\n";
+      Flow << "X: 1\\nT: Preview\\nL: 1\\nK: C\\n";
 
       Flow << "[|]";
 
@@ -372,9 +372,32 @@ qRT;
 qRE;
 }
 
-D_( Key )
+D_( Accidental )
 {
+qRH;
+  str::wString RawAccidental;
+  mscmld::eAccidental Accidental = mscmld::a_Undefined;
+  hGuard Guard;
+qRB;
+  RawAccidental.Init();
+  Session.GetValue(Id, RawAccidental);
 
+  rXMelody &XMelody = Get(Guard);
+
+  switch ( Accidental = mscmld::GetAccidental(RawAccidental) ) {
+  case mscmld::aFlat:
+  case mscmld::aSharp:
+    XMelody.Accidental = Accidental;
+    break;
+  default:
+    qRGnr();
+    break;
+  }
+
+  DisplayMelody_(XMelody, Session);
+qRR;
+qRT;
+qRE;
 }
 
 D_( Refresh )
@@ -627,7 +650,7 @@ qGCTOR( main ) {
   Core.Init();
   R_( OnNewSession );
   R_( Hit );
-  R_( Key );
+  R_( Accidental );
   R_( Refresh );
   R_( SelectNote );
   R_( Rest );

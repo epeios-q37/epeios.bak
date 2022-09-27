@@ -1,0 +1,53 @@
+<xpp:bloc xmlns="http://www.w3.org/1999/xhtml" xmlns:xpp="http://epeios.q37.info/ns/xpp">
+.dummy {
+  /*
+    From the 'HeadStyles.xml' files,
+    so it can be copy/paste as is
+    to 'jsbin.com', which ignores
+    the first (this one) rule dur to
+    above 'xpp:bloc'…
+  */
+}
+
+.neat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.clef {
+  display: flex;
+}
+
+.duration {
+	border: solid 1px;
+	display: table-cell;
+	vertical-align: bottom;
+	padding: 5px 10px;
+	border-right: 0px;
+}
+
+
+legend::after {
+	content: '?';
+	display: inline-grid;
+	font-family: sans-serif;
+	font-weight: bold;
+	text-align: center;
+	width: 1.8ex;
+	height: 1.8ex;
+	font-size: 1.4ex;
+	line-height: 1.8ex;
+	border-radius: 1.2ex;
+	margin-right: 4px;
+	padding: 1px;
+	color: blue;
+	background: white;
+	border: 1px solid blue;
+	text-decoration: none;
+	margin-left: 5px;
+	margin-top: -5px;
+	vertical-align: middle;
+}
+</xpp:bloc> 

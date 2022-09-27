@@ -1,0 +1,76 @@
+<xpp:bloc xmlns="http://www.w3.org/1999/xhtml" xmlns:xpp="http://epeios.q37.info/ns/xpp">
+function clickListener(abcelem, tuneNumber, classes, analysis, drag, mouseEvent) {
+  end = classes.lastIndexOf(" abcjs-mm");
+  begin = classes.lastIndexOf("abcjs-m", end)+7;
+  note = classes.substring(begin, end);
+  launchEvent(note + "|DUMMY|dummy||((dummy|SelectNote))");
+}
+  
+function load(abc) {
+  visualObj = ABCJS.renderAbc("Score", abc, { add_classes: true, clickListener: clickListener } );
+}
+
+function setMyKeyDownListener() {
+  window.addEventListener(
+  "keydown",
+  function(event) {MyFunction(event.key)}
+  )
+}
+
+function MyFunction (the_Key) {
+  alert("Key pressed is: "+the_Key);
+}		
+
+function createStylesheet() {
+  const styleEl = document.createElement('style');
+  
+  document.head.appendChild(styleEl);
+  stylesheet = styleEl.sheet;
+}
+
+var index = -1;
+var stylesheet;
+
+function highlightNote(note) {
+  if ( index !== -1 )
+    stylesheet.deleteRule(index);
+    
+  if ( note.length !== 0 ) {
+    index = stylesheet.insertRule( ".abcjs-n0.abcjs-m" + note + " {color: green;}");
+  } else {
+    index = -1;
+  }
+}
+
+var visualOptions = {  };
+var visualObj;
+var synthControl;
+
+function activate() {    
+  if (ABCJS.synth.supportsAudio()) {
+    var controlOptions = {
+      displayRestart: true,
+      displayPlay: true,
+      displayProgress: true,
+      displayClock: true
+    };
+    synthControl = new ABCJS.synth.SynthController();
+    synthControl.load("##audio", null, controlOptions);
+    synthControl.disable(true);
+    var midiBuffer = new ABCJS.synth.CreateSynth();
+    midiBuffer.init({
+      visualObj: visualObj[0],
+      options: {
+        
+      }
+
+    }).then(function () {
+      synthControl.setTune(visualObj[0], true).then(function (response) {
+      document.querySelector(".abcjs-inline-audio").classList.remove("disabled");
+      })
+    });
+  } else {
+    console.log("audio is not supported on this browser");
+  };
+}  
+</xpp:bloc> 

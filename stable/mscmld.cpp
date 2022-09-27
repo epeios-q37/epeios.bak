@@ -78,33 +78,24 @@ namespace {
   qCDEFC( DiatonicAttributeLabel_, "Diatonic" );
 }
 
-const char *mscmld::GetPitchNameLabel( ePitchName Name )
+const char *mscmld::GetLabel(ePitchName Name)
 {
-	switch( Name ) {
-	case pnA:
-		return "a";
-		break;
-	case pnB:
-		return "b";
-		break;
-	case pnC:
-		return "c";
-		break;
-	case pnD:
-		return "d";
-		break;
-	case pnE:
-		return "e";
-		break;
-	case pnF:
-		return "f";
-		break;
-	case pnG:
-		return "g";
-		break;
-	case pnRest:
-		return "r";
-		break;
+  static const bso::sChar *Names[pn_amount] = {"a", "b", "c", "d", "e", "f", "g", "r"};
+
+  if ( Name >= pn_amount )
+    qRFwk();
+
+  return Names[Name];
+}
+
+#define C( name )	case a##name : return #name; break
+
+const char *mscmld::GetLabel(eAccidental Accidental)
+{
+	switch( Accidental ) {
+	C( Flat );
+	C( Natural );
+	C( Sharp );
 	default:
 		qRFwk();
 		break;
@@ -113,24 +104,21 @@ const char *mscmld::GetPitchNameLabel( ePitchName Name )
 	return NULL;	// To avoir a 'warning'.
 }
 
-const char *mscmld::GetPitchAccidentalLabel( eAccidental Accidental )
-{
-	switch( Accidental ) {
-	case aFlat:
-		return "Flat";
-		break;
-	case aNatural:
-		return "Natural";
-		break;
-	case aSharp:
-		return "Sharp";
-		break;
-	default:
-		qRFwk();
-		break;
-	}
+#undef C
 
-	return NULL;	// To avoir a 'warning'.
+namespace {
+	stsfsm::wAutomat AccidentalAutomat_;
+
+	void FillAccidentalAutomat_( void )
+	{
+		AccidentalAutomat_.Init();
+		stsfsm::Fill<eAccidental>( AccidentalAutomat_, a_amount, GetLabel );
+	}
+}
+
+eAccidental mscmld::GetAccidental(const str::dString &Pattern)
+{
+	return stsfsm::GetId( Pattern, AccidentalAutomat_, a_Undefined, a_amount );
 }
 
 static mthrtn::dRational &GetFraction_(
@@ -614,14 +602,14 @@ qRB
 	Duration.Simplify();
 
 	switch ( Duration.D.GetU32() ) {
-		C( 0 );
-		C( 1 );
-		C( 2 );
-		C( 3 );
-		C( 4 );
-		C( 5 );
-		C( 6 );
-		C( 7 );
+  C( 0 );
+  C( 1 );
+  C( 2 );
+  C( 3 );
+  C( 4 );
+  C( 5 );
+  C( 6 );
+  C( 7 );
 	default:
 		qRFwk();
 		break;
@@ -688,9 +676,9 @@ static void WriteXMLAltPitch_(
 
 	Writer.PushTag( PITCH_TAG );
 
-	Writer.PutAttribute( NAME_ATTRIBUTE, GetPitchNameLabel( Pitch.Name ) );
+	Writer.PutAttribute( NAME_ATTRIBUTE, GetLabel( Pitch.Name ) );
 
-	Writer.PutAttribute( ACCIDENTAL_ATTRIBUTE, GetPitchAccidentalLabel( Pitch.Accidental ) );
+	Writer.PutAttribute( ACCIDENTAL_ATTRIBUTE, GetLabel( Pitch.Accidental ) );
 
 	Writer.PutAttribute( OCTAVE_ATTRIBUTE, bso::Convert( Pitch.Octave, Buffer ) );
 
@@ -713,7 +701,7 @@ static void WriteXMLAltPitch_(
 	Writer.PopTag();
 }
 
-const char *mscmld::GetPitchNameLabel(
+const char *mscmld::GetLabel(
     sPitch Pitch,
     sSignatureKey Key,
     eAccidental Accidental)
@@ -722,10 +710,10 @@ const char *mscmld::GetPitchNameLabel(
 
   AltPitch.Init();
 
-  return GetPitchNameLabel(Convert(Pitch, Key, Accidental, AltPitch).Name);
+  return GetLabel(Convert(Pitch, Key, Accidental, AltPitch).Name);
 }
 
-sOctave mscmld::GetPitchOctave(
+sOctave mscmld::GetOctave(
     sPitch Pitch,
     sSignatureKey Key,
     eAccidental Accidental)
@@ -863,9 +851,9 @@ static void WriteXMLSignatureKey_(
 		break;
 	}
 
-	Writer.PutAttribute( NAME_ATTRIBUTE, GetPitchNameLabel( Name ) );
+	Writer.PutAttribute( NAME_ATTRIBUTE, GetLabel( Name ) );
 
-	Writer.PutAttribute( ACCIDENTAL_ATTRIBUTE, GetPitchAccidentalLabel( Accidental ) );
+	Writer.PutAttribute( ACCIDENTAL_ATTRIBUTE, GetLabel( Accidental ) );
 
 	Writer.PutAttribute( RAW_ATTRIBUTE, bso::Convert( Key, Buffer ) );
 
@@ -1273,7 +1261,7 @@ static ePitchName GetPitchName_( const str::string_ &Name )
 {
 	int i = 0;
 
-	while ( ( i < pn_amount ) && ( Name != GetPitchNameLabel( (ePitchName)i ) ) )
+	while ( ( i < pn_amount ) && ( Name != GetLabel( (ePitchName)i ) ) )
 		i++;
 
 	if ( i > pn_amount )
@@ -1286,7 +1274,7 @@ static eAccidental GetPitchAccidental_(const str::string_ &Accidental)
 {
 	int i = 0;
 
-	while ( ( i < a_amount ) && ( Accidental != GetPitchAccidentalLabel( (eAccidental)i ) ) )
+	while ( ( i < a_amount ) && ( Accidental != GetLabel( (eAccidental)i ) ) )
 		i++;
 
 	if ( i > a_amount )
@@ -1304,8 +1292,6 @@ static sOctave GetPitchOctave_( const str::string_ &Octave )
 		O = MSCMLD_UNDEFINED_PITCH_OCTAVE;
 
 	return O;
-
-
 }
 
 static parse_status__ ParsePitch_(
@@ -1892,4 +1878,8 @@ parse_status__ mscmld::ParseXML(
 		qRVct();
 
 	return Parse_( Parser, Melody );
+}
+
+qGCTOR( mscmld ) {
+	FillAccidentalAutomat_();
 }

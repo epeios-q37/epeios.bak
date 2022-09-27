@@ -27,14 +27,6 @@
 # include "bso.h"
 # include "tol.h"
 
-
-	inline void reset(
-		bso::sBool,
-		mscmld::sRow &Row )
-	{
-		Row = qNIL;
-	}
-
 namespace main {
   class sSession
   : public sclx::sProxy

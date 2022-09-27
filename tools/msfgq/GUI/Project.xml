@@ -53,8 +53,8 @@
 	</Libraries>
   <Files>
 		<Files Group="XML" Path="XML/">
-			<File>Head.xhtml</File>
-			<File>Body.xhtml</File>
+			<File>Head.xml</File>
+			<File>Body.xml</File>
 		</Files>
 	</Files>
 	<Misc>

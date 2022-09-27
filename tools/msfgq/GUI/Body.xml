@@ -1,0 +1,129 @@
+<xpp:cdata xmlns="http://www.w3.org/1999/xhtml" xmlns:xpp="http://epeios.q37.info/ns/xpp" xmlns:xdh="http://epeios.q37.info/ns/xdhtml">
+  <fieldset>
+    <span style="display: flex; ">
+      <fieldset style="display: flex; align-items: center; justify-content: space-around">
+        <legend>Midi in</legend>
+        <select id="MidiIn">
+          <option value="dummy">Placeholder</option>
+        </select>
+        <input xdh:onevent="Refresh" type="image" style="width:20px; height: 20px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABHNCSVQICAgIfAhkiAAAAVNJREFUOE/t1EsrBlEYwPFxSS7Z2hrklj0pxAeQtc+gfAKy8SFQygbxFSQsLBQLS0lZo1xzLfz/OvM2jZlhz1O/5sx5npl3zpxn3ij6c1FVsuJ6cv0YRRzqzjnu4ACvaEIvjvCBwmgns4I7POEyeOZ4gwX0YR7LKI02stt4wTom0BM43sQjzuBTWlMYLtNftHAGDTmVLcztwiVqLaemMjXM6BYbaMwp9Afm8IDcG1ZnLhrhvA6rcFnpcH4K06gJ+TeOvppK1KZPGHfgHieZ+eR0i8E+3sOEXXKVrs3esOA+X9O+1+OyAnPZJbtzzej+6ULynZiEXVEYQ2Tss6JNSS50w2yfawwW3o1E0ja+aNsmb6edm4U1NribVRoxWV++F/gUNnNXMM7RpzdnTYxfRStVi3D5fnoXga3k3BJifIuyPweXMoAx+G3byKfYwyF8yv+Iok/EGUn4rtKSKQAAAABJRU5ErkJggg==" />
+      </fieldset>
+      <fieldset class="neat">
+        <legend>Key</legend>
+        <select id="Key">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+        <span xdh:onevent="Accidental" xdh:radio="Accidental">
+          <label>
+            <input type="radio" name="Accidental" value="Sharp" />
+            <span>♯</span>
+          </label>
+          <label>
+            <input type="radio" name="Accidental" value="Flat" />
+            <span>♭</span>
+          </label>
+        </span>
+      </fieldset>
+      <fieldset class="neat">
+        <legend>Time</legend>
+        <input id="Numerator" type="number" max="12" min="1" value="4" size="2" />
+        <span>/</span>
+        <select id="Denominator">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="4" selected="selected">4</option>
+          <option value="8">8</option>
+          <option value="16">16</option>
+        </select>
+      </fieldset>
+      <fieldset class="neat">
+        <legend>Octave</legend>
+        <input type="number" size="1" min="0" max="9" value="4" />
+      </fieldset>
+    </span>
+    <fieldset style="display: flex; flex-direction: column; gap: 5px">
+      <legend>Score</legend>
+      <fieldset>
+        <div id="Score"></div>
+      </fieldset>
+      <div id="audio"></div>
+      <span>
+        <button class="activate-audio">Activate Audio</button>
+        <button xdh:onevent="Execute">Execute</button>
+      </span>
+    </fieldset>
+    <span style="display: flex">
+      <fieldset style="display: table; box-sizing: border-box; border: solid 1px;">
+        <legend>Duration/rest</legend>
+        <span id="1" xdh:onevent="Duration" class="duration">
+          <input type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAICAQAAABjGAZHAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAD4gAAA+IARbIpYYAAAAHdElNRQflCBQAGSTCVeZRAAAAEGNhTnYAAANDAAAEnQAAAFAAAAA1c4Hx6QAAAHhJREFUCNddj2ENwjAYRF9R0EkYEkDCMgcEB7WAhlnAAkjAQidhSCgSHj9ou4T7873k8l3uggA8zbz5AANHrpwDAPJwFJMiL08iTmaFu4i4+YNiFDGaJVazHuRWIXmgarXRTFeLvfTfZY9thTBZlOLYC4V9ygp/U778rWDCqA7aKQAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMS0wOC0yMFQwMDoyNTozNiswMDowMJUzzywAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjEtMDgtMjBUMDA6MjU6MzYrMDA6MDDkbneQAAAALXRFWHRpY2M6Y29weXJpZ2h0AENvcHlyaWdodCBBcnRpZmV4IFNvZnR3YXJlIDIwMTEIusW0AAAAMXRFWHRpY2M6ZGVzY3JpcHRpb24AQXJ0aWZleCBTb2Z0d2FyZSBzUkdCIElDQyBQcm9maWxlEwwBhgAAAB10RVh0U29mdHdhcmUAR1BMIEdob3N0c2NyaXB0IDkuMjcvl14hAAAAAElFTkSuQmCC" />
+        </span>
+        <span class="duration">
+          <input id="2" xdh:onevent="Duration" type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAdCAQAAAA56DUVAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAD4gAAA+IARbIpYYAAAAHdElNRQflCBQAGSYsW4d9AAAAEGNhTnYAAANDAAAEnQAAAFAAAAAgHlwVAgAAAIBJREFUKM/tkUENwkAQRV8bBCypggYHixZwUAuroRbWAkiohbXQSthKeBy2ISFBAAfmHyZ5eZk5fOQzi9jzZf7wp+Cprc0nhR0YAKQ6iTialXsrNYqYrIo8TJLF6GITisEs0elwJInBKuHttDOzwmhxPV4FsyJdcWYHrly4ce4AXunVXnPK1fDUAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIxLTA4LTIwVDAwOjI1OjM4KzAwOjAwxQy0cQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMS0wOC0yMFQwMDoyNTozOCswMDowMLRRDM0AAAAtdEVYdGljYzpjb3B5cmlnaHQAQ29weXJpZ2h0IEFydGlmZXggU29mdHdhcmUgMjAxMQi6xbQAAAAxdEVYdGljYzpkZXNjcmlwdGlvbgBBcnRpZmV4IFNvZnR3YXJlIHNSR0IgSUNDIFByb2ZpbGUTDAGGAAAAHXRFWHRTb2Z0d2FyZQBHUEwgR2hvc3RzY3JpcHQgOS4yNy+XXiEAAAAASUVORK5CYII=" />
+        </span>
+        <span class="duration">
+          <input id="3" xdh:onevent="Duration" type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAdCAQAAAA56DUVAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAD4gAAA+IARbIpYYAAAAHdElNRQflCBQAGSdbXLfrAAAAEGNhTnYAAANDAAAEnQAAAFAAAAAgHlwVAgAAAGdJREFUKM/tzkERQFAAhOGfEYAIKngVRDAaqPA6iKCCLqq8Ag6/A2MwAjjYPezMd9pM7mkN5Lzkx09hsc/izAIEVgBJRjlbGSXZXAhxkvigUqF+4KBwp8akMFyoMylSjFTHmZ6Q7Qc3+o5Mdx6apWUAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMDgtMjBUMDA6MjU6MzkrMDA6MDBje7/FAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIxLTA4LTIwVDAwOjI1OjM5KzAwOjAwEiYHeQAAAC10RVh0aWNjOmNvcHlyaWdodABDb3B5cmlnaHQgQXJ0aWZleCBTb2Z0d2FyZSAyMDExCLrFtAAAADF0RVh0aWNjOmRlc2NyaXB0aW9uAEFydGlmZXggU29mdHdhcmUgc1JHQiBJQ0MgUHJvZmlsZRMMAYYAAAAddEVYdFNvZnR3YXJlAEdQTCBHaG9zdHNjcmlwdCA5LjI3L5deIQAAAABJRU5ErkJggg==" />
+        </span>
+        <span class="duration">
+          <input id="4" xdh:onevent="Duration" type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAdCAQAAADfwf5RAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAD4gAAA+IARbIpYYAAAAHdElNRQflCBQAGSjL46p6AAAAEGNhTnYAAANDAAAEnQAAAFAAAAAgHlwVAgAAAN1JREFUKM990sFtwjAYhuE3KAMkEyAyQlJxRgojUDbICmlHoCNU3YCswAhw5wBBvdFL2nsPXw+NUtu1bZ8+Pbbs/7cR9qzV6i/NcMbFSv8Y7nH+iPM5zu8cNAX35nOherq7l9FeAa61FFpokLduWNFwY+c/+7drpdBV3t0AHRk7f2EARfLMG58KMDwlGR1BhkeOMc7pYxzoubk/wieKOD+EudMXa9JxpfacgIrvkXsa8gQxqDWanls/lUGl8yqvJrcOZjIjC4cbm20sx18ycWOkjYMifSEfS9pSJW71P/izzc8YcPbcAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIxLTA4LTIwVDAwOjI1OjQwKzAwOjAw/CbzDwAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMS0wOC0yMFQwMDoyNTo0MCswMDowMI17S7MAAAAtdEVYdGljYzpjb3B5cmlnaHQAQ29weXJpZ2h0IEFydGlmZXggU29mdHdhcmUgMjAxMQi6xbQAAAAxdEVYdGljYzpkZXNjcmlwdGlvbgBBcnRpZmV4IFNvZnR3YXJlIHNSR0IgSUNDIFByb2ZpbGUTDAGGAAAAHXRFWHRTb2Z0d2FyZQBHUEwgR2hvc3RzY3JpcHQgOS4yNy+XXiEAAAAASUVORK5CYII=" />
+        </span>
+        <span class="duration">
+          <input id="5" xdh:onevent="Duration" type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAdCAQAAADfwf5RAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAD4gAAA+IARbIpYYAAAAHdElNRQflCBQAGSol7ctWAAAAEGNhTnYAAANDAAAEnQAAAFAAAAAgHlwVAgAAAP1JREFUKM990jFOwzAYhuG3qBJrMzGiVOxIrcQFitQLFG4QjhA4QnOEXoErFG6Q7iBRsTK5YmZ4GQht6jqxp9+PbH+/bOR4ziw9VGdE4+OoOmH46ue3fn7v528e3Rdx8ktx5LZJn+C5OLOjMbhgySuVHYffKEVzQYLPDQZzizRjqazFrUnGWsldmYg2B+7Yecs2lfyaFZ8syYBhjFfAw2DnEyOq02j/770QQ+ruv1EBL3TyeLCg7mYYs+ljDsk3PrMBpvy0MAMJlq3o2f6nziwlOIl6WykSxFrKCEfN3qW5Qh5x0XBtrfF/mBhsL1C0qkWEMqzImpbumQ7ivn8BMnQGSbgKlR0AAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMDgtMjBUMDA6MjU6NDIrMDA6MDBrueImAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIxLTA4LTIwVDAwOjI1OjQyKzAwOjAwGuRamgAAAC10RVh0aWNjOmNvcHlyaWdodABDb3B5cmlnaHQgQXJ0aWZleCBTb2Z0d2FyZSAyMDExCLrFtAAAADF0RVh0aWNjOmRlc2NyaXB0aW9uAEFydGlmZXggU29mdHdhcmUgc1JHQiBJQ0MgUHJvZmlsZRMMAYYAAAAddEVYdFNvZnR3YXJlAEdQTCBHaG9zdHNjcmlwdCA5LjI3L5deIQAAAABJRU5ErkJggg==" />
+        </span>
+        <span class="duration">
+          <input id="6" xdh:onevent="Duration" type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAiCAQAAAAq7UspAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAD4gAAA+IARbIpYYAAAAHdElNRQflCBQAGSzMjm5jAAAAEGNhTnYAAANDAAAEnQAAAFAAAAAbr1f8JgAAARRJREFUOMt9k7FNw0AUQF9QJFqnokRGTJBIUFKAxAIxGyRsYDECGcGMYNggKxCJBRyJjsoJNcWjwHKMc+d/zX29u6/3/+mQ/+vc3EN2wlF8dfYB/DmMP4bxNyvb5FgNE2ujavfsWcaLn7HgjVcjxa+UW1PFED61tjLxWcNquZKbxjCurcTKoDlkTEjZhs2LQ2th80LEyoi5zE2GzGuxNGouc/OQ+Q2QsfMiPPNrCvZkbIExgViO8BEoj29fNgdy4C5U/C+eSHmJ48ko4z2OAXbDuDXfWLIBZvy0aMsMpDbvjG3SfqLEUmqnvbkWihQm1pL3YNLcXVsopD28sJv2XnTa/o8GLzrZvAdlvGLStPTAbNTv+xfJLiuvxf+xMgAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMS0wOC0yMFQwMDoyNTo0NCswMDowMAhp1xwAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjEtMDgtMjBUMDA6MjU6NDQrMDA6MDB5NG+gAAAALXRFWHRpY2M6Y29weXJpZ2h0AENvcHlyaWdodCBBcnRpZmV4IFNvZnR3YXJlIDIwMTEIusW0AAAAMXRFWHRpY2M6ZGVzY3JpcHRpb24AQXJ0aWZleCBTb2Z0d2FyZSBzUkdCIElDQyBQcm9maWxlEwwBhgAAAB10RVh0U29mdHdhcmUAR1BMIEdob3N0c2NyaXB0IDkuMjcvl14hAAAAAElFTkSuQmCC" />
+        </span>
+        <span class="duration" style="border-right:solid 1px!important;">
+          <input id="7" xdh:onevent="Duration" type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAoCAQAAACLdmhPAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAD4gAAA+IARbIpYYAAAAHdElNRQflCBQAGS4igA9PAAAAEGNhTnYAAANDAAAEnQAAAFAAAAAa2FDMsAAAAWZJREFUOMt9lDtu20AUAIeBACNVVlUCpDBk9ynIwE4ZwAJygSg5gXwEy0eQdQPZN1Aa96RvYAm5AA24cyUmdYpJEUqhyaV3m32cXXDe2w/yvC/N/R/RxodeNPArOu2pMY7gx5fxz5fxb67dB101DG7tVTvhF/P+1edOpc4+gr8oqWkffqPci0uNq82VqWkfDpaWYmkEfxDPlGDuoJvYZ065YeYREMGP3Ca4AIaxfx8qW1NHfWq5kvepUZckdW6k5m/ZMBPGbGNb8p2UBYVVfL+fKEg5p+CYaFmkNIjbuFqpLPvxmSIjlzHzA+64EsaUcfPAJWuHcfN3FAQmXPOxi18DWVJQccQk6eD3AGTJJRseYmr/2iwZ8YNeDBPy3XFYu2INZPx5NmUAlXMWdXjHkE9NXDlm0/hQcVyPHsjgolXVsH8bgisZtfDU3RsTtH0H0/3VzV0pTBvw6x7u+uCKYZ3SN7KknftfVfxxDp3t+y4AAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMDgtMjBUMDA6MjU6NDYrMDA6MDCf9sY1AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIxLTA4LTIwVDAwOjI1OjQ2KzAwOjAw7qt+iQAAAC10RVh0aWNjOmNvcHlyaWdodABDb3B5cmlnaHQgQXJ0aWZleCBTb2Z0d2FyZSAyMDExCLrFtAAAADF0RVh0aWNjOmRlc2NyaXB0aW9uAEFydGlmZXggU29mdHdhcmUgc1JHQiBJQ0MgUHJvZmlsZRMMAYYAAAAddEVYdFNvZnR3YXJlAEdQTCBHaG9zdHNjcmlwdCA5LjI3L5deIQAAAABJRU5ErkJggg==" />
+        </span>
+        <span class="duration" style="border: none;"></span>
+        <span class="duration" style="border-right:solid 1px!important;">
+          <input xdh:onevent="Rest" type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAUCAQAAAAaErTgAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAD4gAAA+IARbIpYYAAAAHdElNRQflCBQAGTGviAK6AAAAEGNhTnYAAANDAAAEnQAAAE8AAAAqHDn8TwAAAKBJREFUGNNVkFERwkAMRN91KqCV0OIAcFALIOGQgIZaKBJAApWABZBwSHh89K5Tko8km51sEkRGo7J4DtHRPyDZeHcDyGDjyw2wFztTKZ85OVkBPDyzWA8yFZpR4b2WY1HZr90MvGwkbyEVHMIMfPPYPGByKIybwYNv4CIAcVXBSal3QMcMzIz0ksSr5eZk3YZoEWgDIGnzL6mgDUc+K+sHnoCSnIQFiOMAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMDgtMjBUMDA6MjU6NDkrMDA6MDBpvrbcAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIxLTA4LTIwVDAwOjI1OjQ5KzAwOjAwGOMOYAAAAC10RVh0aWNjOmNvcHlyaWdodABDb3B5cmlnaHQgQXJ0aWZleCBTb2Z0d2FyZSAyMDExCLrFtAAAADF0RVh0aWNjOmRlc2NyaXB0aW9uAEFydGlmZXggU29mdHdhcmUgc1JHQiBJQ0MgUHJvZmlsZRMMAYYAAAAddEVYdFNvZnR3YXJlAEdQTCBHaG9zdHNjcmlwdCA5LjI3L5deIQAAAABJRU5ErkJggg==" />
+        </span>
+        <span class="duration" style="border: none;"></span>
+        <span class="duration">
+          <input xdh:onevent="Dot" type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAdCAQAAADfwf5RAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAHdElNRQfmCRkOGgXmEQsFAAAAxUlEQVQoz+3QrU6CcRiG8d8LKOgmXwZHZajJ4nTOzRMwQCCYMXoEHAMJiWr1JBwdi0yhEKlY2XzdLH+TfMkhcKX72bU9e56bVQ69Kv8NCf+J5nGdttEbvZbULCXlbZsKwqrec63uxI5PA5llfaylKtY3ELtSEBDJ+qKiJ/bk0i449aGMhjf3PBurS8723Roq2fIi+GGstnDejYlHCTT0dejKg7RzD2LvjkAkJxXpyBjZd+ZCVlfTcPHzA20TwbeeO8XlWn4BDs4qaLc7t+UAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjItMDktMjVUMTQ6MjU6NDcrMDA6MDDw9LZvAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIyLTA5LTI1VDE0OjI1OjQ3KzAwOjAwgakO0wAAAABJRU5ErkJggg==" />
+        </span>
+        <span class="duration" style="border-right:solid 1px!important;">
+          <input xdh:onevent="Tie" type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAICAQAAAC4o6xlAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAHdElNRQfmCRkOLxFe+h3OAAAArElEQVQY043NsUpCARiG4acjcSgpUAkEcRBpEeQIQaM4ODQ46eTWFbg5eQPehktdRi0iTs0Fh2hKCBykJTNpEFGRyHf7+B/4SQscVtJpIHR5ED5XMA9MZFX/xRk3PiwSeFd35cX8T1xxayhezxNddxrO9uCRop571+u5KqGl48ejsTczS6ELJTWRsb7XXQ45bU0FfFk6Fvo0MvDge/Nst5SySF5o6tmT2GL7/Avd5SJmNF7EVwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMi0wOS0yNVQxNDo0NzowNCswMDowMKkWuHYAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjItMDktMjVUMTQ6NDc6MDQrMDA6MDDYSwDKAAAAAElFTkSuQmCC" />
+        </span>
+      </fieldset>
+      <fieldset style="display: flex; align-items: center;">
+        <legend>Clef</legend>
+        <label class="clef" xdh:onevent="treble" style="margin: 0px 3px;">
+          <input name="clef" type="radio" />
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAkCAYAAABSSLCCAAAABHNCSVQICAgIfAhkiAAAAmZJREFUOE+NlduLT1EUx3+M3MptQiNkGEUjIg8uUZrkyZOEPCgSqXErRZEXyqMHf4KkeFLkUnIpEkLukmheXHMZRBh8Pj9rH8fROTOrPrP2Xmt9z95n7X1+U6tVWy/Su+AuDK4u/Zvdy/AXXIPtPREtpKgLLsBA8AHd2i0qOmFMVO7HN1SpZpB0W5tyRYcYN1WJ1pF8AwOiSP8axjrvXaIcTfwgfIn8KvwweFklstU2QGuGfXAdvhkoW8kGPAC7dgRcxUZU2hKybXAGbMhNKFsge9BMRu5fwSeYkmVKBiOIe0YKfsKykros7N7dShJs6E7gS18JgaLTZYI+kbDFh2FWzHfjP5eJUnw9A58unom2Ajzk/8wVhsNjGAqnYDEo9irNhXfwEI6CV6tu7WBRB9iIIXAuYml1vWIfWLfLYHB1zI/H3JiX9CnYeufexVbrPLzvYPdmR/I5fh7ssABrgYug0IbVvsI9B9hOMLEg5knkdCR4Jzu9Ty/Az1rzy/Rlz8fctveP8Su8N3+QoqswHhSkzyFdzifEJoZId98/FrrkGjgJl2AC2P7b8AO8rLZcWw7m6nYCPAfNs/MYPFgfuuVPuNYX783fHPP62dyAPSmQ81tjfAB/DBrS3j8wmQ8e7lnwc5gKkwN34eEuhS63UrRGAj7Ad7Or08Atep49trVU+j6ZVf5iRpXv647eJlVR5DvNAX+qPkaRNaOgI4nyvpmJdy5d1JZIjsMvyhem7hnbCE2R9BtLPyiTGP+zSl7k1vL2LCbT8Y8KuWya/h+9J7ItoivxbUVB8ZwUWuR/vn5wB9Jnk2l/Aw8lhcbwdz2RAAAAAElFTkSuQmCC" alt="" />
+        </label>
+        <!--label class="clef" style="margin: 0px 3px;">
+          <input name="clef" type="radio"/>
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAVCAYAAACZm7S3AAAABHNCSVQICAgIfAhkiAAAAZNJREFUOE+FlDsohlEYx1+3UhQhYrHJbSSLSMokKYMiWSVGi8WkDEakJBlk+MrAJCkZmJQVZaEIJUpCLr//2/PpfKfvPd9Tv/c557mc23POG0VR9GuMoMtgCySlsAQrsAZnMAmFcqYlKVmDyLdtgePWX3VyE2e+s2ANoBXlwYPZujVAvjuK196z/gn6xZLOzaYtBpMn8DdAlyVIPVu7UTpj806Qmj9w5dkqrP8mHVp2Nf4BL7nG+se5kocJWIASS6hDt8A9rMuWtOxKfLPwDotwCkNwCxr0EWLx65zCdmj2ebRK1A59oIuTIX7yB17ZvqHKD3b72Q5sl4B9kK8ftLUO6ITiXMmfBIyCDmYONqAJZuAC2uBf/GWnH8Y0EZegqylR6b5Ag5bLkG3ZcSSiB6ET19WU6F5fg2qt1xVMfsK/oyBHbqzdIx2aWb56KHCSNbukSJ9Q8jJ+LVMnr1pL0qXTwQWTBy2hF60bpwFazRb/IEIzH1jgJlr7H4Na0J/kSL6kuy3fFLyClqpaN4PeuP5nsfwBTdRVUl6D03gAAAAASUVORK5CYII=" alt=""/>
+        </label-->
+        <label class="clef" xdh:onevent="bass">
+          <input name="clef" type="radio" />
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAARCAYAAAACCvahAAAABHNCSVQICAgIfAhkiAAAATtJREFUOE+Vkz8vg1EUh98KHcVCQpuqhFFilcbiA9gFA59A0o9g8g2YRCISbUp0MOiki83CKDEY0EFTC02oPj89rfM2pX1P8uT8ub9z73vvfW8Q/FqKcA8u4Boe4BBmnaZnOE/1FKbd6ALxM3zAsqsniDdgpF0rEUxA9yrr1L7hFcZMfGK1VeVz8AQVKx6ZSC4O71bPWn0Ffw4/X5mxQa3QZsqEcrdWV0PIhsjuoO6qmuDL5fcWz4Rbg0DNNdiFhg3u41+cUAfmTZNsQefANDgJ6ZCslejq9DWXNpazfG3YiXVovUyTynT3sgPQZFeW/+nUqP1rS/oXItk2aq2Sj9SFeByqoPtPRmnWWRThDRajNOoKjuER/t2n7tmbXlYZPkEPQ39XXxtFsQNnsNRXbYIYfhP0mgpwM2ijdE3G7D5kEdnBWAAAAABJRU5ErkJggg==" alt="" />
+        </label>
+      </fieldset>
+    </span>
+    <fieldset style="display: flex; align-items: center; gap:5px;">
+      <legend>Cursor</legend>
+      <fieldset xdh:radio="Cursor" xdh:onevent="Cursor">
+        <label>
+          <input name="Cursor" type="radio" value="Insert" checked="checked">Insert</input>
+        </label>
+        <label>
+          <input name="Cursor" type="radio" value="Overwrite">Overwrite</input>
+        </label>
+      </fieldset>
+      <button xdh:onevent="Append">Append</button>
+      <button xdh:onevent="Suppr">Suppr.</button>
+      <button xdh:onevent="Clear">Clear all</button>
+    </fieldset>
+  </fieldset>
+</xpp:cdata>

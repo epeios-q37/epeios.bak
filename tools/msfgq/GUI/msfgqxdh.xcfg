@@ -75,9 +75,9 @@
     </Parameters>
     <Definitions>
 			<XDHTML xpp:attribute="ScriptsVersion,XDHScriptsVersion"/>
-			<HeadFile>Head.xhtml</HeadFile>
+			<HeadFile>Head.xml</HeadFile>
 			<Body>
-			    <xpp:expand href="Body.xhtml"/>
+			    <xpp:expand href="Body.xml"/>
 			</Body>
 			<!--Script>while read x ; do echo $x ; done</Script-->
       <Script>

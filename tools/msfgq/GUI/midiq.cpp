@@ -109,7 +109,7 @@ namespace {
     sNote Note,
     main::rXMelody &XMelody)
   {
-    bso::sS8 RelativeOctave = mscmld::GetPitchOctave(Note, XMelody.Accidental) - XMelody.BaseOctave;
+    bso::sS8 RelativeOctave = mscmld::GetOctave(Note, XMelody.Accidental) - XMelody.BaseOctave;
 
     if ( RelativeOctave < 0 )
       return RelativeOctave;
