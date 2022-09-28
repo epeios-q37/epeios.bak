@@ -30,18 +30,6 @@ using namespace main;
 sclx::action_handler<sSession> main::Core;
 
 namespace {
-  rXMelody Melody_;
-  mtx::rMutex Mutex_ = mtx::Undefined;
-}
-
-rXMelody &main::Get(hGuard &Guard)
-{
-  Guard.InitAndLock(Mutex_);
-
-  return Melody_;
-}
-
-namespace {
   namespace {
     void Fill_(
       const str::dStrings &Ids,
@@ -241,7 +229,7 @@ namespace {
   }
 
   bso::sS8 GetABC_(
-    const main::rXMelody &XMelody,
+    const melody::rXMelody &XMelody,
     str::dString &ABC)
   {
     return GetABC_(XMelody.Melody, XMelody.BaseOctave, XMelody.Accidental, ABC);
@@ -251,9 +239,9 @@ namespace {
   {
     bso::sS8 Return = 0;
   qRH;
-    main::hGuard Guard;
+    melody::hGuard Guard;
   qRB;
-    Return = GetABC_(main::Get(Guard), ABC);
+    Return = GetABC_(melody::Get(Guard), ABC);
   qRR;
   qRT;
   qRE;
@@ -276,7 +264,7 @@ namespace {
     }
 
     void DisplayMelody_(
-      const main::rXMelody &XMelody,
+      const melody::rXMelody &XMelody,
       main::sSession &Session)
     {
     qRH;
@@ -306,9 +294,9 @@ namespace {
     void DisplayMelody_(main::sSession &Session)
     {
     qRH;
-      main::hGuard Guard;
+      melody::hGuard Guard;
     qRB;
-      DisplayMelody_(Get(Guard), Session);
+      DisplayMelody_(melody::Get(Guard), Session);
     qRR;
     qRT;
     qRE;
@@ -377,12 +365,12 @@ D_( Accidental )
 qRH;
   str::wString RawAccidental;
   mscmld::eAccidental Accidental = mscmld::a_Undefined;
-  hGuard Guard;
+  melody::hGuard Guard;
 qRB;
   RawAccidental.Init();
   Session.GetValue(Id, RawAccidental);
 
-  rXMelody &XMelody = Get(Guard);
+  melody::rXMelody &XMelody = melody::Get(Guard);
 
   switch ( Accidental = mscmld::GetAccidental(RawAccidental) ) {
   case mscmld::aFlat:
@@ -407,9 +395,9 @@ D_( Refresh )
 
 D_( SelectNote )
 {
-  main::hGuard Guard;
+  melody::hGuard Guard;
 
-  main::rXMelody &XMelody = main::Get(Guard);
+  melody::rXMelody &XMelody = melody::Get(Guard);
 
   str::wString(Id).ToNumber(*XMelody.Row);
   DisplayMelody_(XMelody, Session);
@@ -418,9 +406,9 @@ D_( SelectNote )
 D_( Rest )
 {
 qRH;
-  main::hGuard Guard;
+  melody::hGuard Guard;
 qRB;
-  main::rXMelody &XMelody = main::Get(Guard);
+  melody::rXMelody &XMelody = melody::Get(Guard);
 
   if ( XMelody.Row != qNIL ) {
     melody::sNote Note = XMelody.Melody(XMelody.Row);
@@ -442,9 +430,9 @@ qRE;
 D_( Duration )
 {
 qRH;
-  main::hGuard Guard;
+  melody::hGuard Guard;
 qRB;
-  main::rXMelody &XMelody = main::Get(Guard);
+  melody::rXMelody &XMelody = melody::Get(Guard);
 
   if ( XMelody.Row != qNIL ) {
     melody::sNote Note = XMelody.Melody(XMelody.Row);
@@ -465,9 +453,9 @@ qRE;
 D_( Dot )
 {
 qRH;
-  main::hGuard Guard;
+  melody::hGuard Guard;
 qRB;
-  main::rXMelody &XMelody = main::Get(Guard);
+  melody::rXMelody &XMelody = melody::Get(Guard);
 
   if ( XMelody.Row != qNIL ) {
     melody::sNote Note = XMelody.Melody(XMelody.Row);
@@ -489,9 +477,9 @@ qRE;
 D_( Tie )
 {
 qRH;
-  main::hGuard Guard;
+  melody::hGuard Guard;
 qRB;
-  main::rXMelody &XMelody = main::Get(Guard);
+  melody::rXMelody &XMelody = melody::Get(Guard);
 
   if ( XMelody.Row != qNIL ) {
     melody::sNote Note = XMelody.Melody(XMelody.Row);
@@ -545,7 +533,7 @@ namespace {
   }
 
   void ToXML_(
-    const main::rXMelody &XMelody,
+    const melody::rXMelody &XMelody,
     txf::sWFlow &Flow)
   {
     ToXML_(XMelody.Melody, XMelody.Accidental, Flow);
@@ -556,19 +544,49 @@ D_( Execute )
 {
 qRH;
 	str::wString Script;
-	flx::rExecWDriver XDriver;
-	txf::rWFlow TFlow;
-	main::hGuard Guard;
+#if 0
+	flx::rExecRDriver XDriver;
+	fdr::rWDriver &WDriver = flx::VoidWDriver;
+#else
+	flx::rExecDriver XDriver;
+	fdr::rWDriver &WDriver = XDriver;
+#endif
+	txf::rWFlow WFlow;
+	flw::rDressedRFlow<> RFlow;
+	melody::hGuard Guard;
+	str::wString Output;
+	int C;
 qRB;
 	Script.Init();
 	sclm::MGetValue(registry::definition::Script, Script);
+	Script.Append(";echo -n '$';");
 
 	XDriver.Init(Script);
-	TFlow.Init(XDriver);
+	WFlow.Init(WDriver);
 
-	ToXML_(main::Get(Guard), TFlow);
+	ToXML_(melody::Get(Guard), WFlow);
 
-	TFlow.Commit();
+	WFlow.Commit();
+
+	Output.Init("window.open(\"data:application/pdf;base64,");
+
+	RFlow.Init(XDriver);
+
+	while ( ( C = RFlow.Get() ) != '$' ) {
+    if ( isgraph(C) ) {
+  /*    if ( C == '+' )
+        C = '-';
+      else if ( C == '/' )
+        C = '_';
+*/
+      Output.Append(C);
+    }
+   // cio::COut << (char)C << txf::commit;
+	}
+
+	Output.Append("\").focus();");
+
+	Session.Execute(Output);
 qRR;
 qRT;
 qRE;
@@ -578,13 +596,13 @@ D_( Cursor )
 {
 qRH;
   str::wString Cursor;
-  main::hGuard Guard;
+  melody::hGuard Guard;
 qRB;
   Cursor.Init();
 
   Session.GetValue(Id, Cursor);
 
-  Get(Guard).Overwrite = Cursor == "Overwrite";
+  melody::Get(Guard).Overwrite = Cursor == "Overwrite";
 qRR;
 qRT;
 qRE;
@@ -593,9 +611,9 @@ qRE;
 D_( Append )
 {
 qRH;
-  hGuard Guard;
+  melody::hGuard Guard;
 qRB;
-  rXMelody &XMelody = Get(Guard);
+  melody::rXMelody &XMelody = melody::Get(Guard);
 
   XMelody.Row = qNIL;
 
@@ -608,10 +626,10 @@ qRE;
 D_( Suppr )
 {
 qRH;
-  hGuard Guard;
+  melody::hGuard Guard;
   bso::sBool IsLast = false;
 qRB;
-  rXMelody &XMelody = Get(Guard);
+  melody::rXMelody &XMelody = melody::Get(Guard);
 
   if ( XMelody.Row != qNIL ) {
     IsLast = XMelody.Row == XMelody.Melody.Last();
@@ -631,9 +649,9 @@ qRE;
 D_( Clear )
 {
 qRH;
-  hGuard Guard;
+  melody::hGuard Guard;
 qRB;
-  rXMelody &XMelody = Get(Guard);
+  melody::rXMelody &XMelody = melody::Get(Guard);
 
   XMelody.Melody.Init();
   XMelody.Row = qNIL;
@@ -642,6 +660,17 @@ qRB;
 qRR;
 qRT;
 qRE;
+}
+
+D_( Keyboard )
+{
+  melody::hGuard Guard;
+
+  melody::rXMelody &XMelody = melody::Get(Guard);
+
+  melody::Handle(melody::sNote(str::wString(Id+1).ToU8() + 5 + XMelody.BaseOctave * 12, melody::sDuration(3), melody::GetSignature()), XMelody);
+
+  DisplayMelody_(XMelody, Session);
 }
 
 #define R_( name ) Core.Add(#name, actions_::name)
@@ -662,8 +691,5 @@ qGCTOR( main ) {
   R_( Append );
   R_( Suppr );
   R_( Clear );
-
-
-  Melody_.Init();
-  Mutex_ = mtx::Create();
+  R_( Keyboard );
 }

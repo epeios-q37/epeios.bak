@@ -180,10 +180,13 @@ static bso::bool__ POpen2_(
         dup2(pipe_stdout[1], 1);
         close(pipe_stderr[0]);
         dup2(pipe_stderr[1], 2);
+#if 0	// Exemples use this, but on success 'execl' never returns.				
         execl("/bin/sh", "sh", "-c", (const char *)Command.Internal(), (const char *)NULL);
-
         perror("execl"); exit(99);
-    }
+#else // Seems also to work but returns.
+				tol::System(Command);
+#endif
+		}
 
     In = pipe_stdin[1];
     Out = pipe_stdout[0];

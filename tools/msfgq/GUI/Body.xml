@@ -126,4 +126,82 @@
       <button xdh:onevent="Clear">Clear all</button>
     </fieldset>
   </fieldset>
+  <fieldset>
+    <div class='piano-container'>
+      <ul id="beautiful-piano">
+        <li>
+          <div id="k0" xdh:onevent="Keyboard" class="anchor F3"></div>
+        </li>
+        <li>
+          <div id="k2" xdh:onevent="Keyboard" class="anchor G3"></div>
+          <span id="k1" xdh:onevent="Keyboard" class="Fs3 Gb3"></span>
+        </li>
+        <li>
+          <div id="k4" xdh:onevent="Keyboard" class="anchor A3"></div>
+          <span id="k3" xdh:onevent="Keyboard"  class="Gs3 Ab3"></span>
+        </li>
+        <li>
+          <div id="k6" xdh:onevent="Keyboard" class="anchor B3"></div>
+          <span id="k5" xdh:onevent="Keyboard" class="As3 Bb3"></span>
+        </li>
+        <li>
+          <div id="k7" xdh:onevent="Keyboard" class="anchor C4"></div>
+        </li>
+        <li>
+          <div id="k9" xdh:onevent="Keyboard" class="anchor D4"></div>
+          <span id="k8" xdh:onevent="Keyboard" class="Cs4 Db4"></span>
+        </li>
+        <li>
+          <div id="k11" xdh:onevent="Keyboard" class="anchor E4"></div>
+          <span id="k10" xdh:onevent="Keyboard" class="Ds4 Eb4"></span>
+        </li>
+        <li>
+          <div id="k12" xdh:onevent="Keyboard" class="anchor F4"></div>
+        </li>
+        <li>
+          <div id="k14" xdh:onevent="Keyboard" class="anchor G4"></div>
+          <span id="k13" xdh:onevent="Keyboard" class="Fs4 Gb4"></span>
+        </li>
+        <li>
+          <div id="k16" xdh:onevent="Keyboard" class="anchor A4"></div>
+          <span id="k15" xdh:onevent="Keyboard" class="Gs4 Ab4"></span>
+        </li>
+        <li>
+          <div id="k18" xdh:onevent="Keyboard" class="anchor B4"></div>
+          <span id="k17" xdh:onevent="Keyboard" class="As4 Bb4"></span>
+        </li>
+        <li>
+          <div id="k19" xdh:onevent="Keyboard" class="anchor C5"></div>
+        </li>
+        <li>
+          <div id="k21" xdh:onevent="Keyboard" class="anchor D5"></div>
+          <span id="k20" xdh:onevent="Keyboard" class="Cs5 Db5"></span>
+        </li>
+        <li>
+          <div id="k23" xdh:onevent="Keyboard" class="anchor E5"></div>
+          <span id="k22" xdh:onevent="Keyboard" class="Ds5 Eb5"></span>
+        </li>
+        <li>
+          <div id="k24" xdh:onevent="Keyboard" class="anchor F5"></div>
+        </li>
+        <li>
+          <div id="k26" xdh:onevent="Keyboard" class="anchor G5"></div>
+          <span id="k25" xdh:onevent="Keyboard" class="Fs5 Gb5"></span>
+        </li>
+        <li>
+          <div id="k28" xdh:onevent="Keyboard" class="anchor A5"></div>
+          <span id="k27" xdh:onevent="Keyboard" class="Gs5 Ab5"></span>
+        </li>
+        <li>
+          <div id="k30" xdh:onevent="Keyboard" class="anchor B5"></div>
+          <span id="k29" xdh:onevent="Keyboard" class="As5 Bb5"></span>
+        </li>
+        <li>
+          <div id="k31" xdh:onevent="Keyboard" class="anchor C6"></div>
+        </li>
+      </ul>
+    </div>
+  </fieldset>
+  <iframe id="Output" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAkCAYAAABSSLCCAAAABHNCSVQICAgIfAhkiAAAAmZJREFUOE+NlduLT1EUx3+M3MptQiNkGEUjIg8uUZrkyZOEPCgSqXErRZEXyqMHf4KkeFLkUnIpEkLukmheXHMZRBh8Pj9rH8fROTOrPrP2Xmt9z95n7X1+U6tVWy/Su+AuDK4u/Zvdy/AXXIPtPREtpKgLLsBA8AHd2i0qOmFMVO7HN1SpZpB0W5tyRYcYN1WJ1pF8AwOiSP8axjrvXaIcTfwgfIn8KvwweFklstU2QGuGfXAdvhkoW8kGPAC7dgRcxUZU2hKybXAGbMhNKFsge9BMRu5fwSeYkmVKBiOIe0YKfsKykros7N7dShJs6E7gS18JgaLTZYI+kbDFh2FWzHfjP5eJUnw9A58unom2Ajzk/8wVhsNjGAqnYDEo9irNhXfwEI6CV6tu7WBRB9iIIXAuYml1vWIfWLfLYHB1zI/H3JiX9CnYeufexVbrPLzvYPdmR/I5fh7ssABrgYug0IbVvsI9B9hOMLEg5knkdCR4Jzu9Ty/Az1rzy/Rlz8fctveP8Su8N3+QoqswHhSkzyFdzifEJoZId98/FrrkGjgJl2AC2P7b8AO8rLZcWw7m6nYCPAfNs/MYPFgfuuVPuNYX783fHPP62dyAPSmQ81tjfAB/DBrS3j8wmQ8e7lnwc5gKkwN34eEuhS63UrRGAj7Ad7Or08Atep49trVU+j6ZVf5iRpXv647eJlVR5DvNAX+qPkaRNaOgI4nyvpmJdy5d1JZIjsMvyhem7hnbCE2R9BtLPyiTGP+zSl7k1vL2LCbT8Y8KuWya/h+9J7ItoivxbUVB8ZwUWuR/vn5wB9Jnk2l/Aw8lhcbwdz2RAAAAAElFTkSuQmCC">
+  </iframe>
 </xpp:cdata>

@@ -49,11 +49,47 @@ namespace melody {
     }
   };
 
-  sSignatureKey _GetSignatureKey( void );
+  sSignatureKey GetSignatureKey( void );
 
   sSignatureTime GetSignatureTime( void );
 
-  sSignature _GetSignature(void);
+  sSignature GetSignature(void);
+
+  struct rXMelody {
+  public:
+    melody::wMelody Melody;
+    mscmld::sRow Row;
+    bso::sU8 BaseOctave;
+    mscmld::eAccidental Accidental; // Accidental to use for alterate notes when in C key.
+    bso::sBool Overwrite;
+    void reset(bso::sBool P = true)
+    {
+      Melody.reset(P);
+      Row = qNIL;
+      BaseOctave = 0;
+      Accidental = mscmld::a_Undefined;
+      Overwrite = false;
+    }
+    qCDTOR(rXMelody);
+    void Init(void)
+    {
+      Melody.Init();
+      Row = qNIL;
+      BaseOctave = 2;
+      Accidental = mscmld::aSharp;
+      Overwrite = false;
+    }
+  };
+
+  typedef mtx::rHandle hGuard;
+
+  rXMelody &Get(hGuard &Guard);
+
+  bso::sS8 Handle(
+    sNote Note,
+    rXMelody &XMelody);
+
+  bso::sS8 Handle(const sNote &Note);
 
   void Play(
     const dMelody &Melody,

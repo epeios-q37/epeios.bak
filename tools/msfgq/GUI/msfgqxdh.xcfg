@@ -47,7 +47,7 @@
 						</xpp:bloc>
 					</xpp:define>
 					<xpp:define name="Lilypond">
-						<xpp:bloc>/usr/bin/lilypond -dbackend=eps -dno-gs-load-fonts -dinclude-eps-fonts --png </xpp:bloc>
+						<xpp:bloc>/usr/bin/lilypond </xpp:bloc>
 					</xpp:define>
 					<xpp:define name="putclip">
 						<xpp:bloc>
@@ -79,8 +79,9 @@
 			<Body>
 			    <xpp:expand href="Body.xml"/>
 			</Body>
+			<!--Script>base64 test.png</Script-->
 			<!--Script>while read x ; do echo $x ; done</Script-->
-      <Script>
+      <!--Script>
         <xpp:bloc>rm test.xml;</xpp:bloc>
         <xpp:bloc>while read x ; do echo $x&gt;&gt;test.xml ; done;</xpp:bloc>
         <xpp:expand select="xslt"/>
@@ -88,16 +89,15 @@
         <xpp:expand select="xmld2ly"/>
         <xpp:bloc>" test.xml &gt;test.ly;</xpp:bloc>
         <xpp:expand select="Lilypond"/>
-        <xpp:bloc> test.ly; xdg-open ./test.png</xpp:bloc>
-      </Script>
+        <xpp:bloc> test.ly; base64 -w 0 test.png</xpp:bloc>
+      </Script-->
       <Script>
-        <xpp:bloc>echo;</xpp:bloc>
         <xpp:expand select="xslt"/>
         <xpp:bloc> "</xpp:bloc>
         <xpp:expand select="xmld2ly"/>
-        <xpp:bloc>" - &gt;test.ly;</xpp:bloc>
+        <xpp:bloc>" - | </xpp:bloc>
         <xpp:expand select="Lilypond"/>
-        <xpp:bloc> test.ly; xdg-open ./test.png</xpp:bloc>
+        <xpp:bloc> -o test - ; base64 ./test.pdf</xpp:bloc>
       </Script>
     </Definitions>
     <Locale>

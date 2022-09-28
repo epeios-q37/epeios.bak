@@ -36,7 +36,7 @@ function highlightNote(note) {
     stylesheet.deleteRule(index);
     
   if ( note.length !== 0 ) {
-    index = stylesheet.insertRule( ".abcjs-n0.abcjs-m" + note + " {color: green;}");
+    index = stylesheet.insertRule( ".abcjs-n0.abcjs-m" + note + " {color: crimson;}");
   } else {
     index = -1;
   }

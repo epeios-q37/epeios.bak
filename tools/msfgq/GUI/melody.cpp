@@ -32,7 +32,19 @@ using namespace melody;
 
 using namespace mscmld;
 
-sSignatureKey melody::_GetSignatureKey( void )
+namespace {
+  rXMelody Melody_;
+  mtx::rMutex Mutex_ = mtx::Undefined;
+}
+
+rXMelody &melody::Get(hGuard &Guard)
+{
+  Guard.InitAndLock(Mutex_);
+
+  return Melody_;
+}
+
+sSignatureKey melody::GetSignatureKey( void )
 {
 	return sclm::MGetS8( registry::parameter::signature::Key, -8, 8 );
 }
@@ -61,9 +73,45 @@ qRE;
   return Signature;
 }
 
-sSignature melody::_GetSignature( void )
+sSignature melody::GetSignature( void )
 {
-	return sSignature(_GetSignatureKey(), GetSignatureTime());
+	return sSignature(GetSignatureKey(), GetSignatureTime());
+}
+
+bso::sS8 melody::Handle(
+  sNote Note,
+  rXMelody &XMelody)
+{
+  bso::sS8 RelativeOctave = mscmld::GetOctave(Note, XMelody.Accidental) - XMelody.BaseOctave;
+
+  if ( RelativeOctave < 0 )
+    return RelativeOctave;
+
+  if ( RelativeOctave > 3)
+    return RelativeOctave - 3;
+
+  if ( XMelody.Row == qNIL )
+    XMelody.Melody.Append(Note);
+  else if ( XMelody.Overwrite ) {
+    XMelody.Melody.Store(Note, XMelody.Row);
+    XMelody.Row = XMelody.Melody.Next(XMelody.Row);
+  } else
+    XMelody.Melody.InsertAt(Note, XMelody.Row);
+
+  return 0;
+}
+
+bso::sS8 melody::Handle(const sNote &Note)
+{
+  bso::sS8 OctaveOverflow = 0;
+qRH;
+  hGuard Guard;
+qRB;
+  OctaveOverflow = Handle(Note, Get(Guard));
+qRR;
+qRT;
+qRE;
+  return OctaveOverflow;
 }
 /*
 static const sDuration &GetTempoUnit_( sDuration &Unit )
@@ -390,4 +438,10 @@ qRB;
 qRR;
 qRT;
 qRE;
+}
+
+qGCTOR( melody )
+{
+  Melody_.Init();
+  Mutex_ = mtx::Create();
 }

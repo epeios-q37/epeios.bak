@@ -28,7 +28,6 @@
 	border-right: 0px;
 }
 
-
 legend::after {
 	content: '?';
 	display: inline-grid;

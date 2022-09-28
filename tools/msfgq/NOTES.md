@@ -26,3 +26,7 @@ Pour lancer le serveur : `fluidsynth --server --audio-driver=alsa -o audio.alsa
 `aconnect 24 128`
 
 Sous *Windows*, on peut également utiliser *VMPK* en conjonction avec *loopMIDI*. `chcp 65001` pour basculer la console en *UTF-8*, et utilisation d'une police adaptée.
+
+Bibliothèques utilisées pour la version GUI :
+- *abcjs* (https://www.abcjs.net/) ;
+- *beautiful-piano* (https://github.com/musicJS/beautiful-piano/).

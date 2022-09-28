@@ -12,6 +12,9 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-09-28
+- FLX: improving `rExecDriver`;
+
 ## 2022-09-27
 - MECMLD: [stdz];
 
