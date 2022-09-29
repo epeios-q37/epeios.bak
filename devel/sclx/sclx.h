@@ -436,6 +436,20 @@ namespace sclx {
 		qRT;
 		qRE;
 		}
+		template <typename c1, typename c2> void GetMark_(
+			const c1 &Id,
+			c2 &Buffer )
+		{
+		qRH;
+			str::wStrings Marks;
+		qRB;
+			Marks.Init();
+			GetMarks(str::wStrings(Id), Marks);
+			str::Recall(Marks, Buffer);
+		qRR;
+		qRT;
+		qRE;
+		}
 	protected:
 		template <typename session, typename rack, typename chars> void HandleLayout_(
 			const char *Variant,
@@ -627,7 +641,26 @@ namespace sclx {
 
 			return Buffer;
 		}
-		void SetValues(
+		void GetMarks(
+			const str::dStrings &Ids,
+			str::dStrings &Marks );
+		template <typename c> const str::dString &GetMark(
+			const c &Id,
+			str::dString &Buffer )
+		{
+			GetMark_(Id, Buffer);
+
+			return Buffer;
+		}
+		template <typename c> const char *GetMark(
+			const c &Id,
+			qCBUFFERh &Buffer )
+		{
+			GetVMark_(Id, Buffer);
+
+			return Buffer;
+		}
+    void SetValues(
 			const str::dStrings &Ids,
 			const str::dStrings &Values )
 		{

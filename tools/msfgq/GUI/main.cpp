@@ -284,6 +284,8 @@ namespace {
 
         HighlightNote_(XMelody.Row, Script);
 
+        Script.Append("updatePlayer();");
+
         Session.Execute(Script);
       }
     qRR;
@@ -301,6 +303,48 @@ namespace {
     qRT;
     qRE;
     }
+  }
+
+  namespace _ {
+    void GetScriptsXHTML(
+      const str::dStrings &Ids,
+      txf::sWFlow &XHTML)
+      {
+      qRH;
+        str::wString Label, Description;
+        sdr::sRow Row = qNIL;
+      qRB;
+        Row = Ids.First();
+
+        while ( Row != qNIL ) {
+          tol::Init(Label, Description);
+
+          registry::GetScriptFeature(Ids(Row), Label, Description);
+
+          XHTML << "<button xdh:mark=\"" << Ids(Row) << "\" xdh:onevent=\"Execute\">" << Label << "</button>" << txf::nl;
+
+          Row = Ids.Next(Row);
+        }
+      qRR;
+      qRT;
+      qRE;
+      }
+  }
+
+  void GetScriptsXHTML_(str::wString &XHTML)
+  {
+  qRH;
+    str::wStrings Ids;
+    flx::rStringTWFlow Flow;
+  qRB;
+    Ids.Init();
+    Flow.Init(XHTML);
+
+    registry::GetScriptIds(Ids);
+    _::GetScriptsXHTML(Ids, Flow);
+  qRR;
+  qRT;
+  qRE;
   }
 }
 
@@ -341,6 +385,13 @@ D_( OnNewSession ) {
 
   sclm::MGetValue(registry::parameter::devices::in::Value, Device);
   Session.SetValue("MidiIn", Device);
+
+  XHTML.Init();
+
+  GetScriptsXHTML_(XHTML);
+  Session.Inner(str::wString("Scripts"), XHTML);
+
+  Session.Execute("activate()");
 
 //  Session.Execute("setMyKeyDownListener();");
 }
@@ -523,6 +574,7 @@ namespace {
     Writer.Init(Flow, xml::oIndent, xml::e_Default);
 
     Writer.PushTag("Melody");
+    Writer.PutAttribute("Amount", Melody.Amount() );
 
     mscmld::WriteXML(Melody, Accidental, Writer);
 
@@ -543,32 +595,32 @@ namespace {
 D_( Execute )
 {
 qRH;
-	str::wString Script;
-#if 0
-	flx::rExecRDriver XDriver;
-	fdr::rWDriver &WDriver = flx::VoidWDriver;
-#else
+	str::wString Mark, Script, Mime;
 	flx::rExecDriver XDriver;
-	fdr::rWDriver &WDriver = XDriver;
-#endif
 	txf::rWFlow WFlow;
 	flw::rDressedRFlow<> RFlow;
 	melody::hGuard Guard;
+	flx::rStringTWFlow OFlow;
 	str::wString Output;
 	int C;
 qRB;
-	Script.Init();
-	sclm::MGetValue(registry::definition::Script, Script);
+  tol::Init(Mark, Script, Mime);
+  Session.GetMark(Id, Mark);
+	registry::GetScriptContentAndMime(Mark, Script, Mime);
+
 	Script.Append(";echo -n '$';");
 
 	XDriver.Init(Script);
-	WFlow.Init(WDriver);
+	WFlow.Init(XDriver);
 
 	ToXML_(melody::Get(Guard), WFlow);
 
 	WFlow.Commit();
 
-	Output.Init("window.open(\"data:application/pdf;base64,");
+	Output.Init();
+	OFlow.Init(Output);
+
+	OFlow << "openDataURI('<iframe src=\"data:" << Mime << ";base64,";
 
 	RFlow.Init(XDriver);
 
@@ -579,14 +631,15 @@ qRB;
       else if ( C == '/' )
         C = '_';
 */
-      Output.Append(C);
+      OFlow << (char)C;
     }
    // cio::COut << (char)C << txf::commit;
 	}
 
-	Output.Append("\").focus();");
+	OFlow << "\" frameborder=\"0\" style=\"border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;\" allowfullscreen></iframe>');";
+	OFlow.reset();
 
-	Session.Execute(Output);
+  Session.Execute(Output);
 qRR;
 qRT;
 qRE;

@@ -319,6 +319,7 @@ function patchATags(node)  // Patches the 'A' tags, so it does open in another b
 	}
 }
 
+// Deprecated
 function setContent(idOrElement, content) {
 	var element = getElement(idOrElement);
 
@@ -414,6 +415,7 @@ function setMark(idOrElement, mark) {
 	setXDHAttribute(getElement(idOrElement), xdhMark, mark);
 }
 
+// Deprecated
 function setContents(ids, contents) {	// Deprecated!
 	let i = ids.length;
 
@@ -534,6 +536,7 @@ function fetchWidgets(id) {
 	return digests;
 }
 
+// Deprecated
 function getContent(elementOrId)	// Deprecated!
 {
 	var element = getElement(elementOrId);
@@ -664,7 +667,8 @@ function appendToFlatStrings(string, strings) {
 	return (strings ? strings + ',"' : '"' ) + escapeQuotes(string) + '"';
 }
 
-function getContents(ids) {	// Deprecated!
+// Deprecated
+function getContents(ids) {
 	var i = ids.length;
 	var contents = "";
 

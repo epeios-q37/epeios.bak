@@ -91,14 +91,37 @@
         <xpp:expand select="Lilypond"/>
         <xpp:bloc> test.ly; base64 -w 0 test.png</xpp:bloc>
       </Script-->
-      <Script>
-        <xpp:expand select="xslt"/>
-        <xpp:bloc> "</xpp:bloc>
-        <xpp:expand select="xmld2ly"/>
-        <xpp:bloc>" - | </xpp:bloc>
-        <xpp:expand select="Lilypond"/>
-        <xpp:bloc> -o test - ; base64 ./test.pdf</xpp:bloc>
-      </Script>
+			<Scripts>
+				<Script id="text" Label="XML as text" Mime="text/plain">
+					<xpp:bloc>while read x ; do echo $x ; done | base64</xpp:bloc>
+				</Script>
+				<Script id="xml" Label="XML" Mime="text/xml">
+					<xpp:bloc>while read x ; do echo $x ; done | base64</xpp:bloc>
+				</Script>
+				<Script id="ly" Label=".ly" Mime="text/plain">
+					<xpp:expand select="xslt"/>
+					<xpp:bloc> "</xpp:bloc>
+					<xpp:expand select="xmld2ly"/>
+					<xpp:bloc>" - | base64</xpp:bloc>
+				</Script>
+				<xpp:define name="LilyCommon">
+					<xpp:bloc>
+						<xpp:expand select="xslt"/>
+						<xpp:bloc> "</xpp:bloc>
+						<xpp:expand select="xmld2ly"/>
+						<xpp:bloc>" - | </xpp:bloc>
+						<xpp:expand select="Lilypond"/>
+						</xpp:bloc>
+				</xpp:define>
+				<Script id="png" Label="PNG" Mime="image/png">
+					<xpp:expand select="LilyCommon"/>
+					<xpp:bloc> --png -o test - ; base64 ./test.png</xpp:bloc>
+				</Script>
+				<Script id="pdf" Label="PDF" Mime="application/pdf">
+					<xpp:expand select="LilyCommon"/>
+					<xpp:bloc> -o test - ; base64 ./test.pdf</xpp:bloc>
+				</Script>
+			</Scripts>
     </Definitions>
     <Locale>
     </Locale>

@@ -54,10 +54,9 @@
         <div id="Score"></div>
       </fieldset>
       <div id="audio"></div>
-      <span>
-        <button class="activate-audio">Activate Audio</button>
-        <button xdh:onevent="Execute">Execute</button>
-      </span>
+      <fieldset id="Scripts">
+        <legend>Scripts</legend>
+      </fieldset>
     </fieldset>
     <span style="display: flex">
       <fieldset style="display: table; box-sizing: border-box; border: solid 1px;">
@@ -202,6 +201,4 @@
       </ul>
     </div>
   </fieldset>
-  <iframe id="Output" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAkCAYAAABSSLCCAAAABHNCSVQICAgIfAhkiAAAAmZJREFUOE+NlduLT1EUx3+M3MptQiNkGEUjIg8uUZrkyZOEPCgSqXErRZEXyqMHf4KkeFLkUnIpEkLukmheXHMZRBh8Pj9rH8fROTOrPrP2Xmt9z95n7X1+U6tVWy/Su+AuDK4u/Zvdy/AXXIPtPREtpKgLLsBA8AHd2i0qOmFMVO7HN1SpZpB0W5tyRYcYN1WJ1pF8AwOiSP8axjrvXaIcTfwgfIn8KvwweFklstU2QGuGfXAdvhkoW8kGPAC7dgRcxUZU2hKybXAGbMhNKFsge9BMRu5fwSeYkmVKBiOIe0YKfsKykros7N7dShJs6E7gS18JgaLTZYI+kbDFh2FWzHfjP5eJUnw9A58unom2Ajzk/8wVhsNjGAqnYDEo9irNhXfwEI6CV6tu7WBRB9iIIXAuYml1vWIfWLfLYHB1zI/H3JiX9CnYeufexVbrPLzvYPdmR/I5fh7ssABrgYug0IbVvsI9B9hOMLEg5knkdCR4Jzu9Ty/Az1rzy/Rlz8fctveP8Su8N3+QoqswHhSkzyFdzifEJoZId98/FrrkGjgJl2AC2P7b8AO8rLZcWw7m6nYCPAfNs/MYPFgfuuVPuNYX783fHPP62dyAPSmQ81tjfAB/DBrS3j8wmQ8e7lnwc5gKkwN34eEuhS63UrRGAj7Ad7Or08Atep49trVU+j6ZVf5iRpXv647eJlVR5DvNAX+qPkaRNaOgI4nyvpmJdy5d1JZIjsMvyhem7hnbCE2R9BtLPyiTGP+zSl7k1vL2LCbT8Y8KuWya/h+9J7ItoivxbUVB8ZwUWuR/vn5wB9Jnk2l/Aw8lhcbwdz2RAAAAAElFTkSuQmCC">
-  </iframe>
 </xpp:cdata>

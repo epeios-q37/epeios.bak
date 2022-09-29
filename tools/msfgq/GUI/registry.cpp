@@ -19,11 +19,23 @@
 
 #include "registry.h"
 
+#include "sclm.h"
+
 using namespace registry;
 
 rEntry registry::definition::Body( "Body", sclr::Definitions);
 
-rEntry registry::definition::Script( "Script", sclr::Definitions );
+namespace {
+  rEntry Scripts_( "Scripts", sclr::Definitions );
+  rEntry UntaggedScript_("Script", Scripts_);
+  rEntry TaggedScript_(RGSTRY_TAGGING_ATTRIBUTE( "id" ), UntaggedScript_);
+}
+
+rEntry registry::definition::script::Id("@id", UntaggedScript_);
+rEntry registry::definition::script::tagged::Label("@Label", TaggedScript_);
+rEntry registry::definition::script::tagged::Description("@Description", TaggedScript_);
+rEntry registry::definition::script::tagged::Mime("@Mime", TaggedScript_);
+rEntry registry::definition::script::tagged::Content = TaggedScript_;
 
 namespace {
 	rEntry Signature_( "Signature", sclr::Parameters );
@@ -40,5 +52,30 @@ namespace {
 
 rEntry registry::parameter::devices::in::Value = In_;
 rEntry registry::parameter::devices::in::Policy( "@Policy", In_ );
+
+const str::dStrings &registry::GetScriptIds(str::dStrings &Ids)
+{
+  sclm::GetValues(registry::definition::script::Id, Ids);
+
+  return Ids;
+}
+
+void registry::GetScriptFeature(
+  const str::dString &Id,
+  str::dString &Label,
+  str::dString &Description)
+{
+  sclm::MGetValue(rgstry::rTEntry(registry::definition::script::tagged::Label, Id), Label);
+  sclm::OGetValue(rgstry::rTEntry(registry::definition::script::tagged::Description, Id), Description);
+}
+
+void registry::GetScriptContentAndMime(
+  const str::dString &Id,
+  str::dString &Content,
+  str::dString &Mime)
+{
+  sclm::MGetValue(rgstry::rTEntry(registry::definition::script::tagged::Content, Id), Content);
+  sclm::MGetValue(rgstry::rTEntry(registry::definition::script::tagged::Mime, Id), Mime);
+}
 
 

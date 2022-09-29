@@ -92,6 +92,7 @@
 }
         ]]>
         </Script>
+        <!-- Deprecated -->
         <Script name="GetContents_1" Arguments="_Ids">
           <![CDATA[
 {
@@ -99,6 +100,7 @@
 }
         ]]>
         </Script>
+        <!-- Deprecated -->
         <Script name="SetContents_1" Arguments="_Ids,_Contents">
           <![CDATA[
 {

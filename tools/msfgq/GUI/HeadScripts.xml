@@ -45,15 +45,16 @@ function highlightNote(note) {
 var visualOptions = {  };
 var visualObj;
 var synthControl;
+var controlOptions = {
+  displayRestart: true,
+  displayPlay: true,
+  displayProgress: true,
+  displayClock: true,
+};
 
 function activate() {    
   if (ABCJS.synth.supportsAudio()) {
-    var controlOptions = {
-      displayRestart: true,
-      displayPlay: true,
-      displayProgress: true,
-      displayClock: true
-    };
+
     synthControl = new ABCJS.synth.SynthController();
     synthControl.load("##audio", null, controlOptions);
     synthControl.disable(true);
@@ -72,5 +73,32 @@ function activate() {
   } else {
     console.log("audio is not supported on this browser");
   };
-}  
+}
+
+function updatePlayer() {
+  if (ABCJS.synth.supportsAudio()) {
+
+    synthControl.load("##audio", null, controlOptions);
+    var midiBuffer = new ABCJS.synth.CreateSynth();
+    midiBuffer.init({
+      visualObj: visualObj[0],
+      options: {
+        
+      }
+
+    }).then(function () {
+      synthControl.setTune(visualObj[0], true).then(function (response) {
+      document.querySelector(".abcjs-inline-audio").classList.remove("disabled");
+      synthControl.setWarp("100");
+      })
+    });
+  } else {
+    console.log("audio is not supported on this browser");
+  };
+}
+
+function openDataURI(uri) {
+     var win = window.open();
+     win.document.write(uri);
+ }
 </xpp:bloc> 

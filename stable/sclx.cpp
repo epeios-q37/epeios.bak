@@ -561,6 +561,23 @@ qRT;
 qRE;
 }
 
+void sclx::sProxy::GetMarks(
+	const str::dStrings &Ids,
+	str::dStrings &Marks)
+{
+qRH;
+	str::wString MergedMarks;
+qRB;
+	MergedMarks.Init();
+
+	Process_("GetMarks_1", &MergedMarks, Ids);
+
+	xdhcmn::FlatSplit(MergedMarks, Marks);
+qRR;
+qRT;
+qRE;
+}
+
 void sclx::sProxy::EnableElements( const str::dStrings &Ids )
 {
 	qRLmt();

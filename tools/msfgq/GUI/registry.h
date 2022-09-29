@@ -46,12 +46,34 @@ namespace registry {
 	namespace definition {
 		using namespace sclr::definition;
 
-		extern rEntry
-      Body,
-      Script;
+		extern rEntry Body;
+
+		namespace script {
+		  namespace tagged {
+		    extern rEntry
+          Label,
+          Description,
+          Mime,
+          Content;
+		  }
+
+		  extern rEntry Id;
+		}
 	}
 
 	const str::dString &GetWebHost(str::dString &Host);
+
+	const str::dStrings &GetScriptIds(str::dStrings &Ids);
+
+	void GetScriptFeature(
+    const str::dString &Id,
+    str::dString &Label,
+    str::dString &Description);
+
+  void GetScriptContentAndMime(
+    const str::dString &Id,
+    str::dString &Content,
+    str::dString &Mime);
 }
 
 #endif

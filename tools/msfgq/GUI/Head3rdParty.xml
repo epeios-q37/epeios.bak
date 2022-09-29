@@ -3,4 +3,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/abcjs@6.1.3/abcjs-audio.min.css"></link>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/beautiful-piano@0.0.6/styles.min.css"></link>
   <script src="https://cdn.jsdelivr.net/npm/beautiful-piano@0.0.6/dist/piano.min.js"></script>
+  <style>
+    .abcjs-midi-tempo {
+      width: 4em !important;
+    }    
+  </style>
 </xpp:bloc> 
