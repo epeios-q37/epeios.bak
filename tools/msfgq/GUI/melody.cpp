@@ -33,56 +33,86 @@ using namespace melody;
 using namespace mscmld;
 
 namespace {
-  rXMelody Melody_;
+  rXMelody XMelody_;
   mtx::rMutex Mutex_ = mtx::Undefined;
+}
+
+namespace {
+  bso::sS8 GetRegistryRawSignatureKey_( void )
+  {
+    bso::sS8 Key = sclm::MGetS8(registry::parameter::signature::Key, -8, 8);
+
+    if ( Key == 0 ) // 0 usually stands for C Key, but 8 or -8 have to be used instead,
+                    // to indicate the accidental to use for alterate note in C key.
+      qRFwk();
+
+    return Key;
+  }
+
+  sSignatureKey GetRegistrySignatureKey_( void )
+  {
+    bso::sS8 RawKey = GetRegistryRawSignatureKey_();
+
+    if ( abs(RawKey) == 8 )
+      return 0;
+    else
+      return RawKey;
+  }
+
+  sSignatureTime GetRegistrySignatureTime_( void )
+  {
+    sSignatureTime Signature;
+  qRH;
+    str::wString RawTime;
+    flx::sStringRFlow Flow;
+    bso::sU8 Num = 0, Den = 4;
+  qRB;
+    RawTime.Init();
+    sclm::MGetValue(registry::parameter::signature::Time, RawTime);
+
+    Flow.Init(RawTime);
+
+    if ( !Flow.GetNumber(Num, qRPU) )
+      if ( ( Flow.Get() != '/' ) || !Flow.GetNumber(Den, qRPU ) )
+        sclm::ReportAndAbort(ML(BadTimeSignature));
+
+    Signature = sSignatureTime(Num, Den);
+  qRR;
+  qRT;
+  qRE;
+    return Signature;
+  }
+
+  sSignature GetRegistrySignature_( void )
+  {
+    return sSignature(GetRegistrySignatureKey_(), GetRegistrySignatureTime_());
+  }
+
+  eAccidental GetRegistryAccidental_(void)
+  {
+    return GetRegistryRawSignatureKey_() > 0 ? aSharp : aFlat;
+  }
+}
+
+void melody::Initialize(void)
+{
+  XMelody_.BaseOctave = sclm::MGetU8(registry::parameter::BaseOctave, 9);
+  XMelody_.Signature = GetRegistrySignature_();
+  XMelody_.Accidental = GetRegistryAccidental_();
 }
 
 rXMelody &melody::Get(hGuard &Guard)
 {
   Guard.InitAndLock(Mutex_);
 
-  return Melody_;
-}
-
-sSignatureKey melody::GetSignatureKey( void )
-{
-	return sclm::MGetS8( registry::parameter::signature::Key, -8, 8 );
-}
-
-sSignatureTime melody::GetSignatureTime( void )
-{
-  sSignatureTime Signature;
-qRH;
-  str::wString RawTime;
-  flx::sStringRFlow Flow;
-  bso::sU8 Num = 0, Den = 4;
-qRB;
-  RawTime.Init();
-  sclm::MGetValue(registry::parameter::signature::Time, RawTime);
-
-  Flow.Init(RawTime);
-
-  if ( !Flow.GetNumber(Num, qRPU) )
-    if ( ( Flow.Get() != '/' ) || !Flow.GetNumber(Den, qRPU ) )
-      sclm::ReportAndAbort(ML(BadTimeSignature));
-
-  Signature = sSignatureTime(Num, Den);
-qRR;
-qRT;
-qRE;
-  return Signature;
-}
-
-sSignature melody::GetSignature( void )
-{
-	return sSignature(GetSignatureKey(), GetSignatureTime());
+  return XMelody_;
 }
 
 bso::sS8 melody::Handle(
   sNote Note,
   rXMelody &XMelody)
 {
-  bso::sS8 RelativeOctave = mscmld::GetOctave(Note, XMelody.Accidental) - XMelody.BaseOctave;
+  bso::sS8 RelativeOctave = GetOctave(Note, XMelody.Accidental) - XMelody.BaseOctave;
 
   if ( RelativeOctave < 0 )
     return RelativeOctave;
@@ -91,28 +121,46 @@ bso::sS8 melody::Handle(
     return RelativeOctave - 3;
 
   if ( XMelody.Row == qNIL )
-    XMelody.Melody.Append(Note);
+    XMelody.Append(Note);
   else if ( XMelody.Overwrite ) {
-    XMelody.Melody.Store(Note, XMelody.Row);
-    XMelody.Row = XMelody.Melody.Next(XMelody.Row);
+    XMelody.Store(Note, XMelody.Row);
+    XMelody.Row = XMelody.Next(XMelody.Row);
   } else
-    XMelody.Melody.InsertAt(Note, XMelody.Row);
+    XMelody.InsertAt(Note, XMelody.Row);
 
   return 0;
 }
 
-bso::sS8 melody::Handle(const sNote &Note)
-{
-  bso::sS8 OctaveOverflow = 0;
-qRH;
-  hGuard Guard;
-qRB;
-  OctaveOverflow = Handle(Note, Get(Guard));
-qRR;
-qRT;
-qRE;
-  return OctaveOverflow;
+namespace {
+  void UpdateSignatureKey_(
+    sSignatureKey Key,
+    dMelody &Melody)
+  {
+    sNote Note;
+    sRow Row = Melody.First();
+
+    while ( Row != qNIL ) {
+      Note.Init();
+
+      Melody.Recall(Row, Note);
+      Note.Signature.Key = Key;
+      Melody.Store(Note, Row);
+
+      Row = Melody.Next(Row);
+    }
+  }
 }
+
+void melody::HandleKeyAndAccidental(
+  bso::sU8 Key,
+  eAccidental Accidental,
+  rXMelody &XMelody)
+{
+  XMelody.Accidental = Accidental;
+
+  UpdateSignatureKey_(Accidental == aSharp ? Key : -Key, XMelody);
+}
+
 /*
 static const sDuration &GetTempoUnit_( sDuration &Unit )
 {
@@ -442,6 +490,6 @@ qRE;
 
 qGCTOR( melody )
 {
-  Melody_.Init();
+  XMelody_.Init();
   Mutex_ = mtx::Create();
 }

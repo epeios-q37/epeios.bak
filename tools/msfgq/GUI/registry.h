@@ -36,6 +36,8 @@ namespace registry {
 			}
     }
 
+    extern rEntry BaseOctave;
+
 		namespace signature {
 			extern rEntry
         Key,
@@ -61,7 +63,7 @@ namespace registry {
 		}
 	}
 
-	const str::dString &GetWebHost(str::dString &Host);
+//	const str::dString &GetWebHost(str::dString &Host);
 
 	const str::dStrings &GetScriptIds(str::dStrings &Ids);
 

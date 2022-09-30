@@ -31,6 +31,7 @@ const scli::sInfo &sclx::SCLXInfo( void )
 
 void sclx::SCLXInitialization( xdhcdc::eMode Mode )
 {
+  melody::Initialize();
 	mtk::Launch(midiq::HandleInput, NULL);
 }
 

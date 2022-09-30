@@ -23,19 +23,9 @@
 
 using namespace registry;
 
-rEntry registry::definition::Body( "Body", sclr::Definitions);
+// Parameters.
 
-namespace {
-  rEntry Scripts_( "Scripts", sclr::Definitions );
-  rEntry UntaggedScript_("Script", Scripts_);
-  rEntry TaggedScript_(RGSTRY_TAGGING_ATTRIBUTE( "id" ), UntaggedScript_);
-}
-
-rEntry registry::definition::script::Id("@id", UntaggedScript_);
-rEntry registry::definition::script::tagged::Label("@Label", TaggedScript_);
-rEntry registry::definition::script::tagged::Description("@Description", TaggedScript_);
-rEntry registry::definition::script::tagged::Mime("@Mime", TaggedScript_);
-rEntry registry::definition::script::tagged::Content = TaggedScript_;
+rEntry registry::parameter::BaseOctave( "BaseOctave", sclr::Parameters);
 
 namespace {
 	rEntry Signature_( "Signature", sclr::Parameters );
@@ -52,6 +42,23 @@ namespace {
 
 rEntry registry::parameter::devices::in::Value = In_;
 rEntry registry::parameter::devices::in::Policy( "@Policy", In_ );
+
+// Definitions.
+
+rEntry registry::definition::Body( "Body", sclr::Definitions);
+
+namespace {
+  rEntry Scripts_( "Scripts", sclr::Definitions );
+  rEntry UntaggedScript_("Script", Scripts_);
+  rEntry TaggedScript_(RGSTRY_TAGGING_ATTRIBUTE( "id" ), UntaggedScript_);
+}
+
+rEntry registry::definition::script::Id("@id", UntaggedScript_);
+rEntry registry::definition::script::tagged::Label("@Label", TaggedScript_);
+rEntry registry::definition::script::tagged::Description("@Description", TaggedScript_);
+rEntry registry::definition::script::tagged::Mime("@Mime", TaggedScript_);
+rEntry registry::definition::script::tagged::Content = TaggedScript_;
+
 
 const str::dStrings &registry::GetScriptIds(str::dStrings &Ids)
 {

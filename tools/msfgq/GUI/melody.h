@@ -24,20 +24,6 @@
 #include "mscmld.h"
 
 namespace melody {
-  using mscmld::sRow;
-  using mscmld::dMelody;
-  using mscmld::wMelody;
-  using mscmld::sSignatureTime;
-  using mscmld::sSignatureKey;
-  using mscmld::sSignature;
-  using mscmld::sNote;
-  using mscmld::sAltPitch;
-  using mscmld::sDuration;
-  using mscmld::aFlat;
-  using mscmld::aSharp;
-  using mscmld::aNatural;
-  using mscmld::pnRest;
-
   struct sTempo {
     bso::sU8 Value;
     mscmld::sDuration Unit;
@@ -49,50 +35,55 @@ namespace melody {
     }
   };
 
-  sSignatureKey GetSignatureKey( void );
+  typedef mscmld::wMelody wMelody_;
 
-  sSignatureTime GetSignatureTime( void );
-
-  sSignature GetSignature(void);
-
-  struct rXMelody {
+  struct rXMelody
+  : public wMelody_
+  {
   public:
-    melody::wMelody Melody;
     mscmld::sRow Row;
     bso::sU8 BaseOctave;
-    mscmld::eAccidental Accidental; // Accidental to use for alterate notes when in C key.
+    mscmld::sSignature Signature;
+    mscmld::eAccidental Accidental; // Accidental to use for alterated notes when in C key.
     bso::sBool Overwrite;
     void reset(bso::sBool P = true)
     {
-      Melody.reset(P);
+      wMelody::reset(P);
       Row = qNIL;
       BaseOctave = 0;
+      Signature.reset(P);
       Accidental = mscmld::a_Undefined;
       Overwrite = false;
     }
     qCDTOR(rXMelody);
     void Init(void)
     {
-      Melody.Init();
+      wMelody::Init();
       Row = qNIL;
       BaseOctave = 2;
+      Signature.Init();
       Accidental = mscmld::aSharp;
       Overwrite = false;
     }
   };
+
+  void Initialize();
 
   typedef mtx::rHandle hGuard;
 
   rXMelody &Get(hGuard &Guard);
 
   bso::sS8 Handle(
-    sNote Note,
+    mscmld::sNote Note,
     rXMelody &XMelody);
 
-  bso::sS8 Handle(const sNote &Note);
+  void HandleKeyAndAccidental(
+    bso::sU8 Key,
+    mscmld::eAccidental Accidental,
+    rXMelody &Melody);
 
   void Play(
-    const dMelody &Melody,
+    const mscmld::dMelody &Melody,
     const sTempo &Tempo,
     flw::oflow__ &Flow);
 }

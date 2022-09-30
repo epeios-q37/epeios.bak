@@ -5,6 +5,7 @@
 - [adpt]: adaptation to changes in underlying modules;
 - [cont]: continuation of previous modifications;
 - [crtn]: creation;
+- [extn]: extension;
 - [obvs]: obvious modifications;
 - [rvrt]: reverting modifications;
 - [stdz]: modification to comply with cusrrent standards;
@@ -12,8 +13,11 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-09-30
+- SCLX: [extn];
+
 ## 2022-09-29
-- SCLX:
+- SCLX: [extn];
 
 ## 2022-09-28
 - FLX: improving `rExecDriver`;
@@ -4372,6 +4376,7 @@
 [adpt]:#Adaptation
 [cont]:#Continuation
 [crtn]:#Creation
+[extn]:#Extension
 [obvs]:#Obvious
 [rvrt]:#Reverting
 [stdz]:#Standardization
@@ -4390,6 +4395,10 @@ Continuation of the in progress modifications.
 ### Creation (crtn)
 
 Creation of the library.
+
+### Extension
+
+The library is extended.
 
 ### Obvious (obvs)
 

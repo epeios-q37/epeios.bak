@@ -21,15 +21,15 @@ function MyFunction (the_Key) {
   alert("Key pressed is: "+the_Key);
 }		
 
+var index = -1;
+var stylesheet;
+
 function createStylesheet() {
   const styleEl = document.createElement('style');
   
   document.head.appendChild(styleEl);
   stylesheet = styleEl.sheet;
 }
-
-var index = -1;
-var stylesheet;
 
 function highlightNote(note) {
   if ( index !== -1 )
@@ -45,6 +45,7 @@ function highlightNote(note) {
 var visualOptions = {  };
 var visualObj;
 var synthControl;
+
 var controlOptions = {
   displayRestart: true,
   displayPlay: true,
@@ -96,9 +97,4 @@ function updatePlayer() {
     console.log("audio is not supported on this browser");
   };
 }
-
-function openDataURI(uri) {
-     var win = window.open();
-     win.document.write(uri);
- }
 </xpp:bloc> 

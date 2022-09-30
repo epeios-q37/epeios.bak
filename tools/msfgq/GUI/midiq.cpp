@@ -104,6 +104,23 @@ const str::dString &midiq::GetDeviceOutId(str::dString &Id)
 //	return GetDeviceId_(mscmdd::wOut, registry::parameter::devices::out::Policy, registry::parameter::devices::out::Value, Id);
 }
 
+namespace {
+  bso::sS8 Handle_(bso::sU8 Pitch)
+  {
+    bso::sS8 OctaveOverflow = 0;
+  qRH
+    hGuard Guard;
+  qRB;
+    melody::rXMelody &XMelody = melody::Get(Guard);
+
+    OctaveOverflow = melody::Handle(sNote(Pitch, sDuration(3), XMelody.Signature), XMelody);
+  qRR;
+  qRT;
+  qRE;
+    return OctaveOverflow;
+  }
+}
+
 void midiq::HandleInput(
   void *UP,
   mtk::gBlocker &Blocker)
@@ -113,17 +130,12 @@ qRH;
 	sEventHeader Header;
   wData Data;
   wEvent Event;
-	sNote Note;
-	sSignature Signature;
 	str::wString DeviceId;
 	flw::rWFlow &Flow = flx::VoidOFlow;
 	bso::pInt Buffer;
 qRB;
 	sShared &Shared = *(sShared *)UP;
-
 	Blocker.Release();
-
-	Signature = melody::GetSignature();
 
 	DeviceId.Init();
 	IFlow.Init(GetDeviceInId(DeviceId));
@@ -144,8 +156,7 @@ qRB;
 		if ( Header.EventType == etMIDI )
 			if ( Header.MIDIEvent.Event == midNoteOn )
 				if  ( Data( Data.Last() ) != 0 ) {
-					Note = sNote(Data(Data.First()), sDuration(3), Signature);
-					if ( melody::Handle(Note) == 0)
+					if ( Handle_(Data(Data.First())) == 0 )
             sclx::Broadcast(str::wString("Hit"), str::wString(bso::Convert(Data(Data.First()), Buffer)));
 //					mtx::Lock( Shared.Mutex );
 					/*if ( Shared.Row != qNIL ) {

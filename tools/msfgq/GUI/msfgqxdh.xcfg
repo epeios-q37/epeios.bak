@@ -24,14 +24,14 @@
         <xpp:expand select="LinuxDevices"/>
       </Devices>
 			<Signature>
-				<Time>4/4</Time>
-				<Key>0</Key>
+				<Time>3/4</Time>
+				<Key>-2</Key><!-- Do NOT use 'O' for C key, but '8' or '-8' to indicate the default accidental -->
 			</Signature>
 			<Tempo>
 				<Unit>3</Unit>
 				<Value>60</Value>
 			</Tempo>
-			<TargetFilename>Essai.xmld</TargetFilename>
+			<BaseOctave>3</BaseOctave>
 			<xpp:bloc>
 				<xpp:bloc><!--- Some macro for the script-->
 					<xpp:define name="xslt">

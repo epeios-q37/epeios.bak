@@ -105,7 +105,7 @@ namespace {
 namespace {
   namespace {
     bso::sS8 Convert_(
-      const melody::sNote &Note,
+      const mscmld::sNote &Note,
       bso::sU8 BaseOctave,
       mscmld::eAccidental Accidental,
       txf::sWFlow &Flow)
@@ -187,13 +187,13 @@ namespace {
     }
 
     bso::sS8 Convert_(
-      const melody::dMelody &Melody,
+      const mscmld::dMelody &Melody,
       bso::sU8 BaseOctave,
       mscmld::eAccidental Accidental,
       txf::sWFlow &Flow)
     {
       bso::sS8 Return = 0;
-      melody::sRow Row = Melody.First();
+      mscmld::sRow Row = Melody.First();
 
       Flow << "X: 1\\nT: Preview\\nL: 1\\nK: C\\n";
 
@@ -210,7 +210,7 @@ namespace {
   }
 
   bso::sS8 GetABC_(
-    const melody::dMelody &Melody,
+    const mscmld::dMelody &Melody,
     bso::sU8 BaseOctave,
     mscmld::eAccidental Accidental,
     str::dString &ABC)
@@ -232,7 +232,7 @@ namespace {
     const melody::rXMelody &XMelody,
     str::dString &ABC)
   {
-    return GetABC_(XMelody.Melody, XMelody.BaseOctave, XMelody.Accidental, ABC);
+    return GetABC_(XMelody, XMelody.BaseOctave, XMelody.Accidental, ABC);
   }
 
   bso::sS8 GetABC_(str::dString &ABC)
@@ -251,7 +251,7 @@ namespace {
   namespace {
     namespace {
       void HighlightNote_(
-        melody::sRow Row,
+        mscmld::sRow Row,
         str::dString &Script)
       {
         bso::pInt Buffer;
@@ -288,17 +288,6 @@ namespace {
 
         Session.Execute(Script);
       }
-    qRR;
-    qRT;
-    qRE;
-    }
-
-    void DisplayMelody_(main::sSession &Session)
-    {
-    qRH;
-      melody::hGuard Guard;
-    qRB;
-      DisplayMelody_(melody::Get(Guard), Session);
     qRR;
     qRT;
     qRE;
@@ -348,92 +337,136 @@ namespace {
   }
 }
 
-D_( OnNewSession ) {
-  str::wString Body, XHTML, Key, Device;
-  bso::pInt Buffer;
+namespace {
+  void UpdateInterface_(
+    const melody::rXMelody &XMelody,
+    sSession &Session)
+    {
+    qRH;
+      str::wString XHTML, Device;
+      mscmld::eAccidental Accidental = mscmld::a_Undefined;
+      bso::pInt Buffer;
+    qRB;
+      XHTML.Init();
+      FillMidiInDevices_(XHTML);
+      Session.Inner(str::wString("MidiIn"), XHTML);
 
-  Session.Execute("createStylesheet();");
-//  Session.Execute("activate();");
+      Device.Init();
+      sclm::MGetValue(registry::parameter::devices::in::Value, Device);
+      Session.SetValue("MidiIn", Device);
 
+      /*
+      XHTML.Init();
+      FillMidiOutDevices_(XHTML);
+      Session.Inner(str::wString("MidiOut"), XHTML);
+      */
+
+      Session.SetValue("AccidentalAmount", bso::Convert(abs(XMelody.Signature.Key), Buffer));
+
+      Accidental = XMelody.Signature.Key ? XMelody.Signature.Key > 0 ? mscmld::aSharp : mscmld::aFlat : XMelody.Accidental;
+      Session.SetValue("Accidental", mscmld::GetLabel(Accidental));
+
+      Session.SetValue("Numerator", bso::Convert(XMelody.Signature.Time.Numerator(), Buffer));
+      Session.SetValue("Denominator", bso::Convert(XMelody.Signature.Time.Denominator(), Buffer));
+
+      Session.SetValue("Octave", bso::Convert(XMelody.BaseOctave, Buffer));
+
+      XHTML.Init();
+      GetScriptsXHTML_(XHTML);
+      Session.End(str::wString("Scripts"), XHTML);
+    qRR;
+    qRT;
+    qRE;
+    }
+}
+
+#define XMEL() melody::rXMelody &XMelody = melody::Get(Guard)
+#define CXMEL() const XMEL()
+
+D_( OnNewSession )
+{
+qRH;
+  melody::hGuard Guard;
+  str::wString Body;
+qRB;
   Body.Init();
   sclm::MGetValue(registry::definition::Body, Body);
 
   Session.Inner(str::Empty, Body);
 
-  XHTML.Init();
-  FillMidiInDevices_(XHTML);
-  Session.Inner(str::wString("MidiIn"), XHTML);
+  CXMEL();
+  UpdateInterface_(XMelody, Session);
 
-  /*
-  XHTML.Init();
-  FillMidiOutDevices_(XHTML);
-  Session.Inner(str::wString("MidiOut"), XHTML);
-*/
-  DisplayMelody_(Session);
-  Session.Execute("document.querySelector(\".activate-audio\").addEventListener(\"click\", activate);");
+  Session.Execute("createStylesheet();");
 
-  Key.Init();
-  if ( sclm::OGetValue(registry::parameter::signature::Key, Key) )
-    Session.SetValue("Key", Key);
-
-  melody::sSignatureTime SignatureTime = melody::GetSignatureTime();
-
-  Session.SetValue("Numerator", bso::Convert(SignatureTime.Numerator(), Buffer));
-  Session.SetValue("Denominator", bso::Convert(SignatureTime.Denominator(), Buffer));
-
-  Device.Init();
-
-  sclm::MGetValue(registry::parameter::devices::in::Value, Device);
-  Session.SetValue("MidiIn", Device);
-
-  XHTML.Init();
-
-  GetScriptsXHTML_(XHTML);
-  Session.Inner(str::wString("Scripts"), XHTML);
-
+  DisplayMelody_(XMelody, Session);
   Session.Execute("activate()");
-
-//  Session.Execute("setMyKeyDownListener();");
+qRR;
+qRT;
+qRE;
 }
 
 D_( Hit )
 {
 qRH;
   str::wString Script;
+  melody::hGuard Guard;
 qRB;
   Script.Init("ABCJS.synth.playEvent([{\"cmd\":\"note\", \"pitch\":");
   Script.Append(Id);
   Script.Append(",\"durationInMeasures\":0.125,\"start\":0, \"volume\":70,\"instrument\":0,\"gap\":0}], [], 1000).then(function (response) {console.log(\"note played\");}).catch(function (error) {	console.log(\"error playing note\", error);});");
   Session.Execute(Script);
-  DisplayMelody_(Session);
+
+  CXMEL();
+  DisplayMelody_(XMelody, Session);
 qRR;
 qRT;
 qRE;
 }
 
-D_( Accidental )
+namespace {
+  void HandleKeyAndAccidental_(
+    melody::rXMelody &XMelody,
+    sSession &Session)
+  {
+  qRH;
+    str::wString RawKey, RawAccidental;
+  qRB;
+    tol::Init(RawAccidental, RawKey);
+    Session.GetValue("AccidentalAmount", RawKey);
+    Session.GetValue("Accidental", RawAccidental);
+
+    melody::HandleKeyAndAccidental(RawKey.ToU8(), mscmld::GetAccidental(RawAccidental), XMelody);
+  qRR;
+  qRT;
+  qRE;
+  }
+}
+
+D_( SetAccidental )
 {
 qRH;
-  str::wString RawAccidental;
-  mscmld::eAccidental Accidental = mscmld::a_Undefined;
   melody::hGuard Guard;
 qRB;
-  RawAccidental.Init();
-  Session.GetValue(Id, RawAccidental);
+  XMEL();
 
-  melody::rXMelody &XMelody = melody::Get(Guard);
-
-  switch ( Accidental = mscmld::GetAccidental(RawAccidental) ) {
-  case mscmld::aFlat:
-  case mscmld::aSharp:
-    XMelody.Accidental = Accidental;
-    break;
-  default:
-    qRGnr();
-    break;
-  }
+  HandleKeyAndAccidental_(XMelody, Session);
 
   DisplayMelody_(XMelody, Session);
+qRR;
+qRT;
+qRE;
+}
+
+
+D_( SetAccidentalAmount )
+{
+qRH;
+  melody::hGuard Guard;
+qRB;
+  XMEL();
+
+  HandleKeyAndAccidental_(XMelody, Session);
 qRR;
 qRT;
 qRE;
@@ -459,17 +492,17 @@ D_( Rest )
 qRH;
   melody::hGuard Guard;
 qRB;
-  melody::rXMelody &XMelody = melody::Get(Guard);
+  XMEL();
 
   if ( XMelody.Row != qNIL ) {
-    melody::sNote Note = XMelody.Melody(XMelody.Row);
+    mscmld::sNote Note = XMelody(XMelody.Row);
 
     Note.Pitch = mscmld::pRest;
     Note.Duration.TiedToNext = false;
 
-    XMelody.Melody.Store(Note, XMelody.Row);
+    XMelody.Store(Note, XMelody.Row);
 
-    XMelody.Row = XMelody.Melody.Next(XMelody.Row);
+    XMelody.Row = XMelody.Next(XMelody.Row);
 
     DisplayMelody_(XMelody, Session);
   }
@@ -483,16 +516,16 @@ D_( Duration )
 qRH;
   melody::hGuard Guard;
 qRB;
-  melody::rXMelody &XMelody = melody::Get(Guard);
+  XMEL();
 
   if ( XMelody.Row != qNIL ) {
-    melody::sNote Note = XMelody.Melody(XMelody.Row);
+    mscmld::sNote Note = XMelody(XMelody.Row);
 
     str::wString(Id).ToNumber(Note.Duration.Base);
 
-    XMelody.Melody.Store(Note, XMelody.Row);
+    XMelody.Store(Note, XMelody.Row);
 
-    XMelody.Row = XMelody.Melody.Next(XMelody.Row);
+    XMelody.Row = XMelody.Next(XMelody.Row);
 
     DisplayMelody_(XMelody, Session);
   }
@@ -506,17 +539,17 @@ D_( Dot )
 qRH;
   melody::hGuard Guard;
 qRB;
-  melody::rXMelody &XMelody = melody::Get(Guard);
+  XMEL();
 
   if ( XMelody.Row != qNIL ) {
-    melody::sNote Note = XMelody.Melody(XMelody.Row);
+    mscmld::sNote Note = XMelody(XMelody.Row);
 
     if ( Note.Duration.Modifier >= 3 )
       Note.Duration.Modifier = 0;
     else
       Note.Duration.Modifier++;
 
-    XMelody.Melody.Store(Note, XMelody.Row);
+    XMelody.Store(Note, XMelody.Row);
 
     DisplayMelody_(XMelody, Session);
   }
@@ -530,28 +563,28 @@ D_( Tie )
 qRH;
   melody::hGuard Guard;
 qRB;
-  melody::rXMelody &XMelody = melody::Get(Guard);
+  XMEL();
 
   if ( XMelody.Row != qNIL ) {
-    melody::sNote Note = XMelody.Melody(XMelody.Row);
+    mscmld::sNote Note = XMelody(XMelody.Row);
 
     if ( Note.Pitch != mscmld::pRest ) {
       if ( Note.Duration.TiedToNext ) {
         Note.Duration.TiedToNext = false;
-        XMelody.Melody.Store(Note, XMelody.Row);
+        XMelody.Store(Note, XMelody.Row);
       } else {
         Note.Duration.TiedToNext = true;
-        XMelody.Melody.Store(Note, XMelody.Row);
+        XMelody.Store(Note, XMelody.Row);
         Note.Duration.TiedToNext = false;
         Note.Duration.Modifier = 0;
         Note.Duration.Base = 3;
 
-        melody::sRow Row = XMelody.Melody.Next(XMelody.Row);
+        mscmld::sRow Row = XMelody.Next(XMelody.Row);
 
         if ( Row == qNIL )
-          XMelody.Melody.Append(Note);
+          XMelody.Append(Note);
         else
-          XMelody.Melody.InsertAt(Note, Row);
+          XMelody.InsertAt(Note, Row);
       }
 
       DisplayMelody_(XMelody, Session);
@@ -564,7 +597,7 @@ qRE;
 
 namespace {
   void ToXML_(
-    const melody::dMelody &Melody,
+    const mscmld::dMelody &Melody,
     mscmld::eAccidental Accidental,
     txf::sWFlow &Flow)
   {
@@ -588,7 +621,7 @@ namespace {
     const melody::rXMelody &XMelody,
     txf::sWFlow &Flow)
   {
-    ToXML_(XMelody.Melody, XMelody.Accidental, Flow);
+    ToXML_(XMelody, XMelody.Accidental, Flow);
   }
 }
 
@@ -618,22 +651,16 @@ qRB;
 	WFlow.Commit();
 
 	Output.Init();
-	OFlow.Init(Output);
 
-	OFlow << "openDataURI('<iframe src=\"data:" << Mime << ";base64,";
+	flx::rStringTWFlow(Output) << "window.open().document.write('<iframe src=\"data:" << Mime << ";base64,";
+
+  OFlow.Init(Output);
 
 	RFlow.Init(XDriver);
 
 	while ( ( C = RFlow.Get() ) != '$' ) {
-    if ( isgraph(C) ) {
-  /*    if ( C == '+' )
-        C = '-';
-      else if ( C == '/' )
-        C = '_';
-*/
+    if ( isgraph(C) )
       OFlow << (char)C;
-    }
-   // cio::COut << (char)C << txf::commit;
 	}
 
 	OFlow << "\" frameborder=\"0\" style=\"border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;\" allowfullscreen></iframe>');";
@@ -655,7 +682,8 @@ qRB;
 
   Session.GetValue(Id, Cursor);
 
-  melody::Get(Guard).Overwrite = Cursor == "Overwrite";
+  XMEL();
+  XMelody.Overwrite = Cursor == "Overwrite";
 qRR;
 qRT;
 qRE;
@@ -666,7 +694,7 @@ D_( Append )
 qRH;
   melody::hGuard Guard;
 qRB;
-  melody::rXMelody &XMelody = melody::Get(Guard);
+  XMEL();
 
   XMelody.Row = qNIL;
 
@@ -682,12 +710,12 @@ qRH;
   melody::hGuard Guard;
   bso::sBool IsLast = false;
 qRB;
-  melody::rXMelody &XMelody = melody::Get(Guard);
+  XMEL();
 
   if ( XMelody.Row != qNIL ) {
-    IsLast = XMelody.Row == XMelody.Melody.Last();
+    IsLast = XMelody.Row == XMelody.Last();
 
-    XMelody.Melody.Remove(XMelody.Row);
+    XMelody.Remove(XMelody.Row);
 
     if ( IsLast )
       XMelody.Row = qNIL;
@@ -704,9 +732,9 @@ D_( Clear )
 qRH;
   melody::hGuard Guard;
 qRB;
-  melody::rXMelody &XMelody = melody::Get(Guard);
+  XMEL();
 
-  XMelody.Melody.Init();
+  XMelody.wMelody::Init();
   XMelody.Row = qNIL;
 
   DisplayMelody_(XMelody, Session);
@@ -717,13 +745,17 @@ qRE;
 
 D_( Keyboard )
 {
+qRH;
   melody::hGuard Guard;
+qRB;
+  XMEL();
 
-  melody::rXMelody &XMelody = melody::Get(Guard);
-
-  melody::Handle(melody::sNote(str::wString(Id+1).ToU8() + 5 + XMelody.BaseOctave * 12, melody::sDuration(3), melody::GetSignature()), XMelody);
+  melody::Handle(mscmld::sNote(str::wString(Id+1).ToU8() + 5 + XMelody.BaseOctave * 12, mscmld::sDuration(3), XMelody.Signature), XMelody);
 
   DisplayMelody_(XMelody, Session);
+qRR;
+qRT;
+qRE;
 }
 
 #define R_( name ) Core.Add(#name, actions_::name)
@@ -732,7 +764,8 @@ qGCTOR( main ) {
   Core.Init();
   R_( OnNewSession );
   R_( Hit );
-  R_( Accidental );
+  R_( SetAccidental );
+  R_( SetAccidentalAmount );
   R_( Refresh );
   R_( SelectNote );
   R_( Rest );

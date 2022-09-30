@@ -593,6 +593,13 @@ namespace sclx {
     {
       return HandleLayout_(str::wString("inner"), Id, XML, XSL);
     }
+    void End(
+      const str::dString &Id,
+      const str::dString &XML,
+      const str::dString &XSL = str::Empty)
+    {
+      return HandleLayout_(str::wString("beforeend"), Id, XML, XSL);
+    }
 		template <typename s, typename t, typename u> void SetAttribute(
 			const s &Id,
 			const t &Name,

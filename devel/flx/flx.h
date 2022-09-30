@@ -447,9 +447,15 @@ namespace flx {
 			_tiflow__::reset( P );
 		}
 		E_CVDTOR( string_text_iflow__ );
-		void Init( str::string_ &Target )
+		string_text_iflow__(const str::dString &Source)
 		{
-			_Flow.Init( Target );
+		  reset(false);
+
+		  Init(Source);
+		}
+		void Init(const str::string_ &Source)
+		{
+			_Flow.Init(Source);
 			_tiflow__::Init( _Flow );
 		}
 	};
@@ -563,6 +569,12 @@ namespace flx {
 			_toflow__::reset( P );
 		}
 		E_CVDTOR( string_text_oflow___ );
+		string_text_oflow___(str::dString &Target)
+		{
+		  reset(false);
+
+		  Init(Target);
+		}
 		void Init( str::string_ &Target )
 		{
 			_Flow.Init( Target );
