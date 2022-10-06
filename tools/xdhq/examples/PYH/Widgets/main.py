@@ -50,7 +50,7 @@ def clean(s,i):
 def displayCode(dom,element,i):
   source = dom.firstChild(element);
   code,i = clean(dom.getValue(source),i)
-  dom.setValue(dom.nextSibling(source),html.escape(code))
+  dom.setValue(dom.nextSibling(dom.firstChild(dom.nextSibling(dom.firstChild(dom.nextSibling(source))))), html.escape(code))
 
   return i
 
