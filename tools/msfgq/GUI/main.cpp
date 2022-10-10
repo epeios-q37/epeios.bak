@@ -29,6 +29,8 @@ using namespace main;
 
 sclx::action_handler<sSession> main::Core;
 
+mscmdd::rRFlow main::MidiRFlow;
+
 namespace {
   namespace {
     void Fill_(
@@ -475,6 +477,7 @@ qRE;
 D_( Refresh )
 {
   Session.Log("Refresh");
+  main::MidiRFlow.reset();
 }
 
 D_( SelectNote )

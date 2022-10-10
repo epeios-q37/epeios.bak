@@ -31,8 +31,11 @@ const scli::sInfo &sclx::SCLXInfo( void )
 
 void sclx::SCLXInitialization( xdhcdc::eMode Mode )
 {
+  midiq::sShared Shared;
+  Shared.RFlow = &main::MidiRFlow;
+
   melody::Initialize();
-	mtk::Launch(midiq::HandleInput, NULL);
+	mtk::Launch(midiq::HandleInput, &Shared);
 }
 
 namespace {

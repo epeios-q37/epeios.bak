@@ -21,6 +21,7 @@
 #ifndef MIDIQ_INC_
 # define MIDIQ_INC_
 
+# include "mscmdd.h"
 # include "mscmld.h"
 
 # include "mtk.h"
@@ -29,10 +30,12 @@ namespace midiq {
   struct sShared {
     mscmld::dMelody *Melody;
     mscmld::sRow Row;
+    mscmdd::rRFlow *RFlow;
     sShared( void )
     {
       Melody = NULL;
       Row = qNIL;
+      RFlow = NULL;
     }
   };
 

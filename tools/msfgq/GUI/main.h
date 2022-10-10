@@ -20,9 +20,11 @@
 #ifndef MAIN_INC_
 # define MAIN_INC_
 
-# include "sclx.h"
-
 # include "melody.h"
+
+# include "mscmdd.h"
+
+# include "sclx.h"
 
 # include "bso.h"
 # include "tol.h"
@@ -48,6 +50,8 @@ namespace main {
   };
 
   extern sclx::action_handler<sSession> Core;
+
+  extern mscmdd::rRFlow MidiRFlow;
 }
 
 #endif // MAIN_INC_

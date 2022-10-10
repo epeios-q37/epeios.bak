@@ -126,7 +126,6 @@ void midiq::HandleInput(
   mtk::gBlocker &Blocker)
 {
 qRH;
-	mscmdd::rRFlow IFlow;
 	sEventHeader Header;
   wData Data;
   wEvent Event;
@@ -135,18 +134,21 @@ qRH;
 	bso::pInt Buffer;
 qRB;
 	sShared &Shared = *(sShared *)UP;
+	mscmdd::rRFlow &RFlow = *Shared.RFlow;
+
 	Blocker.Release();
 
-	DeviceId.Init();
-	IFlow.Init(GetDeviceInId(DeviceId));
 
-	IFlow.Start();
+	DeviceId.Init();
+	RFlow.Init(GetDeviceInId(DeviceId));
+
+	RFlow.Start();
 
 	while ( 1 ) {
-		GetEventHeader( IFlow, Header );
+		GetEventHeader( RFlow, Header );
 
 		Data.Init();
-		GetEventData( Header, IFlow, Data );
+		GetEventData( Header, RFlow, Data );
 
 		Event.Init( Header, Data );
 
