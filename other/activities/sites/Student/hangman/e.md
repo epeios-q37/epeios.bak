@@ -18,14 +18,12 @@ Affichage du masque, c'est-à-dire du mot à deviner avec dissimulation des lett
 ```python
 ETAPE = "e"
 
-m = __import__(f"workshop.fr.{ETAPE}",fromlist=["*"])
-for attr in dir(m):
-  globals()[attr] = getattr(m, attr)
+globals().update(__import__(f"workshop.fr.{ETAPE}",fromlist=["*"]).__dict__)
 
-…
+# …
 
 def lettreEstDansMot(lettre,mot):
-    …
+    # …
 
 def donnerMasque(mot,pioches):
 

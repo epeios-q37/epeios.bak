@@ -18,14 +18,12 @@ Au lieu de toujours retourner le même mot lorsque le champ de saisie est vide, 
 ```python
 ETAPE = "c"
 
-m = __import__(f"workshop.fr.{ETAPE}",fromlist=["*"])
-for attr in dir(m):
-  globals()[attr] = getattr(m, attr)
+globals().update(__import__(f"workshop.fr.{ETAPE}",fromlist=["*"]).__dict__)
 
-…
+# …
 
 def choisirMot(suggestion,motAuHasard):
-    …
+    # …
 
 go(globals())
 ```

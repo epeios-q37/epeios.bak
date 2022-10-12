@@ -1,8 +1,6 @@
 MILESTONE = __file__[3]  # Should actually be "a", "b", "c"…
 
-m = __import__(f"workshop.en.{MILESTONE}",fromlist=["*"])
-for attr in dir(m):
-  globals()[attr] = getattr(m, attr)
+globals().update(__import__(f"workshop.fr.{MILESTONE}",fromlist=["*"]).__dict__)
 
 """
 If missing or set to 'False', the text box displaying

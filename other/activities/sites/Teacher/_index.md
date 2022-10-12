@@ -3,7 +3,7 @@ title: Accueil
 weight: 1
 ---
 
-# Bienvenue aux ateliers de programmation du *Epeios* project
+# Bienvenue aux activités de programmation du *Epeios* project
 
 ## Présentation
 
@@ -57,5 +57,5 @@ Pour revenir au code source, on fermera l'onglet (ou la fenêtre) qui s'est ouve
 
 Les informations données ici viennent en complément de celles indiquées dans le fichier `Student/LISEZMOI.html`, qui est la notice destinée aux étudiants.
 
-**ATTENTION** : ne pas oublier de modifier la 1<sup>ère</sup> ligne (`ETAPE = '…"`) en fonction de l'étape.
+**ATTENTION** : ne pas oublier de modifier la 1<sup>ère</sup> ligne (`ETAPE = "a", "b", "c"…`) en fonction de l'étape.
 

@@ -3,7 +3,7 @@ title: Accueil
 weight: 1
 ---
 
-# Bienvenue aux ateliers de programmation du projet *Epeios*
+# Bienvenue aux activités de programmation du projet *Epeios*
 
 Projets :
 

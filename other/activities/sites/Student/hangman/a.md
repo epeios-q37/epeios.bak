@@ -17,9 +17,7 @@ Ouvrir le fichier `pendu.py`. Il devrait avoir le contenu suivant :
 ```python
 ETAPE = "a"
 
-m = __import__(f"workshop.fr.{ETAPE}",fromlist=["*"])
-for attr in dir(m):
-  globals()[attr] = getattr(m, attr)
+globals().update(__import__(f"workshop.fr.{ETAPE}",fromlist=["*"]).__dict__)
 
 MONTRER_MOT_SECRET = VRAI
 

@@ -38,15 +38,13 @@ Comme vous avez pu le constater, la manière dont est codé l'étape précédent
 ```python
 ETAPE = "j"
 
-m = __import__(f"workshop.fr.{ETAPE}",fromlist=["*"])
-for attr in dir(m):
-  globals()[attr] = getattr(m, attr)
+globals().update(__import__(f"workshop.fr.{ETAPE}",fromlist=["*"]).__dict__)
 
-…
+# …
 
 
 def majCorps(nombreErreurs):    
-    …
+    # …
 
 # Les déclarations des variables 'bonnesPioches' et 'nombreErreurs'
 # qui étaient positionnées ici doivent être supprimées.
@@ -65,13 +63,13 @@ class Pendu:
 def raz(pendu,suggestion,motAuHasard):
 # La ligne 'global bonnesPioches, nombreErreurs' présente ici doit être supprimée.
 # Le reste du code doit être conservé.
-    …
+  # …
 
 
 def traiterPioche(pendu,pioche,motSecret):
 # La ligne 'global bonnesPioches, nombreErreurs' présente ici doit être supprimée.
 # Le reste du code doit être conservé.
-    …
+  # …
 
 go(globals())    
 ```
@@ -150,10 +148,10 @@ Sachant que :
 > Sinon  
 > > Complèter le dessin du pendu
 
-### Aperçu
+## Aperçu
 
 Identique à celui de l'étape précédente.
 
-### Tests
+## Tests
 
 Identiques à ceux de l'étape précédente, en vérifiant que cela fonctionne également avec plusieurs joueurs simultanés.

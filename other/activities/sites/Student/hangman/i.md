@@ -22,15 +22,13 @@ Gérer la lettre sélectionnée par le joueur, de manière à mettre à jour, so
 ```python
 ETAPE = "i"
 
-m = __import__(f"workshop.fr.{ETAPE}",fromlist=["*"])
-for attr in dir(m):
-  globals()[attr] = getattr(m, attr)
+globals().update(__import__(f"workshop.fr.{ETAPE}",fromlist=["*"]).__dict__)
 
-…
+# …
 
 
 def majCorps(nombreErreurs):    
-    …
+  # …
 
 
 bonnesPioches = ""

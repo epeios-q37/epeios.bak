@@ -20,20 +20,18 @@ Prendre en charge la gestion du mot à deviner ainsi que sa (non-)divulgation en
 ```python
 ETAPE = "k"
 
-m = __import__(f"workshop.fr.{ETAPE}",fromlist=["*"])
-for attr in dir(m):
-  globals()[attr] = getattr(m, attr)
+globals().update(__import__(f"workshop.fr.{ETAPE}",fromlist=["*"]).__dict__)
 
-…
+# …
 
 
 def majCorps(*args):
-  …
+  # …
 
 
 class Pendu:
   def raz(self,suggestion,motAuHasard):
-    …
+    # …
 
   def __init__(self):
     self.motSecret = ""
@@ -41,15 +39,15 @@ class Pendu:
     self.nombreErreurs = 0
 
   def traiterEtTesterPioche(self,pioche):
-    …
+    # …
 
 
 def raz(pendu,suggestion,motAuHasard):
-  …
+  # …
 
 
 def traiterPioche(pendu,pioche):
-  …
+  # …
 
 
 go(globals())

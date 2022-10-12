@@ -17,14 +17,12 @@ Lorsque le dernier membre du corps du pendu est dessiné, le visage doit égalem
 ```python
 ETAPE = "h"
 
-m = __import__(f"workshop.fr.{ETAPE}",fromlist=["*"])
-for attr in dir(m):
-  globals()[attr] = getattr(m, attr)
+globals().update(__import__(f"workshop.fr.{ETAPE}",fromlist=["*"]).__dict__)
 
-…
+# …
 
 def majCorps(nombreErreurs):    
-    …
+    # …
 
 go(globals())
 ```

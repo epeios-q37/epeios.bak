@@ -18,14 +18,12 @@ Détecter la présence d'une lettre dans un mot.
 ```python
 ETAPE = "d"
 
-m = __import__(f"workshop.fr.{ETAPE}",fromlist=["*"])
-for attr in dir(m):
-  globals()[attr] = getattr(m, attr)
+globals().update(__import__(f"workshop.fr.{ETAPE}",fromlist=["*"]).__dict__)
 
-…
+# …
 
 def choisirMot(…):
-    …
+    # …
 
 def lettreEstDansMot(lettre,mot):
 
@@ -93,4 +91,4 @@ Si la fonction ne retourne pas la bonne valeur, et doit donc être corrigée, al
 - refaire les actions ci-dessus avec différentes lettres et différents mots.
   
 
-Si ce qui est affiché dans *Obtenu* est barré et surligné de rouge, alors le code de la fonction `lettreEstDansMot` est incorrect. Noter le mot et le lettre qui posent problème, corriger la fonction, et ressayer le mot et la lettre pour vérifier que le bug a été corrigé.
+Si ce qui est affiché dans *Obtenu* est barré et surligné de rouge, alors le code de la fonction `lettreEstDansMot` est incorrect. Noter le mot et la lettre qui posent problème, corriger la fonction, et ressayer le mot et la lettre pour vérifier que le bug a été corrigé.

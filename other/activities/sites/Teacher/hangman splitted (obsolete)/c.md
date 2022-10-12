@@ -36,7 +36,7 @@ Seconde version :
 ```python
 from random import randint
 
-…
+# …
 
 # Placer les mots de son choix.
 DICTIONNAIRE = ("arbre", "maison", "chaise")

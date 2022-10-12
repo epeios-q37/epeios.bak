@@ -18,14 +18,12 @@ Offrir la possibilité de définir le mot à deviner grâce au champ de saisie. 
 ```python
 ETAPE = "b"
 
-m = __import__(f"workshop.fr.{ETAPE}",fromlist=["*"])
-for attr in dir(m):
-  globals()[attr] = getattr(m, attr)
+globals().update(__import__(f"workshop.fr.{ETAPE}",fromlist=["*"]).__dict__)
 
-…
+# …
 
 def choisirMot(suggestion):
-    …
+    # …
 
 go(globals())
 ```

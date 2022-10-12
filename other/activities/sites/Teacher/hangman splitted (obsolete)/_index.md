@@ -1,8 +1,9 @@
 ---
-menu: Jeu du pendu
-title: Jeu du pendu
+menu: Jeu du pendu (splitted)
+title: Jeu du pendu (splitted)
 weight: 2
 bookCollapseSection: true
+draft: true
 ---
 
 # Programmation du jeu du pendu

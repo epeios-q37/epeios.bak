@@ -1,8 +1,6 @@
 ETAPE = __file__[3]  # Devrait normalement être "a", "b", "c"…
 
-m = __import__(f"workshop.fr.{ETAPE}",fromlist=["*"])
-for attr in dir(m):
-  globals()[attr] = getattr(m, attr)
+globals().update(__import__(f"workshop.fr.{ETAPE}",fromlist=["*"]).__dict__)
 
 """
 Si absent ou mis à 'False', le champ texte

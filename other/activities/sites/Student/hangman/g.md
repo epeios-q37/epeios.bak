@@ -18,14 +18,12 @@ Simplification de la fonction `majCorps`, grâce à l'utilisation d'un *tuple*.
 ```python
 ETAPE = "g"
 
-m = __import__(f"workshop.fr.{ETAPE}",fromlist=["*"])
-for attr in dir(m):
-  globals()[attr] = getattr(m, attr)
+globals().update(__import__(f"workshop.fr.{ETAPE}",fromlist=["*"]).__dict__)
 
-…
+# …
 
 def majCorps(nombreErreurs):    
-    …
+    # …
 
 go(globals())
 ```
@@ -37,8 +35,12 @@ go(globals())
 
 ## Pseudo-code
 
+### Code global
+
 > Affecter à `PARTIES_CORPS` un *tuple* contenant les constantes `P_…`
-> 
+
+### Fonction `majCorps`
+
 > Dessiner la partie du corps stockée dans `PARTIES_CORPS` correspondant à `nombreErreurs`
 
 ## Aperçu

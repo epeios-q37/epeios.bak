@@ -18,14 +18,12 @@ Dessiner le corps du pendu en fonction du nombre d'erreurs, c'est-à-dire du nom
 ```python
 ETAPE = "f"
 
-m = __import__(f"workshop.fr.{ETAPE}",fromlist=["*"])
-for attr in dir(m):
-  globals()[attr] = getattr(m, attr)
+globals().update(__import__(f"workshop.fr.{ETAPE}",fromlist=["*"]).__dict__)
 
-…
+# …
 
 def donnerMasque(mot,pioches):
-    …
+    # …
 
 def majCorps(nombreErreurs):    
 
@@ -69,7 +67,7 @@ P_VISAGE        # pour dessiner la visage.
 
 ## Aperçu
 
-![](file:///home/csimon/Favorites/epeios/other/exercises/Hangman/Files/Subs/fr/Student/assets/f.png)
+![](../assets/f.png)
 
 ## Tests
 
