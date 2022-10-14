@@ -80,10 +80,12 @@ USER_ITEM_LABELS = {
   _.UF_PICK_WORD: "choisirMot",
   _.UF_ACONNECT: "AConnexion",
   _.UF_ASUBMIT: "APioche",
-  _.UF_ARESTART: "ARelance"}
+  _.UF_ARESTART: "ARelance"
+}
 
 
-_.setI18n({
+_.setI18n(
+  {
     _.label.Restart: "Recommencer",
     _.label.SecretWord: "Mot secret",
     _.label.Letter: "Pioche ",
@@ -93,7 +95,8 @@ _.setI18n({
     _.label.__dict__["True"]: "vrai",
     # '_.label.False': syntax error!
     _.label.__dict__["False"]: "faux",
-})
+  }
+)
 
 _.setWords(MOTS)
 _.setBodyParts(PARTIES_CORPS)
