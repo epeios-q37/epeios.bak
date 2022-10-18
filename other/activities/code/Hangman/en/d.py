@@ -1,6 +1,6 @@
 MILESTONE = __file__[3]  # Should actually be "a", "b", "c"…
 
-globals().update(__import__(f"workshop.fr.{MILESTONE}",fromlist=["*"]).__dict__)
+globals().update(__import__(f"workshop.en.{MILESTONE}",fromlist=["*"]).__dict__)
 
 DISCLOSE_SECRET_WORD = TRUE
 

@@ -1,6 +1,6 @@
 MILESTONE = "a"
 
-globals().update(__import__(f"workshop.fr.{MILESTONE}",fromlist=["*"]).__dict__)
+globals().update(__import__(f"workshop.en.{MILESTONE}",fromlist=["*"]).__dict__)
 
 """
 If missing or set to 'FALSE' or 'False', the text box displaying

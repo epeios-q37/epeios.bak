@@ -4,3 +4,4 @@ syntax: glob
 *.o
 __pycache__
 *.pyc
+*.code-workspace

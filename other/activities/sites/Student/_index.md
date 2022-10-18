@@ -3,8 +3,9 @@ title: Accueil
 weight: 1
 ---
 
-# Bienvenue aux activités de programmation du projet *Epeios*
+# Bienvenue aux activités de programmation
 
-Projets :
+Ici tu trouveras une série d'activité grâce auxquels, étape par étape, tu programmeras différents logiciels que tu pourras utiliser sur ton smartphone.
 
-  - [Jeu du pendu](./pendu) ;
+Liste des activités :
+- [Jeu du pendu](./hangman) ;
