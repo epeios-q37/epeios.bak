@@ -1,0 +1,5 @@
+# À renommer en '.replit' et à placer dans le dépôt 'GitHub' 'coding-workshops-replit'.
+
+run = ["bash", "main.sh"]
+
+entrypoint = "main.sh"

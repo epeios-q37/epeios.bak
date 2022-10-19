@@ -1,0 +1,5 @@
+# Utilisé par 'ACTRTWStudent".
+
+run = ["bash", "main.sh"]
+
+entrypoint = "main.sh"

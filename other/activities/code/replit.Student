@@ -1,0 +1,5 @@
+# Utilisé par 'ACTRTWStudent".
+
+run = "ATK=none PYTHONPATH=$PYTHONPATH:./EduTK.zip:./atlastk.zip python3 main.py"
+
+language = "bash"

@@ -22,7 +22,17 @@ markup:
   }
 </style>
 
-# Étapes du jeu du pendu
+# Le jeu du pendu
+
+## Version élèves
+
+- Dépôt *GitHub* : https://q37.info/s/9mfgr4xh
+- utilisation :
+  - en ligne (dépôt *Replit*, commun à toutes les activités) : https://q37.info/s/7zcvn3fx,
+  - locale :
+    - fichier *zip* : https://q37.info/s/x74psdc4,
+    - ou cloner le dépôt *GitHub* ci-dessus,
+- documentation (commune à toutes les activités) : https://q37.info/s/b44jhpkd.
 
 ## Étape *A*
 
@@ -120,7 +130,7 @@ def choisirMot(suggestion):
 
 ### Remarque
 
-La seconde solution est optionnelle. On pourra y revenir plus tard, une fois les *tuple* abordés. Dans ce cas, ne pas oublier de remettre `from workshop.fr.c import *`…
+La seconde solution est optionnelle. On pourra y revenir plus tard, une fois les *tuple* abordés. Dans ce cas, ne pas oublier de remettre `ETAPE = "c"`…
 
 ## Étape *D*
 
