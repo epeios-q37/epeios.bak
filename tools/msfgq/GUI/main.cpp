@@ -197,7 +197,7 @@ namespace {
       bso::sS8 Return = 0;
       mscmld::sRow Row = Melody.First();
 
-      Flow << "X: 1\\nT: Preview\\nL: 1\\nK: C\\n";
+      Flow << "X: 1\\nT:\\nL: 1\\nK: C\\n";
 
       Flow << "[|]";
 
@@ -638,7 +638,9 @@ qRH;
 	melody::hGuard Guard;
 	flx::rStringTWFlow OFlow;
 	str::wString Output;
+	qCBUFFERh Buffer;
 	int C;
+	bso::sBool EmbedScriptResult = true;
 qRB;
   tol::Init(Mark, Script, Mime);
   Session.GetMark(Id, Mark);
@@ -654,10 +656,12 @@ qRB;
 	WFlow.Commit();
 
 	Output.Init();
-
-	flx::rStringTWFlow(Output) << "window.open().document.write('<iframe src=\"data:" << Mime << ";base64,";
-
   OFlow.Init(Output);
+
+  if ( !EmbedScriptResult )
+    OFlow << "window.open().document.write('";
+
+  OFlow << "<iframe src=\"data:" << Mime << ";base64,";
 
 	RFlow.Init(XDriver);
 
@@ -666,10 +670,27 @@ qRB;
       OFlow << (char)C;
 	}
 
-	OFlow << "\" frameborder=\"0\" style=\"border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;\" allowfullscreen></iframe>');";
+	OFlow << "\" frameborder=\"0\" style=\"border: 0; top: 0px; left: 0px; bottom: 0px; right: 0px; width: 100%; height: ";
+
+	if ( EmbedScriptResult )
+    OFlow << "400px";
+  else
+    OFlow << "100%";
+
+  OFlow <<  ";\" allowfullscreen></iframe>";
+
+	if ( !EmbedScriptResult)
+    OFlow << "');";
+
 	OFlow.reset();
 
-  Session.Execute(Output);
+	if ( EmbedScriptResult ) {
+    Session.Inner(str::wString("Output"), Output);
+    Session.Execute(str::wString("resizeOutputIFrame();"));
+    Session.SetAttribute(Session.Parent("Output", Buffer), "open", "true");
+    Session.ScrollTo("Output");
+  } else
+    Session.Execute(Output);
 qRR;
 qRT;
 qRE;
@@ -761,6 +782,11 @@ qRT;
 qRE;
 }
 
+D_( Test )
+{
+  Session.Log("Test");
+}
+
 #define R_( name ) Core.Add(#name, actions_::name)
 
 qGCTOR( main ) {
@@ -781,4 +807,5 @@ qGCTOR( main ) {
   R_( Suppr );
   R_( Clear );
   R_( Keyboard );
+  R_( Test );
 }

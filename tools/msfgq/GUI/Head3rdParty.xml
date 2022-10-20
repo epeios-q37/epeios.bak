@@ -6,6 +6,11 @@
   <style>
     .abcjs-midi-tempo {
       width: 4em !important;
+    }
+    
+    .piano-container {
+      justify-content: center;
+      display: grid;
     }    
   </style>
 </xpp:bloc> 

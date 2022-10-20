@@ -4,7 +4,7 @@
     From the 'HeadStyles.xml' files,
     so it can be copy/paste as is
     to 'jsbin.com', which ignores
-    the first (this one) rule dur to
+    the first (this one) rule due to
     above 'xpp:bloc'…
   */
 }
@@ -49,4 +49,9 @@ legend::after {
 	margin-top: -5px;
 	vertical-align: middle;
 }
+
+summary {
+  cursor: pointer;
+}
+
 </xpp:bloc> 

@@ -97,4 +97,13 @@ function updatePlayer() {
     console.log("audio is not supported on this browser");
   };
 }
+
+function resizeIFrame( iFrame ) {
+    iFrame.width  = iFrame.contentWindow.document.body.scrollWidth;
+    iFrame.height = iFrame.contentWindow.document.body.scrollHeight;
+}
+
+function resizeOutputIFrame() {
+  resizeIFrame( document.getElementsByTagName("iframe")[0]);
+}
 </xpp:bloc> 

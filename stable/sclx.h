@@ -799,6 +799,10 @@ namespace sclx {
 		{
 			DisableElement( str::wString( Id ) );
 		}
+		template <typename chars> void ScrollTo( const chars &Id )
+		{
+      Process_("ScrollTo_1", NULL, Id);
+		}
 		const char *Dummy(
 			const str::dString &Id,
 			qCBUFFERh &Value )
