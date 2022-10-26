@@ -13,6 +13,9 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-10-26
+- SCLX: [extn];
+
 ## 2022-09-30
 - SCLX: [extn];
 

@@ -7,17 +7,17 @@ weight: 1
 
 ## Présentation
 
-De nos jour, la plupart des jeunes possèdent un smartphone, auquel il sont très attachés. Il est donc plus facile de les intéresser au numérique en général et à la programmation en particulier avec des activités impliquant leur smartphone.
+De nos jour, la plupart des jeunes possèdent un smartphone, auquel il sont très attachés. Il est donc plus facile de les intéresser au numérique en général et à la programmation en particulier avec des activités impliquant leur smartphone. 
 
-C'est pourquoi les programmes proposés ici ont une véritable interface graphique, au lieu de l'habituelle et austère interface texte. De plus, au lancement de chaque programme, un lien est généré permettant d'y accéder à partir d'un smartphone, ou de n'importe quel dispositif équipé d'un navigateur web moderne connecté à internet. En envoyant ce lien, ou en faisant scanner le [code QR](https://fr.wikipedia.org/wiki/Code_QR) correspondant, il est possible de donner à n'importe qui, fût-il à l'autre bout du monde, accès au programme.
+De ce fait, les programmes proposés ici ont une véritable interface graphique, au lieu de l'habituelle et austère interface texte. De plus, un lien  généré au lancement des programmes permet d'y accéder à partir d'un smartphone, ou de n'importe quel dispositif équipé d'un navigateur web moderne connecté à internet. Grâce à ce lien, également disponible ous forme de [code QR](https://fr.wikipedia.org/wiki/Code_QR), il est possible de donner à n'importe qui, fût-il à l'autre bout du monde, accès au programme.
 
 Vous trouverez plus de détails sur ce type d'activités à l'adresse <https://q37.info/s/knf9hdwp>.
 
-Chaque activité est découpée en étapes qui ne portent pas chacune sur un concept informatique en particulier, mais sur l'élaboration d'une fonctionnalité du programme. L'assimilation des concepts en est ainsi facilitée, car n'étant pas une fin en soi, mais un moyen pour aboutir au programme final.
+Chaque activité est découpée en étapes qui portent chacune sur l'élaboration d'une fonctionnalité du programme, Cela facilite l'assimilation des différents concepts informatiques, la maîtrise de ces concepts n'étant pas une fin en soi, mais un moyen pour aboutir au programme final.
 
-Bien que s'appuyant sur le langage *Python*, ces activités portent sur la programmation en générale, et non pas sur la programmation en *Python*. C'est pour cela que les solutions générales seront données avant les solutions propres à *Python*.
+Bien que s'appuyant sur le langage *Python*, ces activités portent sur la programmation en générale, et pas que sur la programmation en *Python*. C'est pour cela que les solutions générales seront données avant les solutions propres à *Python*.
 
-Si vous avez des questions/suggestions/remarques/… concernant ces activités, vous pouvez contacter l'auteur via les informations de contact situées à l'adresse <https://q37.info/s/ggq7x4w7>, ou utiliser les système de suivi de *GitHub* du dépôt principal à l'adresse <https://github.com/epeios-q37/hangman-exercises>.
+Si vous avez des questions/suggestions/remarques/… concernant ces activités, vous pouvez contacter l'auteur via les informations de contact situées à l'adresse <https://q37.info/s/ggq7x4w7>, ou utiliser les système de suivi de *GitHub* du dépôt principal à l'adresse <https://q37.info/s/f7f3kr37>.
 
 ## Utilisation
 
@@ -41,7 +41,7 @@ Les activités consistent à écrire du code dans le fichier `main.py` situé à
 
 Pour une utilisation en ligne en utilisant un navigateur web, sans rien avoir à installer, il suffit de suivre le lien suivant : https://q37.info/s/7zcvn3fx. Cela ouvre une session dans *Replit*, un environnement de développement en ligne.
 
-Un premier lancement installera les fichiers adéquat dans le dépôt *Replit* (clonage du dépôt de l'activité concernée). Les lancements ultèrieurs exécuteront le fichier `main.py`
+Un premier lancement installera les fichiers adéquat dans le dépôt *Replit* (clonage du dépôt de l'activité concernée). Les lancements ultérieurs exécuteront le fichier `main.py` qui est celui 
 
 Comme ci-dessus, l'activité consistera à écrire du code dans le fichier `main.py`. Pour lancer l'activité, après avoir cliqué sur le bouton vert, une URL s'affichera que l'on cliquera pour acceder à l'interface de l'activité.
 

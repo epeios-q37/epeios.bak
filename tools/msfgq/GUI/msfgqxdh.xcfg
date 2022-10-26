@@ -92,6 +92,7 @@
         <xpp:bloc> test.ly; base64 -w 0 test.png</xpp:bloc>
       </Script-->
 			<Scripts>
+			  <Script id="ABC" Label="ABC" Mime="text/plain"/>
 				<Script id="text" Label="XML as text" Mime="text/plain">
 					<xpp:bloc>while read x ; do echo $x ; done | base64</xpp:bloc>
 				</Script>

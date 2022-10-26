@@ -648,7 +648,19 @@ namespace sclx {
 
 			return Buffer;
 		}
-		void GetMarks(
+		template <typename c> bso::sBool GetBoolValue(const c &Id)
+    {
+      bso::sBool Result = false;
+    qRH;
+      qCBUFFERh Buffer;
+    qRB;
+      Result = strcmp( GetValue(Id, Buffer), "false") != 0;
+    qRR;
+    qRT;
+    qRE;
+      return Result;
+    }
+    void GetMarks(
 			const str::dStrings &Ids,
 			str::dStrings &Marks );
 		template <typename c> const str::dString &GetMark(

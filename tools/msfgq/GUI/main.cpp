@@ -640,8 +640,10 @@ qRH;
 	str::wString Output;
 	qCBUFFERh Buffer;
 	int C;
-	bso::sBool EmbedScriptResult = true;
+	bso::sBool EmbedScriptResult = false;
 qRB;
+  EmbedScriptResult = Session.GetBoolValue("Embedded");
+
   tol::Init(Mark, Script, Mime);
   Session.GetMark(Id, Mark);
 	registry::GetScriptContentAndMime(Mark, Script, Mime);
