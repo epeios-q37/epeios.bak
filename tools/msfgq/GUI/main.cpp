@@ -25,6 +25,8 @@
 
 #include "mthrtn.h"
 
+#include "cdgb64.h"
+
 using namespace main;
 
 sclx::action_handler<sSession> main::Core;
@@ -105,8 +107,8 @@ namespace {
   SCLX_ADef( sSession, actions_, name )
 
 namespace {
-  namespace {
-    bso::sS8 Convert_(
+  namespace _ {
+    bso::sS8 Convert(
       const mscmld::sNote &Note,
       bso::sU8 BaseOctave,
       mscmld::eAccidental Accidental,
@@ -183,26 +185,34 @@ namespace {
       if ( Note.Duration.TiedToNext )
         Flow << '-';
 
-      Flow << "[|]" << ' ';
+      Flow << " [|] ";
 
       return 0;
     }
 
-    bso::sS8 Convert_(
+    namespace _ {
+      qCDEFC(EscapedNL, "\\n");
+      qCDEFC(NL, "\n");
+    }
+
+    bso::sS8 Convert(
       const mscmld::dMelody &Melody,
       bso::sU8 BaseOctave,
       mscmld::eAccidental Accidental,
+      bso::sBool EscapeNL,
       txf::sWFlow &Flow)
     {
       bso::sS8 Return = 0;
       mscmld::sRow Row = Melody.First();
 
-      Flow << "X: 1\\nT:\\nL: 1\\nK: C\\n";
+      const char *&NL = EscapeNL ? _::EscapedNL : _::NL;
+
+      Flow << "X: 1" << NL << "T:" << NL << "L: 1" << NL << "K: C" << NL;
 
       Flow << "[|]";
 
       while ( ( Return == 0 ) && ( Row != qNIL ) ) {
-        Return = Convert_(Melody(Row), BaseOctave, Accidental, Flow);
+        Return = Convert(Melody(Row), BaseOctave, Accidental, Flow);
 
         Row = Melody.Next(Row);
       }
@@ -215,6 +225,24 @@ namespace {
     const mscmld::dMelody &Melody,
     bso::sU8 BaseOctave,
     mscmld::eAccidental Accidental,
+    bso::sBool EscapeNL,
+    txf::sWFlow &Flow)
+  {
+    return _::Convert(Melody, BaseOctave, Accidental, EscapeNL, Flow);
+  }
+
+
+  bso::sS8 GetABC_(
+    const melody::rXMelody &XMelody,
+    bso::sBool EscapeNL,
+    txf::sWFlow &Flow)
+  {
+    return GetABC_(XMelody, XMelody.BaseOctave, XMelody.Accidental, EscapeNL, Flow);
+  }
+
+  bso::sS8 GetABC_(
+    const melody::rXMelody &XMelody,
+    bso::sBool EscapeNL,
     str::dString &ABC)
   {
     bso::sS8 Return = 0;
@@ -223,27 +251,7 @@ namespace {
   qRB;
     Flow.Init(ABC);
 
-    Return = Convert_(Melody, BaseOctave, Accidental, Flow);
-  qRR;
-  qRT;
-  qRE;
-    return Return;
-  }
-
-  bso::sS8 GetABC_(
-    const melody::rXMelody &XMelody,
-    str::dString &ABC)
-  {
-    return GetABC_(XMelody, XMelody.BaseOctave, XMelody.Accidental, ABC);
-  }
-
-  bso::sS8 GetABC_(str::dString &ABC)
-  {
-    bso::sS8 Return = 0;
-  qRH;
-    melody::hGuard Guard;
-  qRB;
-    Return = GetABC_(melody::Get(Guard), ABC);
+    Return = GetABC_(XMelody, EscapeNL, Flow);
   qRR;
   qRT;
   qRE;
@@ -275,7 +283,7 @@ namespace {
     qRB;
       tol::Init(ABC, Script);
 
-      OctaveOverflow = GetABC_(XMelody, ABC);
+      OctaveOverflow = GetABC_(XMelody, true, ABC);
 
       if ( OctaveOverflow != 0 )
         Session.AlertB(str::wString("Octave error !!!"));
@@ -628,6 +636,27 @@ namespace {
   }
 }
 
+namespace {
+  qCDEFC(ABCBuiltInScriptId_, "_ABC");
+
+  void ToBase64ABC_(
+    const melody::rXMelody &XMelody,
+    txf::sWFlow &Flow)
+    {
+    qRH;
+      cdgb64::rEncodingWFlow B64Flow;
+      txf::sWFlow B64TWFlow;
+    qRB;
+      B64Flow.Init(Flow.Flow(), cdgb64::fURL);
+      B64TWFlow.Init(B64Flow);
+
+      GetABC_(XMelody, false, B64TWFlow);
+    qRR;
+    qRT;
+    qRE;
+    }
+}
+
 D_( Execute )
 {
 qRH;
@@ -650,14 +679,7 @@ qRB;
 
 	Script.Append(";echo -n '$';");
 
-	XDriver.Init(Script);
-	WFlow.Init(XDriver);
-
-	ToXML_(melody::Get(Guard), WFlow);
-
-	WFlow.Commit();
-
-	Output.Init();
+  Output.Init();
   OFlow.Init(Output);
 
   if ( !EmbedScriptResult )
@@ -665,12 +687,23 @@ qRB;
 
   OFlow << "<iframe src=\"data:" << Mime << ";base64,";
 
-	RFlow.Init(XDriver);
+	if ( Mark == ABCBuiltInScriptId_ )
+    ToBase64ABC_(melody::Get(Guard), OFlow);
+  else {
+    XDriver.Init(Script);
+    WFlow.Init(XDriver);
 
-	while ( ( C = RFlow.Get() ) != '$' ) {
-    if ( isgraph(C) )
-      OFlow << (char)C;
-	}
+    ToXML_(melody::Get(Guard), WFlow);
+
+    WFlow.Commit();
+
+    RFlow.Init(XDriver);
+
+    while ( ( C = RFlow.Get() ) != '$' ) {
+      if ( isgraph(C) )
+        OFlow << (char)C;
+    }
+  }
 
 	OFlow << "\" frameborder=\"0\" style=\"border: 0; top: 0px; left: 0px; bottom: 0px; right: 0px; width: 100%; height: ";
 

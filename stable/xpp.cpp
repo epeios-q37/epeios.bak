@@ -231,7 +231,7 @@ enum directive__ {
 	dDefine,
 	dExpand,
 	dIfeq,
-	dBloc,
+	_dBloc,
 	dCData,
 	dSet,
 	dCypher,
@@ -258,7 +258,7 @@ static inline directive__ GetDirective_(
 		else if ( Directives.IfeqTag == Name )
 			Directive = dIfeq;
 		else if ( Directives.BlocTag == Name )
-			Directive = dBloc;
+			Directive = _dBloc;
 		else if ( Directives.CDataTag == Name )
 			Directive = dCData;
 		else if ( Directives.SetTag == Name )
@@ -275,7 +275,7 @@ static inline directive__ GetDirective_(
 		Directive = dNone;
 
 	if ( PreservationLevel != 0 )
-		if ( Directive != dBloc )
+		if ( Directive != _dBloc )
 			Directive = dNone;
 
 	return Directive;
@@ -998,7 +998,7 @@ status__ xpp::_extended_parser___::HandlePreprocessorDirective_(
 	case dDefine:
 		return _HandleDefineDirective( Parser );
 		break;
-	case dBloc:
+	case _dBloc:
 		qRFwk();	// Trait en amont.
 		break;
 	case dCData:
@@ -1266,7 +1266,7 @@ status__ xpp::_extended_parser___::Handle(
 				case dNone:
 					Status = sOK;
 					break;
-				case dBloc:
+				case _dBloc:
 					if ( PreservationLevel_ == 0 )
 						Continue = true;
 					else if ( PreservationLevel_ == XPP_LEVEL_MAX )
@@ -1319,7 +1319,7 @@ status__ xpp::_extended_parser___::Handle(
 						break;
 					}
 					break;
-				case dBloc:
+				case _dBloc:
 					if ( _Parser.AttributeName() == BLOC_TAG_PRESERVE_ATTRIBUTE ) {
 						if ( PreservationLevel_ == 0 ) {
 							if ( _Parser.Value() == "yes" ) {
@@ -1360,7 +1360,7 @@ status__ xpp::_extended_parser___::Handle(
 				switch ( GetDirective_( _Parser.TagName(), _Directives, PreservationLevel_ ) ) {
 				case dNone:
 					break;
-				case dBloc:
+				case _dBloc:
 				case dCData:
 					_Parser.PurgeDumpData();
 					// L'attribut n'est pas rpercut sur le flux de sortie.
@@ -1387,7 +1387,7 @@ status__ xpp::_extended_parser___::Handle(
 
 				_CDataNesting++;
 				break;
-			case dBloc:
+			case _dBloc:
 				if ( PreservationLevel_ > 1 )
 					Status = sOK;
 				else if ( _CDataNesting == 0 )
@@ -1427,7 +1427,7 @@ status__ xpp::_extended_parser___::Handle(
 				}
 				_CDataNesting--;
 				break;
-			case dBloc:
+			case _dBloc:
         if ( PreservationLevel_ != 0 ) {
 					PreservationLevel_--;
 					if ( PreservationLevel_ > 0 ) {
