@@ -119,7 +119,6 @@ namespace {
       mthrtn::wRational Duration;
       bso::sS8 RelativeOctave;
       bso::pInteger Buffer;
-      bso::sChar AccidentalMark = 0;
       char PitchNotation[] = {0,0,0};
       mscmld::sAltPitch Pitch;
 
@@ -164,20 +163,19 @@ namespace {
 
         switch ( Pitch.Accidental ) {
         case mscmld::aSharp:
-          AccidentalMark = '^';
+          Flow << '^';
           break;
         case mscmld::aFlat:
-          AccidentalMark = '_';
+          Flow << '_';
           break;
         case mscmld::aNatural:
-          AccidentalMark = ' ';
           break;
         default:
           qRGnr();
           break;
         }
 
-        Flow << AccidentalMark << PitchNotation;
+        Flow << PitchNotation;
       }
 
       Flow << bso::Convert(Duration.N.GetU32(), Buffer) << '/' << bso::Convert(Duration.D.GetU32(), Buffer);
@@ -209,7 +207,7 @@ namespace {
 
       Flow << "X: 1" << NL << "T:" << NL << "L: 1" << NL << "K: C" << NL;
 
-      Flow << "[|]";
+      Flow << "[|] ";
 
       while ( ( Return == 0 ) && ( Row != qNIL ) ) {
         Return = Convert(Melody(Row), BaseOctave, Accidental, Flow);
@@ -633,6 +631,8 @@ namespace {
     txf::sWFlow &Flow)
   {
     ToXML_(XMelody, XMelody.Accidental, Flow);
+
+    Flow << txf::nl;  // Without this, with an empty melody the root 'Melody' will not be available for the script.
   }
 }
 
@@ -817,6 +817,41 @@ qRT;
 qRE;
 }
 
+D_( SetTimeSignature )
+{
+qRH;
+  qCBUFFERh Buffer;
+  melody::hGuard Guard;
+  mscmld::sSignatureTime Signature;
+qRB;
+  Signature.Init(str::wString(Session.GetValue("Numerator", Buffer)).ToU8(), str::wString(Session.GetValue("Denominator", Buffer)).ToU8());
+
+  if ( !Signature.IsValid() )
+    qRGnr();
+
+  XMEL();
+
+  XMelody.Signature.Time = Signature;
+  mscmld::UpdateTimeSignature(Signature, XMelody);
+qRR;
+qRT;
+qRE;
+}
+
+D_( SetOctave )
+{
+qRH;
+  qCBUFFERh Buffer;
+  melody::hGuard Guard;
+qRB;
+  XMEL();
+
+  str::wString(Session.GetValue(Id, Buffer)).ToNumber(XMelody.BaseOctave, str::sULimit<bso::sU8>(9));
+qRR;
+qRT;
+qRE;
+}
+
 D_( Test )
 {
   Session.Log("Test");
@@ -843,4 +878,6 @@ qGCTOR( main ) {
   R_( Clear );
   R_( Keyboard );
   R_( Test );
+  R_( SetTimeSignature );
+  R_( SetOctave );
 }

@@ -341,6 +341,36 @@ qRT
 qRE
 }
 
+void mscmld::UpdateTimeSignature(
+  const sSignatureTime &Signature,
+  dMelody &Melody,
+  sRow First,
+  sRow Last)
+{
+    sRow &Row = First;
+    sNote Note;
+
+    if ( Row == qNIL )
+      Row = Melody.First();
+
+    if ( Last != qNIL ) {
+      if ( !Melody.Exists(Last) )
+        qRFwk();
+      Last = Melody.Next(Last);
+    }
+
+    while ( Row != Last ) {
+      Note = Melody(Row);
+
+      Note.Signature.Time = Signature;
+
+      Melody.Store(Note, Row);
+
+      Row = Melody.Next(Row);
+    }
+}
+
+
 static bso::u8__ GetChromaticAbsolute_( const sAltPitch &Pitch )
 {
 	if ( ( BSO_U8_MAX / 12 ) < Pitch.Octave )

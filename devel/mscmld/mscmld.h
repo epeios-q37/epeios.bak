@@ -688,6 +688,12 @@ namespace mscmld {
 		const dMelody &Source,
 		dMelody &Target );
 
+  void UpdateTimeSignature(
+    const sSignatureTime &Signature,
+    dMelody &Melody,
+    sRow First = qNIL,
+    sRow Last = qNIL);
+
 	enum write_status__ {
 		wsOK,
 		wsBarChekError,

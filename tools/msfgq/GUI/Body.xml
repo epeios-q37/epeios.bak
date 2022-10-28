@@ -33,9 +33,9 @@
       </fieldset>
       <fieldset class="neat">
         <legend>Time</legend>
-        <input id="Numerator" type="number" max="12" min="1" value="4" size="2" />
+        <input id="Numerator" xdh:onevent="SetTimeSignature" type="number" max="12" min="1" value="4" size="2" />
         <span>/</span>
-        <select id="Denominator">
+        <select id="Denominator" xdh:onevent="SetTimeSignature">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="4" selected="selected">4</option>
@@ -45,7 +45,7 @@
       </fieldset>
       <fieldset class="neat">
         <legend>Octave</legend>
-        <input id="Octave" type="number" size="1" min="0" max="9" value="4" />
+        <input id="Octave" xdh:onevent="SetOctave" type="number" size="1" min="0" max="9" value="4" />
       </fieldset>
     </span>
     <fieldset style="display: flex; flex-direction: column; gap: 5px">

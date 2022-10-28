@@ -93,7 +93,7 @@
       </Script-->
 			<Scripts>
 			  <Script id="_ABC" Label="ABC" Mime="text/plain">
-			    <xpp:bloc># Built-in ecript. 'id' value is reserved.</xpp:bloc>
+			    <xpp:bloc># Built-in ecript. 'id' value of '_ABC' is reserved.</xpp:bloc>
         </Script>
 				<Script id="text" Label="XML as text" Mime="text/plain">
 					<xpp:bloc>while read x ; do echo $x ; done | base64</xpp:bloc>
