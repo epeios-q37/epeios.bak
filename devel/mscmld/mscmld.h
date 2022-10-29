@@ -106,7 +106,9 @@ namespace mscmld {
   eAccidental GetAccidental(const str::dString &Pattern);
 
 	typedef bso::u8__ sOctave;
-#define MSCMLD_UNDEFINED_PITCH_OCTAVE BSO_U8_MAX
+
+	qCDEF(sOctave, UndefinedOctave, bso::U8Max);
+
 
 	struct sAltPitch {
 		ePitchName Name;
@@ -116,7 +118,7 @@ namespace mscmld {
 		{
 			Name = pn_Undefined;
 			Accidental = a_Undefined;
-			Octave = MSCMLD_UNDEFINED_PITCH_OCTAVE;
+			Octave = UndefinedOctave;
 		}
 		qCTOR( sAltPitch );
 		sAltPitch(
@@ -158,7 +160,7 @@ namespace mscmld {
 		{
 			return ( Name != pn_Undefined )
 				   && ( ( ( Accidental != a_Undefined )
-				          && ( Octave != MSCMLD_UNDEFINED_PITCH_OCTAVE ) )
+				          && ( Octave != UndefinedOctave ) )
 				        || ( Name == pnRest ) );
 		}
 		bso::u8__ GetChromatic( void ) const;

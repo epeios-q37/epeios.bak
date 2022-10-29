@@ -110,7 +110,7 @@ namespace {
   namespace _ {
     bso::sS8 Convert(
       const mscmld::sNote &Note,
-      bso::sU8 BaseOctave,
+      mscmld::sOctave BaseOctave,
       mscmld::eAccidental Accidental,
       txf::sWFlow &Flow)
     {
@@ -195,7 +195,7 @@ namespace {
 
     bso::sS8 Convert(
       const mscmld::dMelody &Melody,
-      bso::sU8 BaseOctave,
+      mscmld::sOctave BaseOctave,
       mscmld::eAccidental Accidental,
       bso::sBool EscapeNL,
       txf::sWFlow &Flow)
@@ -221,7 +221,7 @@ namespace {
 
   bso::sS8 GetABC_(
     const mscmld::dMelody &Melody,
-    bso::sU8 BaseOctave,
+    mscmld::sOctave BaseOctave,
     mscmld::eAccidental Accidental,
     bso::sBool EscapeNL,
     txf::sWFlow &Flow)
@@ -271,10 +271,11 @@ namespace {
       }
     }
 
-    void DisplayMelody_(
+    bso::sBool DisplayMelody_(
       const melody::rXMelody &XMelody,
       main::sSession &Session)
     {
+      bso::sBool Success = false;
     qRH;
       str::wString ABC, Script;
       bso::sS8 OctaveOverflow = 0;
@@ -295,10 +296,13 @@ namespace {
         Script.Append("updatePlayer();");
 
         Session.Execute(Script);
+
+        Success = true;
       }
     qRR;
     qRT;
     qRE;
+      return Success;
     }
   }
 
@@ -357,7 +361,7 @@ namespace {
     qRB;
       XHTML.Init();
       FillMidiInDevices_(XHTML);
-      Session.Inner(str::wString("MidiIn"), XHTML);
+      Session.End(str::wString("MidiIn"), XHTML);
 
       Device.Init();
       sclm::MGetValue(registry::parameter::devices::in::Value, Device);
@@ -608,6 +612,7 @@ namespace {
   void ToXML_(
     const mscmld::dMelody &Melody,
     mscmld::eAccidental Accidental,
+    mscmld::sOctave BaseOctave,
     txf::sWFlow &Flow)
   {
   qRH;
@@ -617,6 +622,7 @@ namespace {
 
     Writer.PushTag("Melody");
     Writer.PutAttribute("Amount", Melody.Amount() );
+    Writer.PutAttribute("BaseOctave", BaseOctave);
 
     mscmld::WriteXML(Melody, Accidental, Writer);
 
@@ -630,7 +636,7 @@ namespace {
     const melody::rXMelody &XMelody,
     txf::sWFlow &Flow)
   {
-    ToXML_(XMelody, XMelody.Accidental, Flow);
+    ToXML_(XMelody, XMelody.Accidental, XMelody.BaseOctave, Flow);
 
     Flow << txf::nl;  // Without this, with an empty melody the root 'Melody' will not be available for the script.
   }
@@ -843,10 +849,19 @@ D_( SetOctave )
 qRH;
   qCBUFFERh Buffer;
   melody::hGuard Guard;
+  mscmld::sOctave BaseOctaveBackup = mscmld::UndefinedOctave;
 qRB;
   XMEL();
 
+  BaseOctaveBackup = XMelody.BaseOctave;
+
   str::wString(Session.GetValue(Id, Buffer)).ToNumber(XMelody.BaseOctave, str::sULimit<bso::sU8>(9));
+
+  if ( !DisplayMelody_(XMelody, Session) ) {
+    bso::pInt Buffer;
+    XMelody.BaseOctave = BaseOctaveBackup;
+    Session.SetValue("Octave", bso::Convert(XMelody.BaseOctave, Buffer));
+  }
 qRR;
 qRT;
 qRE;
@@ -857,27 +872,41 @@ D_( Test )
   Session.Log("Test");
 }
 
-#define R_( name ) Core.Add(#name, actions_::name)
+
+namespace {
+  using namespace actions_;
+
+  namespace _ {
+    template <typename action> void Add(
+      sclx::action_handler<sSession> &Core,
+      action &Action )
+    {
+        Core.Add(Action.Name, Action);
+    }
+
+    template <typename action, typename... actions> void Add(
+      sclx::action_handler<sSession> &Core,
+      action &Action,
+      actions &...Actions)
+    {
+        Add(Core, Action);
+        Add(Core, Actions...);
+    }
+  }
+
+  void Register_(void)
+  {
+    _::Add(Core,
+      OnNewSession, Hit, SetAccidental, SetAccidentalAmount, Refresh,
+      SelectNote, Rest, Duration, Dot, Tie,
+      Execute, Cursor, Append, Suppr, Clear,
+      Keyboard, Test, SetTimeSignature, SetOctave );
+  }
+}
+
+#define R_( name ) Add_(main::Core, actions_::name)
 
 qGCTOR( main ) {
   Core.Init();
-  R_( OnNewSession );
-  R_( Hit );
-  R_( SetAccidental );
-  R_( SetAccidentalAmount );
-  R_( Refresh );
-  R_( SelectNote );
-  R_( Rest );
-  R_( Duration );
-  R_( Dot );
-  R_( Tie );
-  R_( Execute );
-  R_( Cursor );
-  R_( Append );
-  R_( Suppr );
-  R_( Clear );
-  R_( Keyboard );
-  R_( Test );
-  R_( SetTimeSignature );
-  R_( SetOctave );
+  Register_();
 }

@@ -13,6 +13,10 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+
+## 2022-10-29
+- MECMLD: [stdz];
+
 ## 2022-10-28
 - MSCMLD: [extn];
 

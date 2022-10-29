@@ -1319,7 +1319,7 @@ static sOctave GetPitchOctave_( const str::string_ &Octave )
 	sOctave O = Octave.ToU8( &Error );
 
 	if ( Error != qNIL )
-		O = MSCMLD_UNDEFINED_PITCH_OCTAVE;
+		O = UndefinedOctave;
 
 	return O;
 }
@@ -1332,7 +1332,7 @@ static parse_status__ ParsePitch_(
 	bso::bool__ Continue = true;
 	ePitchName Name = pn_Undefined;
 	eAccidental Accidental = a_Undefined;
-	sOctave Octave = MSCMLD_UNDEFINED_PITCH_OCTAVE;
+	sOctave Octave = UndefinedOctave;
 
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfObvious ) ) {
@@ -1362,12 +1362,12 @@ static parse_status__ ParsePitch_(
 						Status = psBadValue;
 				}
 			} else if ( Parser.AttributeName() == OCTAVE_ATTRIBUTE ) {
-				if ( Octave != MSCMLD_UNDEFINED_PITCH_OCTAVE )
+				if ( Octave != UndefinedOctave )
 					Status = psAlreadyDefined;
 				else {
 					Octave = GetPitchOctave_( Parser.Value() );
 
-					if ( Octave == MSCMLD_UNDEFINED_PITCH_OCTAVE )
+					if ( Octave == UndefinedOctave )
 						Status = psBadValue;
 				}
 			}
@@ -1383,7 +1383,7 @@ static parse_status__ ParsePitch_(
 				Status = psMissingPitchName;
 			else if ( Accidental == a_Undefined )
 				Status = psMissingPitchAccidental;
-			else if ( Octave == MSCMLD_UNDEFINED_PITCH_OCTAVE )
+			else if ( Octave == UndefinedOctave )
 				Status = psMissingPitchOctave;
 			else {
 				Pitch.Name = Name;

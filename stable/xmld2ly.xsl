@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!--$Id: xcmq2ly.xsl,v 1.3 2007/11/10 09:56:29 csimon Exp $-->
-<!DOCTYPE xcmq2ly.xsl [
+<!DOCTYPE xcmd2ly.xsl [
 <!ENTITY nl "&#13;&#10;">
 <!ENTITY tab "&#9;">
 <!ENTITY pad "    ">
@@ -133,45 +132,26 @@
 	</xsl:template>
 	<xsl:template match="Melody">
 		<xsl:text>\relative c</xsl:text>
+		<xsl:variable name="BaseO" select="number(@BaseOctave)"/>
 		<xsl:variable name="C" select="number(Note/Pitch/@Chromatic)"/>
 		<xsl:variable name="AbsC" select="$C*($C>=0)-$C*($C&lt;0)"/>
 		<xsl:variable name="D" select="number(Note/Pitch/@Diatonic)"/>
 		<xsl:variable name="AbsD" select="$D*($D>=0)-$D*($D&lt;0)"/>
-		<xsl:if test="true()">
-			<xsl:variable name="AbsO">
-				<xsl:call-template name="Div12">
-					<xsl:with-param name="Num" select="$AbsC"/>
-				</xsl:call-template>
-			</xsl:variable>
-			<!--xsl:text>&nl;!!!!!!!!!!&nl;</xsl:text>
-			<xsl:value-of select="$C"/>
-			<xsl:text>&nl;</xsl:text>
-			<xsl:value-of select="$O"/>
-			<xsl:text>&nl;!!!!!!!!!!&nl;</xsl:text-->
-			<xsl:variable name="OffD">
-				<xsl:call-template name="Mod7">
-					<xsl:with-param name="Num" select="$AbsD"/>
-				</xsl:call-template>
-			</xsl:variable>
-			<xsl:variable name="OffO">
-				<xsl:choose>
-					<xsl:when test="$OffD&lt;4">-2</xsl:when>
-					<xsl:otherwise>-1</xsl:otherwise>
-				</xsl:choose>
-			</xsl:variable>
-			<xsl:choose>
-				<xsl:when test="$D&gt;0">
-					<xsl:call-template name="OctaveUp">
-						<xsl:with-param name="Amount" select="number($AbsO)+$OffO"/>
-					</xsl:call-template>
-				</xsl:when>
-				<xsl:when test="$D&lt;0">
-					<xsl:call-template name="OctaveDown">
-						<xsl:with-param name="Amount" select="number($AbsO)+$OffO"/>
-					</xsl:call-template>
-				</xsl:when>
-			</xsl:choose>
-		</xsl:if>
+		<xsl:variable name="AbsO" select="number(Note/Pitch/@Octave)"/>
+    <xsl:variable name="OffO" select="$AbsO - $BaseO"/>
+    <!-- '$AbsO-' is handled as a variable identifier, hence the spaces. -->
+    <xsl:choose>
+      <xsl:when test="$OffO&gt;0">
+        <xsl:call-template name="OctaveUp">
+          <xsl:with-param name="Amount" select="$OffO"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="$DffO&lt;0">
+        <xsl:call-template name="OctaveDown">
+          <xsl:with-param name="Amount" select="$OffO"/>
+        </xsl:call-template>
+      </xsl:when>
+    </xsl:choose>
 		<xsl:text> {&nl;</xsl:text>
 		<xsl:apply-templates select="*"/>
 		<xsl:text>&nl;}&nl;</xsl:text>

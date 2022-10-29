@@ -29,7 +29,7 @@ namespace melody {
     mscmld::sDuration Unit;
     sTempo( void )
     {
-      // By deafault, quarter note = 120.
+      // By default, quarter note = 120.
       Value = 120;
       Unit = mscmld::sDuration(4, 0);
     }
@@ -42,15 +42,15 @@ namespace melody {
   {
   public:
     mscmld::sRow Row;
-    bso::sU8 BaseOctave;
+    mscmld::sOctave BaseOctave;
     mscmld::sSignature Signature;
-    mscmld::eAccidental Accidental; // Accidental to use for alterated notes when in C key.
+    mscmld::eAccidental Accidental; // Accidental to use for altered notes when in C key.
     bso::sBool Overwrite;
     void reset(bso::sBool P = true)
     {
       wMelody::reset(P);
       Row = qNIL;
-      BaseOctave = 0;
+      BaseOctave = mscmld::UndefinedOctave;
       Signature.reset(P);
       Accidental = mscmld::a_Undefined;
       Overwrite = false;
