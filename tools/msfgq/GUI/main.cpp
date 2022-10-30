@@ -617,8 +617,10 @@ namespace {
   {
   qRH;
     xml::rWriter Writer;
+    xtf::sPos Pos;
   qRB;
     Writer.Init(Flow, xml::oIndent, xml::e_Default);
+//  Writer.GetFlow() << "<?xml-stylesheet type='text/xsl' href='data:text/xsl;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+CjwhLS0gY29weS1vZi54c2wgLS0+Cjx4c2w6c3R5bGVzaGVldCB2ZXJzaW9uPSIxLjAiCiAgeG1sbnM6eHNsPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L1hTTC9UcmFuc2Zvcm0iPgoKICA8eHNsOnRlbXBsYXRlIG1hdGNoPSIvIj4KICAgIDx4c2w6Y29weS1vZiBzZWxlY3Q9IioiLz4KICA8L3hzbDp0ZW1wbGF0ZT4KPC94c2w6c3R5bGVzaGVldD4=' ?>\n";
 
     Writer.PushTag("Melody");
     Writer.PutAttribute("Amount", Melody.Amount() );

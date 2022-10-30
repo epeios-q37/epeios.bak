@@ -146,7 +146,7 @@
           <xsl:with-param name="Amount" select="$OffO"/>
         </xsl:call-template>
       </xsl:when>
-      <xsl:when test="$DffO&lt;0">
+      <xsl:when test="$OffO&lt;0">
         <xsl:call-template name="OctaveDown">
           <xsl:with-param name="Amount" select="$OffO"/>
         </xsl:call-template>
@@ -240,11 +240,6 @@
 			<xsl:text>&nl;</xsl:text>
 			<xsl:value-of select="$O"/>
 			<xsl:text>&nl;!!!!!!!!!!&nl;</xsl:text-->
-			<xsl:variable name="OffO">
-				<xsl:call-template name="Mod12">
-					<xsl:with-param name="Num" select="$AbsC"/>
-				</xsl:call-template>
-			</xsl:variable>
 			<xsl:choose>
 				<xsl:when test="$D&gt;0">
 					<xsl:call-template name="OctaveUp">

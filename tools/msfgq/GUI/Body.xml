@@ -124,19 +124,10 @@
     <fieldset>
       <legend>Audio</legend>
       <div id="audio"></div>
-    </fieldset>  
-    <fieldset>
-      <legend>Scripts</legend>
-      <span id="Scripts">
-      </span>
-      <span style="display: inline-block; width: 10px;"></span>
-      <label>
-        <input id="Embedded" checked="true" type="checkbox">Embedded</input>
-      </label>
     </fieldset>
-  </fieldset>
-  <fieldset>
-    <div class='piano-container'>
+    <br />
+    <details class='piano-container'>
+      <summary>Keyboard</summary>
       <ul id="beautiful-piano">
         <li>
           <div id="k0" xdh:onevent="Keyboard" class="anchor F3"></div>
@@ -147,7 +138,7 @@
         </li>
         <li>
           <div id="k4" xdh:onevent="Keyboard" class="anchor A3"></div>
-          <span id="k3" xdh:onevent="Keyboard"  class="Gs3 Ab3"></span>
+          <span id="k3" xdh:onevent="Keyboard" class="Gs3 Ab3"></span>
         </li>
         <li>
           <div id="k6" xdh:onevent="Keyboard" class="anchor B3"></div>
@@ -217,12 +208,19 @@
           <span id="k34" xdh:onevent="Keyboard" class="Ds6 Eb6"></span>
         </li>
       </ul>
-    </div>
+    </details>
   </fieldset>
   <fieldset>
+    <legend>Scripts</legend>
+    <span id="Scripts"></span>
+    <span style="display: inline-block; width: 10px;"></span>
+    <label>
+      <input id="Embedded" checked="true" type="checkbox">Embedded</input>
+    </label>
+     <p />
     <details>
       <Summary>Output</Summary>
-      <fieldset id="Output"/>
+      <fieldset id="Output" />
     </details>
   </fieldset>
 </xpp:cdata>
