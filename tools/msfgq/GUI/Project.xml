@@ -22,7 +22,15 @@
 		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
+				<Module>cdgurl</Module>
+				<Module>cnvfdr</Module>
 			</Modules>
+			<Modules Group="CSD">
+			  <Module>csdrcc</Module>
+			</Modules>
+			<Modules Group="FBL">
+				<xpp:expand select="FBLF"/>
+      </Modules>
 			<Modules Group="MSC">
 				<Module>mscmdd</Module>
 				<Module>mscmdf</Module>
@@ -42,6 +50,7 @@
 		</Modules>
 		<Module>main</Module>
 		<Module>melody</Module>
+		<Module>messages</Module>
 		<Module>midiq</Module>
 		<Module>registry</Module>
 	</Modules>
@@ -52,6 +61,12 @@
 	  <Library Target="POSIX">asound</Library>
 	</Libraries>
   <Files>
+    <Files RTW=".">
+			<File>Makefile</File>
+			<Files Path="../">
+				<File>CHANGELOG.md</File>
+			</Files>
+		</Files>
 		<Files Group="XML" Path="XML/">
 			<File>Head.xml</File>
 			<File>Body.xml</File>
@@ -68,9 +83,7 @@
 	        </Arguments>
 	    </CB>
 	</Misc>
-    <RTW Description="MSFGq" Keywords="keyword1,keyword2">
-		<Dir>msfgqxdh</Dir>
-	</RTW>
+  <RTW Description="MSFGq" Keywords="keyword1,keyword2" Folder="msfgqxdh"/>
 	<Packing>
 	</Packing>
 	<PreprocessorDefinitions>

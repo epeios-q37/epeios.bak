@@ -74,7 +74,8 @@ $head
 				<iframe style="border: none; width: 100%; height: 50px;"></iframe>
 			</div>
 			<!-- There must be one and only one element here, even an empty one, for the 'More' section to be handled correctly. -->
-			<iframe style="border: none; width: 100%; height: 0px;" src="sponsors.php?$parameters"></iframe>
+			<!--iframe style="border: none; width: 100%; height: 0px;" src="sponsors.php?$parameters"></iframe-->
+			<span/>
 		</body>
 	</html>
 MLS

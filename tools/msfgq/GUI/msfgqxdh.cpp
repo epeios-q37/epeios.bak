@@ -21,6 +21,7 @@
 
 #include "main.h"
 #include "midiq.h"
+#include "registry.h"
 
 SCLI_DEF( msfgqxdh, NAME_LC	SCLX_DEFAULT_SUFFIX, NAME_MC );
 
@@ -31,11 +32,21 @@ const scli::sInfo &sclx::SCLXInfo( void )
 
 void sclx::SCLXInitialization( xdhcdc::eMode Mode )
 {
+qRH;
   midiq::sShared Shared;
+  str::wString Device;
+qRB;
+  Device.Init();
+  sclm::MGetValue(::registry::parameter::devices::in::Value, Device);
+
   Shared.RFlow = &main::MidiRFlow;
+  Shared.MIDIDeviceIn = &Device;
 
   melody::Initialize();
 	mtk::Launch(midiq::HandleInput, &Shared);
+qRR;
+qRT;
+qRE;
 }
 
 namespace {

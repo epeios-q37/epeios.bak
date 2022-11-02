@@ -31,6 +31,7 @@
 				<Module>csdcmn</Module>
 			</Modules>
 			<Modules Group="XDH">
+				<Module>xdhcdc</Module>
 				<Module>xdhcuc</Module>
 				<Module>xdhcmn</Module>
 				<Module>xdhups</Module>
@@ -38,6 +39,7 @@
 			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>
+				<Module>sclc</Module>
 			</Modules>
 		</Modules>
 		<Module>registry</Module>
@@ -52,8 +54,14 @@
 				</xpp:cdata>
 			</Arguments>
 		</CB>
-	</Misc>	<Files/>
-    <RTW>
-        <Dir>faasq-cli</Dir>
-    </RTW>
+	</Misc>
+	<Files>
+    <Files RTW=".">
+			<File>Makefile</File>
+			<Files Path="../">
+				<File>CHANGELOG.md</File>
+			</Files>
+		</Files>
+  </Files>
+  <RTW Folder="faasq"/>
 </Project>

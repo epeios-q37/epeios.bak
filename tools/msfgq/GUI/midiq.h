@@ -31,6 +31,7 @@ namespace midiq {
     mscmld::dMelody *Melody;
     mscmld::sRow Row;
     mscmdd::rRFlow *RFlow;
+    str::dString *MIDIDeviceIn;
     sShared( void )
     {
       Melody = NULL;
@@ -38,10 +39,6 @@ namespace midiq {
       RFlow = NULL;
     }
   };
-
-  const str::dString &GetDeviceInId(str::dString &Id);
-
-  const str::dString &GetDeviceOutId(str::dString &Id);
 
   void HandleInput(
     void *UP,

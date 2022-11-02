@@ -37,73 +37,6 @@ using namespace mscmld;
 
 using namespace midiq;
 
-qENUM( Policy_ ) {
-	pId,
-	pName,
-	p_amount,
-	p_Undefined
-};
-
-static ePolicy_ GetPolicy_(const rgstry::sTEntry &Entry)
-{
-	ePolicy_ Policy = ::p_Undefined;
-qRH;
-	str::wString RawPolicy;
-qRB;
-	RawPolicy.Init();
-
-	sclm::MGetValue( Entry, RawPolicy );
-
-	if ( RawPolicy == "Id" )
-		Policy = pId;
-	else if ( RawPolicy == "Name" )
-		Policy = pName;
-	else
-		sclr::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
-qRR;
-qRT;
-qRE;
-	return Policy;
-}
-
-static const str::dString &GetDeviceId_(
-	mscmdd::eWay Way,
-	const rgstry::sTEntry &PolicyEntry,
-	const rgstry::sTEntry &ValueEntry,
-	str::dString &Id)
-{
-qRH;
-	qCBUFFERh Buffer;
-qRB;
-	switch ( GetPolicy_( PolicyEntry ) ) {
-	case pId:
-    sclm::MGetValue(ValueEntry, Id);
-		break;
-	case pName:
-    qRVct();
-		break;
-	default:
-		qRGnr();
-		break;
-	}
-qRR;
-qRT;
-qRE;
-	return Id;
-}
-
-const str::dString &midiq::GetDeviceInId(str::dString &Id)
-{
-	return GetDeviceId_(mscmdd::wIn, registry::parameter::devices::in::Policy, registry::parameter::devices::in::Value, Id);
-}
-
-const str::dString &midiq::GetDeviceOutId(str::dString &Id)
-{
-  Id.Append("hw:1,0");
-  return Id;
-//	return GetDeviceId_(mscmdd::wOut, registry::parameter::devices::out::Policy, registry::parameter::devices::out::Value, Id);
-}
-
 namespace {
   bso::sS8 Handle_(bso::sU8 Pitch)
   {
@@ -129,50 +62,51 @@ qRH;
 	sEventHeader Header;
   wData Data;
   wEvent Event;
-	str::wString DeviceId;
 	flw::rWFlow &Flow = flx::VoidOFlow;
 	bso::pInt Buffer;
+	str::wString MIDIDeviceIn;
 qRB;
 	sShared &Shared = *(sShared *)UP;
 	mscmdd::rRFlow &RFlow = *Shared.RFlow;
+	MIDIDeviceIn.Init(*Shared.MIDIDeviceIn);
 
 	Blocker.Release();
 
+	if ( MIDIDeviceIn.Amount() ) {
+    RFlow.Init(MIDIDeviceIn);
 
-	DeviceId.Init();
-	RFlow.Init(GetDeviceInId(DeviceId));
+    RFlow.Start();
 
-	RFlow.Start();
+    while ( 1 ) {
+      GetEventHeader( RFlow, Header );
 
-	while ( 1 ) {
-		GetEventHeader( RFlow, Header );
+      Data.Init();
+      GetEventData( Header, RFlow, Data );
 
-		Data.Init();
-		GetEventData( Header, RFlow, Data );
+      Event.Init( Header, Data );
 
-		Event.Init( Header, Data );
+      PutEvent( Event, xNone, Flow );
+      Flow.Commit();
 
-		PutEvent( Event, xNone, Flow );
-		Flow.Commit();
+      if ( Header.EventType == etMIDI )
+        if ( Header.MIDIEvent.Event == midNoteOn )
+          if  ( Data( Data.Last() ) != 0 ) {
+            if ( Handle_(Data(Data.First())) == 0 )
+              sclx::Broadcast(str::wString("Hit"), str::wString(bso::Convert(Data(Data.First()), Buffer)));
+  //					mtx::Lock( Shared.Mutex );
+            /*if ( Shared.Row != qNIL ) {
+              Shared.Melody->InsertAt(Note, Shared.Row);
+              Shared.Row = Shared.Melody->Next( Shared.Row );
+            }else
+              Shared.Melody->Append( Note );
 
-		if ( Header.EventType == etMIDI )
-			if ( Header.MIDIEvent.Event == midNoteOn )
-				if  ( Data( Data.Last() ) != 0 ) {
-					if ( Handle_(Data(Data.First())) == 0 )
-            sclx::Broadcast(str::wString("Hit"), str::wString(bso::Convert(Data(Data.First()), Buffer)));
-//					mtx::Lock( Shared.Mutex );
-					/*if ( Shared.Row != qNIL ) {
-						Shared.Melody->InsertAt(Note, Shared.Row);
-						Shared.Row = Shared.Melody->Next( Shared.Row );
-					}else
-						Shared.Melody->Append( Note );
-
-          melody::PrintSignature(cio::COut);
-          cio::COut << ": " << txf::commit;
-					Print(*Shared.Melody, Shared.Row, cio::COut);
-//					mtx::Unlock( Shared.Mutex );
-*/
-				}
+            melody::PrintSignature(cio::COut);
+            cio::COut << ": " << txf::commit;
+            Print(*Shared.Melody, Shared.Row, cio::COut);
+  //					mtx::Unlock( Shared.Mutex );
+  */
+          }
+    }
 	}
 qRR;
 qRT;

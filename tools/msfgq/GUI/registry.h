@@ -34,6 +34,11 @@ namespace registry {
 					Policy,
 					Value;
 			}
+			namespace out {
+				extern rEntry
+					Policy,
+					Value;
+			}
     }
 
     extern rEntry BaseOctave;

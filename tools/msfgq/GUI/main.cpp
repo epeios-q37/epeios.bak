@@ -35,42 +35,134 @@ mscmdd::rRFlow main::MidiRFlow;
 
 namespace {
   namespace {
-    void Fill_(
+    bso::sBool Fill_(
+      const str::dString  &Id,
       const str::dStrings &Ids,
       const str::dStrings &Names,
       txf::rWFlow &XHTML)
     {
       sdr::sRow Row = Ids.First();
+      bso::sBool Available = false;
 
       if ( Ids.Amount() != Names.Amount() )
         qRGnr();
 
       while ( Row != qNIL ) {
-        XHTML << "<option value=\"" << Ids(Row) <<  "\">" << Names(Row) << "</option>" << txf::nl;
+        XHTML << "<option value=\"" << Ids(Row);
+
+        if ( Ids(Row) == Id ) {
+          Available = true;
+          XHTML << " selected=\"true\"";
+        }
+
+        XHTML <<  "\">" << Names(Row) << " (" << Ids(Row) << ")" << "</option>" << txf::nl;
         Row = Ids.Next(Row);
       }
+
+      return Available;
     }
   }
 
-  void Fill_(
+  bso::sBool Fill_(
+    const str::dString  &Id,
     const str::dStrings &Ids,
     const str::dStrings &Names,
     str::dString &XHTML)
   {
+    bso::sBool Available = false;
   qRH;
     flx::rStringWDriver SDriver;
     txf::rWFlow TFlow;
   qRB;
     SDriver.Init(XHTML);
     TFlow.Init(SDriver);
-    Fill_(Ids, Names, TFlow);
+    Available = Fill_(Id, Ids, Names, TFlow);
   qRR;
   qRT;
   qRE;
+    return Available;
   }
 
-  void FillMidiInDevices_(str::dString &XHTML)
+  namespace _ {
+    namespace _ {
+      namespace _ {
+        qENUM( Policy ) {
+          pId,
+          pName,
+          p_amount,
+          p_Undefined
+        };
+
+        static ePolicy GetPolicy(const rgstry::sTEntry &Entry)
+        {
+          ePolicy Policy = p_Undefined;
+        qRH;
+          str::wString RawPolicy;
+        qRB;
+          RawPolicy.Init();
+
+          sclm::MGetValue( Entry, RawPolicy );
+
+          if ( RawPolicy == "Id" )
+            Policy = pId;
+          else if ( RawPolicy == "Name" )
+            Policy = pName;
+          else
+            sclr::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+        qRR;
+        qRT;
+        qRE;
+          return Policy;
+        }
+      }
+
+      str::dString &GetDeviceId(
+        mscmdd::eWay Way,
+        const rgstry::sTEntry &PolicyEntry,
+        const rgstry::sTEntry &ValueEntry,
+        str::dString &Id)
+      {
+      qRH;
+        qCBUFFERh Buffer;
+      qRB;
+        switch ( _::GetPolicy( PolicyEntry ) ) {
+        case _::pId:
+          sclm::OGetValue(ValueEntry, Id);
+          break;
+        case _::pName:
+          qRVct();
+          break;
+        default:
+          qRGnr();
+          break;
+        }
+      qRR;
+      qRT;
+      qRE;
+        return Id;
+      }
+    }
+
+    const str::dString &GetDeviceInId(str::dString &Id)
+    {
+      return _::GetDeviceId(mscmdd::wIn, registry::parameter::devices::in::Policy, registry::parameter::devices::in::Value, Id);
+    }
+
+    const str::dString &GetDeviceOutId(str::dString &Id)
+    {
+      /*
+      Id.Append("hw:1,0");
+      return Id;
+      */
+      return _::GetDeviceId(mscmdd::wOut, registry::parameter::devices::out::Policy, registry::parameter::devices::out::Value, Id);
+    }
+  }
+
+  bso::sBool FillMidiInDevices_(
+    const str::dString &Id,
+    str::dString &XHTML)
   {
+    bso::sBool Available = false;
   qRH;
     str::wStrings Ids, Names;
   qRB;
@@ -78,14 +170,18 @@ namespace {
 
     mscmdd::GetMidiInDeviceNames(Ids, Names);
 
-    Fill_(Ids, Names, XHTML);
+    Available = Fill_(Id, Ids, Names, XHTML);
   qRR;
   qRT;
   qRE;
+    return Available;
   }
 
-  void FillMidiOutDevices_(str::dString &XHTML)
+  bso::sBool FillMidiOutDevices_(
+    const str::dString &Id,
+    str::dString &XHTML)
   {
+    bso::sBool Available = false;
   qRH;
     str::wStrings Ids, Names;
   qRB;
@@ -93,10 +189,11 @@ namespace {
 
     mscmdd::GetMidiOutDeviceNames(Ids, Names);
 
-    Fill_(Ids, Names, XHTML);
+    Available = Fill_(Id, Ids, Names, XHTML);
   qRR;
   qRT;
   qRE;
+    return Available;
   }
 }
 
@@ -357,15 +454,17 @@ namespace {
     qRH;
       str::wString XHTML, Device;
       mscmld::eAccidental Accidental = mscmld::a_Undefined;
-      bso::pInt Buffer;
+      bso::pInt IBuffer;
+      qCBUFFERh CBuffer;
     qRB;
+      Device.Init();
+      _::GetDeviceInId(Device);
+
       XHTML.Init();
-      FillMidiInDevices_(XHTML);
+      if ( FillMidiInDevices_(Device, XHTML) )
+        Session.RemoveAttribute(str::wString(Session.Parent("beautiful-piano", CBuffer)), str::wString("open"));
       Session.End(str::wString("MidiIn"), XHTML);
 
-      Device.Init();
-      sclm::MGetValue(registry::parameter::devices::in::Value, Device);
-      Session.SetValue("MidiIn", Device);
 
       /*
       XHTML.Init();
@@ -373,15 +472,15 @@ namespace {
       Session.Inner(str::wString("MidiOut"), XHTML);
       */
 
-      Session.SetValue("AccidentalAmount", bso::Convert(abs(XMelody.Signature.Key), Buffer));
+      Session.SetValue("AccidentalAmount", bso::Convert(abs(XMelody.Signature.Key), IBuffer));
 
       Accidental = XMelody.Signature.Key ? XMelody.Signature.Key > 0 ? mscmld::aSharp : mscmld::aFlat : XMelody.Accidental;
       Session.SetValue("Accidental", mscmld::GetLabel(Accidental));
 
-      Session.SetValue("Numerator", bso::Convert(XMelody.Signature.Time.Numerator(), Buffer));
-      Session.SetValue("Denominator", bso::Convert(XMelody.Signature.Time.Denominator(), Buffer));
+      Session.SetValue("Numerator", bso::Convert(XMelody.Signature.Time.Numerator(), IBuffer));
+      Session.SetValue("Denominator", bso::Convert(XMelody.Signature.Time.Denominator(), IBuffer));
 
-      Session.SetValue("Octave", bso::Convert(XMelody.BaseOctave, Buffer));
+      Session.SetValue("Octave", bso::Convert(XMelody.BaseOctave, IBuffer));
 
       XHTML.Init();
       GetScriptsXHTML_(XHTML);

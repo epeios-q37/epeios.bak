@@ -627,7 +627,7 @@ namespace sclx {
 			const str::dString &Id,
 			const str::dString &Name )
 		{
-			qRLmt();
+      Process_("RemoveAttribute_1", NULL, Id, Name);
 		}
 		void GetValues(
 			const str::dStrings &Ids,

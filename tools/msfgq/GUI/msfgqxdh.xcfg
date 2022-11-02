@@ -35,7 +35,7 @@
 			<xpp:bloc>
 				<xpp:bloc><!--- Some macro for the script-->
 					<xpp:define name="xslt">
-						<xpp:bloc>/usr/bin/xsltproc</xpp:bloc>
+						<xpp:bloc>xsltproc</xpp:bloc>
 					</xpp:define>
 					<xpp:define  name="xmld2ly">
 						<xpp:bloc>/home/csimon/hg/epeios/stable/xmld2ly.xsl</xpp:bloc>
@@ -47,7 +47,7 @@
 						</xpp:bloc>
 					</xpp:define>
 					<xpp:define name="Lilypond">
-						<xpp:bloc>/usr/bin/lilypond </xpp:bloc>
+						<xpp:bloc>lilypond </xpp:bloc>
 					</xpp:define>
 					<xpp:define name="putclip">
 						<xpp:bloc>
@@ -117,12 +117,13 @@
 						</xpp:bloc>
 				</xpp:define>
 				<Script id="png" Label="PNG" Mime="image/png">
+					<xpp:bloc></xpp:bloc>
 					<xpp:expand select="LilyCommon"/>
-					<xpp:bloc> --png -o test - ; base64 ./test.png</xpp:bloc>
+					<xpp:bloc> --png -o msfgqxdh.tmp - ; base64 ./msfgqxdh.tmp.png ; rm msfgqxdh.tmp*</xpp:bloc>
 				</Script>
 				<Script id="pdf" Label="PDF" Mime="application/pdf">
 					<xpp:expand select="LilyCommon"/>
-					<xpp:bloc> -o test - ; base64 ./test.pdf</xpp:bloc>
+					<xpp:bloc> -o msfgqxdh.tmp - ; base64 ./msfgqxdh.tmp.pdf ; rm msfgqxdh.tmp*</xpp:bloc>
 				</Script>
 			</Scripts>
     </Definitions>

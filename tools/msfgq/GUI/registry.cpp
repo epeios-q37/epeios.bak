@@ -43,6 +43,9 @@ namespace {
 rEntry registry::parameter::devices::in::Value = In_;
 rEntry registry::parameter::devices::in::Policy( "@Policy", In_ );
 
+rEntry registry::parameter::devices::out::Value = Out_;
+rEntry registry::parameter::devices::out::Policy( "@Policy", Out_ );
+
 // Definitions.
 
 rEntry registry::definition::Body( "Body", sclr::Definitions);

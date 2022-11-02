@@ -126,7 +126,7 @@
       <div id="audio"></div>
     </fieldset>
     <br />
-    <details class='piano-container'>
+    <details class='piano-container' open="true">
       <summary>Keyboard</summary>
       <ul id="beautiful-piano">
         <li>
@@ -220,7 +220,11 @@
      <p />
     <details>
       <Summary>Output</Summary>
-      <fieldset id="Output" />
+      <fieldset id="Output">
+        <span>Click on one of the above </span>
+        <span style="font-style: oblique;">Scripts</span>
+        <span> button.</span>
+      </fieldset>
     </details>
   </fieldset>
 </xpp:cdata>
