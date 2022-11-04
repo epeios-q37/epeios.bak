@@ -40,6 +40,8 @@ namespace {
 	rEntry Out_( "Out", Devices_ );
 }
 
+rEntry registry::parameter::Width( "Width", sclr::Parameters);
+
 rEntry registry::parameter::devices::in::Value = In_;
 rEntry registry::parameter::devices::in::Policy( "@Policy", In_ );
 

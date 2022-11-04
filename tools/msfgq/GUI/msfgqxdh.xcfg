@@ -32,6 +32,7 @@
 				<Value>60</Value>
 			</Tempo>
 			<BaseOctave>3</BaseOctave>
+			<Width>15</Width>
 			<xpp:bloc>
 				<xpp:bloc><!--- Some macro for the script-->
 					<xpp:define name="xslt">

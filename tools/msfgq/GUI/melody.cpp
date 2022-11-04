@@ -99,6 +99,10 @@ void melody::Initialize(void)
   XMelody_.BaseOctave = sclm::MGetU8(registry::parameter::BaseOctave, 9);
   XMelody_.Signature = GetRegistrySignature_();
   XMelody_.Accidental = GetRegistryAccidental_();
+  XMelody_.Width = sclm::MGetU8(registry::parameter::Width, WidthMax);
+
+  if ( XMelody_.Width < WidthMin )
+    sclr::ReportBadOrNoValueForEntryErrorAndAbort(registry::parameter::Width);
 }
 
 rXMelody &melody::Get(hGuard &Guard)
@@ -157,8 +161,10 @@ void melody::HandleKeyAndAccidental(
   rXMelody &XMelody)
 {
   XMelody.Accidental = Accidental;
+  sSignatureKey SignatureKey = Accidental == aSharp ? Key : -Key;
 
-  UpdateSignatureKey_(Accidental == aSharp ? Key : -Key, XMelody);
+  UpdateSignatureKey_(SignatureKey, XMelody);
+  XMelody.Signature.Key = SignatureKey;
 }
 
 /*

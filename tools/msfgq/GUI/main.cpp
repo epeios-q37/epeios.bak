@@ -26,6 +26,7 @@
 #include "mthrtn.h"
 
 #include "cdgb64.h"
+#include "rnd.h"
 
 using namespace main;
 
@@ -209,6 +210,7 @@ namespace {
       const mscmld::sNote &Note,
       mscmld::sOctave BaseOctave,
       mscmld::eAccidental Accidental,
+      const char *Separator,
       txf::sWFlow &Flow)
     {
       const char *Label = NULL;
@@ -280,7 +282,7 @@ namespace {
       if ( Note.Duration.TiedToNext )
         Flow << '-';
 
-      Flow << " [|] ";
+      Flow << Separator << "[|] ";
 
       return 0;
     }
@@ -295,10 +297,12 @@ namespace {
       mscmld::sOctave BaseOctave,
       mscmld::eAccidental Accidental,
       bso::sBool EscapeNL,
+      bso::sU8 Width,
       txf::sWFlow &Flow)
     {
       bso::sS8 Return = 0;
       mscmld::sRow Row = Melody.First();
+      bso::sUHuge Counter = 1;
 
       const char *&NL = EscapeNL ? _::EscapedNL : _::NL;
 
@@ -307,7 +311,7 @@ namespace {
       Flow << "[|] ";
 
       while ( ( Return == 0 ) && ( Row != qNIL ) ) {
-        Return = Convert(Melody(Row), BaseOctave, Accidental, Flow);
+        Return = Convert(Melody(Row), BaseOctave, Accidental, Counter++ % Width ? " " : NL, Flow);
 
         Row = Melody.Next(Row);
       }
@@ -321,18 +325,18 @@ namespace {
     mscmld::sOctave BaseOctave,
     mscmld::eAccidental Accidental,
     bso::sBool EscapeNL,
+    bso::sU8 Width,
     txf::sWFlow &Flow)
   {
-    return _::Convert(Melody, BaseOctave, Accidental, EscapeNL, Flow);
+    return _::Convert(Melody, BaseOctave, Accidental, EscapeNL, Width, Flow);
   }
-
 
   bso::sS8 GetABC_(
     const melody::rXMelody &XMelody,
     bso::sBool EscapeNL,
     txf::sWFlow &Flow)
   {
-    return GetABC_(XMelody, XMelody.BaseOctave, XMelody.Accidental, EscapeNL, Flow);
+    return GetABC_(XMelody, XMelody.BaseOctave, XMelody.Accidental, EscapeNL, XMelody.Width, Flow);
   }
 
   bso::sS8 GetABC_(
@@ -447,7 +451,25 @@ namespace {
 }
 
 namespace {
-  void UpdateInterface_(
+  void UpdateUIWidth_(
+    const str::dString &Value,
+    sSession &Session)
+    {
+    qRH;
+      str::wStrings Ids, Values;
+    qRB;
+      tol::Init(Ids, Values);
+
+      Ids.AppendMulti("WidthRangeInput", "WidthNumberInput");
+      Values.AppendMulti(Value, Value);
+
+      Session.SetValues(Ids, Values);
+    qRR;
+    qRT;
+    qRE;
+  }
+
+  void UpdateUI_(
     const melody::rXMelody &XMelody,
     sSession &Session)
     {
@@ -482,6 +504,8 @@ namespace {
 
       Session.SetValue("Octave", bso::Convert(XMelody.BaseOctave, IBuffer));
 
+      UpdateUIWidth_(str::wString(bso::Convert(XMelody.Width, IBuffer)), Session);
+
       XHTML.Init();
       GetScriptsXHTML_(XHTML);
       Session.End(str::wString("Scripts"), XHTML);
@@ -506,7 +530,7 @@ qRB;
   Session.Inner(str::Empty, Body);
 
   CXMEL();
-  UpdateInterface_(XMelody, Session);
+  UpdateUI_(XMelody, Session);
 
   Session.Execute("createStylesheet();");
 
@@ -973,6 +997,34 @@ D_( Test )
   Session.Log("Test");
 }
 
+D_( ChangeWidth )
+{
+qRH;
+  str::wString Value;
+  melody::sWidth Width = 0;
+  melody::hGuard Guard;
+qRB;
+  Value.Init();
+
+  Session.GetValue(Id, Value);
+
+  Value.ToNumber(Width, str::sULimit<melody::sWidth>(melody::WidthMax));
+
+  if ( Width < melody::WidthMin )
+    qRGnr();
+
+  UpdateUIWidth_(Value, Session);
+
+  XMEL();
+
+  XMelody.Width = Width;
+
+  DisplayMelody_(XMelody, Session);
+
+qRR;
+qRT;
+qRE;
+}
 
 namespace {
   using namespace actions_;
@@ -1001,7 +1053,7 @@ namespace {
       OnNewSession, Hit, SetAccidental, SetAccidentalAmount, Refresh,
       SelectNote, Rest, Duration, Dot, Tie,
       Execute, Cursor, Append, Suppr, Clear,
-      Keyboard, Test, SetTimeSignature, SetOctave );
+      Keyboard, Test, SetTimeSignature, SetOctave, ChangeWidth );
   }
 }
 

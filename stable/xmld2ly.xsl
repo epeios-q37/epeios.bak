@@ -108,50 +108,30 @@
 	<xsl:template name="OctaveUpOrDown">
 		<xsl:param name="Symbol"/>
 		<xsl:param name="Amount"/>
-		<xsl:if test="not(number($Amount)=0)">
-			<xsl:value-of select="$Symbol"/>
-			<xsl:call-template name="OctaveUpOrDown">
-				<xsl:with-param name="Symbol" select="$Symbol"/>
-				<xsl:with-param name="Amount" select="number($Amount)-1"/>
-			</xsl:call-template>
-		</xsl:if>
-	</xsl:template>
-	<xsl:template name="OctaveUp">
-		<xsl:param name="Amount"/>
-		<xsl:call-template name="OctaveUpOrDown">
-			<xsl:with-param name="Symbol">&apos;</xsl:with-param>
-			<xsl:with-param name="Amount" select="$Amount"/>
-		</xsl:call-template>
-	</xsl:template>
-	<xsl:template name="OctaveDown">
-		<xsl:param name="Amount"/>
-		<xsl:call-template name="OctaveUpOrDown">
-			<xsl:with-param name="Symbol">,</xsl:with-param>
-			<xsl:with-param name="Amount" select="$Amount"/>
-		</xsl:call-template>
+		<xsl:choose>
+      <xsl:when test="$Symbol">
+        <xsl:if test="$Amount">
+          <xsl:value-of select="$Symbol"/>
+          <xsl:call-template name="OctaveUpOrDown">
+            <xsl:with-param name="Symbol" select="$Symbol"/>
+            <xsl:with-param name="Amount" select="number($Amount)-1"/>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- Using a variable because &apos; does not work -->
+        <xsl:variable name="Model">
+          <xsl:text>',</xsl:text>
+        </xsl:variable>
+        <xsl:call-template name="OctaveUpOrDown">
+          <xsl:with-param name="Symbol" select="substring($Model, 2 - ($Amount >= 0), 1)"/>
+          <xsl:with-param name="Amount" select="$Amount * ($Amount &gt; 0) - $Amount * ($Amount &lt; 0)"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	<xsl:template match="Melody">
-		<xsl:text>\relative c</xsl:text>
-		<xsl:variable name="BaseO" select="number(@BaseOctave)"/>
-		<xsl:variable name="C" select="number(Note/Pitch/@Chromatic)"/>
-		<xsl:variable name="AbsC" select="$C*($C>=0)-$C*($C&lt;0)"/>
-		<xsl:variable name="D" select="number(Note/Pitch/@Diatonic)"/>
-		<xsl:variable name="AbsD" select="$D*($D>=0)-$D*($D&lt;0)"/>
-		<xsl:variable name="AbsO" select="number(Note/Pitch/@Octave)"/>
-    <xsl:variable name="OffO" select="$AbsO - $BaseO"/>
-    <!-- '$AbsO-' is handled as a variable identifier, hence the spaces. -->
-    <xsl:choose>
-      <xsl:when test="$OffO&gt;0">
-        <xsl:call-template name="OctaveUp">
-          <xsl:with-param name="Amount" select="$OffO"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:when test="$OffO&lt;0">
-        <xsl:call-template name="OctaveDown">
-          <xsl:with-param name="Amount" select="$OffO"/>
-        </xsl:call-template>
-      </xsl:when>
-    </xsl:choose>
+		<xsl:text>\relative </xsl:text>
 		<xsl:text> {&nl;</xsl:text>
 		<xsl:apply-templates select="*"/>
 		<xsl:text>&nl;}&nl;</xsl:text>
@@ -210,11 +190,40 @@
 		<xsl:text> r</xsl:text>
 		<xsl:apply-templates select="Duration"/>
 	</xsl:template>
+	<xsl:template match="Note[1]">
+		<xsl:apply-templates select="Pitch" mode="First"/>
+		<xsl:apply-templates select="Duration"/>
+	</xsl:template>
 	<xsl:template match="Note">
 		<xsl:apply-templates select="Pitch"/>
 		<xsl:apply-templates select="Duration"/>
 	</xsl:template>
+	<xsl:template match="Pitch" mode="First">
+    <xsl:text> </xsl:text>
+		<xsl:apply-templates select="." mode="Common"/>
+    <xsl:variable name="OffO" select="number(@Octave) - number(/Melody/@BaseOctave)"/>
+    <xsl:if test="$OffO != 0">
+      <xsl:call-template name="OctaveUpOrDown">
+        <xsl:with-param name="Amount" select="$OffO"/>
+      </xsl:call-template>
+    </xsl:if>
+	</xsl:template>
 	<xsl:template match="Pitch">
+		<xsl:apply-templates select="." mode="Common"/>
+		<xsl:variable name="D" select="number(Diff/@Diatonic)"/>
+    <xsl:variable name="AbsD" select="$D * ( $D &gt; 0 ) - $D * ( $D &lt; 0 )"/>
+    <xsl:if test="$AbsD &gt; 3">
+      <xsl:variable name="AbsO">
+        <xsl:call-template name="Div7">
+          <xsl:with-param name="Num" select="$AbsD + 4"/>
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:call-template name="OctaveUpOrDown">
+        <xsl:with-param name="Amount" select="( $D div $AbsD ) * $AbsO"/>
+      </xsl:call-template>
+    </xsl:if>
+	</xsl:template>
+  <xsl:template match="Pitch" mode="Common">
 		<xsl:text> </xsl:text>
 		<xsl:value-of select="@Name"/>
 		<xsl:choose>
@@ -225,35 +234,7 @@
 				<xsl:text>es</xsl:text>
 			</xsl:when>
 		</xsl:choose>
-		<xsl:variable name="C" select="number(Diff/@Chromatic)"/>
-		<xsl:variable name="AbsC" select="$C*($C>=0)-$C*($C&lt;0)"/>
-		<xsl:variable name="D" select="number(Diff/@Diatonic)"/>
-		<xsl:variable name="AbsD" select="$D*($D>=0)-$D*($D&lt;0)"/>
-		<xsl:if test="$AbsD&gt;3">
-			<xsl:variable name="AbsO">
-				<xsl:call-template name="Div12">
-					<xsl:with-param name="Num" select="$AbsD - 1"/>
-				</xsl:call-template>
-			</xsl:variable>
-			<!--xsl:text>&nl;!!!!!!!!!!&nl;</xsl:text>
-			<xsl:value-of select="$C"/>
-			<xsl:text>&nl;</xsl:text>
-			<xsl:value-of select="$O"/>
-			<xsl:text>&nl;!!!!!!!!!!&nl;</xsl:text-->
-			<xsl:choose>
-				<xsl:when test="$D&gt;0">
-					<xsl:call-template name="OctaveUp">
-						<xsl:with-param name="Amount" select="number($AbsO)+1"/>
-					</xsl:call-template>
-				</xsl:when>
-				<xsl:when test="$D&lt;0">
-					<xsl:call-template name="OctaveDown">
-						<xsl:with-param name="Amount" select="number($AbsO)+1"/>
-					</xsl:call-template>
-				</xsl:when>
-			</xsl:choose>
-		</xsl:if>
-	</xsl:template>
+  </xsl:template>
 	<xsl:template match="Duration">
 		<xsl:if test="@Diff='yes'">
 			<xsl:call-template name="Calc2power">

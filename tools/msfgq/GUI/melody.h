@@ -24,6 +24,11 @@
 #include "mscmld.h"
 
 namespace melody {
+  typedef bso::sU8 sWidth;
+
+  qCDEF(sWidth, WidthMin, 10 ;)
+  qCDEF(sWidth, WidthMax, 25 ;)
+
   struct sTempo {
     bso::sU8 Value;
     mscmld::sDuration Unit;
@@ -45,6 +50,7 @@ namespace melody {
     mscmld::sOctave BaseOctave;
     mscmld::sSignature Signature;
     mscmld::eAccidental Accidental; // Accidental to use for altered notes when in C key.
+    sWidth Width;
     bso::sBool Overwrite;
     void reset(bso::sBool P = true)
     {
@@ -54,6 +60,7 @@ namespace melody {
       Signature.reset(P);
       Accidental = mscmld::a_Undefined;
       Overwrite = false;
+      Width = 0;
     }
     qCDTOR(rXMelody);
     void Init(void)
@@ -64,6 +71,7 @@ namespace melody {
       Signature.Init();
       Accidental = mscmld::aSharp;
       Overwrite = false;
+      Width = 0;
     }
   };
 

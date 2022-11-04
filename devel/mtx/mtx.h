@@ -52,7 +52,7 @@
 # endif
 
 # ifdef MTX_RAND_BUFFER_
-#  define rand MTX_SYSTEM_BUFFER_
+#  define rand MTX_RAND_BUFFER_
 #  undef MTX_RAND_BUFFER_
 # endif
 

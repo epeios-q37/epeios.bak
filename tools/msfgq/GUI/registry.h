@@ -48,6 +48,8 @@ namespace registry {
         Key,
         Time;
 		}
+
+		extern rEntry Width;
 	}
 
 	namespace definition {

@@ -849,6 +849,10 @@ namespace str {
         {
             return tstrings_<row>::Append(wString(String));
         }
+        sdr::sRow AppendMulti(const char *String)
+        {
+            return Append(String);
+        }
         sdr::sRow AppendMulti(const string &String)
         {
             return tstrings_<row>::Append(String);
