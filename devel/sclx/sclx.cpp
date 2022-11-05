@@ -25,6 +25,8 @@
 
 using namespace sclx;
 
+bso::sBool (* sclx::SCLXGetHead)(str::dString &Head) = NULL;
+
 namespace {
 	using rgstry::rEntry;
 
@@ -148,7 +150,10 @@ namespace {
 			if ( Token.Amount())
 				qRFwk();
 
-			sclm::LoadXMLAndTranslateTags( registry::definition::HeadFile, sclr::GetCommonRegistry(), Head, 0, DefaultMarker);
+      if ( SCLXGetHead != NULL )
+        Success = SCLXGetHead(Head);
+      else
+        sclm::LoadXMLAndTranslateTags( registry::definition::HeadFile, sclr::GetCommonRegistry(), Head, 0, DefaultMarker);
 		qRFR;
 			Success = false;
 		qRFT;

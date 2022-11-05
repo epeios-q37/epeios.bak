@@ -99,10 +99,6 @@ void melody::Initialize(void)
   XMelody_.BaseOctave = sclm::MGetU8(registry::parameter::BaseOctave, 9);
   XMelody_.Signature = GetRegistrySignature_();
   XMelody_.Accidental = GetRegistryAccidental_();
-  XMelody_.Width = sclm::MGetU8(registry::parameter::Width, WidthMax);
-
-  if ( XMelody_.Width < WidthMin )
-    sclr::ReportBadOrNoValueForEntryErrorAndAbort(registry::parameter::Width);
 }
 
 rXMelody &melody::Get(hGuard &Guard)

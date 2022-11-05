@@ -42,6 +42,8 @@ namespace {
 
 rEntry registry::parameter::Width( "Width", sclr::Parameters);
 
+rEntry registry::parameter::devices::Forbidden("@Forbidden", Devices_);
+
 rEntry registry::parameter::devices::in::Value = In_;
 rEntry registry::parameter::devices::in::Policy( "@Policy", In_ );
 
@@ -50,6 +52,7 @@ rEntry registry::parameter::devices::out::Policy( "@Policy", Out_ );
 
 // Definitions.
 
+rEntry registry::definition::Head( "Head", sclr::Definitions);
 rEntry registry::definition::Body( "Body", sclr::Definitions);
 
 namespace {

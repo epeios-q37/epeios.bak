@@ -8,10 +8,10 @@
       <Language>en</Language>
       <Command>Draft</Command>
       <!-- Default command -->
-			<Devices>
+			<Devices Forbidden="False">
         <xpp:define name="LinuxDevices">
           <xpp:bloc>
-            <In Policy="Id">hw:1,0</In>
+            <In Policy="Id">hw:2,0</In>
             <Out Policy="Id">hw:2,0</Out>
           </xpp:bloc>
         </xpp:define>
@@ -76,9 +76,11 @@
     </Parameters>
     <Definitions>
 			<XDHTML xpp:attribute="ScriptsVersion,XDHScriptsVersion"/>
-			<HeadFile>Head.xml</HeadFile>
+			<Head>
+				<xpp:expand href="Head.xml"/>
+			</Head>
 			<Body>
-			    <xpp:expand href="Body.xml"/>
+				<xpp:expand href="Body.xml"/>
 			</Body>
 			<!--Script>base64 test.png</Script-->
 			<!--Script>while read x ; do echo $x ; done</Script-->
@@ -93,7 +95,7 @@
         <xpp:bloc> test.ly; base64 -w 0 test.png</xpp:bloc>
       </Script-->
 			<Scripts>
-			  <Script id="_ABC" Label="ABC" Mime="text/plain">
+			  <Script id="_ABC" Label="ABC (debug)" Mime="text/plain">
 			    <xpp:bloc># Built-in ecript. 'id' value of '_ABC' is reserved.</xpp:bloc>
         </Script>
 				<Script id="text" Label="XML as text" Mime="text/plain">

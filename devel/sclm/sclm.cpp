@@ -967,7 +967,6 @@ qRB;
 		ReportAndAbort(SCLM_NAME "_ErrorInXMLFile", Filename, Meaning);
 	}
 
-
 	scll::TranslateTags( Untranslated, Language, Content, Marker );
 qRR;
 qRT;

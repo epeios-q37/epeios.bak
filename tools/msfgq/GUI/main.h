@@ -30,13 +30,21 @@
 # include "tol.h"
 
 namespace main {
+  typedef bso::sU8 sWidth;
+
+  qCDEF(sWidth, UndefinedWidth, bso::U8Max);
+  qCDEF(sWidth, WidthMin, 10);
+  qCDEF(sWidth, WidthMax, 25);
+
   class sSession
   : public sclx::sProxy
   {
   public:
+    sWidth Width;
     void reset(bso::sBool P = true)
     {
       sProxy::reset(P);
+      Width = UndefinedWidth;
     }
     qCDTOR( sSession );
     void Init(

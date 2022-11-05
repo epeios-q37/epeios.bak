@@ -25,7 +25,7 @@
     <fieldset>
       <legend>Python</legend>
       <pre class="lang-python">
-callbacks = {
+CALLBACKS = {
   "btSubmit": lambda dom: dom.alert("Click on button detected!"),
 }      </pre>
     </fieldset>
@@ -48,7 +48,7 @@ callbacks = {
     <fieldset>
       <legend>Python</legend>
       <pre class="lang-python">
-callbacks = {
+CALLBACKS = {
   "pwSubmit": lambda dom, id: dom.setValue("pwOutput", dom.getValue(id)),
 }      </pre>
     </fieldset>
@@ -94,7 +94,7 @@ callbacks = {
     <fieldset>
       <legend>Python</legend>
       <pre class="lang-python">
-callbacks = {
+CALLBACKS = {
   "cbSelect": lambda dom, id: dom.setValue("cbOutput", "{} ({})".format(id, dom.getValue(id))),
   "cbSubmit": lambda dom: dom.alert(str(dom.getValues(["cbBicycle", "cbCar","cbPirogue"]))),
 }      </pre>
@@ -144,7 +144,7 @@ callbacks = {
     <fieldset>
       <legend>Python</legend>
       <pre class="lang-python">
-callbacks = {
+CALLBACKS = {
   "rdCheck": lambda dom, id: dom.setValue("rdSelect", dom.getValue(id)),
   "rdSelect": lambda dom, id: dom.setValue("rdRadios", dom.getValue(id)),
   "rdReset": lambda dom: dom.setValues({"rdSelect": "None", "rdRadios": ""}),
@@ -194,7 +194,7 @@ def acDlSubmit(dom, id):
   dom.setValue("dlOutput", flavor)
 
 
-callbacks = {
+CALLBACKS = {
   "dlSubmit": acDlSubmit,
 }      </pre>
     </fieldset>
@@ -217,7 +217,7 @@ callbacks = {
     <fieldset>
       <legend>Python</legend>
       <pre class="lang-python">
-callbacks = {
+CALLBACKS = {
   "dtSelect": lambda dom, id: dom.setValue("dtOutput", dom.getValue(id)),
 }      </pre>
     </fieldset>
@@ -240,18 +240,20 @@ callbacks = {
     <fieldset>
       <legend>Python</legend>
       <pre class="lang-python">
-callbacks = {
+CALLBACKS = {
   "clSelect": lambda dom, id: dom.setValue("clOutput", dom.getValue(id)),
 }      </pre>
     </fieldset>
   </fieldset>
 </fieldset>
 <fieldset class="hidden" id="range/meter">
-  <fieldset>
-    <label for="rgVolume">Volume</label>
-    <input type="range" id="rgVolume" min="0" max="10" xdh:onevent="rgSlide">
-    <meter id="rgOutput" min="0" max="10" low="5" high="7" optimum="4" value="5">
-    </meter>
+  <fieldset style="display: flex; flex-direction: row; align-items: center; gap: 5px;">
+    <label style="display: flex; align-items: center;">
+      <span>Volume: </span>
+      <input type="range" id="rgRange"  xdh:onevent="rgSubmit" min="0" max="15" value="5"/>
+    </label>
+    <input type="number" id="rgNumber"  xdh:onevent="rgSubmit" min="0" max="15" value="5" size="2"/>
+    <meter id="rgMeter" min="0" max="15" low="5" high="10" optimum="3" value="5"/>
   </fieldset>
   <fieldset>
     <legend>Source code</legend>
@@ -262,8 +264,17 @@ callbacks = {
     <fieldset>
       <legend>Python</legend>
       <pre class="lang-python">
-callbacks = {
-  "rgSlide": lambda dom: dom.setAttribute("rgOutput", "value", (dom.getValue("rgVolume"))),
+def acRgSubmit(dom, id):
+  value = dom.getValue(id)
+
+  dom.setValues({
+    "rgRange": value,
+    "rgNumber": value,
+    "rgMeter": value
+  })        
+
+  CALLBACKS = {
+  "rgSubmit": acRgSubmit,
 }      </pre>
     </fieldset>
   </fieldset>
@@ -295,7 +306,7 @@ callbacks = {
       <input id="slInput" xdh:onevent="slAdd" placeholder="Other dinausor to add" />
       <label>
         <input type="checkbox" xdh:onevent="slToggle" />
-        <b>Deactivate</b>
+        <strong>Deactivate</strong>
       </label>
     </div>
     <p></p>
@@ -323,7 +334,7 @@ def acSlAdd(dom):
   dom.setValue("slInput", "")
   dom.focus("slInput")  
   
-callbacks = {
+CALLBACKS = {
   "slSelect": lambda dom, id: dom.setValue("slOutput", dom.getValue(id)),
   "slAdd": acSlAdd,
   "slToggle": lambda dom, id: dom.disableElement("slOthers") if dom.getValue(id) == 'true' else dom.enableElement("slOthers"),
@@ -351,7 +362,7 @@ callbacks = {
     <fieldset>
       <legend>Python</legend>
       <pre class="lang-python">
-callbacks = {
+CALLBACKS = {
   "ckSubmit": lambda dom, id: dom.setValue("ckOutput", dom.getValue("ckInput")),
 }      </pre>
     </fieldset>

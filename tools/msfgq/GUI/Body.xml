@@ -4,7 +4,7 @@
       <fieldset style="display: flex; align-items: center; justify-content: space-around">
         <legend xdh:onevents="Test">Midi in</legend>
         <select id="MidiIn">
-          <option disabled="true">Select a device</option>
+          <option disabled="true" value="None">Select a device</option>
         </select>
         <!--input xdh:onevent="Refresh" type="image" style="width:20px; height: 20px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABHNCSVQICAgIfAhkiAAAAVNJREFUOE/t1EsrBlEYwPFxSS7Z2hrklj0pxAeQtc+gfAKy8SFQygbxFSQsLBQLS0lZo1xzLfz/OvM2jZlhz1O/5sx5npl3zpxn3ij6c1FVsuJ6cv0YRRzqzjnu4ACvaEIvjvCBwmgns4I7POEyeOZ4gwX0YR7LKI02stt4wTom0BM43sQjzuBTWlMYLtNftHAGDTmVLcztwiVqLaemMjXM6BYbaMwp9Afm8IDcG1ZnLhrhvA6rcFnpcH4K06gJ+TeOvppK1KZPGHfgHieZ+eR0i8E+3sOEXXKVrs3esOA+X9O+1+OyAnPZJbtzzej+6ULynZiEXVEYQ2Tss6JNSS50w2yfawwW3o1E0ja+aNsmb6edm4U1NribVRoxWV++F/gUNnNXMM7RpzdnTYxfRStVi3D5fnoXga3k3BJifIuyPweXMoAx+G3byKfYwyF8yv+Iok/EGUn4rtKSKQAAAABJRU5ErkJggg==" /-->
       </fieldset>

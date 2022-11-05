@@ -1259,7 +1259,7 @@ status__ xpp::_extended_parser___::Handle(
 					Continue = true;
 				else
 					Status = sOK;
-			} else if ( _CDataNesting != 0 ) {
+			} else if ( ( _CDataNesting != 0 ) && ( Directive == dNone ) ) {
 				Status = sOK;
 			} else {
 				switch ( Directive ) {

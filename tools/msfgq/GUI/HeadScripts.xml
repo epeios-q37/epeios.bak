@@ -1,7 +1,7 @@
 <xpp:bloc xmlns="http://www.w3.org/1999/xhtml" xmlns:xpp="http://epeios.q37.info/ns/xpp">
 function clickListener(abcelem, tuneNumber, classes, analysis, drag, mouseEvent) {
-  end = classes.lastIndexOf(" abcjs-mm");
-  begin = classes.lastIndexOf("abcjs-m", end)+7;
+  end = classes.lastIndexOf(" abcjs-v0");
+  begin = classes.lastIndexOf("abcjs-mm", end)+8;
   note = classes.substring(begin, end);
   launchEvent(note + "|DUMMY|dummy||((dummy|SelectNote))");
 }
@@ -36,7 +36,7 @@ function highlightNote(note) {
     stylesheet.deleteRule(index);
     
   if ( note.length !== 0 ) {
-    index = stylesheet.insertRule( ".abcjs-n0.abcjs-m" + note + " {color: crimson;}");
+    index = stylesheet.insertRule( ".abcjs-n0.abcjs-mm" + note + " {color: crimson;}");
   } else {
     index = -1;
   }

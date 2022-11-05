@@ -49,14 +49,14 @@ namespace {
         qRGnr();
 
       while ( Row != qNIL ) {
-        XHTML << "<option value=\"" << Ids(Row);
+        XHTML << "<option value=\"" << Ids(Row) << "\" ";
 
         if ( Ids(Row) == Id ) {
           Available = true;
           XHTML << " selected=\"true\"";
         }
 
-        XHTML <<  "\">" << Names(Row) << " (" << Ids(Row) << ")" << "</option>" << txf::nl;
+        XHTML <<  " disabled=\"true\">" << Names(Row) << " (" << Ids(Row) << ")" << "</option>" << txf::nl;
         Row = Ids.Next(Row);
       }
 
@@ -159,7 +159,14 @@ namespace {
     }
   }
 
-  bso::sBool FillMidiInDevices_(
+  namespace _ {
+    // When returning false, prevents using of ALSA libs (which headers must still be prsent).
+    bso::sBool AreDevicesAllowed(void) {
+      return !sclm::OGetBoolean(registry::parameter::devices::Forbidden, false);
+    }
+  }
+
+  bso::sBool _FillMidiInDevices_(
     const str::dString &Id,
     str::dString &XHTML)
   {
@@ -167,18 +174,20 @@ namespace {
   qRH;
     str::wStrings Ids, Names;
   qRB;
-    tol::Init(Ids, Names);
+    if ( _::AreDevicesAllowed() ) {
+      tol::Init(Ids, Names);
 
-    mscmdd::GetMidiInDeviceNames(Ids, Names);
+      mscmdd::GetMidiInDeviceNames(Ids, Names);
 
-    Available = Fill_(Id, Ids, Names, XHTML);
+      Available = Fill_(Id, Ids, Names, XHTML);
+    }
   qRR;
   qRT;
   qRE;
     return Available;
   }
 
-  bso::sBool FillMidiOutDevices_(
+  bso::sBool _FillMidiOutDevices_(
     const str::dString &Id,
     str::dString &XHTML)
   {
@@ -186,11 +195,13 @@ namespace {
   qRH;
     str::wStrings Ids, Names;
   qRB;
-    tol::Init(Ids, Names);
+    if ( _::AreDevicesAllowed() ) {
+      tol::Init(Ids, Names);
 
-    mscmdd::GetMidiOutDeviceNames(Ids, Names);
+      mscmdd::GetMidiOutDeviceNames(Ids, Names);
 
-    Available = Fill_(Id, Ids, Names, XHTML);
+      Available = Fill_(Id, Ids, Names, XHTML);
+    }
   qRR;
   qRT;
   qRE;
@@ -282,7 +293,7 @@ namespace {
       if ( Note.Duration.TiedToNext )
         Flow << '-';
 
-      Flow << Separator << "[|] ";
+      Flow << " [|]" << Separator;
 
       return 0;
     }
@@ -308,7 +319,8 @@ namespace {
 
       Flow << "X: 1" << NL << "T:" << NL << "L: 1" << NL << "K: C" << NL;
 
-      Flow << "[|] ";
+      if ( Row == qNIL )
+        Flow << "[|]";
 
       while ( ( Return == 0 ) && ( Row != qNIL ) ) {
         Return = Convert(Melody(Row), BaseOctave, Accidental, Counter++ % Width ? " " : NL, Flow);
@@ -333,14 +345,16 @@ namespace {
 
   bso::sS8 GetABC_(
     const melody::rXMelody &XMelody,
+    sWidth Width,
     bso::sBool EscapeNL,
     txf::sWFlow &Flow)
   {
-    return GetABC_(XMelody, XMelody.BaseOctave, XMelody.Accidental, EscapeNL, XMelody.Width, Flow);
+    return GetABC_(XMelody, XMelody.BaseOctave, XMelody.Accidental, EscapeNL, Width, Flow);
   }
 
   bso::sS8 GetABC_(
     const melody::rXMelody &XMelody,
+    sWidth Width,
     bso::sBool EscapeNL,
     str::dString &ABC)
   {
@@ -350,7 +364,7 @@ namespace {
   qRB;
     Flow.Init(ABC);
 
-    Return = GetABC_(XMelody, EscapeNL, Flow);
+    Return = GetABC_(XMelody, Width, EscapeNL, Flow);
   qRR;
   qRT;
   qRE;
@@ -383,7 +397,7 @@ namespace {
     qRB;
       tol::Init(ABC, Script);
 
-      OctaveOverflow = GetABC_(XMelody, true, ABC);
+      OctaveOverflow = GetABC_(XMelody, Session.Width, true, ABC);
 
       if ( OctaveOverflow != 0 )
         Session.AlertB(str::wString("Octave error !!!"));
@@ -483,10 +497,13 @@ namespace {
       _::GetDeviceInId(Device);
 
       XHTML.Init();
-      if ( FillMidiInDevices_(Device, XHTML) )
-        Session.RemoveAttribute(str::wString(Session.Parent("beautiful-piano", CBuffer)), str::wString("open"));
-      Session.End(str::wString("MidiIn"), XHTML);
 
+      if ( _FillMidiInDevices_(Device, XHTML) )
+        Session.RemoveAttribute(str::wString(Session.Parent("beautiful-piano", CBuffer)), str::wString("open"));
+      else
+        Session.SetValue("MidiIn", "None");
+
+      Session.End(str::wString("MidiIn"), XHTML);
 
       /*
       XHTML.Init();
@@ -504,7 +521,7 @@ namespace {
 
       Session.SetValue("Octave", bso::Convert(XMelody.BaseOctave, IBuffer));
 
-      UpdateUIWidth_(str::wString(bso::Convert(XMelody.Width, IBuffer)), Session);
+      UpdateUIWidth_(str::wString(bso::Convert(Session.Width, IBuffer)), Session);
 
       XHTML.Init();
       GetScriptsXHTML_(XHTML);
@@ -524,6 +541,11 @@ qRH;
   melody::hGuard Guard;
   str::wString Body;
 qRB;
+  Session.Width = sclm::MGetU8(registry::parameter::Width, WidthMax);
+
+  if ( Session.Width < WidthMin )
+    sclr::ReportBadOrNoValueForEntryErrorAndAbort(registry::parameter::Width);
+
   Body.Init();
   sclm::MGetValue(registry::definition::Body, Body);
 
@@ -772,6 +794,7 @@ namespace {
 
   void ToBase64ABC_(
     const melody::rXMelody &XMelody,
+    sWidth Width,
     txf::sWFlow &Flow)
     {
     qRH;
@@ -781,7 +804,7 @@ namespace {
       B64Flow.Init(Flow.Flow(), cdgb64::fURL);
       B64TWFlow.Init(B64Flow);
 
-      GetABC_(XMelody, false, B64TWFlow);
+      GetABC_(XMelody, Width, false, B64TWFlow);
     qRR;
     qRT;
     qRE;
@@ -819,7 +842,7 @@ qRB;
   OFlow << "<iframe src=\"data:" << Mime << ";base64,";
 
 	if ( Mark == ABCBuiltInScriptId_ )
-    ToBase64ABC_(melody::Get(Guard), OFlow);
+    ToBase64ABC_(melody::Get(Guard), Session.Width, OFlow);
   else {
     XDriver.Init(Script);
     WFlow.Init(XDriver);
@@ -1001,24 +1024,23 @@ D_( ChangeWidth )
 {
 qRH;
   str::wString Value;
-  melody::sWidth Width = 0;
+  sWidth Width = 0;
   melody::hGuard Guard;
 qRB;
   Value.Init();
 
   Session.GetValue(Id, Value);
 
-  Value.ToNumber(Width, str::sULimit<melody::sWidth>(melody::WidthMax));
+  Value.ToNumber(Width, str::sULimit<sWidth>(WidthMax));
 
-  if ( Width < melody::WidthMin )
+  if ( Width < WidthMin )
     qRGnr();
 
   UpdateUIWidth_(Value, Session);
 
-  XMEL();
+  Session.Width = Width;
 
-  XMelody.Width = Width;
-
+  CXMEL();
   DisplayMelody_(XMelody, Session);
 
 qRR;

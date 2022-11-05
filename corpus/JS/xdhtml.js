@@ -380,6 +380,7 @@ function setValue(idOrElement, value) {
 				}
 				break;
 			case "TEXTAREA":
+      case "METER":
 				element.value = value;
 				break;
 			case "SELECT":

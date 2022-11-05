@@ -932,6 +932,8 @@ namespace sclx {
 	xdhcdc::cSingle *SCLXFetchCallback();	// To define by user.
 
 	void SCLXDismissCallback( xdhcdc::cSingle *Callback );	// To define by user.
+
+	extern bso::sBool (* SCLXGetHead)(str::dString &Head);  // To override for head handling by user.
 }
 
 #endif

@@ -36,14 +36,17 @@ qRH;
   midiq::sShared Shared;
   str::wString Device;
 qRB;
-  Device.Init();
-  sclm::MGetValue(::registry::parameter::devices::in::Value, Device);
-
-  Shared.RFlow = &main::MidiRFlow;
-  Shared.MIDIDeviceIn = &Device;
-
   melody::Initialize();
-	mtk::Launch(midiq::HandleInput, &Shared);
+
+  if ( !sclm::OGetBoolean(::registry::parameter::devices::Forbidden, false ) ) {
+    Device.Init();
+    sclm::MGetValue(::registry::parameter::devices::in::Value, Device);
+
+    Shared.RFlow = &main::MidiRFlow;
+    Shared.MIDIDeviceIn = &Device;
+
+    mtk::Launch(midiq::HandleInput, &Shared);
+  }
 qRR;
 qRT;
 qRE;
@@ -116,3 +119,20 @@ void sclx::SCLXDismissCallback( xdhcdc::cSingle *Callback )
 	delete Callback;
 }
 
+namespace {
+  bso::sBool GetHead_(str::dString &Head)
+  {
+    bso::sBool Success = true;
+  qRH;
+  qRB;
+    sclm::MGetValue(registry::definition::Head, Head);
+  qRR;
+  qRT;
+  qRE;
+    return Success;
+  }
+}
+
+qGCTOR(msfgxdh) {
+  sclx::SCLXGetHead = &GetHead_;
+}
