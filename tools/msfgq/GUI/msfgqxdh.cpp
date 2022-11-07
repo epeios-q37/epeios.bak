@@ -38,15 +38,13 @@ qRH;
 qRB;
   melody::Initialize();
 
-  if ( !sclm::OGetBoolean(::registry::parameter::devices::Forbidden, false ) ) {
-    Device.Init();
-    sclm::MGetValue(::registry::parameter::devices::in::Value, Device);
+  Device.Init();
+  midiq::GetDeviceInId(Device);
 
-    Shared.RFlow = &main::MidiRFlow;
-    Shared.MIDIDeviceIn = &Device;
+  Shared.RFlow = &main::MidiRFlow;
+  Shared.MIDIDeviceIn = &Device;
 
-    mtk::Launch(midiq::HandleInput, &Shared);
-  }
+  mtk::Launch(midiq::HandleInput, &Shared);
 qRR;
 qRT;
 qRE;

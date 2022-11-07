@@ -42,8 +42,6 @@ namespace {
 
 rEntry registry::parameter::Width( "Width", sclr::Parameters);
 
-rEntry registry::parameter::devices::Forbidden("@Forbidden", Devices_);
-
 rEntry registry::parameter::devices::in::Value = In_;
 rEntry registry::parameter::devices::in::Policy( "@Policy", In_ );
 

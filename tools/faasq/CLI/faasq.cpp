@@ -202,7 +202,7 @@ namespace {
 			{
 			qRH
 				flw::rDressedRWFlow<> Proxy;
-				str::wString Head, Host, Token, Message, URL;
+				str::wString Head, Host, Token, Message, URL, ATKEnvVar;
 			qRB
 				Proxy.Init(ProxyDriver);
 
@@ -234,7 +234,21 @@ namespace {
 
 				cio::COut << URL << txf::nl << txf::commit;
 
-				tol::Launch(URL);
+				ATKEnvVar.Init();
+
+				if ( !tol::GetEnv("ATK", ATKEnvVar) )
+          ATKEnvVar.Init("auto"); // Default value.
+
+
+				str::ToLower(ATKEnvVar);
+
+				if ( ATKEnvVar == "auto")
+          tol::Launch(URL);
+        else if ( ATKEnvVar == "qrcode") {
+          URL.Append("&_supplier=qrcode");
+          tol::Launch(URL);
+        } else if ( ATKEnvVar != "none" )
+          qRVct();  // Display a eaningfull message…
 			qRR
 			qRT
 			qRE

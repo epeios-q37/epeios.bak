@@ -19,6 +19,7 @@
 
 #include "main.h"
 
+#include "midiq.h"
 #include "registry.h"
 
 #include "mscmdd.h"
@@ -84,89 +85,7 @@ namespace {
     return Available;
   }
 
-  namespace _ {
-    namespace _ {
-      namespace _ {
-        qENUM( Policy ) {
-          pId,
-          pName,
-          p_amount,
-          p_Undefined
-        };
-
-        static ePolicy GetPolicy(const rgstry::sTEntry &Entry)
-        {
-          ePolicy Policy = p_Undefined;
-        qRH;
-          str::wString RawPolicy;
-        qRB;
-          RawPolicy.Init();
-
-          sclm::MGetValue( Entry, RawPolicy );
-
-          if ( RawPolicy == "Id" )
-            Policy = pId;
-          else if ( RawPolicy == "Name" )
-            Policy = pName;
-          else
-            sclr::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
-        qRR;
-        qRT;
-        qRE;
-          return Policy;
-        }
-      }
-
-      str::dString &GetDeviceId(
-        mscmdd::eWay Way,
-        const rgstry::sTEntry &PolicyEntry,
-        const rgstry::sTEntry &ValueEntry,
-        str::dString &Id)
-      {
-      qRH;
-        qCBUFFERh Buffer;
-      qRB;
-        switch ( _::GetPolicy( PolicyEntry ) ) {
-        case _::pId:
-          sclm::OGetValue(ValueEntry, Id);
-          break;
-        case _::pName:
-          qRVct();
-          break;
-        default:
-          qRGnr();
-          break;
-        }
-      qRR;
-      qRT;
-      qRE;
-        return Id;
-      }
-    }
-
-    const str::dString &GetDeviceInId(str::dString &Id)
-    {
-      return _::GetDeviceId(mscmdd::wIn, registry::parameter::devices::in::Policy, registry::parameter::devices::in::Value, Id);
-    }
-
-    const str::dString &GetDeviceOutId(str::dString &Id)
-    {
-      /*
-      Id.Append("hw:1,0");
-      return Id;
-      */
-      return _::GetDeviceId(mscmdd::wOut, registry::parameter::devices::out::Policy, registry::parameter::devices::out::Value, Id);
-    }
-  }
-
-  namespace _ {
-    // When returning false, prevents using of ALSA libs (which headers must still be prsent).
-    bso::sBool AreDevicesAllowed(void) {
-      return !sclm::OGetBoolean(registry::parameter::devices::Forbidden, false);
-    }
-  }
-
-  bso::sBool _FillMidiInDevices_(
+  bso::sBool FillMidiInDevices_(
     const str::dString &Id,
     str::dString &XHTML)
   {
@@ -174,20 +93,18 @@ namespace {
   qRH;
     str::wStrings Ids, Names;
   qRB;
-    if ( _::AreDevicesAllowed() ) {
-      tol::Init(Ids, Names);
+    tol::Init(Ids, Names);
 
-      mscmdd::GetMidiInDeviceNames(Ids, Names);
+    mscmdd::GetMidiInDeviceNames(Ids, Names);
 
-      Available = Fill_(Id, Ids, Names, XHTML);
-    }
+    Available = Fill_(Id, Ids, Names, XHTML);
   qRR;
   qRT;
   qRE;
     return Available;
   }
 
-  bso::sBool _FillMidiOutDevices_(
+  bso::sBool FillMidiOutDevices_(
     const str::dString &Id,
     str::dString &XHTML)
   {
@@ -195,13 +112,11 @@ namespace {
   qRH;
     str::wStrings Ids, Names;
   qRB;
-    if ( _::AreDevicesAllowed() ) {
-      tol::Init(Ids, Names);
+    tol::Init(Ids, Names);
 
-      mscmdd::GetMidiOutDeviceNames(Ids, Names);
+    mscmdd::GetMidiOutDeviceNames(Ids, Names);
 
-      Available = Fill_(Id, Ids, Names, XHTML);
-    }
+    Available = Fill_(Id, Ids, Names, XHTML);
   qRR;
   qRT;
   qRE;
@@ -494,11 +409,11 @@ namespace {
       qCBUFFERh CBuffer;
     qRB;
       Device.Init();
-      _::GetDeviceInId(Device);
+      midiq::GetDeviceInId(Device);
 
       XHTML.Init();
 
-      if ( _FillMidiInDevices_(Device, XHTML) )
+      if ( FillMidiInDevices_(Device, XHTML) )
         Session.RemoveAttribute(str::wString(Session.Parent("beautiful-piano", CBuffer)), str::wString("open"));
       else
         Session.SetValue("MidiIn", "None");

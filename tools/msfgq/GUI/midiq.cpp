@@ -37,6 +37,76 @@ using namespace mscmld;
 
 using namespace midiq;
 
+
+namespace {
+  namespace _ {
+    qENUM( Policy ) {
+      pId,
+      pName,
+      p_amount,
+      p_Undefined
+    };
+
+    static ePolicy GetPolicy(const rgstry::sTEntry &Entry)
+    {
+      ePolicy Policy = p_Undefined;
+    qRH;
+      str::wString RawPolicy;
+    qRB;
+      RawPolicy.Init();
+
+      sclm::MGetValue( Entry, RawPolicy );
+
+      if ( RawPolicy == "Id" )
+        Policy = pId;
+      else if ( RawPolicy == "Name" )
+        Policy = pName;
+      else
+        sclr::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+    qRR;
+    qRT;
+    qRE;
+      return Policy;
+    }
+  }
+
+  str::dString &GetDeviceId_(
+    mscmdd::eWay Way,
+    const rgstry::sTEntry &PolicyEntry,
+    const rgstry::sTEntry &ValueEntry,
+    str::dString &Id)
+  {
+  qRH;
+    qCBUFFERh Buffer;
+  qRB;
+    switch ( _::GetPolicy( PolicyEntry ) ) {
+    case _::pId:
+      sclm::OGetValue(ValueEntry, Id);
+      break;
+    case _::pName:
+      qRVct();
+      break;
+    default:
+      qRGnr();
+      break;
+    }
+  qRR;
+  qRT;
+  qRE;
+    return Id;
+  }
+}
+
+const str::dString &midiq::GetDeviceInId(str::dString &Id)
+{
+  return GetDeviceId_(mscmdd::wIn, registry::parameter::devices::in::Policy, registry::parameter::devices::in::Value, Id);
+}
+
+const str::dString &midiq::GetDeviceOutId(str::dString &Id)
+{
+  return GetDeviceId_(mscmdd::wOut, registry::parameter::devices::out::Policy, registry::parameter::devices::out::Value, Id);
+}
+
 namespace {
   bso::sS8 Handle_(bso::sU8 Pitch)
   {

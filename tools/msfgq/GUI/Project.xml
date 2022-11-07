@@ -66,6 +66,7 @@
 			<Files Path="../">
 				<File>CHANGELOG.md</File>
 			</Files>
+			<File Path="/home/csimon/Favorites/epeios/stable/">xmld2ly.xsl</File>
 		</Files>
 		<Files Group="XML" Path="XML/">
 			<File>Head.xml</File>

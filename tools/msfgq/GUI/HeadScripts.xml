@@ -57,7 +57,7 @@ function activate() {
   if (ABCJS.synth.supportsAudio()) {
 
     synthControl = new ABCJS.synth.SynthController();
-    synthControl.load("##audio", null, controlOptions);
+    synthControl.load("#audio", null, controlOptions);
     synthControl.disable(true);
     var midiBuffer = new ABCJS.synth.CreateSynth();
     midiBuffer.init({
@@ -79,7 +79,7 @@ function activate() {
 function updatePlayer() {
   if (ABCJS.synth.supportsAudio()) {
 
-    synthControl.load("##audio", null, controlOptions);
+    synthControl.load("#audio", null, controlOptions);
     var midiBuffer = new ABCJS.synth.CreateSynth();
     midiBuffer.init({
       visualObj: visualObj[0],

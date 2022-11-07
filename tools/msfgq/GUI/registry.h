@@ -29,8 +29,6 @@ namespace registry {
 		using namespace sclr::parameter;
 
     namespace devices	{
-      extern rEntry Forbidden;  // When at true, prevents the use of the ALSA libraries (Replit issue workaround), which headers must still be present.
-
 			namespace in {
 				extern rEntry
 					Policy,
