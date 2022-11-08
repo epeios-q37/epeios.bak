@@ -53,8 +53,7 @@
 	</xpp:bloc>
 	<xpp:define name="epeios.xlcl">
 		<xpp:bloc marker="$">
-			<!--xpp:expand href="$HomePath$hg/epeios/corpus/epeios.xlcl"/-->
-			<xpp:expand href="/home/csimon/hg/epeios/corpus/epeios.xlcl"/>
+			<xpp:expand href="$HomePath$hg/epeios/corpus/epeios.xlcl"/>
 		</xpp:bloc>
 	</xpp:define>
 	<xpp:bloc>
