@@ -13,6 +13,9 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-11-08
+- TOL: fixing recursion issue with *VC++*;
+
 ## 2022-11-05
 - SCLX: introducing the handling of the head section by user;
 - XPP: XPP directives inside a *cdata* directive are now handled;

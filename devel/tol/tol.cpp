@@ -305,7 +305,7 @@ namespace {
   qRB
     NativeName.Init( Name );
 
-    Found =  EnvExists_(NativeName.Internal());
+    Found =  EnvExists_(( const ntvstr::sChar *)NativeName.Internal());
   qRR
   qRT
   qRE

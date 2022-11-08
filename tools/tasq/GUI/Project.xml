@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>(Obsolete ; generated automatically)</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2022</xpp:bloc>
+		</xpp:define>
+	</xpp:bloc>
+	<xpp:set name="Credits" value="Epeios"/>
+	<xpp:set name="Type" value="ToolGUI"/>
+	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
+	<xpp:expand value-of="q37.project"/>
+	<About>
+		<Program>tasqxdh</Program>
+		<Software>TASq</Software>
+		<UUID>ca73d466-b32d-4db6-9e65-4a44e2081f7c</UUID>
+	</About>
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+			</Modules>
+			<Modules Group="FBL">
+				<xpp:expand select="FBLF"/>
+      </Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+			<Modules Group="XDHTML">
+				<xpp:expand select="XDH"/>
+			</Modules>
+		</Modules>
+		<Module>main</Module>
+		<Module>messages</Module>
+		<Module>registry</Module>
+	</Modules>
+	<SourceDirs>
+		<SourceDir>..</SourceDir>
+	</SourceDirs>
+	<Libraries>
+	</Libraries>
+  <Files>
+    <Files RTW=".">
+			<File>Makefile</File>
+			<Files Path="../">
+				<File>CHANGELOG.md</File>
+			</Files>
+		</Files>
+		<Files Group="XML" Path="XML/">
+			<File>Head.xml</File>
+			<File>Body.xml</File>
+		</Files>
+	</Files>
+	<Misc>
+	    <CB>
+	        <Arguments>
+	            <xpp:cdata>
+                    <Option parameters='--#Project=Testing.xprj' />
+                    <Option host_application="faasq" />
+                    <Option run_host_application_in_terminal="1" />
+	            </xpp:cdata>
+	        </Arguments>
+	    </CB>
+	</Misc>
+  <RTW Description="TASq" Keywords="keyword1,keyword2" Folder="tasqxdh"/>
+	<Packing>
+	</Packing>
+	<PreprocessorDefinitions>
+	</PreprocessorDefinitions>
+</Project>

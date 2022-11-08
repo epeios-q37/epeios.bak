@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Locale target="tasqxdh" xmlns:xpp="http://q37.info/ns/xpp/" >
+	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+	<xpp:expand value-of="q37.xpp"/>
+	<xpp:expand select="epeios.xlcl"/>
+	<Translations text="ProgramDescription">
+		<Translation language="fr">Générateur de fragment de partition musicale.</Translation>
+		<Translation language="en">Generator of fragment of musical score.</Translation>
+	</Translations>
+	<Translations text="NoAvailableMIDIInDevices">
+		<Translation language="fr">Pas de dispositif d'entrée MIDI disponibles !</Translation>
+		<Translation language="en">No available MIDI in devices!</Translation>
+	</Translations>
+	<Translations text="AvailableMIDIInDevices">
+		<Translation language="fr">Dispositifs d'entrée MIDI disponibles </Translation>
+		<Translation language="en">Available MIDI in devices</Translation>
+	</Translations>
+	<Translations text="NoAvailableMIDIOutDevices">
+		<Translation language="fr">Pas de dispositif de sortie MIDI disponibles !</Translation>
+		<Translation language="en">No available MIDI out devices!</Translation>
+	</Translations>
+	<Translations text="AvailableMIDIOutDevices">
+		<Translation language="fr">Dispositifs de sortie MIDI disponibles </Translation>
+		<Translation language="en">Available MIDI out devices</Translation>
+	</Translations>
+	<Translations text="SavingFile">
+		<Translation language="fr">Sauvegarde fichier</Translation>
+		<Translation language="en">Saving file</Translation>
+	</Translations>
+	<Translations text="FileSavingDone">
+		<Translation language="fr">Fichier sauvé</Translation>
+		<Translation language="en">File saved</Translation>
+	</Translations>
+	<Translations text="ExecutingScript">
+		<Translation language="fr">Exécution script</Translation>
+		<Translation language="en">Script execution</Translation>
+	</Translations>
+	<Translations text="ScriptExecutionDone">
+		<Translation language="fr">Script exécuté</Translation>
+		<Translation language="en">Script excuted</Translation>
+	</Translations>
+	<Translations text="BadTimeSignature">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	<!--
+	<Translations text="">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</Locale>
