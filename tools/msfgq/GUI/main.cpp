@@ -143,7 +143,7 @@ namespace {
       bso::sS8 RawDuration = 0;
       mthrtn::wRational Duration;
       bso::sS8 RelativeOctave;
-      bso::pInteger Buffer;
+      bso::pInteger NBuffer, DBuffer;
       char PitchNotation[] = {0,0,0};
       mscmld::sAltPitch Pitch;
 
@@ -203,7 +203,7 @@ namespace {
         Flow << PitchNotation;
       }
 
-      Flow << bso::Convert(Duration.N.GetU32(), Buffer) << '/' << bso::Convert(Duration.D.GetU32(), Buffer);
+      Flow << bso::Convert(Duration.N.GetU32(), NBuffer) << '/' << bso::Convert(Duration.D.GetU32(), DBuffer);
 
       if ( Note.Duration.TiedToNext )
         Flow << '-';
