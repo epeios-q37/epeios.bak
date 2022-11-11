@@ -13,6 +13,10 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-11-11
+- LSTBCH: [trvl];
+- QUE: [extn];
+
 ## 2022-11-08
 - TOL: fixing recursion issue with *VC++*;
 

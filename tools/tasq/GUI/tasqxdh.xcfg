@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Configurations xmlns:xpp="http://q37.info/ns/xpp/">
   <Configuration target="tasqxdh">
     <xpp:set name="q37.xpp" env-var="Q37_XPP"/>

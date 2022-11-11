@@ -90,7 +90,7 @@ namespace lstbch {
 		void plug( sHooks &Hooks )
 		{
 			bunch_<type, row>::plug( Hooks.Bunch_ );
-			list_<row, row_t>::plug( Hooks.List_, bunch_<type, row>::Amount );
+			list_<row, row_t>::plug( Hooks.List_, bunch_<type, row>::Amount() );
 		}
 		void plug( qASd *AS )
 		{

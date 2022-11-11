@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// QUEue 
+// QUEue
 
 #ifndef QUE_INC_
 # define QUE_INC_
@@ -39,7 +39,7 @@
 # include "stkbch.h"
 
 namespace que {
-	//e dump direction.	
+	//e dump direction.
 	enum direction
 	{
 		//i Unknow direction.
@@ -51,7 +51,7 @@ namespace que {
 		//i amount of directyon item.
 		d_amount
 	};
-	
+
 	// The link between queue nodes.
 	struct link__
 	{
@@ -141,7 +141,7 @@ namespace que {
 			sdr::row_t__ Begin,
 			sdr::row_t__ End );
 	};
-	
+
 	E_AUTO( links )
 
 /*
@@ -416,13 +416,23 @@ namespace que {
 		r Head_;
 		r Tail_;
 		sdr::size__ Amount_;
-# ifdef QUE_DBG
-		void Test_( void ) const
+		bso::sBool TestAndGet_(void) const
 		{
-			if ( ( Tail_ == qNIL ) ||( Head_ == qNIL ) )
-				qRFwk();
+			if ( Tail_ == qNIL ) {
+        if ( Head_ == qNIL )
+          return false;
+			} else if ( Head_ != qNIL )
+        return true;
+
+      qRFwk();
+
+			return false; // To avoid a warning.
 		}
-# endif
+		void Test_(bso::sBool ExpectedResult = true) const
+		{
+		  if ( TestAndGet_() != ExpectedResult )
+        qRFwk();
+		}
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -442,7 +452,7 @@ namespace que {
 			return *this;
 		}
 		//f Initialization with queue 'Queue'.
-		void Init( que::E_QUEUEt_( r ) & )
+		void Init( const que::E_QUEUEt_( r ) & )
 		{
 			Head_ = Tail_ = qNIL;
 			Amount_ = 0;
@@ -452,23 +462,31 @@ namespace que {
 			r Item,
 			que::E_QUEUEt_(r) & )
 		{
-# ifdef QUE_DBG
-			if ( ( Head_ != qNIL ) || ( Tail_ != qNIL ) )
-				qRFwk();
-# endif
+      Test_(false);
+
 			Head_ = Tail_ = Item;
 
 			Amount_ = 1;
 		}
+		void BecomeLast(
+      r Row,
+      que::E_QUEUEt_(r) &Queue)
+    {
+      if ( TestAndGet_() ) {
+        Queue.BecomeNext(Row, Tail_);
+        Tail_ = Row;
+        Amount_++;
+      } else
+        Create(Row, Queue);
+    }
 		//f Insert 'Item' after 'Node'.
 		void BecomeNext(
 			r Item,
 			r Node,
 			que::E_QUEUEt_(r) &Queue )
 		{
-# ifdef QUE_DBG
 			Test_();
-# endif
+
 			Queue.BecomeNext( Item, Node );
 
 			if ( Node == Tail_ )
@@ -482,9 +500,8 @@ namespace que {
 			r Node ,
 			que::E_QUEUEt_(r) &Queue )
 		{
-	#ifdef QUE_DBG
 			Test_();
-	#endif
+
 			Queue.BecomePrevious( Item, Node );
 
 			if ( Node == Head_ )
@@ -492,14 +509,25 @@ namespace que {
 
 			Amount_++;
 		}
+    void BecomeFirst(
+      r Row,
+      que::E_QUEUEt_(r) &Queue)
+    {
+      if ( TestAndGet_() ) {
+        Queue.BecomePrevious(Row, Head_);
+        Head_ = Row;
+        Amount_++;
+      } else
+        Create(Row, Queue);
+    }
+
 		//f Delete 'Node'.
 		void Delete(
 			r Node,
 			que::E_QUEUEt_(r) &Queue  )
 		{
-	#ifdef QUE_DBG
 			Test_();
-	#endif
+
 			if ( Tail_ == Node )
 				Tail_ = Queue.Previous( Node );
 
@@ -558,12 +586,11 @@ namespace que {
 			r Node,
 			const que::E_QUEUEt_(r) &Queue )
 		{
-	#ifdef QUE_DBG
 			Test_();
 
 			if ( Node == qNIL )
 				qRFwk();
-	#endif
+
 			return Queue.Next( Node );
 		}
 		//f Return node previous to 'Node'.
@@ -571,12 +598,11 @@ namespace que {
 			r Node,
 			const que::E_QUEUEt_(r) &Queue ) const
 		{
-	#ifdef QUE_DBG
 			Test_();
 
 			if ( Node == qNIL )
 				qRFwk();
-	#endif
+
 			return Queue.Previous( Node );
 		}
 		//f Swap 'Node1' and 'Node2'.
@@ -585,9 +611,8 @@ namespace que {
 			r Node2,
 			que::E_QUEUEt_(r) &Queue  )
 		{
-	#ifdef QUE_DBG
 			Test_();
-	#endif
+
 			if ( Tail_ == Node1 )
 				Tail_ = Node2;
 			else if ( Tail_ == Node2 )
@@ -601,7 +626,7 @@ namespace que {
 			Queue.Swap( Node1, Node2 );
 		}
 	};
-			
+
 	//c A managed queue (with head and tail). Use 'MQUEUE_' rather then directly this class.
 	template <typename r> class managed_queue_
 	{
@@ -747,9 +772,29 @@ namespace que {
 	//d A managed queue.
 	#define E_MQUEUEt_( r )		managed_queue_< r >
 	#define E_MQUEUEt( r )		managed_queue<r>
-	
+
 	#define E_MQUEUE_	E_MQUEUEt_( sdr::row__ )
 	#define E_MQUEUE	E_MQUEUEt( sdr::row__ )
 }
+
+/*******/
+/* NEW */
+/*******/
+
+# define qQUEUEd(row) que::queue_<row>
+# define qQUEUEw(row) que::queue<row>
+
+# define qQUQUEdl qQUEUEd(sdr::sRow)
+# define qQUQUEwl qQUEUEw(sdr::sRow)
+
+# define qQUEUEMs(row)  que::queue_manager__<row>
+# define qQUEUEMsl  qQUEUEm(sdr::sRow)
+
+# define qMQUEUEd(row) que::managed_queue_<row>
+# define qMQUEUEw(row) que::managed_queue_<row>
+
+# define qMQUQUEdl qMQUEUEd(sdr::sRow)
+# define qMQUQUEwl qMQUEUEw(sdr::sRow)
+
 
 #endif

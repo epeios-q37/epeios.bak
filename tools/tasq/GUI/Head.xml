@@ -1,3 +1,5 @@
 <xpp:cdata xmlns="http://www.w3.org/1999/xhtml" xmlns:xpp="http://epeios.q37.info/ns/xpp">
   <title>TASq</title>
+  <xpp:expand href="HeadCDN.xml"/>
+  <xpp:expand href="HeadJS.xml"/>
 </xpp:cdata>

@@ -1,0 +1,26 @@
+<xpp:bloc xmlns="http://www.w3.org/1999/xhtml" xmlns:xpp="http://epeios.q37.info/ns/xpp">
+<script>
+  function editMarkdown(id, markdown)
+  {
+    return new SimpleMDE({
+      element: document.getElementById(id),
+      renderingConfig: {
+         codeSyntaxHighlighting: true
+      },
+      indentWithTabs: false
+    });
+  }
+
+  function renderMarkdown(id, markdown) {
+    document.getElementById(id).innerHTML = marked.parse(markdown, {
+      highlight: function(code, lang) {
+        const c = "def toto():\n  pass\n";
+        return hljs.highlight(lang, code).value;
+      },
+      langPrefix: 'hljs language-',
+      gfm: true,
+      breaks: true
+    });
+  }
+</script>
+</xpp:bloc>

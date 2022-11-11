@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2021 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2022 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the 'mscfdraftq' tool.
 
@@ -25,15 +25,6 @@
 
 namespace messages {
   qENUM( Name ) {
-    nNoAvailableMIDIOutDevices,
-    nAvailableMIDIOutDevices,
-    nNoAvailableMIDIInDevices,
-    nAvailableMIDIInDevices,
-    nSavingFile,
-    nFileSavingDone,
-    nExecutingScript,
-    nScriptExecutionDone,
-    nBadTimeSignature,
     n_amount,
     n_Undefined
   };

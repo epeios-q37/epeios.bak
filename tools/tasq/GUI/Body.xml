@@ -2,4 +2,12 @@
   <fieldset>
     <span>Hello!</span>
   </fieldset>
+  <fieldset>
+    <textarea id="Edit"></textarea>
+  </fieldset>
+  <div>
+    <button xdh:onevent="Submit">Submit</button>
+  </div>
+  <fieldset id="View"/>
+  <fieldset id="Tree"/>
 </xpp:cdata>

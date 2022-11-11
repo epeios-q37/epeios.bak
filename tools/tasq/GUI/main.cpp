@@ -20,6 +20,7 @@
 #include "main.h"
 
 #include "registry.h"
+#include "tasks.h"
 
 using namespace main;
 
@@ -31,19 +32,97 @@ sclx::action_handler<sSession> main::Core;
   }\
   SCLX_ADef( sSession, actions_, name )
 
+namespace {
+  void Build_(
+    xml::rWriter &Writer,
+    const tasks::dBundle &Bundle)
+  {
+  qRH;
+    str::wString Value;
+    tasks::sTask Task;
+    tasks::sTRow
+    Row = qNIL,
+    Candidate = qNIL;
+  qRB;
+    Writer.PushTag("ul");
+    Row = Bundle.First(Row);
+    Writer.PushTag("li");
+
+    while ( Row != qNIL ) {
+      Writer.PushTag("details");
+
+      Value.Init();
+      Task.Init(Bundle.Queue);
+      Bundle.Tasks.Recall(Row, Task);
+      Writer.PutValue(Bundle.Strings(Task.Title), "summary");
+
+      Writer.PopTag();  // 'details'.
+
+      if ( ( Candidate = Bundle.First(Row) ) != qNIL ) {
+        Writer.PopTag();
+        Writer.PushTag("ul");
+        Writer.PushTag("li");
+        Row = Candidate;
+      } else if( ( Candidate = Bundle.Next(Row) ) != qNIL ) {
+        Writer.PopTag();  // 'li';
+        Writer.PushTag("li");
+        Row = Candidate;
+      } else {
+        Row = Bundle.Parent(Row);
+        Writer.PopTag();  // 'li'.
+        Writer.PopTag();  // 'uu'.
+      }
+    }
+
+    Writer.PopTag();
+  qRR;
+  qRT;
+  qRE;
+  }
+}
+
 
 D_( OnNewSession )
 {
 qRH;
   str::wString Body;
+  str::wString Tree;
+  str::wString XML;
+  flx::rStringTWFlow Flow;
+  xml::rWriter Writer;
 qRB;
   Body.Init();
   sclm::MGetValue(registry::definition::Body, Body);
 
   Session.Inner(str::Empty, Body);
+
+  Session.Execute("var markdown = editMarkdown('Edit','# Titre\\n```python\\ndef coucou():\\n  pass\\n```')");
+
+  XML.Init();
+  Flow.Init(XML);
+  Writer.Init(Flow, xml::lIndent, xml::fEncoding());
+
+  Build_(Writer, tasks::Bundle);
+  Writer.reset();
+  Flow.reset();
+  Session.Inner(str::wString("Tree"), XML);
 qRR;
 qRT;
 qRE;
+}
+
+D_( Submit )
+{
+  str::wString Markdown, Script;
+
+  Markdown.Init();
+  Session.Execute("markdown.value()", Markdown);
+
+  Script.Init();
+  flx::rStringTWFlow(Script) << "renderMarkdown('View','" << xdhcmn::Escape(Markdown, 0) << "');";
+  Session.Execute(Script);
+
+//  Session.Execute("renderMarkdown('View',markdown.value())");
 }
 
 namespace {
@@ -69,7 +148,7 @@ namespace {
 
   void Register_(void)
   {
-    _::Add(Core, OnNewSession);
+    _::Add(Core, OnNewSession, Submit);
   }
 }
 

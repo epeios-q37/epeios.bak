@@ -36,6 +36,7 @@
 		<Module>main</Module>
 		<Module>messages</Module>
 		<Module>registry</Module>
+		<Module>tasks</Module>
 	</Modules>
 	<SourceDirs>
 		<SourceDir>..</SourceDir>

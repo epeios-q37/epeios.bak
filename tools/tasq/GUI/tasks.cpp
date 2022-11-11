@@ -18,23 +18,47 @@
 */
 
 
-#include "messages.h"
+#include "tasks.h"
 
-using namespace messages;
+using namespace tasks;
 
-#define C( name )	case n##name : return #name; break
+wBundle tasks::Bundle;
 
-const char *messages::GetLabel( eName Name )
-{
-	switch ( Name ) {
-	// C(  );
-	default:
-		qRFwk();
-		break;
-	}
+namespace {
+  namespace _ {
+    sTRow Add(
+      const str::dString &Title,
+      const str::dString &Description,
+      sTRow Row)
+    {
+      return Bundle.Add(Title, Description, Row);
+    }
+    sTRow Add(
+      const char *Title,
+      const char *Description,
+      sTRow Row)
+    {
+      return Add(str::wString(Title), str::wString(Description), Row);
+    }
+  }
 
-	return NULL;	// To avoid a warning.
+  void Populate_(void) {
+    sTRow Row = qNIL;
+
+    _::Add("T1", "D1", Row);
+    _::Add("T2", "D2", Row);
+    _::Add("T3", "D3", Row);
+
+    Row = Bundle.First(Bundle.Next());
+
+    _::Add("T2.1", "D2.1", Row);
+    _::Add("T2.2", "D2.2", Row);
+
+  }
 }
 
-#undef C
-
+qGCTOR(Taslks)
+{
+  Bundle.Init();
+  Populate_();
+}
