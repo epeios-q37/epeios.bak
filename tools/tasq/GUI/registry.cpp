@@ -30,3 +30,9 @@ using namespace registry;
 
 rEntry registry::definition::Head( "Head", sclr::Definitions);
 rEntry registry::definition::Body( "Body", sclr::Definitions);
+
+namespace {
+  rEntry XSLFiles_("XSLFiles", sclr::Definitions);
+}
+
+rEntry registry::definition::XSLFiles::Items("Items", XSLFiles_);

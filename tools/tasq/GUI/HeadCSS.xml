@@ -1,0 +1,31 @@
+<xpp:bloc xmlns="http://www.w3.org/1999/xhtml" xmlns:xpp="http://epeios.q37.info/ns/xpp">
+<style>
+  .selected {
+    background-color: salmon;
+  }
+
+  .item {
+    cursor: pointer;
+  }
+
+  .item-ul {
+    padding-left: 10px;
+  }
+  
+  .item-li-with-child {
+    list-style: none;
+  }
+
+  .item-li-without-child {
+    list-style: "  ";
+  }
+
+  details > .items-summary {
+    list-style: "+ ";
+  }  
+
+  details[open] > .items-summary {
+    list-style: "- ";
+  }  
+</style>
+</xpp:bloc>

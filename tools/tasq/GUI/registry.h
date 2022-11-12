@@ -34,6 +34,9 @@ namespace registry {
 
 		extern rEntry Head;
 		extern rEntry Body;
+		namespace XSLFiles{
+		  extern rEntry Items;
+		}
 	}
 }
 

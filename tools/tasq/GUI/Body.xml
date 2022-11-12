@@ -8,6 +8,6 @@
   <div>
     <button xdh:onevent="Submit">Submit</button>
   </div>
-  <fieldset id="View"/>
-  <fieldset id="Tree"/>
+  <fieldset id="View"></fieldset>
+  <fieldset id="Tree"></fieldset>
 </xpp:cdata>

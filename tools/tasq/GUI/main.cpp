@@ -43,44 +43,98 @@ namespace {
     tasks::sTRow
     Row = qNIL,
     Candidate = qNIL;
+    bso::sBool SkipChildren = false;
   qRB;
     Writer.PushTag("ul");
+    Writer.PutAttribute("class", "item-ul");
     Row = Bundle.First(Row);
-    Writer.PushTag("li");
 
     while ( Row != qNIL ) {
-      Writer.PushTag("details");
-
-      Value.Init();
-      Task.Init(Bundle.Queue);
-      Bundle.Tasks.Recall(Row, Task);
-      Writer.PutValue(Bundle.Strings(Task.Title), "summary");
-
-      Writer.PopTag();  // 'details'.
-
-      if ( ( Candidate = Bundle.First(Row) ) != qNIL ) {
-        Writer.PopTag();
-        Writer.PushTag("ul");
+      if ( !SkipChildren ) {
         Writer.PushTag("li");
+        if ( Row == 4 ) {
+          Writer.PutAttribute("open", "true");
+          Writer.PutAttribute("class", "selected");
+        }
+
+        Writer.PushTag("details");
+
+        Value.Init();
+        Task.Init(Bundle.Queue);
+        Bundle.Tasks.Recall(Row, Task);
+        Writer.PutValue(Bundle.Strings(Task.Title), "summary");
+      }
+
+      if ( !SkipChildren && ( Candidate = Bundle.First(Row) ) != qNIL ) {
+        Writer.PushTag("ul");
+        Writer.PutAttribute("class", "item-ul");
         Row = Candidate;
       } else if( ( Candidate = Bundle.Next(Row) ) != qNIL ) {
-        Writer.PopTag();  // 'li';
-        Writer.PushTag("li");
+        Writer.PopTag();  // 'details'.
+        Writer.PopTag();  // 'li'
         Row = Candidate;
+        SkipChildren = false;
       } else {
         Row = Bundle.Parent(Row);
-        Writer.PopTag();  // 'li'.
+        Writer.PopTag();  // 'details'.
+        Writer.PopTag();  // 'li'
         Writer.PopTag();  // 'uu'.
+        SkipChildren = true;
       }
     }
 
-    Writer.PopTag();
+
+  qRR;
+  qRT;
+  qRE;
+  }
+
+  void Get_(
+    xml::rWriter &Writer,
+    const tasks::dBundle &Bundle)
+  {
+  qRH;
+    tasks::sTask Task;
+    tasks::sTRow
+    Row = qNIL,
+    Candidate = qNIL;
+    bso::sBool SkipChildren = false;
+  qRB;
+    Writer.PushTag("Items");
+    Row = Bundle.First(Row);
+
+    while ( Row != qNIL ) {
+      if ( !SkipChildren ) {
+        Writer.PushTag("Item");
+        if ( Row == 4 )
+          Writer.PutAttribute("Selected", "true");
+
+        Task.Init(Bundle.Queue);
+        Bundle.Tasks.Recall(Row, Task);
+        Writer.PutAttribute("Title", Bundle.Strings(Task.Title));
+      }
+
+      if ( !SkipChildren && ( Candidate = Bundle.First(Row) ) != qNIL ) {
+        Writer.PushTag("Items");
+        Row = Candidate;
+      } else if( ( Candidate = Bundle.Next(Row) ) != qNIL ) {
+        Writer.PopTag();  // 'Item'
+        Row = Candidate;
+        SkipChildren = false;
+      } else {
+        Row = Bundle.Parent(Row);
+        Writer.PopTag();  // 'Item'
+        Writer.PopTag();  // 'Items'.
+        SkipChildren = true;
+      }
+    }
+
+
   qRR;
   qRT;
   qRE;
   }
 }
-
 
 D_( OnNewSession )
 {
@@ -88,6 +142,7 @@ qRH;
   str::wString Body;
   str::wString Tree;
   str::wString XML;
+  str::wString XSL, Base64XSL, XSLAsURI;
   flx::rStringTWFlow Flow;
   xml::rWriter Writer;
 qRB;
@@ -96,16 +151,28 @@ qRB;
 
   Session.Inner(str::Empty, Body);
 
-  Session.Execute("var markdown = editMarkdown('Edit','# Titre\\n```python\\ndef coucou():\\n  pass\\n```')");
+//  Session.Execute("var markdown = editMarkdown('Edit','# Titre\\n```python\\ndef coucou():\\n  pass\\n```')");
 
   XML.Init();
   Flow.Init(XML);
   Writer.Init(Flow, xml::lIndent, xml::fEncoding());
 
-  Build_(Writer, tasks::Bundle);
+//  Build_(Writer, tasks::Bundle);
+  Get_(Writer, tasks::Bundle);
   Writer.reset();
   Flow.reset();
-  Session.Inner(str::wString("Tree"), XML);
+
+  XSL.Init();
+  sclm::MGetValue(registry::definition::XSLFiles::Items, XSL);
+
+  Base64XSL.Init();
+  cdgb64::Encode(XSL, cdgb64::fOriginal, Base64XSL);
+
+  XSLAsURI.Init("data:text/xml;base64,");
+  XSLAsURI.Append(Base64XSL);
+
+  XSL.StripLeadingChars('\n');
+  Session.Inner(str::wString("Tree"), XML, XSLAsURI);
 qRR;
 qRT;
 qRE;

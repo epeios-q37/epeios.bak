@@ -93,6 +93,11 @@
 			<Body>
 				<xpp:expand href="Body.xml"/>
 			</Body>
+			<XSLFiles>
+				<Items>
+					<xpp:cdata><xpp:expand href="Items.xsl"/></xpp:cdata>
+				</Items>	
+			</XSLFiles>
 			<!--Script>base64 test.png</Script-->
 			<!--Script>while read x ; do echo $x ; done</Script-->
       <!--Script>
