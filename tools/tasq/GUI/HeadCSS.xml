@@ -1,7 +1,7 @@
 <xpp:bloc xmlns="http://www.w3.org/1999/xhtml" xmlns:xpp="http://epeios.q37.info/ns/xpp">
 <style>
   .selected {
-    background-color: salmon;
+    background-color: bisque;
   }
 
   .item {
@@ -20,12 +20,16 @@
     list-style: "  ";
   }
 
-  details > .items-summary {
+  details > .item-summary {
     list-style: "+ ";
   }  
 
-  details[open] > .items-summary {
+  details[open] > .item-summary {
     list-style: "- ";
-  }  
+  }
+
+  .hide {
+    display: none;
+  }
 </style>
 </xpp:bloc>

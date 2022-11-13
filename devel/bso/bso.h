@@ -74,9 +74,8 @@ namespace bso {
 
 	typedef sU8 tEnum;
 
-	struct pGlobal_ {
-		char Datum[BSO_CONVERSION_SIZE_MAX+1];	// + 1 for the NUL chracter.
-	};
+	struct pGlobal_;  // pre-declaration.
+
 
 	typedef pGlobal_ pInteger;
 	typedef pInteger pInt;
@@ -224,13 +223,36 @@ namespace bso {
 #  error
 #endif
 
+	struct pGlobal_ {
+  private:
+		char Datum_[BSO_CONVERSION_SIZE_MAX+1];	// + 1 for the NUL chracter.
+  public:
+    const char *operator()(void) const
+    {
+      return Datum_;
+    }
+		template <typename t> friend const char *Convert_(
+      t Value,
+      const char *fmt,
+      pGlobal_ &Buffer);
+	};
+
+	template <typename t> inline const char *Convert_(
+    t Value,
+    const char *fmt,
+    pGlobal_ &Buffer)
+  {
+		sprintf( Buffer.Datum_, fmt, Value );
+
+		return Buffer();
+  }
+
 	inline const char *Convert(
 		u64__ Value,
 		integer_buffer__ &Buffer )
 	{
-		sprintf( Buffer.Datum, "%" BSO_U64_P_, Value );
+	  return Convert_(Value, "%" BSO_U64_P_, Buffer);
 
-		return Buffer.Datum;
 	}
 #  ifndef CPE_F_MT
 	inline const char *Convert( u64__ Value )
@@ -245,9 +267,7 @@ namespace bso {
 		bso::u32__ Value,
 		integer_buffer__ &Buffer )
 	{
-		sprintf( Buffer.Datum, "%" BSO_U32_P_, Value );
-
-		return Buffer.Datum;
+		return Convert_(Value, "%" BSO_U32_P_, Buffer);
 	}
 
 #ifndef CPE_F_MT
@@ -377,9 +397,7 @@ namespace bso {
 		s64__ Value,
 		integer_buffer__ &Buffer )
 	{
-		sprintf( Buffer.Datum, "%" BSO_S64_P_, Value );
-
-		return Buffer.Datum;
+		return Convert_(Value, "%" BSO_S64_P_, Buffer);
 	}
 
 # ifndef CPE_F_MT
@@ -397,9 +415,7 @@ namespace bso {
 		s32__ Value,
 		integer_buffer__ &Buffer )
 	{
-		sprintf( Buffer.Datum, "%" BSO_S32_P_, Value );
-
-		return Buffer.Datum;
+		return Convert_(Value, "%" BSO_S32_P_, Buffer);
 	}
 
 #ifndef CPE_F_MT
@@ -451,9 +467,7 @@ namespace bso {
 		lfloat__ Value,
 		float_buffer__ &Buffer )
 	{
-		sprintf( Buffer.Datum, "%Lg", Value );
-
-		return Buffer.Datum;
+		return Convert_(Value, "%Lg", Buffer);
 	}
 
 #ifndef CPE_F_MT

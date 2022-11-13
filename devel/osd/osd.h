@@ -48,7 +48,14 @@ namespace osd {
 		  if ( Storage_ == NULL )
         return 0;
 
-		  return S_().OSDSize();
+      sdr::sSize Size = S_().OSDSize();
+
+      if ( Size >= offset )
+        Size -= offset;
+      else if ( Size != 0 )
+        qRFwk();
+
+      return Size;
 		}
 		//v Recall 'Amount' at position 'Position' and put them in 'Buffer'.
 		virtual void SDRRecall(

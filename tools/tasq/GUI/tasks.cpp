@@ -22,7 +22,29 @@
 
 using namespace tasks;
 
-wBundle tasks::Bundle;
+namespace {
+  uys::rFOH<sizeof(dBundle::s)> FH_;
+  ags::aggregated_storage AS_;
+  rXBundle XBundle_;
+  mtx::rMutex Mutex_ = mtx::Undefined;
+}
+
+void tasks::dBundle::StoreMain_(void)
+{
+  FH_.Put((const sdr::sByte *)&XBundle_.S_);
+}
+
+rXBundle &tasks::Get(hGuard &Guard )
+{
+    Guard.InitAndLock(Mutex_);
+
+    return XBundle_;
+}
+
+const rXBundle & tasks::CGet(hGuard &Guard)
+{
+  return Get(Guard);
+}
 
 namespace {
   namespace _ {
@@ -31,7 +53,7 @@ namespace {
       const str::dString &Description,
       sTRow Row)
     {
-      return Bundle.Add(Title, Description, Row);
+      return XBundle_.Add(Title, Description, Row);
     }
     sTRow Add(
       const char *Title,
@@ -49,20 +71,20 @@ namespace {
     _::Add("T2", "D2", Row);
     _::Add("T3", "D3", Row);
 
-    Row = Bundle.Next();
+    Row = XBundle_.Next();
 
-    Row = Bundle.Next(Row);
+    Row = XBundle_.Next(Row);
 
     _::Add("T2.1", "D2.1", Row);
-    _::Add("T2.2", "D2.2", Row);
+    _::Add("T2.2", "# D2.2", Row);
 
-    Row = Bundle.Next(Row);
+    Row = XBundle_.Next(Row);
 
     _::Add("T3.1", "D3.1", Row);
     _::Add("T3.2", "D3.2", Row);
 
-    Row = Bundle.Previous(Row);
-    Row = Bundle.First(Row);
+    Row = XBundle_.Previous(Row);
+    Row = XBundle_.First(Row);
 
     _::Add("T2.1.1", "D2.1.1", Row);
     _::Add("T2.1.2", "D2.1.2", Row);
@@ -72,6 +94,16 @@ namespace {
 
 qGCTOR(Taslks)
 {
-  Bundle.Init();
-  Populate_();
+  Mutex_ = mtx::Create();
+  bso::sBool Exists = FH_.Init("Test", uys::mReadWrite).Boolean();
+
+  AS_.plug(FH_);
+  XBundle_.plug(&AS_);
+
+  if ( Exists ) {
+    FH_.Get((sdr::sByte *)&XBundle_.S_);
+  } else {
+    XBundle_.Init();
+    Populate_();
+  }
 }

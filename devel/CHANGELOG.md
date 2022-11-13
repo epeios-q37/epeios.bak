@@ -13,6 +13,10 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-11-13
+- BSO: [extn];
+- OSD: fixing storage/file size issue;
+
 ## 2022-11-11
 - LSTBCH: [trvl];
 - QUE: [extn];

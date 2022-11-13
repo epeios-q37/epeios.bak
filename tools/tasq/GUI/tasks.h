@@ -65,10 +65,11 @@ namespace tasks {
   typedef lstbch::qLBUNCHd( sTask, sTRow ) dTasks;
   qW(Tasks);
 
-  qHOOKS3(lstctn::sHooks, Strings, lstbch::sHooks, Tasks, que::sHook, Queue);
+  qHOOKS3(lstcrt::sHooks, Strings, lstbch::sHooks, Tasks, que::sHook, Queue);
 
   class dBundle {
   private:
+    void StoreMain_(void);
     void Retrieve_(
       sTRow Row,
       sQManager &Manager)
@@ -84,9 +85,10 @@ namespace tasks {
       const sQManager &Manager,
       sTRow Row)
     {
-      if ( Row == qNIL )
+      if ( Row == qNIL ) {
         S_.Main = Manager;
-      else if ( Tasks.Exists(Row) ) {
+        StoreMain_();
+      } else if ( Tasks.Exists(Row) ) {
         sTask Task;
         Task.Init(Queue);
 
@@ -101,6 +103,8 @@ namespace tasks {
       sSRow Row = Strings.New();
 
       Strings(Row) = String;
+
+      StoreMain_();
 
       return Row;
     }
@@ -140,7 +144,7 @@ namespace tasks {
       Tasks.plug(Hooks.Tasks_);
       Queue.plug(Hooks.Queue_);
     }
-    void plug( qASd *AS )
+    void plug(qASd *AS)
     {
       Strings.plug(AS);
       Tasks.plug(AS);
@@ -187,6 +191,7 @@ namespace tasks {
       Manager.BecomeLast(New, Queue);
 
       Store_(Manager, Row);
+      StoreMain_();
 
       return New;
     }
@@ -228,11 +233,73 @@ namespace tasks {
       else
         return GetTask_(Row).Children.Last(Queue);
     }
-  };
+    void Get(
+      sTRow Row,
+      str::dString &Title,
+      str::dString &Description) const
+    {
+      sTask Task;
+
+      Task.Init(Queue);
+
+      Task = GetTask_(Row);
+
+      Strings.Recall(Task.Title, Title);
+
+      if ( Task.Description != qNIL )
+        Strings.Recall(Task.Description, Description);
+    }
+    void Set(
+      const str::dString &Title,
+      const str::dString &Description,
+      sTRow Row)
+      {
+        sTask Task;
+
+        Task.Init(Queue);
+
+        Task = GetTask_(Row);
+
+        Strings.Store(Title, Task.Title);
+
+        if ( Task.Description == qNIL) {
+          Task.Description = Strings.New();
+          Tasks.Store(Task, Row);
+        }
+
+        Strings.Store(Description, Task.Description);
+
+        StoreMain_();
+      }
+    };
 
   qW(Bundle);
 
-  extern wBundle Bundle;
+
+  class rXBundle
+  : public wBundle
+  {
+  public:
+    sTRow Selected;
+    void reset(bso::sBool P = true)
+    {
+      wBundle::reset(P);
+      Selected = qNIL;
+    }
+    qCDTOR(rXBundle);
+    void Init(void)
+    {
+      wBundle::Init();
+      Selected = qNIL;
+    }
+  };
+
+
+  typedef mtx::rHandle hGuard;
+
+  rXBundle &Get(hGuard &Guard);
+
+  const rXBundle &CGet(hGuard &Guard);
 }
 
 #endif

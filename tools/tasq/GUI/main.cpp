@@ -32,71 +32,16 @@ sclx::action_handler<sSession> main::Core;
   }\
   SCLX_ADef( sSession, actions_, name )
 
+using namespace tasks;
+
 namespace {
-  void Build_(
-    xml::rWriter &Writer,
-    const tasks::dBundle &Bundle)
-  {
-  qRH;
-    str::wString Value;
-    tasks::sTask Task;
-    tasks::sTRow
-    Row = qNIL,
-    Candidate = qNIL;
-    bso::sBool SkipChildren = false;
-  qRB;
-    Writer.PushTag("ul");
-    Writer.PutAttribute("class", "item-ul");
-    Row = Bundle.First(Row);
-
-    while ( Row != qNIL ) {
-      if ( !SkipChildren ) {
-        Writer.PushTag("li");
-        if ( Row == 4 ) {
-          Writer.PutAttribute("open", "true");
-          Writer.PutAttribute("class", "selected");
-        }
-
-        Writer.PushTag("details");
-
-        Value.Init();
-        Task.Init(Bundle.Queue);
-        Bundle.Tasks.Recall(Row, Task);
-        Writer.PutValue(Bundle.Strings(Task.Title), "summary");
-      }
-
-      if ( !SkipChildren && ( Candidate = Bundle.First(Row) ) != qNIL ) {
-        Writer.PushTag("ul");
-        Writer.PutAttribute("class", "item-ul");
-        Row = Candidate;
-      } else if( ( Candidate = Bundle.Next(Row) ) != qNIL ) {
-        Writer.PopTag();  // 'details'.
-        Writer.PopTag();  // 'li'
-        Row = Candidate;
-        SkipChildren = false;
-      } else {
-        Row = Bundle.Parent(Row);
-        Writer.PopTag();  // 'details'.
-        Writer.PopTag();  // 'li'
-        Writer.PopTag();  // 'uu'.
-        SkipChildren = true;
-      }
-    }
-
-
-  qRR;
-  qRT;
-  qRE;
-  }
-
   void Get_(
     xml::rWriter &Writer,
-    const tasks::dBundle &Bundle)
+    const dBundle &Bundle)
   {
   qRH;
-    tasks::sTask Task;
-    tasks::sTRow
-    Row = qNIL,
+    sTask Task;
+    sTRow Row = qNIL,
     Candidate = qNIL;
     bso::sBool SkipChildren = false;
   qRB;
@@ -106,6 +51,7 @@ namespace {
     while ( Row != qNIL ) {
       if ( !SkipChildren ) {
         Writer.PushTag("Item");
+        Writer.PutAttribute("id", *Row);
         if ( Row == 4 )
           Writer.PutAttribute("Selected", "true");
 
@@ -129,16 +75,46 @@ namespace {
       }
     }
 
+  qRR;
+  qRT;
+  qRE;
+  }
 
+  void Select_(
+    sTRow Row,
+    const dBundle &Bundle,
+    sSession &Session)
+  {
+  qRH;
+    bso::pInteger Buffer;
+    sTRow Looper = qNIL;
+    qCBUFFERh Parent;
+  qRB;
+    Looper = Row;
+    while ( Looper != qNIL ) {
+      Session.SetAttribute(Session.Parent(bso::Convert(*Looper, Buffer), Parent), "open", "true");
+
+      Looper = Bundle.Parent(Looper);
+    }
+
+    Session.ScrollTo(bso::Convert(*Row, Buffer));
+
+    Session.AddClass(Buffer(), "selected");
   qRR;
   qRT;
   qRE;
   }
 }
 
+#define BGRD  tasks::hGuard BundleGuard
+#define BNDL()  tasks::rXBundle &Bundle = tasks::Get(BundleGuard)
+#define CBNDL()  const tasks::rXBundle &Bundle = tasks::CGet(BundleGuard)
+
+
 D_( OnNewSession )
 {
 qRH;
+  BGRD;
   str::wString Body;
   str::wString Tree;
   str::wString XML;
@@ -157,8 +133,9 @@ qRB;
   Flow.Init(XML);
   Writer.Init(Flow, xml::lIndent, xml::fEncoding());
 
-//  Build_(Writer, tasks::Bundle);
-  Get_(Writer, tasks::Bundle);
+  CBNDL();
+
+  Get_(Writer, Bundle);
   Writer.reset();
   Flow.reset();
 
@@ -178,18 +155,90 @@ qRT;
 qRE;
 }
 
-D_( Submit )
+D_( Select )
 {
-  str::wString Markdown, Script;
+qRH;
+  BGRD;
+  sTRow Row = qNIL;
+  str::wString Title, Description, Script;
+  bso::pInteger Buffer;
+qRB;
+  str::wString(Id).ToNumber(*Row);
 
-  Markdown.Init();
-  Session.Execute("markdown.value()", Markdown);
+  BNDL();
+
+  tol::Init(Title, Description);
+  Bundle.Get(Row, Title, Description);
+
+  Session.SetValue("Title", Title);
 
   Script.Init();
-  flx::rStringTWFlow(Script) << "renderMarkdown('View','" << xdhcmn::Escape(Markdown, 0) << "');";
+  flx::rStringTWFlow(Script) << "renderMarkdown('DescriptionView','" << xdhcmn::Escape(Description, 0) << "');";
   Session.Execute(Script);
 
-//  Session.Execute("renderMarkdown('View',markdown.value())");
+  if ( Bundle.Selected != qNIL )
+    Session.RemoveClass(bso::Convert(*Bundle.Selected, Buffer), "selected");
+
+  Session.AddClass(bso::Convert(*Row, Buffer), "selected");
+
+  Bundle.Selected = Row;
+qRR;
+qRT;
+qRE;
+}
+
+D_( Edit )
+{
+qRH;
+  BGRD;
+  str::wString Title, Description, Script;
+qRB;
+  Session.AddClass("DescriptionView", "hide");
+  Session.AddClass("Tree", "hide");
+
+  CBNDL();
+
+  tol::Init(Title, Description);
+  Bundle.Get(Bundle.Selected, Title, Description);
+
+  Script.Init();
+  flx::rStringTWFlow(Script) << "markdown = editMarkdown('DescriptionEdition','" << xdhcmn::Escape(Description, 0) << "');";
+  Session.Execute(Script);
+
+  Session.RemoveClass("DescriptionEdition", "hide");
+qRR;
+qRT;
+qRE;
+}
+
+D_( Submit )
+{
+qRH;
+  BGRD;
+  str::wString Title, Description, Script;
+qRB;
+  BNDL();
+
+  tol::Init(Title, Description);
+  Bundle.Get(Bundle.Selected, Title, Description);
+
+  Description.Init();
+  Session.Execute("let value = markdown.value(); markdown.toTextArea(); markdown = null; value;", Description);
+
+  Bundle.Set(Title, Description, Bundle.Selected);
+
+  Session.SetValue("Title", Title);
+
+  Script.Init();
+  flx::rStringTWFlow(Script) << "renderMarkdown('DescriptionView','" << xdhcmn::Escape(Description, 0) << "');";
+  Session.Execute(Script);
+
+  Session.AddClass("DescriptionEdition", "hide");
+  Session.RemoveClass("DescriptionView", "hide");
+  Session.RemoveClass("Tree", "hide");
+qRR;
+qRT;
+qRE;
 }
 
 namespace {
@@ -215,7 +264,7 @@ namespace {
 
   void Register_(void)
   {
-    _::Add(Core, OnNewSession, Submit);
+    _::Add(Core, OnNewSession, Select, Edit, Submit);
   }
 }
 

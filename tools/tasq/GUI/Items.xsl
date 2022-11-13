@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet version="1.0"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xdh="http://q37.info/ns/xdh">
   <xsl:output method="html" indent="yes" />
+  <xsl:attribute-set name="ItemEvents">
+    <xsl:attribute name="xdh:onevent">Select</xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="Item" use-attribute-sets="ItemEvents">
+    <xsl:attribute name="id">
+      <xsl:value-of select="@id"></xsl:value-of>
+    </xsl:attribute>
+  </xsl:attribute-set>
   <xsl:template match="/">
     <xsl:apply-templates select="Items" />
   </xsl:template>
@@ -14,8 +25,8 @@
       <xsl:choose>
         <xsl:when test="Items">
           <xsl:attribute name="class">item-li item-li-with-child</xsl:attribute>
-          <details>
-            <summary class="item items-summary">
+          <details xdh:onevent="Select">
+            <summary class="item items-summary" xsl:use-attribute-sets="Item">
               <xsl:value-of select="@Title" />
             </summary>
             <xsl:apply-templates select="Items" />
@@ -23,9 +34,9 @@
         </xsl:when>
         <xsl:otherwise>
           <xsl:attribute name="class">item-li item-li-without-child</xsl:attribute>
-          <span class="item">
+          <span class="item" xsl:use-attribute-sets="Item">
             <xsl:value-of select="@Title" />
-          </span>          
+          </span>
         </xsl:otherwise>
       </xsl:choose>
     </li>
