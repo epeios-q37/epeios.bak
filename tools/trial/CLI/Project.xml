@@ -29,6 +29,7 @@
 			</Modules>
 		</Modules>
 		<Module>registry</Module>
+		<Module>trial3</Module>
 	</Modules>
 	<Files/>
     <RTW>

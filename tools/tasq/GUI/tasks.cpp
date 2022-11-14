@@ -31,6 +31,8 @@ namespace {
 
 void tasks::dBundle::StoreMain_(void)
 {
+  Strings.Flush();
+  FH_.Flush();
   FH_.Put((const sdr::sByte *)&XBundle_.S_);
 }
 
@@ -68,7 +70,7 @@ namespace {
     sTRow Row = qNIL;
 
     _::Add("T1", "D1", Row);
-    _::Add("T2", "D2", Row);
+/*    _::Add("T2", "D2", Row);
     _::Add("T3", "D3", Row);
 
     Row = XBundle_.Next();
@@ -88,7 +90,7 @@ namespace {
 
     _::Add("T2.1.1", "D2.1.1", Row);
     _::Add("T2.1.2", "D2.1.2", Row);
-
+*/
   }
 }
 
@@ -103,6 +105,7 @@ qGCTOR(Taslks)
   if ( Exists ) {
     FH_.Get((sdr::sByte *)&XBundle_.S_);
   } else {
+    AS_.Init();
     XBundle_.Init();
     Populate_();
   }

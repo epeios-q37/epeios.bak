@@ -21,6 +21,7 @@
 #include "trial.h"
 
 #include "registry.h"
+#include "trial3.h"
 
 #include "sclt.h"
 #include "scle.h"
@@ -153,6 +154,11 @@ namespace {
 
 		cio::COut << txf::nl << "End" << txf::nl << txf::commit;
 	}
+
+	void T3_(void)
+	{
+	  trial3::Launch();
+	}
 }
 
 #define C( name )\
@@ -172,6 +178,7 @@ qRB;
 		epsmsc::PrintLicense( NAME_MC );
 	C( T1 );
 	C( T2 );
+	C( T3 );
 	else
 		qRGnr();
 
