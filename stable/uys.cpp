@@ -55,8 +55,8 @@ bso::sign__ uys::Compare(
 			if ( Taille > Nombre )
 				Taille = Nombre;
 
-			E1.Recall( DebutE1, Taille, T1 );
-			E2.Recall( DebutE2, Taille, T2 );
+			E1.Fetch(DebutE1, Taille, T1, qRPDefault);
+			E2.Fetch(DebutE2, Taille, T2, qRPDefault);
 
 			DebutE1 += Taille;
 			DebutE2 += Taille;
@@ -82,7 +82,7 @@ void uys::IndirectCopy_(
 
 	if ( PosSource >= PosDest ) {
 		while( Nombre > BufferSize ) {
-			Source.Recall( PosSource, BufferSize, Buffer );
+			Source.Fetch(PosSource, BufferSize, Buffer, qRPDefault);
 			Dest.Store( Buffer, BufferSize, PosDest );
 
 			PosSource += BufferSize ;
@@ -91,7 +91,7 @@ void uys::IndirectCopy_(
 		}
 
 		if ( Nombre ) {
-			Source.Recall( PosSource, Nombre, Buffer );
+			Source.Fetch(PosSource, Nombre, Buffer, qRPDefault);
 			Dest.Store( Buffer, Nombre, PosDest );
 		}
 	} else {
@@ -99,7 +99,7 @@ void uys::IndirectCopy_(
 		PosSource += Nombre;
 
 		while( Nombre > BufferSize ) {
-			Source.Recall( PosSource - BufferSize, BufferSize, Buffer );
+			Source.Fetch(PosSource - BufferSize, BufferSize, Buffer, qRPDefault);
 			Dest.Store( Buffer, BufferSize, PosDest - BufferSize );
 
 			PosSource -= BufferSize;
@@ -108,7 +108,7 @@ void uys::IndirectCopy_(
 		}
 
 		if ( Nombre ) {
-			Source.Recall( PosSource - Nombre, Nombre, Buffer );
+			Source.Fetch(PosSource - Nombre, Nombre, Buffer, qRPDefault);
 			Dest.Store( Buffer, Nombre, PosDest - Nombre );
 		}
 	}
@@ -148,7 +148,7 @@ row_t__ untyped_storage_::Search(
 		if ( ( Debut + BufferSize ) > Fin )
 			BufferSize = Fin - Debut;
 
-		Recall( Debut, BufferSize, Tampon );
+		Fetch(Debut, BufferSize, Tampon, qRPDefault);
 
 		while( !Trouve && ( BufferPosition < BufferSize ) )
 		{
@@ -195,7 +195,7 @@ qRB
 		if ( Quantite < Taille )
 			Taille = Quantite;
 
-		Recall( Position, Taille, Tampon );
+		Fetch(Position, Taille, Tampon, qRPDefault);
 
 		OFlow.Write( Tampon, (flw::size__)Taille );
 

@@ -83,29 +83,31 @@ namespace ags {
 		descriptor__ &_Descriptor;
 		// memoire  laquelle il a t affect
 		class aggregated_storage_ *_AStorage;
-		void _Free( void );
+		void _Free(bso::sBool EvenIfPersitent = true);
 	protected:
-		virtual void SDRAllocate( sdr::size__ Size );
+	  virtual sdr::eType SDRType(void) const override;
+		virtual void SDRAllocate( sdr::size__ Size ) override;
 		// Fonction dporte.
-		virtual sdr::size__ SDRSize( void ) const;
+		virtual sdr::size__ SDRSize( void ) const override;
 		// fonction dporte
 		// lit  partir de 'Position' et place dans 'Tampon' 'Nombre' octets;
-		virtual void SDRRecall(
+		virtual sdr::sSize SDRFetch(
 			sdr::row_t__ Position,
 			sdr::size__ Amount,
-			sdr::byte__ *Buffer );
+			sdr::byte__ *Buffer,
+			qRPN) override;
 		// fonction dporte
 		// crit 'Nombre' octets  la position 'Position'
 		virtual void SDRStore(
 			const sdr::byte__ *Buffer,
 			sdr::size__ Amount,
-			sdr::row_t__ Position );
+			sdr::row_t__ Position ) override;
 	public:
 		void reset( bool P = true )
 		{
 			if ( P ) {
 				if ( _AStorage != NULL )
-					_Free();
+					_Free(false);
 			} else
 				_AStorage = NULL;
 
@@ -778,12 +780,13 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		{
 			return Storage.Size();
 		}
-		void _Read(
+		sdr::sSize _Read(
 			sdr::row_t__ Row,
 			size__ Size,
-			sdr::byte__ *Data ) const
+			sdr::byte__ *Data,
+			qRPN) const
 		{
-			Storage.Recall( Row, Size, Data );
+			return Storage.Fetch(Row, Size, Data, qRP);
 		}
 		void _Write(
 			const sdr::byte__ *Data,
@@ -808,7 +811,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			if ( Amount == 0 )
 				qRFwk();
 
-			_Read( Row - Amount, Amount, Buffer );
+			_Read( Row - Amount, Amount, Buffer, qRPDefault );
 
 			return GetPriorMetaData( Pointer, Status, Header, Size );
 		}
@@ -836,9 +839,9 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 		void _Get(
 			sdr::row_t__ Row,
-			header__ &Header ) const
+			header__ &Header) const
 		{
-			_Read( Row, AGS_HEADER_SIZE, &*Header );
+			_Read(Row, AGS_HEADER_SIZE, &*Header, qRPDefault);
 		}
 		void _Set(
 			sdr::row_t__ Row,
@@ -903,9 +906,18 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			bso::dint__ DSize;
 			size__ Limit = _Size() - Row;
 
-			_Read( Row, sizeof( DSize ) > Limit ? Limit : sizeof( DSize ), (sdr::byte__ *)&DSize );
+			sdr::sSize
+        Amount = 0,
+        Value = 0;
 
-			return ConvertValueToLongSize( bso::ConvertToInt( DSize, SizeLength ), Status );
+			Amount = _Read( Row, sizeof( DSize ) > Limit ? Limit : sizeof( DSize ), (sdr::byte__ *)&DSize, qRPUser);
+
+			Value = bso::ConvertToInt(DSize, SizeLength);
+
+			if ( Amount < SizeLength )
+        qRFwk();
+
+			return ConvertValueToLongSize(Value , Status);
 		}
 		void _GetMetaData(
 			sdr::row_t__ Row,
@@ -1351,6 +1363,22 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		{
 			Storage.plug( AS );
 		}
+		bso::sBool IsVolatile(void) const
+		{
+		  switch ( Storage.Type() ) {
+      case sdr::tVolatile:
+        return true;
+        break;
+      case sdr::tPersistent:
+        return false;
+        break;
+      default:
+        qRFwk();
+        break;
+		  }
+
+		  return false; //To avoid a warning.
+		}
 		void Init( void )
 		{
 			Storage.Init();
@@ -1358,6 +1386,10 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 			if ( Storage.Size() != 0 )
 				_SetAsFreeFragment( 0, Storage.Size(), sFree );
+		}
+		sdr::eType Type(void) const
+		{
+		  return Storage.Type();
 		}
 		void Preallocate( sdr::size__ Size )
 		{
@@ -1422,7 +1454,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			sdr::size__ Amount,
 			sdr::byte__ *Buffer ) const
 		{
-			Storage.Recall( *Descriptor + Position, Amount, Buffer );
+			Storage.Fetch(*Descriptor + Position, Amount, Buffer, qRPDefault);
 		}
 		void Write(
 			const sdr::byte__ *Buffer,

@@ -39,6 +39,10 @@ namespace osd {
   private:
     qRMV(storage, S_, Storage_);
   protected:
+    virtual sdr::eType SDRType(void) const override
+    {
+      return S_().OSDType();
+    }
 		virtual void SDRAllocate( sdr::sSize Size ) override
 		{
 			return S_().OSDAllocate(Size + offset);
@@ -58,12 +62,13 @@ namespace osd {
       return Size;
 		}
 		//v Recall 'Amount' at position 'Position' and put them in 'Buffer'.
-		virtual void SDRRecall(
+		virtual sdr::sSize SDRFetch(
 			sdr::tRow Position,
 			sdr::sSize Amount,
-			sdr::sByte *Buffer ) override
+			sdr::sByte *Buffer,
+			qRPN) override
     {
-        return S_().OSDRecall(Position + offset, Amount, Buffer);
+        return S_().OSDFetch(Position + offset, Amount, Buffer, qRP);
     }
 		//v Write 'Amount' bytes from 'Buffer' to storage at position 'Position'.
 		virtual void SDRStore(
@@ -102,7 +107,7 @@ namespace osd {
       if ( offset == 0 )  // Calling this function in this context does not make sense.
         qRFwk();
 
-      return S_().OSDRecall(0, offset, Buffer);
+      S_().OSDFetch(0, offset, Buffer, qRPDefault);
     }
   };
 }

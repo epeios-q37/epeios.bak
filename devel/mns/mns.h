@@ -144,27 +144,34 @@ namespace mns {
 	  public main_storage__
 	{
 	protected:
-		virtual sdr::size__ SDRSize( void ) const
+	  virtual sdr::eType SDRType(void) const override
+	  {
+	    return sdr::tVolatile;
+	  }
+		virtual sdr::size__ SDRSize( void ) const override
 		{
 			return main_storage__::Size();
 		}
-		virtual void SDRRecall(
+		virtual sdr::sSize SDRFetch(
 			sdr::row_t__ Position,
 			sdr::size__ Amount,
-			sdr::byte__ *Buffer )
+			sdr::byte__ *Buffer,
+			qRPType) override
 		{
-			main_storage__::Recall( Position, Amount, Buffer );
+			main_storage__::Recall( Position, Amount, Buffer);
+
+			return Amount;
 		}
 		// crit 'Nombre' octets  la position 'Position'
 		virtual void SDRStore(
 			const sdr::byte__ *Buffer,
 			sdr::size__ Nombre,
-			sdr::row_t__ Position )
+			sdr::row_t__ Position ) override
 		{
 			main_storage__::Store( Buffer, Nombre, Position );
 		}
 		// alloue 'Taille' octets
-		virtual void SDRAllocate( sdr::size__ Size )
+		virtual void SDRAllocate( sdr::size__ Size ) override
 		{
 			main_storage__::Allocate( Size );
 		}

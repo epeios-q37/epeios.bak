@@ -30,6 +30,8 @@
 		</Modules>
 		<Module>registry</Module>
 		<Module>trial3</Module>
+		<Module>trial4</Module>
+		<Module>trial5</Module>
 	</Modules>
 	<Files/>
     <RTW>

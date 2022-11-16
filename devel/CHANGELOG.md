@@ -13,6 +13,19 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-11-16
+- AGS: is now aware of storage type (persistent/volatile) and behaves appropriatly;
+- CTN, LSTBCH, LSTCTN, MNS, OSD, UYS: [adpt];
+- ERR: [extn];
+- SDR: introducing storage type;
+
+## 2022-11-15
+- BCH, IAS, MNS: [adpt];
+- FLSQ: it's now possible to ask for more data the available without généretinf an error (useful with the agregated storage based on file);
+- OSD, SDR, UYS:
+  - `(OSD|SDR|)Recall` becomes `(OSD|SDR\)Fetch`,
+  - `(OSD|SDR|)Fetch` (ex `(OSD|SDR\)Recall`) returns amount of data red, which can be less then asked (useful with the agregated storage based on file),
+
 ## 2022-11-13
 - BSO: [extn];
 - OSD: fixing storage/file size issue;

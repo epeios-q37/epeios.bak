@@ -248,13 +248,13 @@ namespace lstbch {
 		uys::eState Init(
 			const rHF &Filenames,
 			uys::mode__ Mode,
-			uys::eBehavior Behavior,
+			sdr::eType Type,
 			flsq::rId Id )
 		{
-			uys::eState State = Bunch_.Init(Filenames.Bunch, Mode, Behavior, Id);
+			uys::eState State = Bunch_.Init(Filenames.Bunch, Mode, Type, Id);
 
 			if ( !State.IsError() ) {
-				if ( List_.Init(Filenames.List, Mode, Behavior, Id) != State )
+				if ( List_.Init(Filenames.List, Mode, Type, Id) != State )
 					State = uys::sInconsistent;
 			}
 

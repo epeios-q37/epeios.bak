@@ -58,22 +58,29 @@ namespace ias {
 		index__ _Index;
 		const indexed_aggregated_storage_ *&_AStorage;
 	protected:
-		virtual void SDRAllocate( sdr::size__ Capacity )
+	  virtual sdr::eType SDRType(void) const override
+	  {
+	    qRUnx();
+
+	    return sdr::t_Undefined;  // To avoid a warning.
+	  }
+		virtual void SDRAllocate( sdr::size__ Capacity) override
 		{
-			qRFwk();
+	    qRUnx();
 		}
-		virtual sdr::size__ SDRSize( void ) const;
+		virtual sdr::size__ SDRSize( void) const override;
 		// Dporte.
-		virtual void SDRRecall(
+		virtual sdr::sSize SDRFetch(
 			sdr::row_t__ Position,
 			sdr::size__ Amount,
-			sdr::byte__ *Buffer );
+			sdr::byte__ *Buffer,
+			qRPN) override;
 		virtual void SDRStore(
 			const sdr::byte__ *Buffer,
 			sdr::size__ Amount,
-			sdr::row_t__ Position )
+			sdr::row_t__ Position) override
 		{
-			qRFwk();
+	    qRUnx();
 		}
 	public:
 		_indexed_aggregated_storage_driver__( const indexed_aggregated_storage_ *&AStorage )
@@ -495,13 +502,13 @@ namespace ias {
 		uys::eState Init(
 			const rHF &Filenames,
 			uys::mode__ Mode,
-			uys::eBehavior Behavior,
+			sdr::eType Type,
 			flsq::rId Id)
 		{
-			uys::eState State = Descriptors_.Init(Filenames.Descriptors, Mode, Behavior, Id);
+			uys::eState State = Descriptors_.Init(Filenames.Descriptors, Mode, Type, Id);
 
 			if ( !State.IsError() ) {
-				if ( State != Storage_.Init(Filenames.Storage, Mode, Behavior, Id) )
+				if ( State != Storage_.Init(Filenames.Storage, Mode, Type, Id) )
 					State = uys::sInconsistent;
 			}
 
@@ -511,12 +518,15 @@ namespace ias {
 
 # endif
 
-	inline void _indexed_aggregated_storage_driver__::SDRRecall(
+	inline sdr::sSize _indexed_aggregated_storage_driver__::SDRFetch(
 		sdr::row_t__ Position,
 		sdr::size__ Amount,
-		sdr::byte__ *Buffer )
+		sdr::byte__ *Buffer,
+		qRPType)
 	{
-		_AStorage->Read( _Index, Position, Amount, Buffer );
+		_AStorage->Read(_Index, Position, Amount, Buffer);
+
+		return Amount;
 	}
 
 	inline sdr::size__ _indexed_aggregated_storage_driver__::SDRSize( void ) const

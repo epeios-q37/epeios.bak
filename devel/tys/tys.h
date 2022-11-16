@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// TYped Storage 
+// TYped Storage
 
 #ifndef TYS_INC_
 # define TYS_INC_
@@ -47,7 +47,7 @@ namespace tys {
 			sdr::size__ Nombre,
 			t *Tampon ) const
 		{
-			b::Recall( Position * sizeof( t ), Nombre * sizeof( t ), (sdr::byte__ *)Tampon );
+			b::Fetch(Position * sizeof( t ), Nombre * sizeof( t ), (sdr::byte__ *)Tampon, qRPDefault);
 		}
 		// crit 'Taille' objets de 'Tampon'  la position 'Position'
 		void _Store(
@@ -292,13 +292,13 @@ namespace tys {
 		storage__( typename _storage_<t, uys::untyped_storage__< amount * size >, r >::s &S = *( typename _storage_<t, uys::untyped_storage__< amount * size >, r >::s *) NULL )	// To simplify use in 'BCH'.
 		: _storage_<t, uys::untyped_storage__< amount * size >, r >( S )
 		{}
-	
+
 	};
 
 
 	//d A static set of 'amount' object of type 'Type'.
-	#define E_STORAGEt__( type, amount, r ) storage__< type, amount, sizeof( type ), r > 
-	#define E_STORAGE__( type, amount ) storage__< type, amount, sizeof( type ), sdr::row__ > 
+	#define E_STORAGEt__( type, amount, r ) storage__< type, amount, sizeof( type ), r >
+	#define E_STORAGE__( type, amount ) storage__< type, amount, sizeof( type ), sdr::row__ >
 
 		/*c A bunch of object of 'amount' objects of type 't' of size 'size' stored in conventional memory.
 	The size parameter was added due to a bug of Borland C++, which doesn't like a 'sizeof'
@@ -319,7 +319,7 @@ namespace tys {
 	};
 
 
-# define E_STORAGEt___( type, r ) storage___< type, r > 
-# define E_STORAGE___( type ) storage___< type, sdr::ow__ > 
+# define E_STORAGEt___( type, r ) storage___< type, r >
+# define E_STORAGE___( type ) storage___< type, sdr::ow__ >
 }
 #endif

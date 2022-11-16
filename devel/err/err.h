@@ -255,19 +255,27 @@ namespace err {
 
 // Error handling parameter related macros.
 
-// Definition with default value.
-# define qRPD	qRPN = err::h_Default
+# define qRPType	err::handling__
 
-// Naked defintion, without default value.
-# define qRPN	err::handling__ qRP
+# define qRPDefault err::h_Default
+
+# define qRPUser err::hUserDefined
+
+# define qRPThrow err::hThrowException
+
+// Definition with default value.
+# define qRPD	qRPN = qRPDefault
+
+// Naked definition, without default value.
+# define qRPN	qRPType qRP
 
 // For testing
-# define qRPT ( qRP != err::hUserDefined )
+# define qRPT ( qRP != qRPUser )
 
 // For reference.
 # define qRP ErrHandling
 
 // Parameter value for user handled error.
-# define qRPU err::hUserDefined
+# define qRPU qRPUser
 
 #endif

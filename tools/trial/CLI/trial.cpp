@@ -22,6 +22,8 @@
 
 #include "registry.h"
 #include "trial3.h"
+#include "trial4.h"
+#include "trial5.h"
 
 #include "sclt.h"
 #include "scle.h"
@@ -159,6 +161,16 @@ namespace {
 	{
 	  trial3::Launch();
 	}
+
+	void T4_(void)
+	{
+	  trial4::Launch();
+	}
+
+	void T5_(void)
+	{
+	  trial5::Launch();
+	}
 }
 
 #define C( name )\
@@ -179,6 +191,8 @@ qRB;
 	C( T1 );
 	C( T2 );
 	C( T3 );
+	C( T4 );
+	C( T5 );
 	else
 		qRGnr();
 

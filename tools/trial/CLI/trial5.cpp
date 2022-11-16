@@ -18,60 +18,49 @@
 */
 
 
-#include "trial3.h"
+#include "trial5.h"
 
 #include "cio.h"
 #include "lstcrt.h"
 
 
-using namespace trial3;
+using namespace trial5;
 
 namespace {
-  qROW( CRow_ );
+  qROW( Row_ );
 
-  typedef lstcrt::qLMCRATEd( str::dString, sCRow_ ) dCrate_;
-  qW( Crate_ );
+  typedef lstcrt::qLMCRATEd( str::dString, sRow_ ) dCrate_;
+  qW(Crate_);
 
-  qROW( BRow_ );
-
-  typedef lstbch::qLBUNCHd( bso::sU8, sBRow_ ) dBunch_;
-  qW(Bunch_);
-
-  qHOOKS2(lstcrt::sHooks, Crate, lstbch::sHooks, Bunch);
+  using lstcrt::sHooks;
 
   class dBundle_ {
   public:
     struct s {
       dCrate_::s Crate;
-      dBunch_::s Bunch;
       bso::sU8 Value;
     } &S_;
     dCrate_ Crate;
-    dBunch_ Bunch;
     dBundle_(s &S)
     : S_(S),
-      Crate(S.Crate),
-      Bunch(S.Bunch)
+      Crate(S.Crate)
     {}
     void reset(bso::sBool P = true)
     {
-      tol::reset(P, Crate, Bunch);
+      tol::reset(P, Crate);
       S_.Value = 50;
     }
     void plug(sHooks &Hooks)
     {
-      Crate.plug(Hooks.Crate_);
-      Bunch.plug(Hooks.Bunch_);
+      Crate.plug(Hooks);
     }
     void plug(qASd *AS)
     {
       Crate.plug(AS);
-      Bunch.plug(AS);
     }
     dBundle_ &operator =(const dBundle_ &B)
     {
       Crate = B.Crate;
-      Bunch = B.Bunch;
 
       S_.Value = B.S_.Value;
 
@@ -79,26 +68,18 @@ namespace {
     }
     void Init(void)
     {
-      tol::Init(Crate, Bunch);
+      tol::Init(Crate);
       S_.Value = 100;
     }
   };
 
   qW( Bundle_ );
 
-// #define FILE
-#define FILES
+#define FILE
+// #define OFFSET
 
-#ifdef FILE
-# ifdef FILES
-#  error
-# endif
-#elif defined( FILES )
-# ifdef OFFSET
-#  error
-# endif
-#else
-# define NO_FILES
+#ifndef FILE
+# define NO_FILE
 #endif
 
 #ifdef FILE
@@ -107,12 +88,9 @@ namespace {
 # else
   uys::rFH FH_;
 # endif
-#elif defined( FILES )
-  uys::rFH FHC_, FHB_;
-  ags::aggregated_storage ASC_, ASB_;
 #endif
 
-#ifndef FILES
+#ifndef NO_FILE
   ags::aggregated_storage AS_;
 #endif
   wBundle_ Bundle_;
@@ -121,12 +99,7 @@ namespace {
   bso::sBool Initialize_(void)
   {
 #ifdef FILE
-    bso::sBool Exists = FH_.Init("T3", uys::mReadWrite).Boolean();
-#elif defined( FILES )
-    bso::sBool Exists = FHC_.Init("T3c", uys::mReadWrite).Boolean();
-
-    if ( Exists != FHB_.Init("T3b", uys::mReadWrite).Boolean() )
-      qRGnr();
+    bso::sBool Exists = FH_.Init("T4", uys::mReadWrite).Boolean();
 #else
     bso::sBool Exists = false;
 #endif
@@ -134,19 +107,11 @@ namespace {
 #ifdef FILE
     AS_.plug(FH_);
     Bundle_.plug(&AS_);
-#elif defined( FILES )
-    ASC_.plug(FHC_);
-    ASB_.plug(FHB_);
-    Bundle_.Crate.plug(&ASC_);
-    Bundle_.Bunch.plug(&ASB_);
 #endif
 
     if ( !Exists ) {
 #ifdef FILE
       AS_.Init();
-#elif defined( FILES )
-      ASC_.Init();
-      ASB_.Init();
 #endif
       Bundle_.Init();
     }
@@ -156,18 +121,14 @@ namespace {
 
   void Flush_(void)
   {
-    Bundle_.Crate.Flush();
 #ifdef FILE
     FH_.Flush();
-#elif defined( FILES )
-    FHC_.Flush();
-    FHB_.Flush();
 #endif
   }
 
   void Display_(void)
   {
-    cio::COut << Bundle_.Crate(Bundle_.Crate.First()) << " : " << (bso::sUInt)Bundle_.Bunch(Bundle_.Bunch.First()) << txf::nl << txf::commit;
+    cio::COut << (bso::sUInt)Bundle_.S_.Value << " : " << Bundle_.Crate(Bundle_.Crate.First()) << txf::nl << txf::commit;
   }
 
   void Put_(void)
@@ -177,7 +138,7 @@ namespace {
 #elif !defined( NO_FILES )
     flf::rWFlow Flow;
 
-    Flow.Init("T3s.q37");
+    Flow.Init("T5s.q37");
 
     Flow.Write(&Bundle_.S_, sizeof( Bundle_.S_));
 
@@ -192,7 +153,7 @@ namespace {
 #elif !defined( NO_FILES )
     flf::rRFlow Flow;
 
-    Flow.Init("T3s.q37");
+    Flow.Init("T5s.q37");
 
     Flow.Read(sizeof( Bundle_.S_), &Bundle_.S_);
 
@@ -201,30 +162,24 @@ namespace {
   }
 }
 
-void trial3::Launch(void)
+void trial5::Launch(void)
 {
   if ( !Initialize_() ) {
-    sCRow_ Row = Bundle_.Crate.New();
-    Bundle_.Crate(Row).Init("Short content.");
-    Bundle_.Bunch.Add(25);
+    sRow_ Row = Bundle_.Crate.New();
+    Bundle_.Crate(Row).Init("Short");
+    Bundle_.S_.Value = 30;
     Flush_();
     Display_();
     Put_();
   } else {
     Get_();
     Display_();
-//    Bundle_.Crate(Bundle_.Crate.First()) = "Longer content.";
+    Bundle_.Crate(Bundle_.Crate.First()) = "Longer";
+    Bundle_.S_.Value = 45;
     Display_();
+    Flush_();
+    Put_();
   }
 
   Bundle_.reset();
-#ifdef FILE
-  AS_.reset();
-  FH_.reset();
-#elif defined( FILES )
-  ASC_.reset();
-  FHC_.reset();
-  ASB_.reset();
-  FHB_.reset();
-#endif
 }

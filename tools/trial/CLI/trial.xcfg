@@ -6,7 +6,7 @@
   <xpp:expand href="../../../CLI.xcfg"/>
 		<Parameters>
 			<Language>fr</Language>
-			<Command>T3</Command>
+			<Command>T5</Command>
 			<!-- Default command -->
 			<T1>
                 <Value>-1</Value>

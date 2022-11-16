@@ -351,35 +351,41 @@ namespace flsq {
 				qRLbr();
 			}
 		}
-		void Read_(
+		bso::sSize Read_(
 			position__ Position,
 			bso::size__ Nombre,
-			void *Tampon )
+			void *Tampon,
+			qRPD)
 		{
 			Open_( false );
 
-			bso::size__ Amount;
+			bso::sSize
+        TotalAmount = 0,
+        LoopAmount = 0;
 
 			File_.Seek( Position );
 
 			while( Nombre > 0 ) {
+				LoopAmount = File_.Read( Nombre, Tampon );
 
-				Amount = (bso::size__)File_.Read( Nombre, Tampon );
-
-				if ( Amount <= 0 ) {
-					if ( Amount == 0 ) {
-						qRFwk();	// May be we should not generate an error, due to the behavior of some lybrary ('AGS' ? ).
-						Amount = Nombre;
+				if ( LoopAmount <= 0 ) {
+					if ( LoopAmount == 0 ) {
+            if ( qRPT )
+              qRFwk();
+						Nombre = 0;
 					} else
 						qRFwk();
+				} else {
+				  TotalAmount += LoopAmount;
+          Nombre -= LoopAmount;
+          Tampon = (char *)Tampon + LoopAmount;
 				}
-
-				Nombre -= Amount;
-				Tampon = (char *)Tampon + Amount;
 			}
 
 			if ( !Temoin_.Manuel )
 				ReleaseFile();
+
+      return TotalAmount;
 		}
 			/* lit  partir de 'Taille' et place dans 'Tampon' 'Taille' octets
 			retourne le nombre d'octets effectivement lus */
@@ -499,6 +505,10 @@ namespace flsq {
 # ifdef CPE_C_MSC
 #  undef CreateFile
 # endif
+    sdr::eType Type(void) const
+    {
+      return Temoin_.Persistant ? sdr::tPersistent : sdr::tVolatile;
+    }
 		bso::bool__ CreateFile( err::handling__ ErrHandle = err::h_Default )
 		{
 			bso::sBool Success = Open_( false, ErrHandle );
@@ -680,6 +690,10 @@ namespace flsq {
     {
       reset();
     }
+    sdr::eType OSDType(void) const
+    {
+      return S_.Type();
+    }
 		void OSDAllocate( sdr::sSize Size )
 		{
 			return S_.Allocate_(Size);
@@ -698,12 +712,13 @@ namespace flsq {
 #endif
 		}
 		//v Recall 'Amount' at position 'Position' and put them in 'Buffer'.
-		void OSDRecall(
+		sdr::sSize OSDFetch(
 			sdr::tRow Position,
 			sdr::sSize Amount,
-			sdr::sByte *Buffer )
+			sdr::sByte *Buffer,
+			qRPN)
     {
-      return S_.Read_(Position, Amount, Buffer);
+      return S_.Read_(Position, Amount, Buffer, qRP);
     }
 		//v Write 'Amount' bytes from 'Buffer' to storage at position 'Position'.
 		void OSDStore(

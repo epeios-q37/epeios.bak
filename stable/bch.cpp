@@ -36,7 +36,7 @@ void bch::GetRelations_(
 	sdr::row_t__ Row = 0;
 
 	while ( Row < Limit ) {
-		Sorted.Recall( Row, Size, Buffer );
+		Sorted.Fetch(Row, Size, Buffer, qRPDefault);
 		Relations.Append( Unsorted.Search( Buffer, Size, 0, Limit ) / Size );
 
 		Row += Size;
