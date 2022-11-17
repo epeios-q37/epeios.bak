@@ -55,7 +55,7 @@ sdr::sSize aggregated_storage_driver__::SDRFetch(
 	sdr::byte__ *Buffer,
 	qRPN)
 {
-	_AStorage->Read( _Descriptor, Position, Amount, Buffer );
+	_AStorage->Read(_Descriptor, Position, Amount, Buffer, qRP);
 
 	return Amount;
 }

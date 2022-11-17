@@ -13,6 +13,10 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-11-17
+- AGS: fixing missing handling of `qRP`;
+- CTN: changing somewhat misleading naming;
+
 ## 2022-11-16
 - AGS: is now aware of storage type (persistent/volatile) and behaves appropriatly;
 - CTN, LSTBCH, LSTCTN, MNS, OSD, UYS: [adpt];

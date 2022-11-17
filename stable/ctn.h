@@ -82,7 +82,7 @@ namespace ctn {
 	qHOOKS2( tys::sHook, Statics, ias::sHooks, Dynamics );
 
 	typedef uys::sHook sHook_;
-	typedef ias::indexed_aggregated_storage_driver__ rAHook_;
+	typedef ias::indexed_aggregated_storage_driver__ rVIASDriver_;
 
 	//c The base of a container. Internal use.
 	template <typename t, typename st, typename r> class basic_container_
@@ -97,13 +97,13 @@ namespace ctn {
 		{
 			if ( IsVolatile_ && IsSet_() ) {
 				FlushObject_();
-				Statics.Store( S_, *Hook_.Index() );
+				Statics.Store( S_, *IASDriver_.Index() );
 			}
 
 			IsVolatile_ = false;
 
 			if ( Reset )
-				Hook_.Index( qNIL );
+				IASDriver_.Index( qNIL );
 		}
 		void _Allocate(
 			sdr::size__ Size,
@@ -121,12 +121,12 @@ namespace ctn {
 
 			Flush_( false );
 
-			Hook_.Index( *Row );
+			IASDriver_.Index( *Row );
 			Statics.Recall( Row, S_ );
 		}
 		bso::sBool IsSet_( void ) const
 		{
-			return Hook_.Index() != qNIL;
+			return IASDriver_.Index() != qNIL;
 		}
 		void Get_(
 			r Row,
@@ -137,7 +137,7 @@ namespace ctn {
 					qRFwk();
 				if ( !IsConst )
 					IsVolatile_ = true;
-			} else if ( Row != *Hook_.Index() ) {
+			} else if ( Row != *IASDriver_.Index() ) {
 				Set_( Row );
 
 				IsVolatile_ = !IsConst;
@@ -176,7 +176,7 @@ namespace ctn {
 	protected:
 		st Reseted_;	//Static part in a reseted state.
 		mutable t Object_;
-		mutable rAHook_ Hook_;
+		mutable rVIASDriver_ IASDriver_;
 		mutable bso::sBool IsVolatile_;
 	public:
 		//r All the static parts.
@@ -206,7 +206,7 @@ namespace ctn {
 			Dynamics.reset( P );
 			Statics.reset( P );
 			amount_extent_manager_<r>::reset( P );
-			Hook_.reset( P );
+			IASDriver_.reset( P );
 			IsVolatile_ = false;
 		}
 		void plug( sHooks &Hooks )
@@ -215,7 +215,7 @@ namespace ctn {
 			Statics.plug( Hooks.Statics_ );
 			Dynamics.plug( Hooks.Dynamics_ );
 			_Allocate( Dynamics.Amount(), aem::mFitted );
-			Hook_.Init( Dynamics );
+			IASDriver_.Init( Dynamics );
 		}
 		void plug( qASd *AS )
 		{
@@ -225,7 +225,7 @@ namespace ctn {
 				// 'Object' is plugged independently.
 				Dynamics.plug( AS );
 				Statics.plug( AS );
-				Hook_.Init( Dynamics );
+				IASDriver_.Init( Dynamics );
 		//		amount_extent_manager_::plug( M );	// Not relevant
 			}
 		}
@@ -256,7 +256,7 @@ namespace ctn {
 
 			amount_extent_manager_<r>::Init();
 
-			Hook_.Init( Dynamics );
+			IASDriver_.Init( Dynamics );
 		}
 		void PreAllocate( sdr::size__ Size )
 		{
@@ -540,7 +540,7 @@ namespace ctn {
 	private:
 		bool Vide_( void ) const
 		{
-			return Pilote_.Index() == qNIL;
+			return IASDriver_.Index() == qNIL;
 		}
 		void Vider_( void )
 		{
@@ -549,10 +549,10 @@ namespace ctn {
 				if ( Conteneur_ == NULL )
 				qRFwk();
 # endif
-				Conteneur_->Statics.Store( ctn_S_, *Pilote_.Index() );
+				Conteneur_->Statics.Store( ctn_S_, *IASDriver_.Index() );
 			}
 
-			Pilote_.Index( qNIL );
+			IASDriver_.Index( qNIL );
 		}
 	protected:
 		// Conteneur auquel est rattach l'lment.
@@ -560,7 +560,7 @@ namespace ctn {
 		basic_container_<t, st, r> *Conteneur_;
 		/* Pilote permettant l'accs  la partie dynamique des objets contenus
 		dans le conteneur auquel cet lment est rattach. */
-		rAHook_ Pilote_;
+		rVIASDriver_ IASDriver_;
 	public:
 		struct s
 		: public st
@@ -571,7 +571,7 @@ namespace ctn {
 				Flush();
 			}
 
-			Pilote_.reset( P );
+			IASDriver_.reset( P );
 
 			Conteneur_ = NULL;
 		}
@@ -585,7 +585,7 @@ namespace ctn {
 		}
 	/*	tym::row__ ctn_Position( void )
 		{
-			return Pilote_.Index();
+			return IASDriver_.Index();
 		}
 	*/
 		// Rattache au conteneur 'Conteneur'.
@@ -601,7 +601,7 @@ namespace ctn {
 			Conteneur->Flush();
 
 			Conteneur_ = Conteneur;
-			Pilote_.Init( Conteneur->Dynamics );
+			IASDriver_.Init( Conteneur->Dynamics );
 		}
 		//* Cale l'lment sur l'lment du conteneur  la position 'Position'
 		void Set( r Position )
@@ -610,7 +610,7 @@ namespace ctn {
 			if ( Position == qNIL )
 				qRFwk();
 # endif
-			if ( Pilote_.Index() != *Position )
+			if ( IASDriver_.Index() != *Position )
 			{
 				Vider_();
 # ifdef CTN_DBG
@@ -618,7 +618,7 @@ namespace ctn {
 					qRFwk();
 # endif
 				Conteneur_->Statics.Recall( Position, ctn_S_ );
-				Pilote_.Index( *Position );
+				IASDriver_.Index( *Position );
 			}
 		}
 		// Synchronise avec l'lment du conteneur (leur contenu devient identique).
@@ -639,26 +639,26 @@ namespace ctn {
 		// Set as flushed, but without flushing the content.
 		void Erase( void )
 		{
-			Pilote_.Index( qNIL );
+			IASDriver_.Index( qNIL );
 		}
 		r Index( void ) const
 		{
-			return *Pilote_.Index();
+			return *IASDriver_.Index();
 		}
 	};
 
-	typedef ias::const_indexed_aggregated_storage_driver__ rCAHook_;
+	typedef ias::const_indexed_aggregated_storage_driver__ rCIASDriver_;
 
 	template <typename t, typename st, typename r> class item_base_const__
 	{
 	private:
 		bool Vide_( void ) const
 		{
-			return Pilote_.Index() == qNIL;
+			return IASDriver_.Index() == qNIL;
 		}
 		void Vider_( void )
 		{
-			Pilote_.Index( qNIL );
+			IASDriver_.Index( qNIL );
 		}
 	protected:
 		// Conteneur auquel est rattach l'lment.
@@ -666,7 +666,7 @@ namespace ctn {
 		const basic_container_<t, st,r> *Conteneur_;
 		/* Pilote permettant l'accs  la partie dynamique des objets contenus
 		dans le conteneur auquel cet lment est rattach. */
-		rCAHook_ Pilote_;
+		rCIASDriver_ IASDriver_;
 	public:
 		struct s
 		: public st
@@ -677,7 +677,7 @@ namespace ctn {
 				Flush();
 			}
 
-			Pilote_.reset( P );
+			IASDriver_.reset( P );
 
 			Conteneur_ = NULL;
 		}
@@ -691,7 +691,7 @@ namespace ctn {
 		}
 	/*	mbs__position Position( void )
 		{
-			return Pilote_.Index();
+			return IASDriver_.Index();
 		}
 	*/	// Rattache au conteneur 'Conteneur'.
 		void Init( const basic_container_<t, st,r> &Conteneur )
@@ -699,7 +699,7 @@ namespace ctn {
 			Conteneur.Flush();
 
 			Conteneur_ = &Conteneur;
-			Pilote_.Init( Conteneur.Dynamics );
+			IASDriver_.Init( Conteneur.Dynamics );
 		}
 		//* Cale l'lment sur l'lment du conteneur  la position 'Position'
 		void Set( r Position )
@@ -708,7 +708,7 @@ namespace ctn {
 			if ( Position == qNIL )
 				qRFwk();
 # endif
-			if ( *Pilote_.Index() != *Position )
+			if ( *IASDriver_.Index() != *Position )
 			{
 				Vider_();
 # ifdef CTN_DBG
@@ -716,7 +716,7 @@ namespace ctn {
 					qRFwk();
 # endif
 				Conteneur_->Statics.Recall( Position, ctn_S_ );
-				Pilote_.Index( *Position );
+				IASDriver_.Index( *Position );
 			}
 		}
 		// Synchronise avec l'lment du conteneur (leur contenu devient identique).
@@ -731,11 +731,11 @@ namespace ctn {
 		// Set as flushed, but without flushing the content.
 		void Erase( void )
 		{
-			Pilote_.Index( qNIL );
+			IASDriver_.Index( qNIL );
 		}
 		r Index( void ) const
 		{
-			return *Pilote_.Index();
+			return *IASDriver_.Index();
 		}
 	};
 
@@ -760,7 +760,7 @@ namespace ctn {
 
 			Objet_.reset( false );
 
-			Objet_.plug( item_base_volatile__< t, mono_static__< typename_ t::s >, r >::Pilote_ );
+			Objet_.plug( item_base_volatile__< t, mono_static__< typename_ t::s >, r >::IASDriver_ );
 		}
 		volatile_mono_item( void )
 		: Objet_( item_base_volatile__< t, mono_static__< typename_ t::s >, r >::ctn_S_ )
@@ -825,7 +825,7 @@ namespace ctn {
 			item_base_const__< t, mono_static__<typename_ t::s >, r >::reset( P );
 			Objet_.reset( false );
 
-			Objet_.plug(item_base_const__< t, mono_static__< typename_ t::s >, r >::Pilote_);
+			Objet_.plug(item_base_const__< t, mono_static__< typename_ t::s >, r >::IASDriver_);
 		}
 		const_mono_item( void )
 		: Objet_( item_base_const__< t, mono_static__< typename_ t::s >, r >::ctn_S_.ST )
@@ -895,7 +895,7 @@ namespace ctn {
 		{
 			SetReseted_();
 			basic_container_< t, mono_static__< typename_ t::s >, r >::reset( P );
-			basic_container_< t, mono_static__< typename_ t::s >, r >::Object_.plug(basic_container_< t, mono_static__< typename_ t::s >, r >::Hook_);
+			basic_container_< t, mono_static__< typename_ t::s >, r >::Object_.plug(basic_container_< t, mono_static__< typename_ t::s >, r >::IASDriver_);
 		}
 		void FlushTest( void ) const
 		{
@@ -954,7 +954,7 @@ namespace ctn {
 			Objet_.reset( false );
 			AStorage.reset( P );
 
-			AStorage.plug( item_base_volatile__< t, poly_static__< typename_ t::s >, r >::Pilote_ );
+			AStorage.plug( item_base_volatile__< t, poly_static__< typename_ t::s >, r >::IASDriver_ );
 			Objet_.plug( AStorage );
 		}
 		volatile_poly_item( void )
@@ -1030,7 +1030,7 @@ namespace ctn {
 			Objet_.reset( false );
 			AStorage.reset( P );
 
-			AStorage.plug(item_base_const__< t, poly_static__< typename_ t::s >, r >::Pilote_);
+			AStorage.plug(item_base_const__< t, poly_static__< typename_ t::s >, r >::IASDriver_);
 			Objet_.plug( &AStorage );
 		}
 		const_poly_item( void )
@@ -1099,7 +1099,7 @@ namespace ctn {
 		{
 			SetReseted_();
 			basic_container_< t, poly_static__< typename_ t::s >, r >::reset( P );
-			AStorage_.plug(basic_container_< t, poly_static__< typename_ t::s >, r >::Hook_);
+			AStorage_.plug(basic_container_< t, poly_static__< typename_ t::s >, r >::IASDriver_);
 			basic_container_< t, poly_static__< typename_ t::s >, r >::Object_.plug( &AStorage_ );
 		}
 		poly_container_ &operator =( const poly_container_ &C )

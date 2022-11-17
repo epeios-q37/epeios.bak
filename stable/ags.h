@@ -1452,9 +1452,10 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			descriptor__ Descriptor,
 			sdr::row_t__ Position,
 			sdr::size__ Amount,
-			sdr::byte__ *Buffer ) const
+			sdr::byte__ *Buffer,
+			qRPD) const
 		{
-			Storage.Fetch(*Descriptor + Position, Amount, Buffer, qRPDefault);
+			Storage.Fetch(*Descriptor + Position, Amount, Buffer, qRP);
 		}
 		void Write(
 			const sdr::byte__ *Buffer,
