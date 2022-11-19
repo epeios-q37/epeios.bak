@@ -167,7 +167,7 @@ qRH
 	str::wStrings Strings;
 qRB
 	Strings.Init();
-	
+
 	A( 1 );
 	A( 2 );
 	A( 3 );
@@ -301,8 +301,11 @@ int main( int argc, char *argv[] )
 qRFH
 qRFB
 	cio::Initialize( cio::t_Default );
-	COut << "Test of library " << CTN_NAME << ' ' << __DATE__" "__TIME__"\n";
+	COut << "Test of library " << CTN_NAME << ' ' << __DATE__ " " __TIME__ "\n";
 
+	Test1( argc, argv );
+	Test2( argc, argv );
+	Test3( argc, argv );
 	Test4( argc, argv );
 qRFR
 qRFT

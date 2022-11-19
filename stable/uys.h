@@ -395,6 +395,10 @@ namespace uys {
 		{
 			return S_.Size;
 		}
+		sdr::sSize PhysicalSize(void) const // May be different as the theoretical one if the storage is a file, for ex.
+		{
+		  return _Driver.Size();
+		}
 		sdr::byte__ *CVMBuffer( void ) const
 		{
 			return _Driver.CVMBuffer();

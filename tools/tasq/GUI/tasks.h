@@ -69,6 +69,7 @@ namespace tasks {
 
   class dBundle {
   private:
+    qASd AS_;
     void StoreMain_(void);
     void Retrieve_(
       sTRow Row,
@@ -120,6 +121,7 @@ namespace tasks {
     }
   public:
     struct s {
+      qASd::s AS;
       dStrings::s Strings;
       dTasks::s Tasks;
       dQueue::s Queue;
@@ -130,19 +132,19 @@ namespace tasks {
     dQueue Queue;
     dBundle( s &S)
     : S_(S),
+      AS_(S.AS),
       Strings(S.Strings),
       Tasks(S.Tasks),
       Queue(S.Queue)
     {}
     void reset(bso::sBool P = true)
     {
-      tol::reset(P, Strings, Tasks, Queue, S_.Main);
+      tol::reset(P, AS_, Strings, Tasks, Queue, S_.Main);
     }
-    void plug(sHooks &Hooks)
+    void plug(uys::sHook &Hook)
     {
-      Strings.plug(Hooks.Strings_);
-      Tasks.plug(Hooks.Tasks_);
-      Queue.plug(Hooks.Queue_);
+      AS_.plug(Hook);
+      plug(&AS_);
     }
     void plug(qASd *AS)
     {
@@ -161,7 +163,7 @@ namespace tasks {
     }
     void Init(void)
     {
-      tol::Init(Strings, Tasks, Queue);
+      tol::Init(AS_, Strings, Tasks, Queue);
       S_.Main.Init(Queue);
     }
     sTRow Add(

@@ -24,7 +24,6 @@ using namespace tasks;
 
 namespace {
   uys::rFOH<sizeof(dBundle::s)> FH_;
-  ags::aggregated_storage AS_;
   rXBundle XBundle_;
   mtx::rMutex Mutex_ = mtx::Undefined;
 }
@@ -70,7 +69,7 @@ namespace {
     sTRow Row = qNIL;
 
     _::Add("T1", "D1", Row);
-/*    _::Add("T2", "D2", Row);
+    _::Add("T2", "D2", Row);
     _::Add("T3", "D3", Row);
 
     Row = XBundle_.Next();
@@ -90,7 +89,7 @@ namespace {
 
     _::Add("T2.1.1", "D2.1.1", Row);
     _::Add("T2.1.2", "D2.1.2", Row);
-*/
+
   }
 }
 
@@ -99,13 +98,11 @@ qGCTOR(Taslks)
   Mutex_ = mtx::Create();
   bso::sBool Exists = FH_.Init("Test", uys::mReadWrite).Boolean();
 
-  AS_.plug(FH_);
-  XBundle_.plug(&AS_);
+  XBundle_.plug(FH_);
 
   if ( Exists ) {
     FH_.Get((sdr::sByte *)&XBundle_.S_);
   } else {
-    AS_.Init();
     XBundle_.Init();
     Populate_();
   }

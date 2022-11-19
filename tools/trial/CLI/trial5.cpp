@@ -29,6 +29,10 @@ using namespace trial5;
 namespace {
   qROW( Row_ );
 
+#define LIST
+#define FILE
+#define OFFSET
+
 #ifdef LIST
   using lstcrt::sHooks;
   typedef lstcrt::qLMCRATEd( str::dString, sRow_ ) dCrate_;
@@ -40,20 +44,28 @@ namespace {
 
 
   class dBundle_ {
+    qASd AS_;
   public:
     struct s {
+      qASd::s AS;
       dCrate_::s Crate;
       bso::sU8 Value;
     } &S_;
     dCrate_ Crate;
     dBundle_(s &S)
     : S_(S),
+      AS_(S.AS),
       Crate(S.Crate)
     {}
     void reset(bso::sBool P = true)
     {
-      tol::reset(P, Crate);
+      tol::reset(P, AS_, Crate);
       S_.Value = 50;
+    }
+    void plug(uys::sHook &Hook)
+    {
+      AS_.plug(Hook);
+      plug(&AS_);
     }
     void plug(sHooks &Hooks)
     {
@@ -73,15 +85,14 @@ namespace {
     }
     void Init(void)
     {
-      tol::Init(Crate);
+      tol::Init(AS_, Crate);
       S_.Value = 100;
     }
   };
 
   qW( Bundle_ );
 
-#define FILE
-// #define OFFSET
+
 
 #ifndef FILE
 # define NO_FILE
@@ -95,9 +106,6 @@ namespace {
 # endif
 #endif
 
-#ifndef NO_FILE
-  ags::aggregated_storage AS_;
-#endif
   wBundle_ Bundle_;
 
 
@@ -110,14 +118,10 @@ namespace {
 #endif
 
 #ifdef FILE
-    AS_.plug(FH_);
-    Bundle_.plug(&AS_);
+    Bundle_.plug(FH_);
 #endif
 
     if ( !Exists ) {
-#ifdef FILE
-      AS_.Init();
-#endif
       Bundle_.Init();
     }
 
@@ -131,9 +135,26 @@ namespace {
 #endif
   }
 
+  namespace _ {
+    void Display(const dCrate_ &Crate)
+    {
+      sRow_ Row = Crate.First();
+
+      while ( Row != qNIL ) {
+        cio::COut << *Row << ": " << Crate(Row) << "; " << txf::commit;
+
+        Row = Crate.Next(Row);
+      }
+
+      cio::COut << txf::nl << txf::commit;
+    }
+  }
+
   void Display_(void)
   {
-    cio::COut << (bso::sUInt)Bundle_.S_.Value << " : " << Bundle_.Crate(Bundle_.Crate.First()) << txf::nl << txf::commit;
+    cio::COut << (bso::sUInt)Bundle_.S_.Value << " - " << txf::commit;
+
+    _::Display(Bundle_.Crate);
   }
 
   void Put_(void)
@@ -170,8 +191,7 @@ namespace {
 void trial5::Launch(void)
 {
   if ( !Initialize_() ) {
-    sRow_ Row = Bundle_.Crate.New();
-    Bundle_.Crate(Row).Init("Short");
+    Bundle_.Crate(Bundle_.Crate.New()).Init("Short");
     Bundle_.S_.Value = 30;
     Flush_();
     Display_();
@@ -179,7 +199,11 @@ void trial5::Launch(void)
   } else {
     Get_();
     Display_();
-    Bundle_.Crate(Bundle_.Crate.First()) = "Longer";
+    Bundle_.Crate(Bundle_.Crate.New()).Init("Longer");
+    Display_();
+    Bundle_.Crate.Remove(Bundle_.Crate.First());
+    Display_();
+    Bundle_.Crate(Bundle_.Crate.New()).Init("More longer");
     Bundle_.S_.Value = 45;
     Display_();
     Flush_();

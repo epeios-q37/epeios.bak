@@ -13,6 +13,12 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-11-19
+- AGS:
+  - fixing size issue occuring when storage is a file;
+  - optimisation;
+- UYS: [extn];
+
 ## 2022-11-17
 - AGS: fixing missing handling of `qRP`;
 - CTN: changing somewhat misleading naming;

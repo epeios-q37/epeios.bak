@@ -2,7 +2,7 @@
   xmlns:xdh="http://epeios.q37.info/ns/xdhtml">
   <div style="width: 100%;">
     <div style="display: flex; flex-direction: row;">
-      <fieldset style="width: 30%" id="Tree"></fieldset>
+      <fieldset id="Tree"></fieldset>
       <div style="width: 70%">
         <fieldset id="Title"></fieldset>
         <fieldset style="width: 95%;">

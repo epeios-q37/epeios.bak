@@ -26,6 +26,9 @@
 
 using namespace trial3;
 
+// #define FILES
+// #define OFFSET
+
 namespace {
   qROW( CRow_ );
 
@@ -40,8 +43,11 @@ namespace {
   qHOOKS2(lstcrt::sHooks, Crate, lstbch::sHooks, Bunch);
 
   class dBundle_ {
+  private:
+    qASd AS_;
   public:
     struct s {
+      qASd::s AS;
       dCrate_::s Crate;
       dBunch_::s Bunch;
       bso::sU8 Value;
@@ -50,13 +56,19 @@ namespace {
     dBunch_ Bunch;
     dBundle_(s &S)
     : S_(S),
+      AS_(S.AS),
       Crate(S.Crate),
       Bunch(S.Bunch)
     {}
     void reset(bso::sBool P = true)
     {
-      tol::reset(P, Crate, Bunch);
+      tol::reset(P, AS_, Crate, Bunch);
       S_.Value = 50;
+    }
+    void plug(uys::sHook &Hook)
+    {
+      AS_.plug(Hook);
+      plug(&AS_);
     }
     void plug(sHooks &Hooks)
     {
@@ -79,75 +91,26 @@ namespace {
     }
     void Init(void)
     {
-      tol::Init(Crate, Bunch);
+      tol::Init(AS_, Crate, Bunch);
       S_.Value = 100;
     }
   };
 
   qW( Bundle_ );
 
-// #define FILE
-#define FILES
-
-#ifdef FILE
-# ifdef FILES
-#  error
-# endif
-#elif defined( FILES )
-# ifdef OFFSET
-#  error
-# endif
-#else
-# define NO_FILES
-#endif
-
-#ifdef FILE
-# ifdef OFFSET
+#ifdef OFFSET
   uys::rFOH<sizeof(dBundle_::s)> FH_;
-# else
+#else
   uys::rFH FH_;
-# endif
-#elif defined( FILES )
-  uys::rFH FHC_, FHB_;
-  ags::aggregated_storage ASC_, ASB_;
 #endif
-
-#ifndef FILES
-  ags::aggregated_storage AS_;
-#endif
-  wBundle_ Bundle_;
-
 
   bso::sBool Initialize_(void)
   {
-#ifdef FILE
     bso::sBool Exists = FH_.Init("T3", uys::mReadWrite).Boolean();
-#elif defined( FILES )
-    bso::sBool Exists = FHC_.Init("T3c", uys::mReadWrite).Boolean();
 
-    if ( Exists != FHB_.Init("T3b", uys::mReadWrite).Boolean() )
-      qRGnr();
-#else
-    bso::sBool Exists = false;
-#endif
-
-#ifdef FILE
-    AS_.plug(FH_);
-    Bundle_.plug(&AS_);
-#elif defined( FILES )
-    ASC_.plug(FHC_);
-    ASB_.plug(FHB_);
-    Bundle_.Crate.plug(&ASC_);
-    Bundle_.Bunch.plug(&ASB_);
-#endif
+    Bundle_.plug(FH_);
 
     if ( !Exists ) {
-#ifdef FILE
-      AS_.Init();
-#elif defined( FILES )
-      ASC_.Init();
-      ASB_.Init();
-#endif
       Bundle_.Init();
     }
 
@@ -157,12 +120,7 @@ namespace {
   void Flush_(void)
   {
     Bundle_.Crate.Flush();
-#ifdef FILE
     FH_.Flush();
-#elif defined( FILES )
-    FHC_.Flush();
-    FHB_.Flush();
-#endif
   }
 
   void Display_(void)
@@ -174,7 +132,7 @@ namespace {
   {
 #ifdef OFFSET
     FH_.Put((const sdr::sByte *)&Bundle_.S_);
-#elif !defined( NO_FILES )
+#else
     flf::rWFlow Flow;
 
     Flow.Init("T3s.q37");

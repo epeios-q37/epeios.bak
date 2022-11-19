@@ -35,6 +35,18 @@ sclx::action_handler<sSession> main::Core;
 using namespace tasks;
 
 namespace {
+  namespace _{
+    void HandleDescripton(
+      const str::dString &Description,
+      xml::rWriter &Writer)
+    {
+      if ( Description.Amount() ) {
+        Writer.PushTag("Description");
+        Writer.PutCData(Description);
+        Writer.PopTag();
+      }
+    }
+  }
   void Get_(
     xml::rWriter &Writer,
     const dBundle &Bundle)
@@ -58,6 +70,7 @@ namespace {
         Task.Init(Bundle.Queue);
         Bundle.Tasks.Recall(Row, Task);
         Writer.PutAttribute("Title", Bundle.Strings(Task.Title));
+        _::HandleDescripton(Bundle.Strings(Task.Description), Writer);
       }
 
       if ( !SkipChildren && ( Candidate = Bundle.First(Row) ) != qNIL ) {

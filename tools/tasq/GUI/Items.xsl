@@ -16,12 +16,12 @@
     <xsl:apply-templates select="Items" />
   </xsl:template>
   <xsl:template match="Items">
-    <ul class="item-ul">
+    <ul class="item-ul" style="width: 100%;">
       <xsl:apply-templates select="Item" />
     </ul>
   </xsl:template>
   <xsl:template match="Item">
-    <li>
+    <li style="display: flex; width: 100%; justify-content: space-between;">
       <xsl:choose>
         <xsl:when test="Items">
           <xsl:attribute name="class">item-li item-li-with-child</xsl:attribute>
@@ -39,6 +39,7 @@
           </span>
         </xsl:otherwise>
       </xsl:choose>
+      <span>🗏</span>
     </li>
   </xsl:template>
 </xsl:stylesheet>

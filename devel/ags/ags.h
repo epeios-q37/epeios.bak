@@ -954,9 +954,9 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 			return Size + ( IsUsed( Header ) ? XHeaderLength : 0 );
 		}
-		size__ _GetSize( descriptor__ Descriptor ) const
+		size__ _GetSize(descriptor__ Descriptor) const
 		{
-			return _GetPriorSize( Descriptor );
+		  return _GetPriorSize(Descriptor);
 		}
 		bso::bool__ _IsLast( sdr::row_t__ Row ) const
 		{
@@ -1237,7 +1237,12 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 					NewDescriptor = NewRow + NewXHeader.MetaDataSize();
 
-					Storage.Store( Storage, OldSize, *NewDescriptor, *OldDescriptor );
+					if ( true || (OldDescriptor != NewDescriptor ) ) {
+            sdr::sSize OldPhysicalSize = Storage.PhysicalSize() - *OldDescriptor; // The physical size may be lesser than the theoretical size, if the storage is a file,
+                                              // so we must adjust the old fragment size to this physical size.
+
+            Storage.Store( Storage, OldSize > OldPhysicalSize ? OldPhysicalSize : OldSize, *NewDescriptor, *OldDescriptor );
+					}
 
 					_WriteHeadMetaData( NewRow, NewXHeader );
 
@@ -1363,7 +1368,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		{
 			Storage.plug( AS );
 		}
-		bso::sBool IsVolatile(void) const
+    bso::sBool IsVolatile(void) const
 		{
 		  switch ( Storage.Type() ) {
       case sdr::tVolatile:
