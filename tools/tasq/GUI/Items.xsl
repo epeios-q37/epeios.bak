@@ -39,7 +39,6 @@
           </span>
         </xsl:otherwise>
       </xsl:choose>
-      <span>🗏</span>
     </li>
   </xsl:template>
 </xsl:stylesheet>

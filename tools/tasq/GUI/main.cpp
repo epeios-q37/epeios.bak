@@ -20,7 +20,9 @@
 #include "main.h"
 
 #include "registry.h"
-#include "tasks.h"
+
+#include "tasqtasks.h"
+#include "tasqxml.h"
 
 using namespace main;
 
@@ -32,75 +34,17 @@ sclx::action_handler<sSession> main::Core;
   }\
   SCLX_ADef( sSession, actions_, name )
 
-using namespace tasks;
+namespace tasks = tasqtasks;
 
 namespace {
-  namespace _{
-    void HandleDescripton(
-      const str::dString &Description,
-      xml::rWriter &Writer)
-    {
-      if ( Description.Amount() ) {
-        Writer.PushTag("Description");
-        Writer.PutCData(Description);
-        Writer.PopTag();
-      }
-    }
-  }
-  void Get_(
-    xml::rWriter &Writer,
-    const dBundle &Bundle)
-  {
-  qRH;
-    sTask Task;
-    sTRow Row = qNIL,
-    Candidate = qNIL;
-    bso::sBool SkipChildren = false;
-  qRB;
-    Writer.PushTag("Items");
-    Row = Bundle.First(Row);
-
-    while ( Row != qNIL ) {
-      if ( !SkipChildren ) {
-        Writer.PushTag("Item");
-        Writer.PutAttribute("id", *Row);
-        if ( Row == 4 )
-          Writer.PutAttribute("Selected", "true");
-
-        Task.Init(Bundle.Queue);
-        Bundle.Tasks.Recall(Row, Task);
-        Writer.PutAttribute("Title", Bundle.Strings(Task.Title));
-        _::HandleDescripton(Bundle.Strings(Task.Description), Writer);
-      }
-
-      if ( !SkipChildren && ( Candidate = Bundle.First(Row) ) != qNIL ) {
-        Writer.PushTag("Items");
-        Row = Candidate;
-      } else if( ( Candidate = Bundle.Next(Row) ) != qNIL ) {
-        Writer.PopTag();  // 'Item'
-        Row = Candidate;
-        SkipChildren = false;
-      } else {
-        Row = Bundle.Parent(Row);
-        Writer.PopTag();  // 'Item'
-        Writer.PopTag();  // 'Items'.
-        SkipChildren = true;
-      }
-    }
-
-  qRR;
-  qRT;
-  qRE;
-  }
-
   void Select_(
-    sTRow Row,
-    const dBundle &Bundle,
+    tasks::sTRow Row,
+    const tasks::dBundle &Bundle,
     sSession &Session)
   {
   qRH;
     bso::pInteger Buffer;
-    sTRow Looper = qNIL;
+    tasks::sTRow Looper = qNIL;
     qCBUFFERh Parent;
   qRB;
     Looper = Row;
@@ -148,7 +92,7 @@ qRB;
 
   CBNDL();
 
-  Get_(Writer, Bundle);
+  tasqxml::Write(Bundle, Writer);
   Writer.reset();
   Flow.reset();
 
@@ -172,7 +116,7 @@ D_( Select )
 {
 qRH;
   BGRD;
-  sTRow Row = qNIL;
+  tasks::sTRow Row = qNIL;
   str::wString Title, Description, Script;
   bso::pInteger Buffer;
 qRB;

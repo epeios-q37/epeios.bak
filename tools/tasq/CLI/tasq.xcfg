@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Configurations xmlns:xpp="http://q37.info/ns/xpp/">
+  <Configuration target="tasq">
+    <xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+    <xpp:expand value-of="q37.xpp"/>
+    <xpp:expand href="../../../CLI.xcfg"/>
+    <Parameters>
+      <Language>en</Language>
+      <Command>Test</Command>
+      <!-- Default command -->
+    </Parameters>
+    <Definitions>
+    </Definitions>
+    <Locale>
+      <xpp:expand select="CLI_Locale"/>
+      <!-- Commands -->
+      <Translations text="TestCommandDescription">
+        <Translation language="fr">Commande de test.</Translation>
+        <Translation language="en">Test command.</Translation>
+      </Translations>
+      <!-- Flags -->
+      <Translations text="TestFlagDescription">
+        <Translation language="fr">fanion de test.</Translation>
+        <Translation language="en">test flag.</Translation>
+      </Translations>
+      <!-- Option descriptions -->
+      <Translations text="TestOptionDescription">
+        <Translation language="fr">option de test.</Translation>
+        <Translation language="en">test option.</Translation>
+      </Translations>
+      <!-- Option labels -->
+      <Translations text="TestOptionLabel">
+        <Translation language="fr">option (fr)</Translation>
+        <Translation language="en">option (en)</Translation>
+      </Translations>
+      <!-- Argument descriptions -->
+      <Translations text="TestArgumentDescription">
+        <Translation language="fr">argument de test.</Translation>
+        <Translation language="en">test argument.</Translation>
+      </Translations>
+      <!-- Argument labels -->
+      <Translations text="TestArgumentLabel">
+        <Translation language="fr">argument (fr)</Translation>
+        <Translation language="en">argument (en)</Translation>
+      </Translations>
+    </Locale>
+    <Arguments>
+      <xpp:expand select="CLI_Arguments"/>
+      <!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
+      <Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %TestArgument%"/>
+      <!-- Fanaux : 'Path', mais pas de 'Value'. -->
+      <Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
+      <!-- Options : 'Path' ET 'Value'. -->
+      <Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
+      <!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
+      <Argument id="TestArgument" Description="TestArgumentDescription" Path="Test" Label="TestArgumentLabel"/>
+      <!-- Affectations des arguments libres-->
+      <Layouts>
+        <Layout command="Test">
+          <Link index="0" Target="TestArgument"/>
+        </Layout>
+      </Layouts>
+    </Arguments>
+  </Configuration>
+</Configurations>

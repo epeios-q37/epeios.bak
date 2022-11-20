@@ -18,9 +18,9 @@
 */
 
 
-#include "tasks.h"
+#include "tasqtasks.h"
 
-using namespace tasks;
+using namespace tasqtasks;
 
 namespace {
   uys::rFOH<sizeof(dBundle::s)> FH_;
@@ -28,21 +28,21 @@ namespace {
   mtx::rMutex Mutex_ = mtx::Undefined;
 }
 
-void tasks::dBundle::StoreMain_(void)
+void tasqtasks::dBundle::StoreMain_(void)
 {
   Strings.Flush();
   FH_.Flush();
   FH_.Put((const sdr::sByte *)&XBundle_.S_);
 }
 
-rXBundle &tasks::Get(hGuard &Guard )
+rXBundle &tasqtasks::Get(hGuard &Guard )
 {
     Guard.InitAndLock(Mutex_);
 
     return XBundle_;
 }
 
-const rXBundle & tasks::CGet(hGuard &Guard)
+const rXBundle & tasqtasks::CGet(hGuard &Guard)
 {
   return Get(Guard);
 }
@@ -93,7 +93,7 @@ namespace {
   }
 }
 
-qGCTOR(Taslks)
+void tasqtasks::Initialize(void)
 {
   Mutex_ = mtx::Create();
   bso::sBool Exists = FH_.Init("Test", uys::mReadWrite).Boolean();

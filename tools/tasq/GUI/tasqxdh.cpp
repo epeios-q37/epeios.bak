@@ -22,6 +22,8 @@
 #include "main.h"
 #include "registry.h"
 
+#include "tasqtasks.h"
+
 SCLI_DEF( tasqxdh, NAME_LC	SCLX_DEFAULT_SUFFIX, NAME_MC );
 
 const scli::sInfo &sclx::SCLXInfo( void )
@@ -33,6 +35,7 @@ void sclx::SCLXInitialization( xdhcdc::eMode Mode )
 {
 qRH;
 qRB;
+  tasqtasks::Initialize();
 qRR;
 qRT;
 qRE;

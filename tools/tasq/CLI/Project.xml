@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://q37.info/ns/xpp/">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc/>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2019</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="Tool"/>
+	</xpp:bloc>
+	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
+	<xpp:expand value-of="q37.project"/>
+	<About>
+		<Program>tasq</Program>
+		<Software>tasq</Software>
+		<!-- Do not modify below value (used by the 'DVLSetTol' script)! -->
+		<UUID>d9076284-9fd1-4752-9e30-7d1778c24492</UUID>
+	</About>
+	<Modules xpp:marker="$">
+		<Modules Group="Epeios" Path="$EpeiosPath$/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+		</Modules>
+		<Module>registry</Module>
+	</Modules>
+	<Files/>
+	<RTW Folder="tasq-cli">
+	  <!--
+      If '@Parameters'' empty, launching 'help' and 'version' GitHub actions job, but not 'test'.
+      If '@Parameters' absent no ''help', 'version' nor 'test' GitHub action jobs launched.
+    -->
+		<CI Parameters=""/>
+	</RTW>
+</Project>

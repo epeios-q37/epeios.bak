@@ -1,20 +1,29 @@
-<xpp:cdata xmlns="http://www.w3.org/1999/xhtml" xmlns:xpp="http://epeios.q37.info/ns/xpp"
+<xpp:cdata
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:xpp="http://epeios.q37.info/ns/xpp"
   xmlns:xdh="http://epeios.q37.info/ns/xdhtml">
-  <div style="width: 100%;">
-    <div style="display: flex; flex-direction: row;">
+  <div style="display: flex; flex-direction: column;">
+    <fieldset>
       <fieldset id="Tree"></fieldset>
-      <div style="width: 70%">
+      <div class="buttons">
+        <button xdh:onevent="New">New</button>
+        <button xdh:onevent="Edit">Edit</button>
+      </div>
+    </fieldset>
+    <fieldset>
+      <div>
         <fieldset id="Title"></fieldset>
-        <fieldset style="width: 95%;">
-          <div id="DescriptionView"></div>
+        <fieldset>
+          <div id="DescriptionView" style="width: 500px; height: 100px; overflow: auto;"></div>
           <textarea class="hide" id="DescriptionEdition"></textarea>
         </fieldset>
-        <div>
+        <div class="buttons">
           <button xdh:onevent="Edit">Edit</button>
           <button xdh:onevent="Submit">Submit</button>
+          <button xdh:onevent="Delete">Delete</button>
           <button xdh:onevent="Cancel">Cancel</button>
         </div>
       </div>
-    </div>
+    </fieldset>
   </div>
 </xpp:cdata>

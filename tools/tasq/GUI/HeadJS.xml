@@ -14,9 +14,10 @@
 
   function renderMarkdown(id, markdown) {
     document.getElementById(id).innerHTML = marked.parse(markdown, {
-      highlight: function(code, lang) {
+      highlight_: function(code, lang) {
         const c = "def toto():\n  pass\n";
-        return hljs.highlight(lang, code).value;
+        console.log("!!! Lang:", lang);
+        return hljs.highlight(hljs.getLanguage(lang) ? lang : 'text', code).value;
       },
       langPrefix: 'hljs language-',
       gfm: true,

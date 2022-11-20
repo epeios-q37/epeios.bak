@@ -18,15 +18,15 @@
 */
 
 
-#ifndef TASKS_INC_
-# define TASKS_INC_
+#ifndef TASQTASKS_INC_
+# define TASQTASKS_INC_
 
 # include "lstbch.h"
 # include "lstcrt.h"
 # include "que.h"
 # include "str.h"
 
-namespace tasks {
+namespace tasqtasks {
   qROW( SRow );
 
   typedef lstcrt::qLMCRATEd( str::dString, sSRow ) dStrings;
@@ -296,6 +296,7 @@ namespace tasks {
     }
   };
 
+  void Initialize(void);
 
   typedef mtx::rHandle hGuard;
 

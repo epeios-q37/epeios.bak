@@ -33,10 +33,13 @@
 				<xpp:expand select="XDH"/>
 			</Modules>
 		</Modules>
+		<Modules Group="TasQ" Path="../">
+      <Module>tasqtasks</Module>
+		  <Module>tasqxml</Module>
+		</Modules>
 		<Module>main</Module>
 		<Module>messages</Module>
 		<Module>registry</Module>
-		<Module>tasks</Module>
 	</Modules>
 	<SourceDirs>
 		<SourceDir>..</SourceDir>
