@@ -127,12 +127,6 @@ namespace uys {
 #endif
 			return _Driver;
 		}
-		sdr::eType Type(void) const
-		{
-		  _Test();
-
-		  return _Driver->Type();
-		}
 		void Allocate( sdr::size__ Size )
 		{
 			_Test();
@@ -295,10 +289,6 @@ namespace uys {
 			sdr::row_t__ Position,
 			sdr::size__ Size );
 		//f Allocates 'Capacity' bytes.
-		sdr::eType Type(void) const
-		{
-		  return _Driver.Type();
-		}
 		void Allocate( sdr::size__ Size )
 		{
 			_Allocate( Size );

@@ -100,7 +100,6 @@ namespace sdr {
 	class storage_driver__
 	{
 	protected:
-	  virtual eType SDRType(void) const = 0;
 		// Alloue 'Size' octet.
 		virtual void SDRAllocate( size__ Size )
 		{
@@ -137,10 +136,6 @@ namespace sdr {
 			// Standardisation.
 		}
 		//f Allocate 'Size' bytes in storage.
-		eType Type(void) const
-		{
-		  return SDRType();
-		}
 		void Allocate( size__ Size )
 		{
 			return SDRAllocate( Size );

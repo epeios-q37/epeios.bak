@@ -700,50 +700,6 @@ namespace sclm {
 			return Result;\
 		}
 
-    // !!! DON'T FORGET THE CALLING OF 'HandleError()' IN 'qRR'. !!!
-	// To facilitate the backup of an binary output file, which can be restored.
-	class rWFlowRack
-	{
-	private:
-		fnm::name___ _FileName;
-		flf::file_oflow___ _Flow;
-    protected:
-   		bso::bool__ _BackedUp;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			_BackedUp = false;
-			_FileName.reset( P );
-			_Flow.reset( P );
-		}
-		E_CDTOR( rWFlowRack );
-		// !!! Don't forget the 'HandleError()' in 'qRR'. !!!
-		flf::rWFlow &Init( const fnm::name___ &FileName );
-		void HandleError( void );	// A appeler  partir de 'qRR'.
-	};
-
-    // !!! DON'T FORGET THE CALLING OF 'HandleError()' IN 'qRR'. !!!
-    // To facilitate the handling of the backup of a text output file.
-    // If 'FileName' is empty, returns the standard output.
-	class text_oflow_rack___
-	: public rWFlowRack
-	{
-	private:
-		txf::text_oflow__ _TFlow;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-		    rWFlowRack::reset( P );
-			_TFlow.reset( P );
-		}
-		E_CDTOR( text_oflow_rack___ );
-		txf::text_oflow__ &Init( const fnm::name___ &FileName );
-		bso::sBool IsFile( void ) const
-		{
-			return _BackedUp;
-		}
-	};
-
 	void DumpRegistries(
 		const str::string_ &RawList,
 		txf::text_oflow__ &Flow );
@@ -840,8 +796,6 @@ namespace sclm {
 /***************/
 
 namespace sclm {
-	typedef text_oflow_rack___ rTextWFlowRack;
-
 	// To facilitate optional text output file handling. if no file name is given, then the standard output is given. Also creates a backup file, which can be restored.
 	class rWDriverRack
 	{
@@ -850,19 +804,44 @@ namespace sclm {
 		flf::rODriver Driver_;
 		bso::bool__ BackedUp_;
 	public:
-		void reset( bso::bool__ P = true )
+		void reset(bso::bool__ P = true)
 		{
 			tol::reset( P, Driver_, Filename_, BackedUp_ );
 		}
 		qCDTOR( rWDriverRack );
 		// !!! Don't forget the 'HandleError()' in 'qRR'. !!!
-		fdr::rWDriver &Init( const fnm::name___ &FileName );
-		void HandleError( void );	// A appeler  partir de 'qRR'.
-		bso::sBool IsFile( void ) const
+		fdr::rWDriver &Init(const fnm::rName &FileName);
+		void HandleError(void);	// A appeler  partir de 'qRR'.
+		bso::sBool IsFile(void) const
 		{
 			return BackedUp_;
 		}
 	};
+
+	template <typename f> class rWFlowRack_
+	: public rWDriverRack
+	{
+  private:
+    f Flow_;
+  public:
+    void reset(bso::sBool P = true)
+    {
+      Flow_.reset(P);
+      rWDriverRack::reset(P);
+    }
+    qCDTOR(rWFlowRack_);
+ 		// !!! Don't forget the 'HandleError()' in 'qRR'. !!!
+    f &Init(const fnm::rName &FileName)
+    {
+      Flow_.Init(rWDriverRack::Init(FileName));
+
+      return Flow_;
+    }
+	};
+
+	typedef rWFlowRack_<flw::rDressedWFlow<>> rWFlowRack;
+
+  typedef rWFlowRack_<txf::rWFlow> rTWFlowRack;
 
 	class rRDriverRack
 	{
@@ -879,13 +858,62 @@ namespace sclm {
 		fdr::rRDriver &Init( const fnm::name___ &FileName );
 		void HandleError( void )	// To call from' qRR'.
 		{
-			// Does nothing. For simetry with 'rODriverRack'.
+			// Does nothing. For symmetry with 'rODriverRack'.
 		}
 		bso::sBool IsFile( void ) const
 		{
 			return !Filename_.IsEmpty();
 		}
 	};
+
+	template <typename f> class rRFlowRack_
+	: public rRDriverRack
+	{
+  private:
+    f Flow_;
+  public:
+    void reset(bso::sBool P = true)
+    {
+      Flow_.reset(P);
+      rRDriverRack::reset(P);
+    }
+    qCDTOR(rRFlowRack_);
+ 		// !!! Don't forget the 'HandleError()' in 'qRR'. !!!
+    f &Init(const fnm::rName &FileName)
+    {
+      Flow_.Init(rRDriverRack::Init(FileName));
+
+      return Flow_;
+    }
+	};
+
+	typedef rRFlowRack_<flw::rDressedRFlow<>> rRFlowRack;
+
+  typedef rRFlowRack_<txf::rRFlow> rTRFlowRack;
+
+  class rXRFlowRack
+  : public rRFlowRack
+  {
+  private:
+    xtf::sRFlow Flow_;
+  public:
+    void reset(bso::sBool P = true)
+    {
+      Flow_.reset(P);
+      rRFlowRack::reset(P);
+    }
+    qCDTOR(rXRFlowRack);
+ 		// !!! Don't forget the 'HandleError()' in 'qRR'. !!!
+    xtf::sRFlow &Init(
+      const fnm::rName &FileName,
+      utf::eFormat Format = utf::f_Default)
+    {
+      Flow_.Init(rRFlowRack::Init(FileName), Format);
+
+      return Flow_;
+    }
+  };
+
 
 	void ExitOnSignal( void );
 }

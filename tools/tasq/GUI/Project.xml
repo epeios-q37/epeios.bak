@@ -13,6 +13,7 @@
 	<xpp:set name="Type" value="ToolGUI"/>
 	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
 	<xpp:expand value-of="q37.project"/>
+  <xpp:expand href="../ProjectCommon.xml"/>
 	<About>
 		<Program>tasqxdh</Program>
 		<Software>TASq</Software>
@@ -33,10 +34,7 @@
 				<xpp:expand select="XDH"/>
 			</Modules>
 		</Modules>
-		<Modules Group="TasQ" Path="../">
-      <Module>tasqtasks</Module>
-		  <Module>tasqxml</Module>
-		</Modules>
+		<xpp:expand select="TasQModules"/>
 		<Module>main</Module>
 		<Module>messages</Module>
 		<Module>registry</Module>

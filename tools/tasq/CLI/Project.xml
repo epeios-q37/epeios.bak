@@ -13,7 +13,8 @@
 	</xpp:bloc>
 	<xpp:set name="q37.project" env-var="Q37_PROJECT"/>
 	<xpp:expand value-of="q37.project"/>
-	<About>
+  <xpp:expand href="../ProjectCommon.xml"/>
+  <About>
 		<Program>tasq</Program>
 		<Software>tasq</Software>
 		<!-- Do not modify below value (used by the 'DVLSetTol' script)! -->
@@ -28,7 +29,8 @@
 				<xpp:expand select="SCL"/>
 			</Modules>
 		</Modules>
-		<Module>registry</Module>
+		<xpp:expand select="TasQModules"/>
+    <Module>registry</Module>
 	</Modules>
 	<Files/>
 	<RTW Folder="tasq-cli">

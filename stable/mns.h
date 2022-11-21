@@ -144,10 +144,6 @@ namespace mns {
 	  public main_storage__
 	{
 	protected:
-	  virtual sdr::eType SDRType(void) const override
-	  {
-	    return sdr::tVolatile;
-	  }
 		virtual sdr::size__ SDRSize( void ) const override
 		{
 			return main_storage__::Size();

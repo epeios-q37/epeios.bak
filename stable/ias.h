@@ -58,12 +58,6 @@ namespace ias {
 		index__ _Index;
 		const indexed_aggregated_storage_ *&_AStorage;
 	protected:
-	  virtual sdr::eType SDRType(void) const override
-	  {
-	    qRUnx();
-
-	    return sdr::t_Undefined;  // To avoid a warning.
-	  }
 		virtual void SDRAllocate( sdr::size__ Capacity) override
 		{
 	    qRUnx();

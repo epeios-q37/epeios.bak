@@ -88,11 +88,11 @@ qRB;
 
   XML.Init();
   Flow.Init(XML);
-  Writer.Init(Flow, xml::lIndent, xml::fEncoding());
+  Writer.Init(Flow, xml::lIndent);
 
   CBNDL();
 
-  tasqxml::Write(Bundle, Writer);
+  tasqxml::Write(Bundle, tasqxml::ffDisplay, Writer);
   Writer.reset();
   Flow.reset();
 

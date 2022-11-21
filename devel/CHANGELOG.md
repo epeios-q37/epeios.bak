@@ -13,6 +13,15 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-11-21
+- AGS, IAS, MNS, OSD, SDR, UYS: [adpt];
+- SLCM:
+  - simplification;
+  - [extn];
+- SDR: removing newly introduced `SDRType()` method, as it is inadequate;
+- UTF: [stdz];
+- XML: adding dafault parameter value for `rWriter::Init(…)`
+;
 ## 2022-11-19
 - AGS:
   - fixing size issue occuring when storage is a file;

@@ -22,5 +22,6 @@
 
 using namespace registry;
 
-rEntry registry::parameter::Test( "Test", sclr::Parameters );
+rEntry registry::parameter::DBFilename( "DBFilename", sclr::Parameters );
+rEntry registry::parameter::XMLFilename( "XMLFilename", sclr::Parameters );
 

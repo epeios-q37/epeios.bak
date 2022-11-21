@@ -93,10 +93,10 @@ namespace {
   }
 }
 
-void tasqtasks::Initialize(void)
+void tasqtasks::Initialize(const fnm::rName &Filename)
 {
   Mutex_ = mtx::Create();
-  bso::sBool Exists = FH_.Init("Test", uys::mReadWrite).Boolean();
+  bso::sBool Exists = FH_.Init(Filename, uys::mReadWrite).Boolean();
 
   XBundle_.plug(FH_);
 
@@ -104,6 +104,10 @@ void tasqtasks::Initialize(void)
     FH_.Get((sdr::sByte *)&XBundle_.S_);
   } else {
     XBundle_.Init();
-    Populate_();
   }
+}
+
+void tasqtasks::Immortalize(void)
+{
+  XBundle_.Immortalize();
 }

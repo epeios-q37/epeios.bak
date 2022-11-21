@@ -90,7 +90,7 @@ namespace {
 #define L_(token)  GetLabel_( t##token )
 
 namespace {
-  void HandleDescripton_(
+  void WriteDescription_(
     const str::dString &Description,
     xml::rWriter &Writer)
   {
@@ -104,6 +104,7 @@ namespace {
 
 void tasqxml::Write(
   const tasqtasks::dBundle &Bundle,
+  int Flags,
   xml::rWriter &Writer)
 {
 qRH;
@@ -112,24 +113,24 @@ qRH;
   Candidate = qNIL;
   bso::sBool SkipChildren = false;
 qRB;
-  Writer.PushTag("Items");
+  Writer.PushTag(L_( Items ));
   Row = Bundle.First(Row);
 
   while ( Row != qNIL ) {
     if ( !SkipChildren ) {
-      Writer.PushTag("Item");
-      Writer.PutAttribute("id", *Row);
-      if ( Row == 4 )
-        Writer.PutAttribute("Selected", "true");
+      Writer.PushTag(L_( Item ));
+      if ( Flags & ffId )
+        Writer.PutAttribute(L_( Id ), *Row);
 
       Task.Init(Bundle.Queue);
       Bundle.Tasks.Recall(Row, Task);
-      Writer.PutAttribute("Title", Bundle.Strings(Task.Title));
-      HandleDescripton_(Bundle.Strings(Task.Description), Writer);
+      Writer.PutAttribute(L_( Title ), Bundle.Strings(Task.Title));
+      if ( ( Flags & ffDescription ) && ( Task.Description != qNIL ) )
+        WriteDescription_(Bundle.Strings(Task.Description), Writer);
     }
 
     if ( !SkipChildren && ( Candidate = Bundle.First(Row) ) != qNIL ) {
-      Writer.PushTag("Items");
+      Writer.PushTag(L_( Items ) );
       Row = Candidate;
     } else if( ( Candidate = Bundle.Next(Row) ) != qNIL ) {
       Writer.PopTag();  // 'Item'
@@ -164,6 +165,8 @@ namespace {
 
       tol::Init(Tags, Title, Description);
 
+      Tags.Push(tItems);
+
       while ( Continue ) {
         switch ( Parser.Parse(xml::tfObvious) ) {
         case xml::tStartTag:
@@ -195,6 +198,8 @@ namespace {
             case tTitle:
               if ( Title.Amount() )
                 qRGnr();
+
+              Title.Init(Parser.Value());
               break;
             default:
               qRGnr();
@@ -208,7 +213,6 @@ namespace {
               Description.Init(Parser.Value());
               break;
             default:
-              qRGnr();
               break;
             }
             break;
@@ -226,7 +230,8 @@ namespace {
             case tItem:
               if ( !Title.Amount() )
                 qRGnr();
-                Row = Bundle.Add(Title, Description, Row);
+
+              Row = Bundle.Add(Title, Description, Row);
               break;
             case tDescription:
               break;
@@ -247,15 +252,12 @@ namespace {
 }
 
 void tasqxml::Parse(
-  xtf::sRFlow &Flow,
+  xml::rParser &Parser,
   tasqtasks::dBundle &Bundle)
 {
 qRH;
-  xml::rParser Parser;
   bso::sBool Continue = true;
 qRB;
-  Parser.Init(Flow, xml::eh_Default);
-
   while ( Continue ) {
     switch ( Parser.Parse(xml::tfObvious) ) {
     case xml::tStartTag:

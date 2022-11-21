@@ -25,15 +25,10 @@
 
 using namespace ags;
 
-void aggregated_storage_driver__::_Free(bso::sBool EvenIfPersistent)
+void aggregated_storage_driver__::Free_(void)
 {
-	if ( ( _Descriptor != AGS_UNDEFINED_DESCRIPTOR ) && ( EvenIfPersistent || _AStorage->IsVolatile() ) )
+	if ( _Descriptor != AGS_UNDEFINED_DESCRIPTOR )
 		_AStorage->Free( _Descriptor ); // Freeing must not be done on a 'reset(true)' with a persistent storage.
-}
-
-sdr::eType aggregated_storage_driver__::SDRType(void) const
-{
-  return _AStorage->Type();
 }
 
 void aggregated_storage_driver__::SDRAllocate( sdr::size__ Size )

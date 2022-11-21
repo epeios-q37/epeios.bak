@@ -967,7 +967,6 @@ qRB;
 		ReportAndAbort(SCLM_NAME "_ErrorInXMLFile", Filename, Meaning);
 	}
 
-
 	scll::TranslateTags( Untranslated, Language, Content, Marker );
 qRR;
 qRT;
@@ -1005,30 +1004,6 @@ const sclr::registry_ &sclm::GetRegistry( void )
 sclr::registry_ &sclm::GetRWRegistry( void )
 {
 	return sclr::GetRWCommonRegistry();
-}
-
-flf::rWFlow &sclm::rWFlowRack::Init( const fnm::name___ &FileName )
-{
-	_FileName.Init( FileName );
-
-    sclm::CreateBackupFile( _FileName );
-    _BackedUp = true;
-
-    if ( _Flow.Init( _FileName ) != tol::rSuccess )
-        sclm::ReportFileOpeningErrorAndAbort( _FileName );
-
-    return _Flow;
-}
-
-txf::text_oflow__ &sclm::text_oflow_rack___::Init( const fnm::name___ &FileName )
-{
-	if ( FileName.IsEmpty() ) {
-		return cio::COut;
-	} else {
-		_TFlow.Init( rWFlowRack::Init( FileName ) );
-
-		return _TFlow;
-	}
 }
 
 namespace {
@@ -1120,12 +1095,6 @@ qRE
 }
 
 #undef T
-
-void sclm::rWFlowRack::HandleError( void )
-{
-	if ( _BackedUp )
-		sclm::RecoverBackupFile( _FileName );
-}
 
 namespace {
 	 inline void FillPluginRelatedTags_(

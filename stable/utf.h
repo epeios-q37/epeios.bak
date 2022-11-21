@@ -41,7 +41,7 @@
 /* End of automatic documentation generation part. */
 
 /* Addendum to the automatic documentation generation part. */
-//D UCS transformation format 
+//D UCS transformation format
 /* End addendum to automatic documentation generation part. */
 
 /*$BEGIN$*/
@@ -50,6 +50,29 @@
 # include "flw.h"
 # include "tol.h"
 # include "bomhdl.h"
+
+/*************/
+/**** NEW ****/
+/*************/
+
+namespace utf {
+	qENUM( Format ) {
+		fANSI,
+		fUTF_8,
+		fUTF_16_LE,
+		fUTF_16_BE,
+		fUTF_32_LE,
+		fUTF_32_BE,
+		f_amount,
+		f_Undefined,
+		f_Guess,	// Tenter de deviner si c'est de l'ANSI ou de l'UTF-8.
+		f_Default = f_Guess
+	};
+}
+
+/*************/
+/**** OLD ****/
+/*************/
 
 namespace utf {
 
@@ -132,18 +155,7 @@ namespace utf {
 			return 1;
 	}
 
-	enum format__ {
-		fANSI,
-		fUTF_8,
-		fUTF_16_LE,
-		fUTF_16_BE,
-		fUTF_32_LE,
-		fUTF_32_BE,
-		f_amount,
-		f_Undefined,
-		f_Guess,	// Tenter de deviner si c'est de l'ANSI ou de l'UTF-8.
-		f_Default = f_Guess
-	};
+	typedef eFormat format__;
 
 	template <typename feeder> class utf__ {
 	private:

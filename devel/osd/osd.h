@@ -39,10 +39,6 @@ namespace osd {
   private:
     qRMV(storage, S_, Storage_);
   protected:
-    virtual sdr::eType SDRType(void) const override
-    {
-      return S_().OSDType();
-    }
 		virtual void SDRAllocate( sdr::sSize Size ) override
 		{
 			return S_().OSDAllocate(Size + offset);

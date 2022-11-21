@@ -285,7 +285,7 @@ namespace xml {
 		void Init(
 			txf::text_oflow__ &Flow,
 			eLayout Outfit,
-			fEncoding Encoding,
+			fEncoding Encoding = e_Default,
 			sLevel LevelsToIgnore = 0,
 			eSpecialCharHandling SpecialCharHandling = sch_Default )
 		{

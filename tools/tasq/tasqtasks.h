@@ -166,6 +166,12 @@ namespace tasqtasks {
       tol::Init(AS_, Strings, Tasks, Queue);
       S_.Main.Init(Queue);
     }
+    void Immortalize(void)
+    {
+      Strings.Flush();
+      StoreMain_();
+      reset(false);
+    }
     sTRow Add(
       const str::dString &Title,
       const str::dString &Description,
@@ -296,7 +302,8 @@ namespace tasqtasks {
     }
   };
 
-  void Initialize(void);
+  void Initialize(const fnm::rName &Name);
+  void Immortalize(void);
 
   typedef mtx::rHandle hGuard;
 

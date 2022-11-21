@@ -22,6 +22,9 @@
 
 #include "registry.h"
 
+#include "tasqtasks.h"
+#include "tasqxml.h"
+
 #include "sclm.h"
 #include "sclt.h"
 
@@ -51,16 +54,75 @@ namespace {
 		COut << txf::pad << "Build: " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 	}
 
-	void Test_( void )
+	namespace _ {
+	  void GetFilenames(
+      str::dString &DBFilename,
+      str::dString &XMLFilename)
+      {
+        sclm::MGetValue(registry::parameter::DBFilename, DBFilename);
+        sclm::MGetValue(registry::parameter::XMLFilename, XMLFilename);
+      }
+	}
+
+	void Export_( void )
 	{
 	qRH;
-		str::wString Test;
+    str::wString DBFilename, XMLFilename;
+    sclm::rTWFlowRack Rack;
+    xml::rWriter Writer;
+    tasqtasks::hGuard Guard;
+    bso::sBool Initialized = false;
 	qRB;
-		Test.Init();
-		sclm::OGetValue( registry::parameter::Test, Test );
-		cio::COut << "Test :'" << Test << "'" << txf::nl;
+    tol::Init(DBFilename, XMLFilename);
+    _::GetFilenames(DBFilename, XMLFilename);
+
+    tasqtasks::Initialize(DBFilename);
+
+    Initialized = true;
+
+
+    Writer.Init(Rack.Init(XMLFilename), xml::lIndent);
+
+    Writer.PushTag("TasQ");
+
+    tasqxml::Write(tasqtasks::Get(Guard), tasqxml::ffExport, Writer);
+
+    Writer.PopTag();
 	qRR;
+    Rack.HandleError();
 	qRT;
+    if ( Initialized )
+      tasqtasks::Immortalize();
+	qRE;
+	}
+
+	void Import_( void )
+	{
+	qRH;
+    str::wString DBFilename, XMLFilename;
+    sclm::rXRFlowRack Rack;
+    xml::rParser Parser;
+    tasqtasks::hGuard Guard;
+    bso::sBool Initialized = false;
+	qRB;
+    tol::Init(DBFilename, XMLFilename);
+    _::GetFilenames(DBFilename, XMLFilename);
+
+    tasqtasks::Initialize(DBFilename);
+
+    Initialized = true;
+
+    Parser.Init(Rack.Init(XMLFilename), xml::eh_Default);
+
+    if ( ( Parser.Parse(xml::tfStartTagClosed) != xml::tStartTagClosed ) || ( Parser.TagName() != "TasQ") )
+      qRFwk();
+
+    tasqxml::Parse(Parser, tasqtasks::Get(Guard));
+	qRR;
+    Rack.HandleError();
+	qRT;
+    if ( Initialized )
+      tasqtasks::Immortalize();
 	qRE;
 	}
 }
@@ -80,7 +142,8 @@ qRB;
 		PrintHeader_();
 	else if ( Command == "License" )
 		epsmsc::PrintLicense( NAME_MC );
-	C( Test );
+	C( Export );
+  C( Import );
 	else
 		qRGnr();
 

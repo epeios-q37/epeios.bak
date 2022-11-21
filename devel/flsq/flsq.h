@@ -690,10 +690,6 @@ namespace flsq {
     {
       reset();
     }
-    sdr::eType OSDType(void) const
-    {
-      return S_.Type();
-    }
 		void OSDAllocate( sdr::sSize Size )
 		{
 			return S_.Allocate_(Size);

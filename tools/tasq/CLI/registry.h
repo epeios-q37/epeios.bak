@@ -29,7 +29,9 @@ namespace registry {
 	namespace parameter {
 		using namespace sclr::parameter;
 
-		extern rEntry Test;
+		extern rEntry
+      DBFilename,
+      XMLFilename;
 	}
 
 	namespace definition {

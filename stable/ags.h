@@ -83,9 +83,8 @@ namespace ags {
 		descriptor__ &_Descriptor;
 		// memoire  laquelle il a t affect
 		class aggregated_storage_ *_AStorage;
-		void _Free(bso::sBool EvenIfPersitent = true);
+		void Free_(void);
 	protected:
-	  virtual sdr::eType SDRType(void) const override;
 		virtual void SDRAllocate( sdr::size__ Size ) override;
 		// Fonction dporte.
 		virtual sdr::size__ SDRSize( void ) const override;
@@ -107,7 +106,7 @@ namespace ags {
 		{
 			if ( P ) {
 				if ( _AStorage != NULL )
-					_Free(false);
+					Free_();
 			} else
 				_AStorage = NULL;
 
@@ -1368,22 +1367,6 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		{
 			Storage.plug( AS );
 		}
-    bso::sBool IsVolatile(void) const
-		{
-		  switch ( Storage.Type() ) {
-      case sdr::tVolatile:
-        return true;
-        break;
-      case sdr::tPersistent:
-        return false;
-        break;
-      default:
-        qRFwk();
-        break;
-		  }
-
-		  return false; //To avoid a warning.
-		}
 		void Init( void )
 		{
 			Storage.Init();
@@ -1391,10 +1374,6 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 			if ( Storage.Size() != 0 )
 				_SetAsFreeFragment( 0, Storage.Size(), sFree );
-		}
-		sdr::eType Type(void) const
-		{
-		  return Storage.Type();
 		}
 		void Preallocate( sdr::size__ Size )
 		{
