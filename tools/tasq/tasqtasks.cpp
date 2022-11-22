@@ -22,8 +22,21 @@
 
 using namespace tasqtasks;
 
+# define UUID_  "93218d1b-f5ed-4b88-bcae-e2c54862372b"
+
+# if BSO_ENDIANESS_SEAL_SIZE == 4
+#  define ENDIANESS_SEAL_TAG_ "XXXX"
+# elif BSO_ENDIANESS_SEAL_SIZE == 8
+#  define ENDIANESS_SEAL_TAG_ "XXXXXXXX"
+# else
+#  error
+# endif // BSO_ENDIANESS_SEAL_SIZE
+
+#define IDENTIFICATION_  "TasQ; UUID: " UUID_ "; Bitness: " CPE_L_BITNESS "; Endianess seal: " ENDIANESS_SEAL_TAG_
+#define INFORMATION_ CPE_DESCRIPTION "; " __DATE__ " - " __TIME__
+
 namespace {
-  uys::rFOH<sizeof(dBundle::s)> FH_;
+  uys::rFOH<sizeof(IDENTIFICATION_) + sizeof(INFORMATION_) + sizeof(dBundle::s)> FH_;
   rXBundle XBundle_;
   mtx::rMutex Mutex_ = mtx::Undefined;
 }
@@ -32,7 +45,7 @@ void tasqtasks::dBundle::StoreMain_(void)
 {
   Strings.Flush();
   FH_.Flush();
-  FH_.Put((const sdr::sByte *)&XBundle_.S_);
+  FH_.Put((const sdr::sByte *)&XBundle_.S_, sizeof(IDENTIFICATION_) + sizeof(INFORMATION_), sizeof(XBundle_.S_));
 }
 
 rXBundle &tasqtasks::Get(hGuard &Guard )
@@ -91,19 +104,41 @@ namespace {
     _::Add("T2.1.2", "D2.1.2", Row);
 
   }
+
+  const char *BuildIdentification_(void)
+  {
+    static char Identification[] = IDENTIFICATION_;
+
+    char *Tag = strstr(Identification, ENDIANESS_SEAL_TAG_);
+
+    if ( Tag == NULL )
+      qRGnr();
+
+    strncpy(Tag, bso::EndianessSeal(), sizeof(ENDIANESS_SEAL_TAG_));
+
+    return Identification;
+  }
 }
 
 void tasqtasks::Initialize(const fnm::rName &Filename)
 {
   Mutex_ = mtx::Create();
   bso::sBool Exists = FH_.Init(Filename, uys::mReadWrite).Boolean();
+  char Identification[sizeof( IDENTIFICATION_ )];
 
   XBundle_.plug(FH_);
 
   if ( Exists ) {
-    FH_.Get((sdr::sByte *)&XBundle_.S_);
+    FH_.Get(0, sizeof(Identification), (sdr::sByte *)Identification);
+
+    if ( memcmp(Identification, BuildIdentification_(), sizeof(Identification) ) )
+      qRFwk();
+
+    FH_.Get(sizeof(IDENTIFICATION_) + sizeof(INFORMATION_), sizeof(XBundle_.S_), (sdr::sByte *)&XBundle_.S_);
   } else {
     XBundle_.Init();
+    FH_.Put((const sdr::sByte *)BuildIdentification_(), 0, sizeof( IDENTIFICATION_ ) );
+    FH_.Put((const sdr::sByte *)INFORMATION_, sizeof( IDENTIFICATION_ ), sizeof( INFORMATION_ ) );
   }
 }
 

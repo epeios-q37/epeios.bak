@@ -32,7 +32,7 @@
 # include <float.h>
 
 # ifdef __MINGW32__
-#   ifndef __STDC_FORMAT_MACROS
+#  ifndef __STDC_FORMAT_MACROS
 #   define __STDC_FORMAT_MACROS	// Needed by below header with the 'mingw' compiler.
 #  endif
 # endif
@@ -713,6 +713,16 @@ namespace bso {
 		return ConvertToSHuge( DInt, &Length );
 	}
 
+# ifdef CPE_F_64BITS
+#  define BSO_ENDIANESS_SEAL_SIZE 8
+# elif defined( CPE_F_32BITS
+#  define BSO_ENDIANESS_SEAL_SIZE 4
+# else
+#  error
+# endif
+
+	const char *EndianessSeal(void);
+
 }
 
 /*************/
@@ -720,7 +730,7 @@ namespace bso {
 /*************/
 
 namespace bso {
-    typedef sign__ sSign;
+  typedef sign__ sSign;
 
 	typedef uint__ sUInt;
 	typedef sint__ sSInt;

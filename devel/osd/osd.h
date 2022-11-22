@@ -91,19 +91,39 @@ namespace osd {
     {
       Init(&Storage);
     }
-    void Put(const sdr::sByte *Buffer)
+    void Put(
+      const sdr::sByte *Data,
+      sdr::sSize Position,
+      sdr::sSize Amount)
     {
       if ( offset == 0 )  // Calling this function in this context does not make sense.
         qRFwk();
 
-      return S_().OSDStore(Buffer, offset, 0);
+      if ( ( Position + Amount ) > offset )
+        qRFwk();
+
+      return S_().OSDStore(Data, Amount, Position);
     }
-    void Get(sdr::sByte *Buffer)
+    void Put(const sdr::sByte *Data)
+    {
+      return Put(Data, 0, offset);
+    }
+    void Get(
+      sdr::sSize Position,
+      sdr::sSize Amount,
+      sdr::sByte *Data)
     {
       if ( offset == 0 )  // Calling this function in this context does not make sense.
         qRFwk();
 
-      S_().OSDFetch(0, offset, Buffer, qRPDefault);
+      if ( ( Position + Amount ) > offset )
+        qRFwk();
+
+      S_().OSDFetch(Position, Amount, Data, qRPDefault);
+    }
+    void Get(sdr::sByte *Data)
+    {
+      return Get(0, offset, Data);
     }
   };
 }

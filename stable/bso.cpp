@@ -69,6 +69,28 @@ sHuge bso::ConvertToHuge(
 	return Huge;
 }
 
+namespace {
+#ifdef CPE_F_64BITS
+  qCDEF( bso::sU64, EndianessSealSource_, 0x4142434445464748);
+#elif defined( CPE_F_32BITS )
+  qCDEF( bso::sU32, EndianessSealSource_, 0x41424344);
+#else
+# error
+#endif
+
+  char EndianessSeal_[sizeof( EndianessSealSource_ )];
+
+  void BuildEndianessSeal_(void)
+  {
+    strncpy(EndianessSeal_, reinterpret_cast<const char *>(&EndianessSealSource_), sizeof( EndianessSealSource_ ));
+  }
+}
+
+const char *bso::EndianessSeal(void)
+{
+  return EndianessSeal_;
+}
+
 Q37_GCTOR( bso )
 {
 	if ( sizeof( size__ ) != sizeof( int__ ) )
@@ -79,5 +101,9 @@ Q37_GCTOR( bso )
 
 	if ( sizeof( int__ ) != sizeof( uint__ ) )
 		qRChk();
-}
 
+  if ( sizeof( EndianessSealSource_) != BSO_ENDIANESS_SEAL_SIZE )
+    qRChk();
+
+  BuildEndianessSeal_();
+}

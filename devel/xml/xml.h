@@ -785,8 +785,8 @@ namespace xml {
 		TF( Comment ),
 		TF( CData ),
 		tfAll = ( ( 1 << t_amount ) - 1 ),
-		tfAllButUseless = tfAll & ~( tfComment | tfSpecialAttribute | tfCData ),
-		tfObvious = tfStartTag | tfAttribute | tfValue | tfEndTag,
+		tfAllButUseless = tfAll & ~( tfComment | tfSpecialAttribute | tfProcessingInstruction ),
+		tfObvious = tfStartTag | tfAttribute | tfValue | tfCData | tfEndTag,
 		tfAllAttributes = tfAttribute | tfSpecialAttribute,
 	};
 

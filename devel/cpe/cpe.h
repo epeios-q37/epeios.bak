@@ -206,6 +206,14 @@
 
 # define CPE_DESCRIPTION	CPE_SL ";" CPE_CL " " CPE_VL ";" CPE_AL
 
+# ifdef CPE_F_64BITS
+#  define CPE_L_BITNESS "64"
+# elif defined( CPE_F_32BITS )
+#  define CPE_L_BITNESS "32"
+# else
+#  error "Undefined bitness!"
+# endif
+
 namespace cpe {
 
 	inline const char *GetDescription( void )

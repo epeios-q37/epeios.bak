@@ -13,6 +13,12 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-11-22
+- BSO: introducing endianess handling;
+- CPE: adding bitness handling;
+- OSD: [extn];
+- XML: fixing *CData* issue;
+
 ## 2022-11-21
 - AGS, IAS, MNS, OSD, SDR, UYS: [adpt];
 - SLCM:

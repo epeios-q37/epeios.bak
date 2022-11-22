@@ -21,6 +21,7 @@
 #ifndef TASQTASKS_INC_
 # define TASQTASKS_INC_
 
+# include "bso.h"
 # include "lstbch.h"
 # include "lstcrt.h"
 # include "que.h"

@@ -205,7 +205,9 @@ namespace {
               qRGnr();
               break;
             }
+            break;
           case xml::tValue:
+          case xml::tCData:
             switch ( Tags.Top() ) {
             case tDescription:
               if ( Description.Amount() )
