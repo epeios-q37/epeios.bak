@@ -56,10 +56,10 @@ namespace {
 
 	namespace _ {
 	  void GetFilenames(
-      str::dString &DBFilename,
+      str::dString &DBFileAffix,
       str::dString &XMLFilename)
       {
-        sclm::MGetValue(registry::parameter::DBFilename, DBFilename);
+        sclm::MGetValue(registry::parameter::DBFileAffix, DBFileAffix);
         sclm::MGetValue(registry::parameter::XMLFilename, XMLFilename);
       }
 	}
@@ -67,16 +67,16 @@ namespace {
 	void Export_( void )
 	{
 	qRH;
-    str::wString DBFilename, XMLFilename;
+    str::wString DBFileAffix, XMLFilename;
     sclm::rTWFlowRack Rack;
     xml::rWriter Writer;
     tasqtasks::hGuard Guard;
     bso::sBool Initialized = false;
 	qRB;
-    tol::Init(DBFilename, XMLFilename);
-    _::GetFilenames(DBFilename, XMLFilename);
+    tol::Init(DBFileAffix, XMLFilename);
+    _::GetFilenames(DBFileAffix, XMLFilename);
 
-    tasqtasks::Initialize(DBFilename);
+    tasqtasks::Initialize(DBFileAffix);
 
     Initialized = true;
 
@@ -99,16 +99,16 @@ namespace {
 	void Import_( void )
 	{
 	qRH;
-    str::wString DBFilename, XMLFilename;
+    str::wString DBFileAffix, XMLFilename;
     sclm::rXRFlowRack Rack;
     xml::rParser Parser;
     tasqtasks::hGuard Guard;
     bso::sBool Initialized = false;
 	qRB;
-    tol::Init(DBFilename, XMLFilename);
-    _::GetFilenames(DBFilename, XMLFilename);
+    tol::Init(DBFileAffix, XMLFilename);
+    _::GetFilenames(DBFileAffix, XMLFilename);
 
-    tasqtasks::Initialize(DBFilename);
+    tasqtasks::Initialize(DBFileAffix);
 
     Initialized = true;
 

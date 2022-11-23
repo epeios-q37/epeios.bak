@@ -120,7 +120,7 @@ namespace {
   }
 }
 
-void tasqtasks::Initialize(const fnm::rName &Filename)
+bso::sBool tasqtasks::Initialize(const fnm::rName &Filename)
 {
   Mutex_ = mtx::Create();
   bso::sBool Exists = FH_.Init(Filename, uys::mReadWrite).Boolean();
@@ -140,6 +140,8 @@ void tasqtasks::Initialize(const fnm::rName &Filename)
     FH_.Put((const sdr::sByte *)BuildIdentification_(), 0, sizeof( IDENTIFICATION_ ) );
     FH_.Put((const sdr::sByte *)INFORMATION_, sizeof( IDENTIFICATION_ ), sizeof( INFORMATION_ ) );
   }
+
+  return Exists;
 }
 
 void tasqtasks::Immortalize(void)

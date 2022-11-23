@@ -156,95 +156,87 @@ namespace {
     {
     qRH;
       bso::sBool Continue = true;
-      str::wString Title, Description;
-      stkbch::qBSTACKwl( eToken_ ) Tags;
+      stkbch::qBSTACKwl( eToken_ ) Tokens;
+      str::wString Title;
       tasqtasks::sTRow Row = qNIL;
     qRB;
       if ( GetToken_(Parser.TagName()) != tItems )
         qRGnr();
 
-      tol::Init(Tags, Title, Description);
+      Tokens.Init();
 
-      Tags.Push(tItems);
+      Tokens.Push(tItems);
 
       while ( Continue ) {
-        switch ( Parser.Parse(xml::tfObvious) ) {
+        switch ( Parser.Parse(xml::tfObvious | xml::tfStartTagClosed) ) {
         case xml::tStartTag:
-          Tags.Push(GetToken_(Parser.TagName()));
+          Tokens.Push(GetToken_(Parser.TagName()));
 
-          switch ( Tags.Top() ) {
-          case tItems:
-            break;
+          switch ( Tokens.Top() ) {
           case tItem:
-            tol::Init(Title, Description);
+            Title.Init();
             break;
           case tDescription:
-            if ( Description.Amount() )
-              qRGnr();
+          case tItems:
             break;
           default:
             qRGnr();
             break;
           }
           break;
-          case xml::tAttribute:
-            if ( Tags.Top() != tItem )
+        case xml::tAttribute:
+          switch( GetToken_(Parser.AttributeName()) ) {
+          case tTitle:
+            if ( Tokens.Top() != tItem )
               qRFwk();
 
-            switch( GetToken_(Parser.AttributeName())) {
-            case tId:
-              qRGnr();
-              break;
-            case tTitle:
-              if ( Title.Amount() )
-                qRGnr();
-
-              Title.Init(Parser.Value());
-              break;
-            default:
-              qRGnr();
-              break;
-            }
-            break;
-          case xml::tValue:
-          case xml::tCData:
-            switch ( Tags.Top() ) {
-            case tDescription:
-              if ( Description.Amount() )
-                qRGnr();
-              Description.Init(Parser.Value());
-              break;
-            default:
-              break;
-            }
-            break;
-          case xml::tEndTag:
-            if ( Tags.Top() != GetToken_(Parser.TagName()) )
-              qRGnr();
-
-            switch ( Tags.Pop() ) {
-            case tItems:
-              if ( Tags.Amount() )
-                Row = Bundle.Parent(Row);
-              else
-                Continue = false;
-              break;
-            case tItem:
-              if ( !Title.Amount() )
-                qRGnr();
-
-              Row = Bundle.Add(Title, Description, Row);
-              break;
-            case tDescription:
-              break;
-            default:
-              qRGnr();
-              break;
-            }
+            Title.Init(Parser.Value());
             break;
           default:
             qRGnr();
             break;
+          }
+          break;
+        case xml::tStartTagClosed:
+          if ( Tokens.Top() == tItem ) {
+            if ( Title.Amount() == 0 )
+              qRGnr();
+            else
+              Row = Bundle.Add(Title, Row);
+          }
+          break;
+        case xml::tValue:
+        case xml::tCData:
+          switch ( Tokens.Top() ) {
+          case tDescription:
+            Bundle.UpdateDescription(Row, Parser.Value());
+            break;
+          default:
+            break;
+          }
+          break;
+        case xml::tEndTag:
+          if ( Tokens.Top() != GetToken_(Parser.TagName()) )
+            qRGnr();
+
+          switch ( Tokens.Pop() ) {
+          case tItems:
+            if ( !Tokens.Amount() )
+              Continue = false;
+            break;
+          case tItem:
+            Row = Bundle.Parent(Row);
+            break;
+          case tDescription:
+            break;
+          default:
+            qRGnr();
+            break;
+          }
+          break;
+        default:
+          qRGnr();
+          break;
         }
       }
     qRR;

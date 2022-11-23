@@ -23,10 +23,7 @@
 
 using namespace registry;
 
-// Parameters.
-
-
-// Definitions.
+using sclr::rEntry;
 
 rEntry registry::definition::Head( "Head", sclr::Definitions);
 rEntry registry::definition::Body( "Body", sclr::Definitions);

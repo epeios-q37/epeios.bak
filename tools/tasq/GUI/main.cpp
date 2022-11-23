@@ -127,7 +127,7 @@ qRB;
   tol::Init(Title, Description);
   Bundle.Get(Row, Title, Description);
 
-  Session.SetValue("Title", Title);
+  Session.SetValue("TitleView", Title);
 
   Script.Init();
   flx::rStringTWFlow(Script) << "renderMarkdown('DescriptionView','" << xdhcmn::Escape(Description, 0) << "');";
@@ -149,20 +149,30 @@ D_( Edit )
 qRH;
   BGRD;
   str::wString Title, Description, Script;
-qRB;
-  Session.AddClass("DescriptionView", "hide");
-  Session.AddClass("Tree", "hide");
+  str::wStrings Ids, Classes;
+  qRB;
+  tol::Init(Ids, Classes);
+
+  Ids.AppendMulti("Tree", "TitleView", "DescriptionView");
+  Classes.AppendMulti("hide", "hide", "hide");
+  Session.AddClasses(Ids, Classes);
 
   CBNDL();
 
   tol::Init(Title, Description);
   Bundle.Get(Bundle.Selected, Title, Description);
 
+  Session.SetValue("TitleEdition", Title);
+
   Script.Init();
   flx::rStringTWFlow(Script) << "markdown = editMarkdown('DescriptionEdition','" << xdhcmn::Escape(Description, 0) << "');";
   Session.Execute(Script);
 
-  Session.RemoveClass("DescriptionEdition", "hide");
+  tol::Init(Ids, Classes);
+
+  Ids.AppendMulti("TitleEdition", "DescriptionEdition");
+  Classes.AppendMulti("hide", "hide");
+  Session.RemoveClasses(Ids, Classes);
 qRR;
 qRT;
 qRE;

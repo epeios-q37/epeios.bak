@@ -34,8 +34,12 @@ const scli::sInfo &sclx::SCLXInfo( void )
 void sclx::SCLXInitialization( xdhcdc::eMode Mode )
 {
 qRH;
+  str::wString DBFileAffix;
 qRB;
-  tasqtasks::Initialize();
+  DBFileAffix.Init();
+  sclm::MGetValue(::registry::parameter::DBFileAffix, DBFileAffix);
+
+  tasqtasks::Initialize(DBFileAffix);
 qRR;
 qRT;
 qRE;

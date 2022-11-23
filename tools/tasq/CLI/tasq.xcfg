@@ -35,12 +35,12 @@
         <Translation language="en">option (en)</Translation>
       </Translations>
       <!-- Argument descriptions -->
-      <Translations text="DBFilenameArgumentDescription">
-        <Translation language="fr">Nom du fichier de la base de donnée.</Translation>
-        <Translation language="en">DB file name.</Translation>
+      <Translations text="DBFileAffixArgumentDescription">
+        <Translation language="fr">Affixe du fichier de la base de donnée.</Translation>
+        <Translation language="en">DB file affix.</Translation>
       </Translations>
       <!-- Argument labels -->
-      <Translations text="TestArgumentLabel">
+      <Translations text="DBFileAffixArgumentLabel">
         <Translation language="fr">DB</Translation>
         <Translation language="en">DB</Translation>
       </Translations>
@@ -48,23 +48,23 @@
     <Arguments>
       <xpp:expand select="CLI_Arguments"/>
       <!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-      <Argument id="ExportCommand" Description="ExportCommandDescription" long="export" short="x" Value="Export" Usage="%DBFilenameArgument% [%XMLFilenameArgument%]"/>
-      <Argument id="ImportCommand" Description="ImportCommandDescription" long="import" short="i" Value="Import" Usage="%DBFilenameArgument% [%XMLFilenameArgument%]"/>
+      <Argument id="ExportCommand" Description="ExportCommandDescription" long="export" short="x" Value="Export" Usage="%DBFileAffixArgument% [%XMLFilenameArgument%]"/>
+      <Argument id="ImportCommand" Description="ImportCommandDescription" long="import" short="i" Value="Import" Usage="%DBFileAffixArgument% [%XMLFilenameArgument%]"/>
       <!-- Fanaux : 'Path', mais pas de 'Value'. -->
       <Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
       <!-- Options : 'Path' ET 'Value'. -->
       <Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
       <!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
-      <Argument id="DBFilenameArgument" Description="DBFilenameArgumentArgumentDescription" Path="DBFilename" Label="DBFilenameArgumentLabel"/>
+      <Argument id="DBFileAffixArgument" Description="DBFileAffixArgumentArgumentDescription" Path="DBFileAffix" Label="DBFileAffixArgumentLabel"/>
       <Argument id="XMLFilenameArgument" Description="XMLFilenameArgumentArgumentDescription" Path="XMLFilename" Label="XMLFilenameArgumentLabel"/>
       <!-- Affectations des arguments libres-->
       <Layouts>
         <Layout command="Export">
-          <Link index="0" Target="DBFilenameArgument"/>
+          <Link index="0" Target="DBFileAffixArgument"/>
           <Link index="1" Target="XMLFilenameArgument"/>
         </Layout>
         <Layout command="Import">
-          <Link index="0" Target="DBFilenameArgument"/>
+          <Link index="0" Target="DBFileAffixArgument"/>
           <Link index="1" Target="XMLFilenameArgument"/>
         </Layout>
       </Layouts>

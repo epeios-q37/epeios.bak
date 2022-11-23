@@ -2,88 +2,17 @@
 <Configurations xmlns:xpp="http://q37.info/ns/xpp/">
   <Configuration target="tasqxdh">
     <xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:set name="Update" env-var="UPDATE"/>
     <xpp:expand value-of="q37.xpp"/>
     <xpp:expand href="../../../XDH.xcfg"/>
     <Parameters>
-      <Language>en</Language>
-      <Command>Draft</Command>
-      <!-- Default command -->
-			<Devices>
-        <xpp:define name="LinuxDevices">
-          <xpp:bloc>
-            <In Policy="Id">
-              <xpp:ifeq select="packing" value="no">
-                <xpp:bloc>hw:2,0</xpp:bloc>
-              </xpp:ifeq>
-            </In>
-            <Out Policy="Id">hw:2,0</Out>
-          </xpp:bloc>
-        </xpp:define>
-        <xpp:define name="WindowsDevices">
-          <xpp:bloc>
-            <In Policy="Id">0</In>
-            <Out Policy="Id">0</Out>
-          </xpp:bloc>
-        </xpp:define>
-        <xpp:expand select="LinuxDevices"/>
-      </Devices>
-			<Signature>
-				<Time>3/4</Time>
-				<Key>-2</Key><!-- Do NOT use 'O' for C key, but '8' or '-8' to indicate the default accidental -->
-			</Signature>
-			<Tempo>
-				<Unit>3</Unit>
-				<Value>60</Value>
-			</Tempo>
-			<BaseOctave>3</BaseOctave>
-			<Width>15</Width>
-			<xpp:bloc>
-				<xpp:bloc><!--- Some macro for the script-->
-					<xpp:define name="xslt">
-						<xpp:bloc>xsltproc</xpp:bloc>
-					</xpp:define>
-					<xpp:ifeq select="packing" value="no">
-            <xpp:define name="xmld2ly">
-              <xpp:bloc>/home/csimon/hg/epeios/stable/xmld2ly.xsl</xpp:bloc>
-            </xpp:define>
-					</xpp:ifeq>
-					<xpp:ifeq select="packing" value="yes">
-            <xpp:define name="xmld2ly">
-              <xpp:bloc>./xmld2ly.xsl</xpp:bloc>
-            </xpp:define>
-					</xpp:ifeq>
-					<xpp:define name="cat">
-						<xpp:bloc>
-							<xpp:expand select="BinDir"/>
-							<xpp:bloc>cat</xpp:bloc>
-						</xpp:bloc>
-					</xpp:define>
-					<xpp:define name="Lilypond">
-						<xpp:bloc>lilypond </xpp:bloc>
-					</xpp:define>
-					<xpp:define name="putclip">
-						<xpp:bloc>
-							<xpp:expand select="BinDir"/>
-							<xpp:bloc>putclip</xpp:bloc>
-						</xpp:bloc>
-					</xpp:define>
-					<xpp:define name="Script">
-						<xpp:bloc>
-							<xpp:expand select="sabcmd"/>
-							<xpp:bloc> "file://</xpp:bloc>
-							<xpp:expand select="xmld2ly"/>
-							<xpp:bloc>" "%1" test.ly &amp;</xpp:bloc>
-							<xpp:expand select="cat"/>
-							<xpp:bloc> test.ly | </xpp:bloc>
-							<xpp:expand select="putclip"/>
-							<xpp:bloc> &amp; </xpp:bloc>
-							<xpp:expand select="Lilypond"/>
-							<xpp:bloc> test.ly &amp; start test.png</xpp:bloc>
-						</xpp:bloc>
-					</xpp:define>
-				</xpp:bloc>
-      </xpp:bloc>
-      <!--Script>while read x ; do echo $x ; done</Script-->
+			<xpp:ifeq select="Update" value="yes">
+				<DBFilename>/home/csimon/Misc/TasQ/DB</DBFilename>
+			</xpp:ifeq>
+			<xpp:ifeq select="Update" value="">
+				<DBFileAffix>./Test</DBFileAffix>
+			</xpp:ifeq>
+		<Language>en</Language>
     </Parameters>
     <Definitions>
 			<XDHTML xpp:attribute="ScriptsVersion,XDHScriptsVersion"/>
@@ -96,59 +25,8 @@
 			<XSLFiles>
 				<Items>
 					<xpp:cdata><xpp:expand href="Items.xsl"/></xpp:cdata>
-				</Items>	
+				</Items>
 			</XSLFiles>
-			<!--Script>base64 test.png</Script-->
-			<!--Script>while read x ; do echo $x ; done</Script-->
-      <!--Script>
-        <xpp:bloc>rm test.xml;</xpp:bloc>
-        <xpp:bloc>while read x ; do echo $x&gt;&gt;test.xml ; done;</xpp:bloc>
-        <xpp:expand select="xslt"/>
-        <xpp:bloc> "</xpp:bloc>
-        <xpp:expand select="xmld2ly"/>
-        <xpp:bloc>" test.xml &gt;test.ly;</xpp:bloc>
-        <xpp:expand select="Lilypond"/>
-        <xpp:bloc> test.ly; base64 -w 0 test.png</xpp:bloc>
-      </Script-->
-			<Scripts>
-			  <Script id="_ABC" Label="ABC (debug)" Mime="text/plain">
-			    <xpp:bloc># Built-in ecript. 'id' value of '_ABC' is reserved.</xpp:bloc>
-        </Script>
-				<Script id="text" Label="XML (as text)" Mime="text/plain">
-					<xpp:bloc>while read x ; do echo $x ; done | base64</xpp:bloc>
-				</Script>
-				<Script id="xml" Label="XML" Mime="text/xml">
-					<xpp:bloc>while read x ; do echo $x ; done | base64</xpp:bloc>
-				</Script>
-				<Script id="xsl" Label="XSL" Mime="text/xml">
-					<xpp:bloc>base64 </xpp:bloc>
-					<xpp:expand select="xmld2ly"/>
-				</Script>
-				<Script id="ly" Label=".ly" Mime="text/plain">
-					<xpp:expand select="xslt"/>
-					<xpp:bloc> "</xpp:bloc>
-					<xpp:expand select="xmld2ly"/>
-					<xpp:bloc>" - | base64</xpp:bloc>
-				</Script>
-				<xpp:define name="LilyCommon">
-					<xpp:bloc>
-						<xpp:expand select="xslt"/>
-						<xpp:bloc> "</xpp:bloc>
-						<xpp:expand select="xmld2ly"/>
-						<xpp:bloc>" - | </xpp:bloc>
-						<xpp:expand select="Lilypond"/>
-						</xpp:bloc>
-				</xpp:define>
-				<Script id="png" Label="PNG" Mime="image/png">
-					<xpp:bloc></xpp:bloc>
-					<xpp:expand select="LilyCommon"/>
-					<xpp:bloc> --png -o tasqxdh.tmp - ; base64 ./tasqxdh.tmp.png ; rm tasqxdh.tmp*</xpp:bloc>
-				</Script>
-				<Script id="pdf" Label="PDF" Mime="application/pdf">
-					<xpp:expand select="LilyCommon"/>
-					<xpp:bloc> -o tasqxdh.tmp - ; base64 ./tasqxdh.tmp.pdf ; rm tasqxdh.tmp*</xpp:bloc>
-				</Script>
-			</Scripts>
     </Definitions>
     <Locale>
     </Locale>

@@ -210,6 +210,32 @@ namespace tasqtasks {
     {
       return Add(Title, str::Empty, Row);
     }
+    sTRow UpdateDescription(
+      sTRow Row,
+      const str::dString &Description)
+    {
+      sTask Task;
+
+      Task.Init(Queue);
+
+      Task = GetTask_(Row);
+
+      if ( Description.Amount() ) {
+        if ( Task.Description == qNIL )
+          Task.Description = Add_(Description);
+        else
+          Strings(Task.Description) = Description;
+      } else if ( Task.Description != qNIL ) {
+          Strings.Remove(Task.Description);
+          Task.Description = qNIL;
+      }
+
+      Tasks.Store(Task, Row);
+
+      StoreMain_();
+
+      return Row;
+    }
     sTRow Parent(sTRow Row) const
     {
       return GetTask_(Row).Parent;
@@ -303,7 +329,8 @@ namespace tasqtasks {
     }
   };
 
-  void Initialize(const fnm::rName &Name);
+  // Returns true if db exists.
+  bso::sBool Initialize(const fnm::rName &Name);
   void Immortalize(void);
 
   typedef mtx::rHandle hGuard;

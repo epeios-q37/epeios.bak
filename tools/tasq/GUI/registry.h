@@ -20,22 +20,22 @@
 #ifndef REGISTRY_INC_
 # define REGISTRY_INC_
 
-# include "sclr.h"
+# include "tasqregistry.h"
 
 namespace registry {
-	using namespace sclr;
-
 	namespace parameter {
-		using namespace sclr::parameter;
+		using namespace tasqregistry::parameter;
 	}
 
 	namespace definition {
-		using namespace sclr::definition;
+		using namespace tasqregistry::definition;
 
-		extern rEntry Head;
-		extern rEntry Body;
+		extern sclr::rEntry
+      Head,
+      Body;
+
 		namespace XSLFiles{
-		  extern rEntry Items;
+		  extern sclr::rEntry Items;
 		}
 	}
 }
