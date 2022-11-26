@@ -13,6 +13,10 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-11-26
+- SCLX: adding `ConfirmB(…)`
+- XDHCMN: changing return type of `Escape(…)`;
+
 ## 2022-11-22
 - BSO: introducing endianess handling;
 - CPE: adding bitness handling;

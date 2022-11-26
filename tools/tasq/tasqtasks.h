@@ -70,8 +70,6 @@ namespace tasqtasks {
 
   class dBundle {
   private:
-    qASd AS_;
-    void StoreMain_(void);
     void Retrieve_(
       sTRow Row,
       sQManager &Manager)
@@ -89,7 +87,7 @@ namespace tasqtasks {
     {
       if ( Row == qNIL ) {
         S_.Main = Manager;
-        StoreMain_();
+        StoreStatics_();
       } else if ( Tasks.Exists(Row) ) {
         sTask Task;
         Task.Init(Queue);
@@ -106,7 +104,7 @@ namespace tasqtasks {
 
       Strings(Row) = String;
 
-      StoreMain_();
+      StoreStatics_();
 
       return Row;
     }
@@ -120,6 +118,8 @@ namespace tasqtasks {
 
       return Task;
     }
+  protected:
+    virtual void StoreStatics_(void) = 0;
   public:
     struct s {
       qASd::s AS;
@@ -131,21 +131,15 @@ namespace tasqtasks {
     dStrings Strings;
     dTasks Tasks;
     dQueue Queue;
-    dBundle( s &S)
+    dBundle(s &S)
     : S_(S),
-      AS_(S.AS),
       Strings(S.Strings),
       Tasks(S.Tasks),
       Queue(S.Queue)
     {}
     void reset(bso::sBool P = true)
     {
-      tol::reset(P, AS_, Strings, Tasks, Queue, S_.Main);
-    }
-    void plug(uys::sHook &Hook)
-    {
-      AS_.plug(Hook);
-      plug(&AS_);
+      tol::reset(P, Strings, Tasks, Queue, S_.Main);
     }
     void plug(qASd *AS)
     {
@@ -164,14 +158,12 @@ namespace tasqtasks {
     }
     void Init(void)
     {
-      tol::Init(AS_, Strings, Tasks, Queue);
+      tol::Init(Strings, Tasks, Queue);
       S_.Main.Init(Queue);
     }
-    void Immortalize(void)
+    void Flush(void)
     {
       Strings.Flush();
-      StoreMain_();
-      reset(false);
     }
     sTRow Add(
       const str::dString &Title,
@@ -200,7 +192,7 @@ namespace tasqtasks {
       Manager.BecomeLast(New, Queue);
 
       Store_(Manager, Row);
-      StoreMain_();
+      StoreStatics_();
 
       return New;
     }
@@ -232,7 +224,7 @@ namespace tasqtasks {
 
       Tasks.Store(Task, Row);
 
-      StoreMain_();
+      StoreStatics_();
 
       return Row;
     }
@@ -304,33 +296,53 @@ namespace tasqtasks {
 
         Strings.Store(Description, Task.Description);
 
-        StoreMain_();
+        StoreStatics_();
       }
     };
 
-  qW(Bundle);
-
-
   class rXBundle
-  : public wBundle
+  : public dBundle
   {
+  private:
+    qASd AS_;
+  protected:
+    virtual void StoreStatics_(void) override;
   public:
-    sTRow Selected;
+    struct s
+    : public dBundle::s
+    {
+     qASd::s AS;
+    } S_;
+    rXBundle()
+    : dBundle(S_),
+      AS_(S_.AS)
+    {}
     void reset(bso::sBool P = true)
     {
-      wBundle::reset(P);
-      Selected = qNIL;
+      dBundle::reset(P);
+      AS_.reset(P);
     }
-    qCDTOR(rXBundle);
+    void plug(uys::sHook &Hook)
+    {
+      AS_.plug(Hook);
+      dBundle::plug(&AS_);
+    }
+    qDTOR(rXBundle);
     void Init(void)
     {
-      wBundle::Init();
-      Selected = qNIL;
+      dBundle::Init();
+      AS_.Init();
     }
-  };
+    void Immortalize(void)
+    {
+      Flush();
+      reset(false);
+    }
+};
 
   // Returns true if db exists.
   bso::sBool Initialize(const fnm::rName &Name);
+
   void Immortalize(void);
 
   typedef mtx::rHandle hGuard;

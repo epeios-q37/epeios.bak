@@ -11,8 +11,8 @@
 			<Devices>
         <xpp:define name="LinuxDevices">
           <xpp:bloc>
-            <In Policy="Id">hw:2,0</In>
-            <Out Policy="Id">hw:2,0</Out>
+            <In Policy="Id">hw:1,0</In>
+            <Out Policy="Id">hw:1,0</Out>
           </xpp:bloc>
         </xpp:define>
         <xpp:define name="WindowsDevices">
@@ -21,7 +21,7 @@
             <Out Policy="Id">0</Out>
           </xpp:bloc>
         </xpp:define>
-        <xpp:expand select="WindowsDevices"/>
+        <xpp:expand select="LinuxDevices"/>
       </Devices>
 			<Signature>
 				<Time>3/4</Time>

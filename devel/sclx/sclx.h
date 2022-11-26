@@ -566,6 +566,8 @@ namespace sclx {
 			const str::dString &Message,
 			const str::dString &Title,
 			const char *Language );	// Displays 'Message' as is. 'Language' is used for the closing text message.
+		// The basic confirm, without use of 'JQuery' based widget.
+		bso::sBool ConfirmB(const str::dString & Message);
 		bso::bool__ Confirm(
 			const str::dString &XML,
 			const str::dString &XSL,

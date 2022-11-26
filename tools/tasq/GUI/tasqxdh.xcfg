@@ -17,14 +17,14 @@
     <Definitions>
 			<XDHTML xpp:attribute="ScriptsVersion,XDHScriptsVersion"/>
 			<Head>
-				<xpp:expand href="Head.xml"/>
+				<xpp:expand href="assets/Head.xml"/>
 			</Head>
 			<Body>
-				<xpp:expand href="Body.xml"/>
+				<xpp:expand href="assets/Body.xml"/>
 			</Body>
 			<XSLFiles>
 				<Items>
-					<xpp:cdata><xpp:expand href="Items.xsl"/></xpp:cdata>
+					<xpp:cdata><xpp:expand href="assets/Items.xsl"/></xpp:cdata>
 				</Items>
 			</XSLFiles>
     </Definitions>

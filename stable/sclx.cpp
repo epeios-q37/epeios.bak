@@ -329,7 +329,7 @@ qRT
 qRE
 }
 
-void sclx::sProxy::AlertB( const str::dString & RawMessage )
+void sclx::sProxy::AlertB(const str::dString & RawMessage)
 {
 qRH;
 	str::wString Dummy;
@@ -340,6 +340,23 @@ qRB;
 qRR;
 qRT;
 qRE;
+}
+
+bso::sBool sclx::sProxy::ConfirmB(const str::dString & RawMessage)
+{
+  bso::sBool Confirmation = false;
+qRH;
+	str::wString Response;
+qRB;
+	Response.Init();
+
+	Process_("Confirm_1", &Response, RawMessage);    // Get an unused return value to wait the dismissing of the dialog box.
+
+	Confirmation = Response == "true";
+qRR;
+qRT;
+qRE;
+  return Confirmation;
 }
 
 void sclx::sProxy::Alert(

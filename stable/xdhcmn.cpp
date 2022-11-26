@@ -35,7 +35,7 @@ qCDEF(char *, xdhcmn::ScriptNameForStandBy, SPECIAL_SCRIPT_NAME_MARKER "StandBy_
 qCDEF(char *, xdhcmn::ScriptNameForDismiss, SPECIAL_SCRIPT_NAME_MARKER "Dismiss_1");
 qCDEF(char *, xdhcmn::ScriptNameForInform, SPECIAL_SCRIPT_NAME_MARKER "Inform_1");
 
-void xdhcmn::Escape(
+const str::dString &xdhcmn::Escape(
 	const str::string_ &Source,
 	str::string_ &Target,
 	bso::char__ Delimiter,
@@ -102,6 +102,8 @@ void xdhcmn::Escape(
 
 		Row = Source.Next( Row );
 	}
+
+	return Target;
 }
 
 const str::dString &xdhcmn::Escape(
@@ -113,8 +115,7 @@ qRH;
 	str::wString Buffer;
 qRB;
 	Buffer.Init();
-	Escape( String, Buffer, Delimiter, EscapeChar );
-	String = Buffer;
+	String = Escape( String, Buffer, Delimiter, EscapeChar );
 qRR;
 qRT;
 qRE;

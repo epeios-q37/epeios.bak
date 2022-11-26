@@ -13,7 +13,7 @@
           <xpp:bloc>
             <In Policy="Id">
               <xpp:ifeq select="packing" value="no">
-                <xpp:bloc>hw:2,0</xpp:bloc>
+                <xpp:bloc>hw:1,0</xpp:bloc>
               </xpp:ifeq>
             </In>
             <Out Policy="Id">hw:2,0</Out>

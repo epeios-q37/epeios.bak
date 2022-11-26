@@ -21,7 +21,6 @@
 
 #include "registry.h"
 
-#include "tasqtasks.h"
 #include "tasqxml.h"
 
 using namespace main;
@@ -63,6 +62,53 @@ namespace {
   }
 }
 
+namespace {
+  qENUM( Mode_ ) {
+    mView,
+    mEdition,
+    m_amount,
+    m_Undefined
+  };
+
+  void SetDisplay_(
+    eMode_ Mode,
+    sSession &Session)
+  {
+  qRH;
+    str::wStrings
+      ViewIds, ViewClasses,
+      EditionIds, EditionClasses;
+  qRB;
+    tol::Init(ViewIds, ViewClasses);
+
+    ViewIds.AppendMulti("Tree", "TitleView", "DescriptionView", "Edit", "New");
+    ViewClasses.AppendMulti("hide", "hide", "hide" "hide", "hide");
+
+    tol::Init(EditionIds, EditionClasses);
+
+    EditionIds.AppendMulti("TitleEdition", "DescriptionEdition", "Submit", "Cancel");
+    EditionClasses.AppendMulti("hide", "hide", "hide", "hide");
+
+    switch( Mode ) {
+    case mView:
+      Session.AddClasses(EditionIds, EditionClasses);
+      Session.RemoveClasses(ViewIds, ViewClasses);
+      break;
+    case mEdition:
+      Session.AddClasses(ViewIds, ViewClasses);
+      Session.RemoveClasses(EditionIds, EditionClasses);
+      break;
+    default:
+      qRGnr();
+      break;
+    }
+  qRR;
+  qRT;
+  qRE;
+  }
+}
+
+
 #define BGRD  tasks::hGuard BundleGuard
 #define BNDL()  tasks::rXBundle &Bundle = tasks::Get(BundleGuard)
 #define CBNDL()  const tasks::rXBundle &Bundle = tasks::CGet(BundleGuard)
@@ -83,8 +129,6 @@ qRB;
   sclm::MGetValue(registry::definition::Body, Body);
 
   Session.Inner(str::Empty, Body);
-
-//  Session.Execute("var markdown = editMarkdown('Edit','# Titre\\n```python\\ndef coucou():\\n  pass\\n```')");
 
   XML.Init();
   Flow.Init(XML);
@@ -107,6 +151,8 @@ qRB;
 
   XSL.StripLeadingChars('\n');
   Session.Inner(str::wString("Tree"), XML, XSLAsURI);
+
+  SetDisplay_(mView, Session);
 qRR;
 qRT;
 qRE;
@@ -133,46 +179,94 @@ qRB;
   flx::rStringTWFlow(Script) << "renderMarkdown('DescriptionView','" << xdhcmn::Escape(Description, 0) << "');";
   Session.Execute(Script);
 
-  if ( Bundle.Selected != qNIL )
-    Session.RemoveClass(bso::Convert(*Bundle.Selected, Buffer), "selected");
+  if ( Session.Selected != qNIL )
+    Session.RemoveClass(bso::Convert(*Session.Selected, Buffer), "selected");
 
   Session.AddClass(bso::Convert(*Row, Buffer), "selected");
 
-  Bundle.Selected = Row;
+  Session.Selected = Row;
 qRR;
 qRT;
 qRE;
+}
+
+namespace {
+  void Edit_(
+    const str::dString &Title,
+    const str::dString &Description,
+    sSession &Session)
+  {
+  qRH;
+    str::wString Script, EscapedDescription;
+  qRB;
+    Session.SetValue("TitleEdition", Title);
+
+    tol::Init(Script, EscapedDescription);
+    flx::rStringTWFlow(Script) << "markdown = editMarkdown('DescriptionEdition','" << xdhcmn::Escape(Description, EscapedDescription, 0) << "');";
+    Session.Execute(Script);
+
+    SetDisplay_(mEdition, Session);
+  qRR;
+  qRT;
+  qRE;
+  }
+}
+
+D_( New )
+{
+  Session.IsNew = true;
+  Edit_(str::Empty, str::Empty, Session);
 }
 
 D_( Edit )
 {
 qRH;
   BGRD;
-  str::wString Title, Description, Script;
-  str::wStrings Ids, Classes;
-  qRB;
-  tol::Init(Ids, Classes);
-
-  Ids.AppendMulti("Tree", "TitleView", "DescriptionView");
-  Classes.AppendMulti("hide", "hide", "hide");
-  Session.AddClasses(Ids, Classes);
-
+  str::wString Title, Description;
+qRB;
   CBNDL();
 
   tol::Init(Title, Description);
-  Bundle.Get(Bundle.Selected, Title, Description);
+  Bundle.Get(Session.Selected, Title, Description);
 
-  Session.SetValue("TitleEdition", Title);
+  Session.IsNew = false;
+  Edit_(Title, Description, Session);
+qRR;
+qRT;
+qRE;
+}
 
-  Script.Init();
-  flx::rStringTWFlow(Script) << "markdown = editMarkdown('DescriptionEdition','" << xdhcmn::Escape(Description, 0) << "');";
-  Session.Execute(Script);
+namespace {
+  void RetrieveContent_(
+    sSession &Session,
+    str::dString &Title,
+    str::dString &Description)
+  {
+    Session.GetValue("Title", Title);
+    Session.Execute("let value = markdown.value(); markdown.toTextArea(); markdown = null; value;", Description);
+  }
+}
 
-  tol::Init(Ids, Classes);
+D_(Cancel)
+{
+qRH;
+  BGRD;
+  str::wString NewTitle, OldTitle, NewDescription, OldDescription;
+qRB;
+  tol::Init(NewTitle, OldTitle, NewDescription, OldDescription);
 
-  Ids.AppendMulti("TitleEdition", "DescriptionEdition");
-  Classes.AppendMulti("hide", "hide");
-  Session.RemoveClasses(Ids, Classes);
+  RetrieveContent_(Session, NewTitle, NewDescription);
+
+  if ( !Session.IsNew ) {
+    CBNDL();
+
+    Bundle.Get(Session.Selected, OldTitle, OldDescription);
+  }
+
+  if ( ( OldTitle != NewTitle) || ( OldDescription != NewDescription ) ) {
+    if ( Session.ConfirmU(str::wString("Are sure you want to cancel your modifications?"), "" ) )
+      SetDisplay_(mView, Session);
+  }
 qRR;
 qRT;
 qRE;
@@ -182,27 +276,28 @@ D_( Submit )
 {
 qRH;
   BGRD;
-  str::wString Title, Description, Script;
+  str::wString Title, Description;
 qRB;
-  BNDL();
-
   tol::Init(Title, Description);
-  Bundle.Get(Bundle.Selected, Title, Description);
 
-  Description.Init();
-  Session.Execute("let value = markdown.value(); markdown.toTextArea(); markdown = null; value;", Description);
+  RetrieveContent_(Session, Title, Description);
 
-  Bundle.Set(Title, Description, Bundle.Selected);
+  Title.StripChars();
 
-  Session.SetValue("Title", Title);
+  if ( Title.Amount() == 0 ) {
+    Session.AlertB(str::wString("Title can not be empty!"));
+  } else {
+    BNDL();
 
-  Script.Init();
-  flx::rStringTWFlow(Script) << "renderMarkdown('DescriptionView','" << xdhcmn::Escape(Description, 0) << "');";
-  Session.Execute(Script);
+    if ( Session.IsNew )
+      Bundle.Add(Title, Description, Session.Selected);
+    else
+      Bundle.Set(Title, Description, Session.Selected);
+  }
 
-  Session.AddClass("DescriptionEdition", "hide");
-  Session.RemoveClass("DescriptionView", "hide");
-  Session.RemoveClass("Tree", "hide");
+  Session.IsNew = false;
+
+  SetDisplay_(mView, Session);
 qRR;
 qRT;
 qRE;
@@ -231,7 +326,10 @@ namespace {
 
   void Register_(void)
   {
-    _::Add(Core, OnNewSession, Select, Edit, Submit);
+    _::Add(Core,
+      OnNewSession, Select,
+      Edit, New,
+      Submit, Cancel);
   }
 }
 

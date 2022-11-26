@@ -33,9 +33,9 @@ namespace melody {
   using mscmld::sNote;
   using mscmld::sPitch;
   using mscmld::sDuration;
-  using mscmld::paFlat;
-  using mscmld::paSharp;
-  using mscmld::paNatural;
+  using mscmld::aFlat;
+  using mscmld::aSharp;
+  using mscmld::aNatural;
   using mscmld::pnRest;
 
   struct sTempo {

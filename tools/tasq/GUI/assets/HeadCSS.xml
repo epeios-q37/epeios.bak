@@ -1,0 +1,26 @@
+<xpp:bloc xmlns="http://www.w3.org/1999/xhtml" xmlns:xpp="http://epeios.q37.info/ns/xpp">
+  <style>
+    <xpp:bloc>
+.selected {
+  background-color: bisque;
+}
+
+.item {
+  cursor: pointer;
+}
+
+.hide {
+  display: none;
+}
+
+.buttons {
+  margin-top: 5px;
+}
+
+.CodeMirror {
+  height: 500px;
+}
+    </xpp:bloc>
+    <xpp:expand href="HeadCSSTree.xml" />
+  </style>
+</xpp:bloc>

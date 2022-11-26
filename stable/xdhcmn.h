@@ -74,7 +74,7 @@ namespace xdhcmn {
 	static E_CDEF( char *, CloseActionLabel, "Q37Close" );
 	static E_CDEF( char *, RefreshActionLabel, "Q37Refresh" );
 
-	void Escape(
+	const str::dString &Escape(
 		const str::string_ &Source,
 		str::string_ &Target,
 		bso::char__ Delimiter,	// Should be '\'', '"' or 0. If 0, escapes '\'' and '\"', otherwise escapes 'Delimiter'.

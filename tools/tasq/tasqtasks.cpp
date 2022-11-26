@@ -41,10 +41,35 @@ namespace {
   mtx::rMutex Mutex_ = mtx::Undefined;
 }
 
-void tasqtasks::dBundle::StoreMain_(void)
+namespace {
+  const char *BuildIdentification_(void)
+  {
+    static char Identification[] = IDENTIFICATION_;
+
+    char *Tag = strstr(Identification, ENDIANESS_SEAL_TAG_);
+
+    if ( Tag == NULL )
+      qRGnr();
+
+    strncpy(Tag, bso::EndianessSeal(), sizeof(ENDIANESS_SEAL_TAG_));
+
+    return Identification;
+  }
+}
+
+void tasqtasks::rXBundle::StoreStatics_(void)
 {
-  Strings.Flush();
+  static bso::sBool HeaderIsWritten = false;
+
+  dBundle::Flush();
   FH_.Flush();
+
+  if ( !HeaderIsWritten ) {
+    FH_.Put((const sdr::sByte *)BuildIdentification_(), 0, sizeof( IDENTIFICATION_ ) );
+    FH_.Put((const sdr::sByte *)INFORMATION_, sizeof( IDENTIFICATION_ ), sizeof( INFORMATION_ ) );
+    HeaderIsWritten = true;
+  }
+
   FH_.Put((const sdr::sByte *)&XBundle_.S_, sizeof(IDENTIFICATION_) + sizeof(INFORMATION_), sizeof(XBundle_.S_));
 }
 
@@ -104,20 +129,6 @@ namespace {
     _::Add("T2.1.2", "D2.1.2", Row);
 
   }
-
-  const char *BuildIdentification_(void)
-  {
-    static char Identification[] = IDENTIFICATION_;
-
-    char *Tag = strstr(Identification, ENDIANESS_SEAL_TAG_);
-
-    if ( Tag == NULL )
-      qRGnr();
-
-    strncpy(Tag, bso::EndianessSeal(), sizeof(ENDIANESS_SEAL_TAG_));
-
-    return Identification;
-  }
 }
 
 bso::sBool tasqtasks::Initialize(const fnm::rName &Filename)
@@ -137,8 +148,6 @@ bso::sBool tasqtasks::Initialize(const fnm::rName &Filename)
     FH_.Get(sizeof(IDENTIFICATION_) + sizeof(INFORMATION_), sizeof(XBundle_.S_), (sdr::sByte *)&XBundle_.S_);
   } else {
     XBundle_.Init();
-    FH_.Put((const sdr::sByte *)BuildIdentification_(), 0, sizeof( IDENTIFICATION_ ) );
-    FH_.Put((const sdr::sByte *)INFORMATION_, sizeof( IDENTIFICATION_ ), sizeof( INFORMATION_ ) );
   }
 
   return Exists;

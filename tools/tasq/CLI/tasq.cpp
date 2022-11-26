@@ -76,18 +76,19 @@ namespace {
     tol::Init(DBFileAffix, XMLFilename);
     _::GetFilenames(DBFileAffix, XMLFilename);
 
-    tasqtasks::Initialize(DBFileAffix);
+    if ( tasqtasks::Initialize(DBFileAffix) ) {
+      Initialized = true;
 
-    Initialized = true;
+      Writer.Init(Rack.Init(XMLFilename), xml::lIndent);
 
+      Writer.PushTag("TasQ");
 
-    Writer.Init(Rack.Init(XMLFilename), xml::lIndent);
+      tasqxml::Write(tasqtasks::Get(Guard), tasqxml::ffExport, Writer);
 
-    Writer.PushTag("TasQ");
-
-    tasqxml::Write(tasqtasks::Get(Guard), tasqxml::ffExport, Writer);
-
-    Writer.PopTag();
+      Writer.PopTag();
+    } else {
+      cio::COut << "No '" << DBFileAffix << "' to export!";
+    }
 	qRR;
     Rack.HandleError();
 	qRT;
@@ -108,16 +109,18 @@ namespace {
     tol::Init(DBFileAffix, XMLFilename);
     _::GetFilenames(DBFileAffix, XMLFilename);
 
-    tasqtasks::Initialize(DBFileAffix);
+    if ( !tasqtasks::Initialize(DBFileAffix) ) {
+      Initialized = true;
 
-    Initialized = true;
+      Parser.Init(Rack.Init(XMLFilename), xml::eh_Default);
 
-    Parser.Init(Rack.Init(XMLFilename), xml::eh_Default);
+      if ( ( Parser.Parse(xml::tfStartTagClosed) != xml::tStartTagClosed ) || ( Parser.TagName() != "TasQ") )
+        qRFwk();
 
-    if ( ( Parser.Parse(xml::tfStartTagClosed) != xml::tStartTagClosed ) || ( Parser.TagName() != "TasQ") )
-      qRFwk();
-
-    tasqxml::Parse(Parser, tasqtasks::Get(Guard));
+      tasqxml::Parse(Parser, tasqtasks::Get(Guard));
+    } else {
+      cio::COut << '\'' << DBFileAffix << "' already exists!" << txf::nl;
+    }
 	qRR;
     Rack.HandleError();
 	qRT;

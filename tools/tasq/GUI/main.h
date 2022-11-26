@@ -20,6 +20,8 @@
 #ifndef MAIN_INC_
 # define MAIN_INC_
 
+# include "tasqtasks.h"
+
 # include "sclx.h"
 
 # include "bso.h"
@@ -30,9 +32,13 @@ namespace main {
   : public sclx::sProxy
   {
   public:
+    tasqtasks::sTRow Selected;
+    bso::sBool IsNew;
     void reset(bso::sBool P = true)
     {
       sProxy::reset(P);
+      Selected = qNIL;
+      IsNew = false;
     }
     qCDTOR( sSession );
     void Init(
@@ -40,6 +46,8 @@ namespace main {
 			const scli::sInfo &Info)
     {
       sProxy::Init(Callback, Info, sclx::xfh_Default);
+      Selected = qNIL;
+      IsNew = false;
     }
   };
 
