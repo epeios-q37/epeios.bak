@@ -24,7 +24,9 @@
 			</Body>
 			<XSLFiles>
 				<Items>
-					<xpp:cdata><xpp:expand href="assets/Items.xsl"/></xpp:cdata>
+					<xpp:cdata>
+					  <xpp:expand href="assets/Items.xsl"/>
+          </xpp:cdata>
 				</Items>
 			</XSLFiles>
     </Definitions>

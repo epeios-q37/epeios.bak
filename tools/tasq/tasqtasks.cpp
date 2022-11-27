@@ -36,7 +36,7 @@ using namespace tasqtasks;
 #define INFORMATION_ CPE_DESCRIPTION "; " __DATE__ " - " __TIME__
 
 namespace {
-  uys::rFOH<sizeof(IDENTIFICATION_) + sizeof(INFORMATION_) + sizeof(dBundle::s)> FH_;
+  uys::rFOH<sizeof(IDENTIFICATION_) + sizeof(INFORMATION_) + sizeof(rXBundle::s)> FH_;
   rXBundle XBundle_;
   mtx::rMutex Mutex_ = mtx::Undefined;
 }
@@ -70,7 +70,7 @@ void tasqtasks::rXBundle::StoreStatics_(void)
     HeaderIsWritten = true;
   }
 
-  FH_.Put((const sdr::sByte *)&XBundle_.S_, sizeof(IDENTIFICATION_) + sizeof(INFORMATION_), sizeof(XBundle_.S_));
+  FH_.Put((const sdr::sByte *)&XBundle_.S_, sizeof(IDENTIFICATION_) + sizeof(INFORMATION_), sizeof(rXBundle::s));
 }
 
 rXBundle &tasqtasks::Get(hGuard &Guard )

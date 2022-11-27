@@ -36,6 +36,80 @@ sclx::action_handler<sSession> main::Core;
 namespace tasks = tasqtasks;
 
 namespace {
+  qENUM( Id_ ) {
+    iTree,
+    iTitleView,
+    iDescriptionView,
+    iEdit,
+    iNew,
+    iTitleEdition,
+    iDescriptionEdition,
+    iSubmit,
+    iCancel,
+    i_amount,
+    i_Undefined
+  };
+
+#define C_( name )\
+  case i##name:\
+  return #name;\
+  break
+
+  const char *GetLabel_( eId_ Id )
+  {
+    switch ( Id ) {
+    C_( Tree );
+    C_( TitleView );
+    C_( DescriptionView );
+    C_( Edit );
+    C_( New );
+    C_( TitleEdition );
+    C_( DescriptionEdition );
+    C_( Submit );
+    C_( Cancel );
+/*
+    C_(  );
+*/
+    default:
+      qRGnr();
+      break;
+
+    }
+
+    return NULL;  // To avoid a warning.
+  }
+
+#undef C_
+
+  qENUM( Class_ ) {
+    cSelected,
+    cHide,
+    c_amount,
+    c_Undefined
+  };
+
+  const char *GetLabel_( eClass_ Class )
+  {
+    switch ( Class ) {
+    case cSelected:
+      return "selected";
+      break;
+    case cHide:
+      return "hide";
+      break;
+    default:
+      qRGnr();
+      break;
+
+    }
+
+    return NULL;  // To avoid a warning.
+  }
+}
+
+#define L_(name)  GetLabel_(name)
+
+namespace {
   void Select_(
     tasks::sTRow Row,
     const tasks::dBundle &Bundle,
@@ -55,7 +129,7 @@ namespace {
 
     Session.ScrollTo(bso::Convert(*Row, Buffer));
 
-    Session.AddClass(Buffer(), "selected");
+    Session.AddClass(Buffer(), L_( cSelected ));
   qRR;
   qRT;
   qRE;
@@ -81,18 +155,19 @@ namespace {
   qRB;
     tol::Init(ViewIds, ViewClasses);
 
-    ViewIds.AppendMulti("Tree", "TitleView", "DescriptionView", "Edit", "New");
-    ViewClasses.AppendMulti("hide", "hide", "hide" "hide", "hide");
+    ViewIds.AppendMulti(L_( iTree ), L_( iTitleView ), L_( iDescriptionView ), L_( iEdit ), L_( iNew ));
+    ViewClasses.AppendMulti(L_( cHide ), L_( cHide ), L_( cHide ), L_( cHide ), L_( cHide ));
 
     tol::Init(EditionIds, EditionClasses);
 
-    EditionIds.AppendMulti("TitleEdition", "DescriptionEdition", "Submit", "Cancel");
-    EditionClasses.AppendMulti("hide", "hide", "hide", "hide");
+    EditionIds.AppendMulti(L_( iTitleEdition ), L_( iDescriptionEdition ), L_( iSubmit ), L_( iCancel ));
+    EditionClasses.AppendMulti(L_( cHide ), L_( cHide ), L_( cHide ), L_( cHide ));
 
     switch( Mode ) {
     case mView:
       Session.AddClasses(EditionIds, EditionClasses);
       Session.RemoveClasses(ViewIds, ViewClasses);
+      Session.Execute("markdown.toTextArea(); markdown = null;");
       break;
     case mEdition:
       Session.AddClasses(ViewIds, ViewClasses);
@@ -102,6 +177,42 @@ namespace {
       qRGnr();
       break;
     }
+  qRR;
+  qRT;
+  qRE;
+  }
+}
+
+namespace {
+  void FillTree_(
+    const tasqtasks::dBundle &Bundle,
+    sSession &Session)
+  {
+  qRH;
+    str::wString XML;
+    str::wString XSL, Base64XSL, XSLAsURI;
+    flx::rStringTWFlow Flow;
+    xml::rWriter Writer;
+  qRB;
+    XML.Init();
+    Flow.Init(XML);
+    Writer.Init(Flow, xml::lIndent);
+
+    tasqxml::Write(Bundle, tasqxml::ffDisplay, Writer);
+    Writer.reset();
+    Flow.reset();
+
+    XSL.Init();
+    sclm::MGetValue(registry::definition::XSLFiles::Items, XSL);
+
+    Base64XSL.Init();
+    cdgb64::Encode(XSL, cdgb64::fOriginal, Base64XSL);
+
+    XSLAsURI.Init("data:text/xml;base64,");
+    XSLAsURI.Append(Base64XSL);
+
+    XSL.StripLeadingChars('\n');
+    Session.Inner(str::wString(L_( iTree )), XML, XSLAsURI);
   qRR;
   qRT;
   qRE;
@@ -120,37 +231,15 @@ qRH;
   BGRD;
   str::wString Body;
   str::wString Tree;
-  str::wString XML;
-  str::wString XSL, Base64XSL, XSLAsURI;
-  flx::rStringTWFlow Flow;
-  xml::rWriter Writer;
 qRB;
   Body.Init();
   sclm::MGetValue(registry::definition::Body, Body);
 
   Session.Inner(str::Empty, Body);
 
-  XML.Init();
-  Flow.Init(XML);
-  Writer.Init(Flow, xml::lIndent);
-
   CBNDL();
 
-  tasqxml::Write(Bundle, tasqxml::ffDisplay, Writer);
-  Writer.reset();
-  Flow.reset();
-
-  XSL.Init();
-  sclm::MGetValue(registry::definition::XSLFiles::Items, XSL);
-
-  Base64XSL.Init();
-  cdgb64::Encode(XSL, cdgb64::fOriginal, Base64XSL);
-
-  XSLAsURI.Init("data:text/xml;base64,");
-  XSLAsURI.Append(Base64XSL);
-
-  XSL.StripLeadingChars('\n');
-  Session.Inner(str::wString("Tree"), XML, XSLAsURI);
+  FillTree_(Bundle, Session);
 
   SetDisplay_(mView, Session);
 qRR;
@@ -173,7 +262,7 @@ qRB;
   tol::Init(Title, Description);
   Bundle.Get(Row, Title, Description);
 
-  Session.SetValue("TitleView", Title);
+  Session.SetValue(L_( iTitleView ), Title);
 
   Script.Init();
   flx::rStringTWFlow(Script) << "renderMarkdown('DescriptionView','" << xdhcmn::Escape(Description, 0) << "');";
@@ -182,7 +271,7 @@ qRB;
   if ( Session.Selected != qNIL )
     Session.RemoveClass(bso::Convert(*Session.Selected, Buffer), "selected");
 
-  Session.AddClass(bso::Convert(*Row, Buffer), "selected");
+  Session.AddClass(bso::Convert(*Row, Buffer), L_( cSelected ));
 
   Session.Selected = Row;
 qRR;
@@ -199,13 +288,15 @@ namespace {
   qRH;
     str::wString Script, EscapedDescription;
   qRB;
-    Session.SetValue("TitleEdition", Title);
+    Session.SetValue(L_( iTitleEdition ), Title);
 
     tol::Init(Script, EscapedDescription);
     flx::rStringTWFlow(Script) << "markdown = editMarkdown('DescriptionEdition','" << xdhcmn::Escape(Description, EscapedDescription, 0) << "');";
     Session.Execute(Script);
 
     SetDisplay_(mEdition, Session);
+
+    Session.Focus(L_( iTitleEdition ));
   qRR;
   qRT;
   qRE;
@@ -242,12 +333,13 @@ namespace {
     str::dString &Title,
     str::dString &Description)
   {
-    Session.GetValue("Title", Title);
-    Session.Execute("let value = markdown.value(); markdown.toTextArea(); markdown = null; value;", Description);
+    Session.GetValue(L_( iTitleEdition ), Title);
+//    Session.Execute("let value = markdown.value(); markdown.toTextArea(); markdown = null; value;", Description);
+    Session.Execute("markdown.value();", Description);
   }
 }
 
-D_(Cancel)
+D_( Cancel )
 {
 qRH;
   BGRD;
@@ -264,9 +356,10 @@ qRB;
   }
 
   if ( ( OldTitle != NewTitle) || ( OldDescription != NewDescription ) ) {
-    if ( Session.ConfirmU(str::wString("Are sure you want to cancel your modifications?"), "" ) )
+    if ( Session.ConfirmB(str::wString("Are sure you want to cancel your modifications?")) )
       SetDisplay_(mView, Session);
-  }
+  } else
+    SetDisplay_(mView, Session);
 qRR;
 qRT;
 qRE;
@@ -286,6 +379,7 @@ qRB;
 
   if ( Title.Amount() == 0 ) {
     Session.AlertB(str::wString("Title can not be empty!"));
+    Session.Focus(L_( iTitleEdition ));
   } else {
     BNDL();
 
@@ -293,11 +387,13 @@ qRB;
       Bundle.Add(Title, Description, Session.Selected);
     else
       Bundle.Set(Title, Description, Session.Selected);
+
+    Session.IsNew = false;
+
+    FillTree_(Bundle, Session);
+
+    SetDisplay_(mView, Session);
   }
-
-  Session.IsNew = false;
-
-  SetDisplay_(mView, Session);
 qRR;
 qRT;
 qRE;
