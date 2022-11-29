@@ -126,6 +126,10 @@ namespace {
   }
 }
 
-qGCTOR(msfgxdh) {
+qGCTOR( tasqxdh ) {
   sclx::SCLXGetHead = &GetHead_;
+}
+
+qGDTOR( tasqxdh ) {
+  tasqtasks::Immortalize();
 }

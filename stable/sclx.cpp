@@ -602,25 +602,38 @@ qRE;
 
 void sclx::sProxy::EnableElements( const str::dStrings &Ids )
 {
-	qRLmt();
-//	HandleElements_( Ids, &xdhdws::sProxy::EnableElements, Core_ );
+  Process_("EnableElements_1", NULL, Ids);
 }
 
 void sclx::sProxy::EnableElement(	const str::dString &Id )
 {
-	qRLmt();
-//	HandleElement_( Id, &sProxy::EnableElements, *this );
+qRH;
+  str::wStrings Ids;
+qRB;
+  Ids.Init(Id);
+
+  EnableElements(Ids);
+qRR;
+qRT;
+qRE;
 }
 
 void sclx::sProxy::DisableElements( const str::dStrings &Ids )
 {
-	qRLmt();
-//	HandleElements_( Ids, &xdhdws::sProxy::DisableElements, Core_ );
+  Process_("DisableElements_1", NULL, Ids);
 }
 
 void sclx::sProxy::DisableElement( const str::dString &Id )
 {
-	qRLmt();
-//	HandleElement_( Id, &sProxy::DisableElements, *this );
+qRH;
+  str::wStrings Ids;
+qRB;
+  Ids.Init(Id);
+
+  DisableElements(Ids);
+qRR;
+qRT;
+qRE;
 }
+
 

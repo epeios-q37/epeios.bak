@@ -113,37 +113,39 @@ qRH;
   Candidate = qNIL;
   bso::sBool SkipChildren = false;
 qRB;
-  Writer.PushTag(L_( Items ));
   Row = Bundle.First(Row);
 
-  while ( Row != qNIL ) {
-    if ( !SkipChildren ) {
-      Writer.PushTag(L_( Item ));
-      if ( Flags & ffId )
-        Writer.PutAttribute(L_( Id ), *Row);
+  if ( Row != qNIL ) {
+    Writer.PushTag(L_( Items ));
 
-      Task.Init(Bundle.Queue);
-      Bundle.Tasks.Recall(Row, Task);
-      Writer.PutAttribute(L_( Title ), Bundle.Strings(Task.Title));
-      if ( ( Flags & ffDescription ) && ( Task.Description != qNIL ) )
-        WriteDescription_(Bundle.Strings(Task.Description), Writer);
-    }
+    while ( Row != qNIL ) {
+      if ( !SkipChildren ) {
+        Writer.PushTag(L_( Item ));
+        if ( Flags & ffId )
+          Writer.PutAttribute(L_( Id ), *Row);
 
-    if ( !SkipChildren && ( Candidate = Bundle.First(Row) ) != qNIL ) {
-      Writer.PushTag(L_( Items ) );
-      Row = Candidate;
-    } else if( ( Candidate = Bundle.Next(Row) ) != qNIL ) {
-      Writer.PopTag();  // 'Item'
-      Row = Candidate;
-      SkipChildren = false;
-    } else {
-      Row = Bundle.Parent(Row);
-      Writer.PopTag();  // 'Item'
-      Writer.PopTag();  // 'Items'.
-      SkipChildren = true;
+        Task.Init(Bundle.Queue);
+        Bundle.Tasks.Recall(Row, Task);
+        Writer.PutAttribute(L_( Title ), Bundle.Strings(Task.Title));
+        if ( ( Flags & ffDescription ) && ( Task.Description != qNIL ) )
+          WriteDescription_(Bundle.Strings(Task.Description), Writer);
+      }
+
+      if ( !SkipChildren && ( Candidate = Bundle.First(Row) ) != qNIL ) {
+        Writer.PushTag(L_( Items ) );
+        Row = Candidate;
+      } else if( ( Candidate = Bundle.Next(Row) ) != qNIL ) {
+        Writer.PopTag();  // 'Item'
+        Row = Candidate;
+        SkipChildren = false;
+      } else {
+        Row = Bundle.Parent(Row);
+        Writer.PopTag();  // 'Item'
+        Writer.PopTag();  // 'Items'.
+        SkipChildren = true;
+      }
     }
   }
-
 qRR;
 qRT;
 qRE;

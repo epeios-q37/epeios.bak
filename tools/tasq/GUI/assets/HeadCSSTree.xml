@@ -22,11 +22,11 @@
 .tree li {
   line-height: 1.2;
   position: relative;
-  padding: 0 0 1em 1em;
+  padding: 0 0 0 1em;
   list-style: none;
   }
 
-.tree ul li { padding: 1em 0 0 1em; }
+.tree ul li { padding: 0.2em 0 0 1em; } /**/
 
 .tree > li:last-child { padding-bottom: 0; }
 
@@ -103,7 +103,7 @@ label.tree_label:after { border-bottom: 0; }
   }
 
 .tree li:last-child:before {
-  height: 1em;
+  height: 0.2em; /**/
   bottom: auto;
   }
 

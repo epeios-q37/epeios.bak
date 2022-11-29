@@ -13,6 +13,9 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-11-29
+- SCLX: [extn];
+
 ## 2022-11-26
 - SCLX: adding `ConfirmB(…)`
 - XDHCMN: changing return type of `Escape(…)`;

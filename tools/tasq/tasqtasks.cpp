@@ -36,7 +36,8 @@ using namespace tasqtasks;
 #define INFORMATION_ CPE_DESCRIPTION "; " __DATE__ " - " __TIME__
 
 namespace {
-  uys::rFOH<sizeof(IDENTIFICATION_) + sizeof(INFORMATION_) + sizeof(rXBundle::s)> FH_;
+  bso::sBool HeaderIsWritten_ = false;
+  uys::rFOH<sizeof(IDENTIFICATION_) + sizeof(INFORMATION_) + sizeof(rXBundle::S_)> FH_;
   rXBundle XBundle_;
   mtx::rMutex Mutex_ = mtx::Undefined;
 }
@@ -59,18 +60,16 @@ namespace {
 
 void tasqtasks::rXBundle::StoreStatics_(void)
 {
-  static bso::sBool HeaderIsWritten = false;
-
   dBundle::Flush();
   FH_.Flush();
 
-  if ( !HeaderIsWritten ) {
+  if ( !HeaderIsWritten_ ) {
     FH_.Put((const sdr::sByte *)BuildIdentification_(), 0, sizeof( IDENTIFICATION_ ) );
     FH_.Put((const sdr::sByte *)INFORMATION_, sizeof( IDENTIFICATION_ ), sizeof( INFORMATION_ ) );
-    HeaderIsWritten = true;
+    HeaderIsWritten_ = true;
   }
 
-  FH_.Put((const sdr::sByte *)&XBundle_.S_, sizeof(IDENTIFICATION_) + sizeof(INFORMATION_), sizeof(rXBundle::s));
+  FH_.Put((const sdr::sByte *)&XBundle_.S_, sizeof(IDENTIFICATION_) + sizeof(INFORMATION_), sizeof(rXBundle::S_));
 }
 
 rXBundle &tasqtasks::Get(hGuard &Guard )
@@ -146,6 +145,8 @@ bso::sBool tasqtasks::Initialize(const fnm::rName &Filename)
       qRFwk();
 
     FH_.Get(sizeof(IDENTIFICATION_) + sizeof(INFORMATION_), sizeof(XBundle_.S_), (sdr::sByte *)&XBundle_.S_);
+
+    HeaderIsWritten_ = true;
   } else {
     XBundle_.Init();
   }

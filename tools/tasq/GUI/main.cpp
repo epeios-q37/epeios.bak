@@ -38,10 +38,12 @@ namespace tasks = tasqtasks;
 namespace {
   qENUM( Id_ ) {
     iTree,
+    iTasksRoot,
     iTitleView,
     iDescriptionView,
-    iEdit,
     iNew,
+    iEdit,
+    iDelete,
     iTitleEdition,
     iDescriptionEdition,
     iSubmit,
@@ -59,10 +61,12 @@ namespace {
   {
     switch ( Id ) {
     C_( Tree );
+    C_( TasksRoot );
     C_( TitleView );
     C_( DescriptionView );
-    C_( Edit );
     C_( New );
+    C_( Edit );
+    C_( Delete );
     C_( TitleEdition );
     C_( DescriptionEdition );
     C_( Submit );
@@ -110,33 +114,6 @@ namespace {
 #define L_(name)  GetLabel_(name)
 
 namespace {
-  void Select_(
-    tasks::sTRow Row,
-    const tasks::dBundle &Bundle,
-    sSession &Session)
-  {
-  qRH;
-    bso::pInteger Buffer;
-    tasks::sTRow Looper = qNIL;
-    qCBUFFERh Parent;
-  qRB;
-    Looper = Row;
-    while ( Looper != qNIL ) {
-      Session.SetAttribute(Session.Parent(bso::Convert(*Looper, Buffer), Parent), "open", "true");
-
-      Looper = Bundle.Parent(Looper);
-    }
-
-    Session.ScrollTo(bso::Convert(*Row, Buffer));
-
-    Session.AddClass(Buffer(), L_( cSelected ));
-  qRR;
-  qRT;
-  qRE;
-  }
-}
-
-namespace {
   qENUM( Mode_ ) {
     mView,
     mEdition,
@@ -151,7 +128,8 @@ namespace {
   qRH;
     str::wStrings
       ViewIds, ViewClasses,
-      EditionIds, EditionClasses;
+      EditionIds, EditionClasses,
+      Ids;
   qRB;
     tol::Init(ViewIds, ViewClasses);
 
@@ -177,6 +155,42 @@ namespace {
       qRGnr();
       break;
     }
+
+    Ids.Init();
+
+    Ids.AppendMulti( L_( iEdit ), L_ ( iDelete ) );
+
+    if ( Session.Selected == qNIL )
+      Session.DisableElements( Ids );
+    else
+      Session.EnableElements( Ids );
+  qRR;
+  qRT;
+  qRE;
+  }
+}
+
+namespace {
+  void Select_(
+    tasks::sTRow Row,
+    const tasks::dBundle &Bundle,
+    sSession &Session)
+  {
+  qRH;
+    bso::pInteger Buffer;
+    tasks::sTRow Looper = qNIL;
+    qCBUFFERh Parent;
+  qRB;
+    Looper = Row;
+    while ( Looper != qNIL ) {
+      Session.SetAttribute(Session.Parent(bso::Convert(*Looper, Buffer), Parent), "open", "true");
+
+      Looper = Bundle.Parent(Looper);
+    }
+
+    Session.ScrollTo(bso::Convert(*Row, Buffer));
+
+    Session.AddClass(Buffer(), L_( cSelected ));
   qRR;
   qRT;
   qRE;
@@ -255,12 +269,16 @@ qRH;
   str::wString Title, Description, Script;
   bso::pInteger Buffer;
 qRB;
-  str::wString(Id).ToNumber(*Row);
-
-  BNDL();
-
   tol::Init(Title, Description);
-  Bundle.Get(Row, Title, Description);
+
+  if ( strcmp( Id, L_(iTasksRoot ) ) ) {
+    str::wString(Id).ToNumber(*Row);
+
+    BNDL();
+
+    Bundle.Get(Row, Title, Description);
+  } else
+    Row = qNIL;
 
   Session.SetValue(L_( iTitleView ), Title);
 
@@ -268,12 +286,19 @@ qRB;
   flx::rStringTWFlow(Script) << "renderMarkdown('DescriptionView','" << xdhcmn::Escape(Description, 0) << "');";
   Session.Execute(Script);
 
-  if ( Session.Selected != qNIL )
+  if ( Session.Selected == qNIL )
+    Session.RemoveClass(L_( iTasksRoot ), "selected");
+  else
     Session.RemoveClass(bso::Convert(*Session.Selected, Buffer), "selected");
 
-  Session.AddClass(bso::Convert(*Row, Buffer), L_( cSelected ));
+  if ( Row == qNIL )
+    Session.AddClass(L_( iTasksRoot ), L_( cSelected ));
+  else
+    Session.AddClass(bso::Convert(*Row, Buffer), L_( cSelected ));
 
   Session.Selected = Row;
+
+  SetDisplay_(mView, Session);
 qRR;
 qRT;
 qRE;
