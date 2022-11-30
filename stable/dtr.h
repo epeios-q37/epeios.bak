@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// Dynamic TRee 
+// Dynamic TRee
 
 #ifndef DTR_INC_
 # define DTR_INC_
@@ -46,7 +46,7 @@ namespace dtr {
 		k_amount,
 		k_Undefined,
 	};
-	
+
 	template <typename r> class dynamic_tree_;	// Predeclaration.
 
 	//c Browse structure.
@@ -85,81 +85,92 @@ namespace dtr {
 	qHOOKS2( btr::sHook, Tree, que::sHook, Queue );
 
 # define E_BROWSER__( t )	browser__<t>
-	//c A dynamic tree.
+
 	template <typename r> class dynamic_tree_
 	{
-	public:
-		//r A binary tree.
-		btr::E_BTREEt_( r ) Tree;
-		//r A queue
-		que::E_QUEUEt_( r ) Queue;
-		struct s 
+  private:
+		btr::E_BTREEt_( r ) Tree_;
+		que::E_QUEUEt_( r ) Queue_;
+  public:
+		struct s
 		{
 			typename btr::E_BTREEt_( r )::s Tree;
 			typename que::E_QUEUEt_( r )::s Queue;
 		};
 		dynamic_tree_( s &S )
-		: Tree( S.Tree ),
-		  Queue( S.Queue )
+		: Tree_( S.Tree ),
+		  Queue_( S.Queue )
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			Tree.reset( P );
-			Queue.reset( P );
+			Tree_.reset( P );
+			Queue_.reset( P );
 		}
 		void plug( sHooks &Hooks )
 		{
-			Tree.plug (Hooks.Tree_ );
-			Queue.plug( Hooks.Queue_ );
+			Tree_.plug(Hooks.Tree_);
+			Queue_.plug(Hooks.Queue_);
 		}
 		void plug( qASd *AS )
 		{
-			tol::plug( AS, Tree, Queue );
+			tol::plug( AS, Tree_, Queue_ );
 		}
 		dynamic_tree_ &operator =( const dynamic_tree_ &T )
 		{
-			Tree = T.Tree;
-			Queue = T.Queue;
+			Tree_ = T.Tree_;
+			Queue_ = T.Queue_;
 
 			return *this;
 		}
 		//f Initialization.
 		void Init( void )
 		{
-			Tree.Init();
-			Queue.Init();
+			Tree_.Init();
+			Queue_.Init();
 		}
 		//f Allocate place nedeed for 'Size' nodes.
 		void Allocate(
 			sdr::size__ Size,
 			aem::mode__ Mode = aem::m_Default )
 		{
-			Tree.Allocate( Size, Mode );
-			Queue.Allocate( Size, Mode );
+			Tree_.Allocate( Size, Mode );
+			Queue_.Allocate( Size, Mode );
 		}
 		//f 'First' becomes first of 'Node'.
-		void BecomeFirstChild( 
+		void BecomeFirstChild(
 			r First,
 			r Node )
 		{
-			if ( Tree.Left( Node ) == qNIL )
-				Tree.BecomeOverridingRight( First, Node );
+			if ( Tree_.Left( Node ) == qNIL )
+				Tree_.BecomeOverridingRight( First, Node );
 			else
-				Queue.BecomePrevious( First, Tree.Left( Node ) );
+				Queue_.BecomePrevious( First, Tree_.Left( Node ) );
 
-			Tree.BecomeOverridingLeft( First, Node );
+			Tree_.BecomeOverridingLeft( First, Node );
+		}
+		void BecomeFirst(
+			r First,
+			r Node )
+		{
+		  return BecomeFirstChild(First, Node);
 		}
 		//f 'Last' becomes last of 'Node'.
-		void BecomeLastChild( 
+		void BecomeLastChild(
 			r Last,
 			r Node )
 		{
-			if ( Tree.Right( Node ) == qNIL )
-				Tree.BecomeOverridingLeft( Last, Node );
+			if ( Tree_.Right( Node ) == qNIL )
+				Tree_.BecomeOverridingLeft( Last, Node );
 			else
-				Queue.BecomeNext( Last, Tree.Right( Node ) );
+				Queue_.BecomeNext( Last, Tree_.Right( Node ) );
 
-			Tree.BecomeOverridingRight( Last, Node );
+			Tree_.BecomeOverridingRight( Last, Node );
+		}
+		void BecomeLast(
+			r Last,
+			r Node )
+		{
+		  return BecomeLastChild(Last, Node);
 		}
 		//f 'Previous' becomes node previous to 'Node'.
 		void BecomePreviousSibling(
@@ -168,13 +179,19 @@ namespace dtr {
 		{
 			r Parent;
 
-			Queue.BecomePrevious( Previous, Node );
+			Queue_.BecomePrevious( Previous, Node );
 
-			if ( ( Parent = Tree.Parent( Node ) ) != qNIL ) {
-				if ( Tree.Left( Parent ) == Node )
-					Tree.BecomeLeft( Previous, Parent );
-				Tree.ForceParent( Previous, Parent );
+			if ( ( Parent = Tree_.Parent( Node ) ) != qNIL ) {
+				if ( Tree_.Left( Parent ) == Node )
+					Tree_.BecomeLeft( Previous, Parent );
+				Tree_.ForceParent( Previous, Parent );
 			}
+		}
+		void BecomePrevious(
+			r Previous,
+			r Node )
+		{
+		  return BecomePreviousSibling(Previous, Node);
 		}
 		//f 'Next' becomes node next to 'Node'.
 		void BecomeNextSibling(
@@ -183,13 +200,19 @@ namespace dtr {
 		{
 			r Parent;
 
-			Queue.BecomeNext( Next, Node );
+			Queue_.BecomeNext( Next, Node );
 
-			if ( ( Parent = Tree.Parent( Node ) ) != qNIL ) {
-				if ( Tree.Right( Parent ) == Node )
-					Tree.BecomeRight( Next, Parent );
-				Tree.ForceParent( Next, Parent );
+			if ( ( Parent = Tree_.Parent( Node ) ) != qNIL ) {
+				if ( Tree_.Right( Parent ) == Node )
+					Tree_.BecomeRight( Next, Parent );
+				Tree_.ForceParent( Next, Parent );
 			}
+		}
+		void BecomeNext(
+			r Next,
+			r Node )
+		{
+		  return BecomeNextSibling(Next, Node);
 		}
 # if 0
 		// Swap 'Node1' and 'Node2'. Both nodes must be from the same queue.
@@ -199,30 +222,38 @@ namespace dtr {
 		{
 			r Parent;
 
-			Queue.Swap( Node1, Node2 );
+			Queue_.Swap( Node1, Node2 );
 
-			if ( ( Parent = Tree.Parent( Node1 ) ) != qNIL ) {
-				if ( Tree.Left( Parent ) == Node1 )
-					Tree.BecomeLeft( Node2, Parent );
-				else if ( Tree.Left( Parent ) == Node2 )
-					Tree.BecomeLeft( Node1, Parent );
+			if ( ( Parent = Tree_.Parent( Node1 ) ) != qNIL ) {
+				if ( Tree_.Left( Parent ) == Node1 )
+					Tree_.BecomeLeft( Node2, Parent );
+				else if ( Tree_.Left( Parent ) == Node2 )
+					Tree_.BecomeLeft( Node1, Parent );
 
-				if ( Tree.Right( Parent ) == Node1 )
-					Tree.BecomeRight( Node2, Parent );
-				else if ( Tree.Right( Parent ) == Node2 )
-					Tree.BecomeRight( Node1, Parent );
+				if ( Tree_.Right( Parent ) == Node1 )
+					Tree_.BecomeRight( Node2, Parent );
+				else if ( Tree_.Right( Parent ) == Node2 )
+					Tree_.BecomeRight( Node1, Parent );
 			}
 		}
 # endif
 		//f Return first node of 'Node'.
 		r FirstChild( r Node ) const
 		{
-			return Tree.Left( Node );
+			return Tree_.Left( Node );
+		}
+		r First( r Node ) const
+		{
+			return FirstChild(Node);
 		}
 		//f Return last node of 'Node'.
 		r LastChild( r Node ) const
 		{
-			return Tree.Right( Node );
+			return Tree_.Right( Node );
+		}
+		r Last( r Node ) const
+		{
+			return LastChild(Node);
 		}
 		bso::bool__ HasChild( r Node ) const
 		{
@@ -231,7 +262,11 @@ namespace dtr {
 		//f Return node previous to 'Node'.
 		r PreviousSibling( r Node ) const
 		{
-			return Queue.Previous( Node );
+			return Queue_.Previous( Node );
+		}
+		r Previous( r Node ) const
+		{
+			return PreviousSibling(Node);
 		}
 		bso::bool__ HasPreviousSibling( r Node ) const
 		{
@@ -240,7 +275,11 @@ namespace dtr {
 		//f Return node next to 'Node'.
 		r NextSibling( r Node ) const
 		{
-			return Queue.Next( Node );
+			return Queue_.Next( Node );
+		}
+		r Next( r Node ) const
+		{
+			return NextSibling(Node);
 		}
 		bso::bool__ HasNextSibling( r Node ) const
 		{
@@ -249,28 +288,28 @@ namespace dtr {
 		//f Return parent of 'Node'.
 		r Parent( r Node ) const
 		{
-			return Tree.Parent( Node );
+			return Tree_.Parent( Node );
 		}
 		r Cut( r Node )
 		{
-			r P = Tree.Parent( Node );
-			r L = Queue.Previous( Node ), R = Queue.Next( Node );
+			r P = Tree_.Parent( Node );
+			r L = Queue_.Previous( Node ), R = Queue_.Next( Node );
 
-			Tree.Cut( Node );
+			Tree_.Cut( Node );
 
 			if ( P != qNIL ) {
 				if ( L == qNIL ) {
 					if ( R != qNIL )
-						Tree.BecomeLeft( R, P );
+						Tree_.BecomeLeft( R, P );
 				}
 
 				if ( R == qNIL ) {
 					if ( L != qNIL )
-						Tree.BecomeRight( L, P );
+						Tree_.BecomeRight( L, P );
 				}
 			}
 
-			Queue.Delete( Node );
+			Queue_.Delete( Node );
 
 			return Node;
 		}
@@ -281,7 +320,7 @@ namespace dtr {
 		//f Return amount of nodes.
 		sdr::size__ Amount( void ) const
 		{
-			return Tree.Amount();
+			return Tree_.Amount();
 		}
 		/*f Return the first, then next node, or 'qNIL' if no more,
 		using 'BrowseStruct'. */
@@ -424,15 +463,15 @@ namespace dtr {
 		uys::eState Init(
 			const rHF &Filenames,
 			uys::mode__ Mode,
-			uys::behavior__ Behavior,
+			sdr::eType Type,
 			flsq::id__ ID )
 		{
 			reset();
 
-			uys::eState State = Tree_.Init( Filenames.Tree, Mode, Behavior, ID );
+			uys::eState State = Tree_.Init( Filenames.Tree, Mode,Type, ID );
 
 			if ( !State.IsError() ) {
-				if ( Queue_.Init( Filenames.Queue, Mode, Behavior, ID ) != State )
+				if ( Queue_.Init( Filenames.Queue, Mode, Type, ID ) != State )
 					State = uys::sInconsistent;
 			}
 
@@ -528,7 +567,7 @@ namespace dtr {
 # define qDTREEdl E_DTREE_
 # define qDTREEwl E_DTREEt
 
-# define qBROWSERb( row ) E_BROWSER__( row )
+# define qBROWSERs( row ) E_BROWSER__( row )
 
 
 #endif

@@ -19,17 +19,17 @@
     </xsl:attribute>
     <xsl:attribute name="class">tree_label item</xsl:attribute>
   </xsl:attribute-set>
-  <xsl:template match="/">
+  <xsl:template match="/Tasks">
     <ul class="tree">
       <xsl:choose>
         <xsl:when test="Items">
           <input type="checkbox" id="{generate-id()}"/>
           <label style="color: transparent; width: 0px;" class="tree_label" for="{generate-id()}">i</label>
-          <span xsl:use-attribute-sets="ItemWithChildren" id="TasksRoot">Tasks with</span>
+          <span xsl:use-attribute-sets="ItemWithChildren" id="{@RootId}">Tasks with</span>
           <xsl:apply-templates select="Items"/>
           </xsl:when>
         <xsl:otherwise>
-          <span xsl:use-attribute-sets="ItemEvents" id="TasksRoot" class="item">Tasks without</span>
+          <span xsl:use-attribute-sets="ItemEvents" id="{@RootId}" class="item">Tasks without</span>
         </xsl:otherwise>
       </xsl:choose>      
     </ul>

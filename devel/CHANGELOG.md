@@ -13,6 +13,11 @@
 - [typo]: typography;
 - [warn]: fixing compiler warning messages;
 
+## 2022-11-30
+- DTR:
+  - [adpt],
+  - [extn];
+
 ## 2022-11-29
 - SCLX: [extn];
 

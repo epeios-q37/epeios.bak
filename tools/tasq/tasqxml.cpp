@@ -26,8 +26,10 @@ namespace tasks = tasqtasks;
 
 namespace {
   qENUM(Token_) {
+    tTasks,
     tItems,
     tItem,
+    tRootId,
     tId,
     tSelected,
     tTitle,
@@ -41,11 +43,17 @@ namespace {
     const char *Label = NULL;
 
     switch ( Token ) {
+    case tTasks:
+      Label = "Tasks";
+      break;
     case tItems:
       Label = "Items";
       break;
     case tItem:
       Label = "Item";
+      break;
+    case tRootId:
+      Label = "RootId";
       break;
     case tId:
       Label = "id";
@@ -102,6 +110,7 @@ namespace {
   }
 }
 
+#if 0
 void tasqxml::Write(
   const tasqtasks::dBundle &Bundle,
   int Flags,
@@ -124,7 +133,7 @@ qRB;
         if ( Flags & ffId )
           Writer.PutAttribute(L_( Id ), *Row);
 
-        Task.Init(Bundle.Queue);
+        Task.Init();
         Bundle.Tasks.Recall(Row, Task);
         Writer.PutAttribute(L_( Title ), Bundle.Strings(Task.Title));
         if ( ( Flags & ffDescription ) && ( Task.Description != qNIL ) )
@@ -150,6 +159,67 @@ qRR;
 qRT;
 qRE;
 }
+#else
+void tasqxml::Write(
+  const tasqtasks::dBundle &Bundle,
+  int Flags,
+  xml::rWriter &Writer)
+{
+qRH;
+  dtr::qBROWSERs(tasks::sTRow) Browser;
+  tasks::sTask Task;
+  tasks::sTRow Row = qNIL;
+  bso::sBool Skip = false;
+qRB;
+  Writer.PushTag(L_( Tasks) );
+
+  if ( Flags & ffId )
+    Writer.PutAttribute(L_( RootId ), *Bundle.Root());
+
+  Browser.Init(Bundle.Root());
+
+  Row = Bundle.Browse(Browser);
+
+  while ( Row != qNIL ) {
+    switch ( Browser.Kinship() ) {
+      case dtr::kChild:
+        Writer.PushTag(L_( Items ) );
+        break;
+      case dtr::kSibling:
+        Writer.PopTag();  // 'Item'
+        break;
+      case dtr::kParent:
+        Writer.PopTag();  // 'Item'
+        Writer.PopTag();  // 'Items'.
+        Skip = true;
+        break;
+      default:
+        qRGnr();
+        break;
+    }
+
+    if ( !Skip ) {
+      Writer.PushTag(L_( Item ));
+      if ( Flags & ffId )
+        Writer.PutAttribute(L_( Id ), *Row);
+
+      Task.Init();
+      Bundle.Tasks.Recall(Row, Task);
+      Writer.PutAttribute(L_( Title ), Bundle.Strings(Task.Title));
+      if ( ( Flags & ffDescription ) && ( Task.Description != qNIL ) )
+        WriteDescription_(Bundle.Strings(Task.Description), Writer);
+    } else
+      Skip = false;
+
+    Row = Bundle.Browse(Browser);
+  }
+
+  Writer.PopTag();
+qRR;
+qRT;
+qRE;
+}
+#endif
 
 namespace {
   void ParseItems_(

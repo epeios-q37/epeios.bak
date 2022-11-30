@@ -23,6 +23,7 @@
 		<Modules Group="Epeios" Path="$EpeiosPath$/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
+				<xpp:expand select="CoreModules"/>
 				<Module>cdgurl</Module>
 			</Modules>
 			<Modules Group="FBL">

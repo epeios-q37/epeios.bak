@@ -22,9 +22,9 @@
 # define TASQTASKS_INC_
 
 # include "bso.h"
+# include "dtr.h"
 # include "lstbch.h"
 # include "lstcrt.h"
-# include "que.h"
 # include "str.h"
 
 namespace tasqtasks {
@@ -35,30 +35,21 @@ namespace tasqtasks {
 
   qROW( TRow );
 
-  typedef qQUEUEd( sTRow ) dQueue;
-  qW( Queue );
-
-  typedef qQUEUEMs( sTRow ) sQManager;
+  typedef dtr::qDTREEd( sTRow ) dTree;
 
   class sTask {
   public:
     sSRow
       Title,
       Description;
-    sTRow Parent;
-    sQManager Children;
     void reset(bso::sBool P = true)
     {
       Title = Description = qNIL;
-      Parent = qNIL;
-      tol::reset( P, Children );
     }
     qCDTOR(sTask);
-    void Init(const dQueue &Queue)
+    void Init(void)
     {
       Title = Description = qNIL;
-      Parent = qNIL;
-      Children.Init(Queue);
     }
   };
 
@@ -66,38 +57,10 @@ namespace tasqtasks {
   typedef lstbch::qLBUNCHd( sTask, sTRow ) dTasks;
   qW(Tasks);
 
-  qHOOKS3(lstcrt::sHooks, Strings, lstbch::sHooks, Tasks, que::sHook, Queue);
-
-  class dBundle {
+  class dBundle
+  : public dTree
+  {
   private:
-    void Retrieve_(
-      sTRow Row,
-      sQManager &Manager)
-    {
-      if ( Row == qNIL )
-        Manager = S_.Main;
-      else if ( Tasks.Exists(Row) )
-        Manager = Tasks(Row).Children;
-      else
-        qRGnr();
-    }
-    void Store_(
-      const sQManager &Manager,
-      sTRow Row)
-    {
-      if ( Row == qNIL ) {
-        S_.Main = Manager;
-        StoreStatics_();
-      } else if ( Tasks.Exists(Row) ) {
-        sTask Task;
-        Task.Init(Queue);
-
-        Tasks.Recall(Row, Task);
-        Task.Children = Manager;
-        Tasks.Store(Task, Row);
-      } else
-        qRGnr();
-    }
     sSRow Add_(const str::dString &String)
     {
       sSRow Row = Strings.New();
@@ -112,7 +75,7 @@ namespace tasqtasks {
     {
       sTask Task;
 
-      Task.Init(Queue);
+      Task.Init();
 
       Tasks.Recall(Row, Task);
 
@@ -121,77 +84,94 @@ namespace tasqtasks {
   protected:
     virtual void StoreStatics_(void) = 0;
   public:
-    struct s {
+    struct s
+    : public dTree::s
+    {
       qASd::s AS;
       dStrings::s Strings;
       dTasks::s Tasks;
-      dQueue::s Queue;
-      sQManager Main; // Main tasks
+      sTRow Root; // Main tasks
     } &S_;
     dStrings Strings;
     dTasks Tasks;
-    dQueue Queue;
     dBundle(s &S)
-    : S_(S),
+    : dTree(S),
+      S_(S),
       Strings(S.Strings),
-      Tasks(S.Tasks),
-      Queue(S.Queue)
+      Tasks(S.Tasks)
     {}
     void reset(bso::sBool P = true)
     {
-      tol::reset(P, Strings, Tasks, Queue, S_.Main);
+      tol::reset(P, Strings, Tasks);
+      dTree::reset(P);
+      S_.Root = qNIL;
     }
     void plug(qASd *AS)
     {
-      Strings.plug(AS);
-      Tasks.plug(AS);
-      Queue.plug(AS);
+      tol::plug(AS, Strings, Tasks);
+      dTree::plug(AS);
     }
     dBundle &operator =(const dBundle &B)
     {
       Strings = B.Strings;
       Tasks = B.Tasks;
-      Queue = B.Queue;
-      S_.Main = B.S_.Main;
+      dTree::operator=(B);
+      S_.Root = B.S_.Root;
 
       return *this;
     }
     void Init(void)
     {
-      tol::Init(Strings, Tasks, Queue);
-      S_.Main.Init(Queue);
+      sTask Task;
+      tol::Init(Strings, Tasks);
+      dTree::Init();
+      Task.Init();
+      S_.Root = Tasks.Add(Task);
+      dTree::Allocate(Tasks.Extent());
     }
     void Flush(void)
     {
       Strings.Flush();
     }
+    sTRow Root(void) const
+    {
+      if ( S_.Root == qNIL )
+        qRGnr();
+
+      return S_.Root;
+    }
+    bso::sBool IsRoot(sTRow Row) const
+    {
+      return Row == Root();
+    }
+    sTRow Next(void) const
+    {
+      return Next(S_.Root);
+    }
+    using dTree::Next;
     sTRow Add(
       const str::dString &Title,
       const str::dString &Description,
       sTRow Row = qNIL)
     {
-      sQManager Manager;
       sTask Task;
       sTRow New = qNIL;
 
-      Manager.Init(Queue);
-      Retrieve_(Row, Manager);
+      if ( Row == qNIL )
+        Row = S_.Root;
 
-      Task.Init(Queue);
+      Task.Init();
 
       Task.Title = Add_(Title);
 
       if ( Description.Amount() )
         Task.Description = Add_(Description);
 
-      Task.Parent = Row;
-
       New = Tasks.Add(Task);
-      Queue.Allocate(Tasks.Extent());
+      dTree::Allocate(Tasks.Extent());
 
-      Manager.BecomeLast(New, Queue);
+      BecomeLast(New, Row);
 
-      Store_(Manager, Row);
       StoreStatics_();
 
       return New;
@@ -208,7 +188,7 @@ namespace tasqtasks {
     {
       sTask Task;
 
-      Task.Init(Queue);
+      Task.Init();
 
       Task = GetTask_(Row);
 
@@ -228,38 +208,6 @@ namespace tasqtasks {
 
       return Row;
     }
-    sTRow Parent(sTRow Row) const
-    {
-      return GetTask_(Row).Parent;
-    }
-    sTRow Next(sTRow Row = qNIL) const
-    {
-      if ( Row == qNIL )
-        return S_.Main.First(Queue);
-      else
-        return Queue.Next(Row);
-    }
-    sTRow Previous(sTRow Row = qNIL) const
-    {
-      if ( Row == qNIL )
-        return S_.Main.Last(Queue);
-      else
-        return Queue.Previous(Row);
-    }
-    sTRow First(sTRow Row) const
-    {
-      if ( Row == qNIL )
-        return S_.Main.First(Queue);
-      else
-        return GetTask_(Row).Children.First(Queue);
-    }
-    sTRow Last(sTRow Row) const
-    {
-      if ( Row == qNIL )
-        return S_.Main.Last(Queue);
-      else
-        return GetTask_(Row).Children.Last(Queue);
-    }
     void Get(
       sTRow Row,
       str::dString &Title,
@@ -267,7 +215,7 @@ namespace tasqtasks {
     {
       sTask Task;
 
-      Task.Init(Queue);
+      Task.Init();
 
       Task = GetTask_(Row);
 
@@ -283,7 +231,7 @@ namespace tasqtasks {
       {
         sTask Task;
 
-        Task.Init(Queue);
+        Task.Init();
 
         Task = GetTask_(Row);
 
@@ -330,8 +278,8 @@ namespace tasqtasks {
     qDTOR(rXBundle);
     void Init(void)
     {
-      dBundle::Init();
       AS_.Init();
+      dBundle::Init();
     }
     void Immortalize(void)
     {
