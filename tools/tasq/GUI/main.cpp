@@ -121,7 +121,6 @@ namespace {
 
   void SetDisplay_(
     eMode_ Mode,
-    bso::sBool SelectedIsRoot,
     sSession &Session)
   {
   qRH;
@@ -132,8 +131,8 @@ namespace {
   qRB;
     tol::Init(ViewIds, ViewClasses);
 
-    ViewIds.AppendMulti(L_( iTree ), L_( iTitleView ), L_( iDescriptionView ), L_( iEdit ), L_( iNew ));
-    ViewClasses.AppendMulti(L_( cHide ), L_( cHide ), L_( cHide ), L_( cHide ), L_( cHide ));
+    ViewIds.AppendMulti(L_( iTree ), L_( iTitleView ), L_( iDescriptionView ), L_( iEdit ), L_( iNew ), L_( iDelete ));
+    ViewClasses.AppendMulti(L_( cHide ), L_( cHide ), L_( cHide ), L_( cHide ), L_( cHide ), L_( cHide ));
 
     tol::Init(EditionIds, EditionClasses);
 
@@ -159,7 +158,7 @@ namespace {
 
     Ids.AppendMulti( L_( iEdit ), L_ ( iDelete ) );
 
-    if ( SelectedIsRoot )
+    if ( Session.Selected == qNIL )
       Session.DisableElements( Ids );
     else
       Session.EnableElements( Ids );
@@ -253,7 +252,7 @@ qRB;
 
   FillTree_(Bundle, Session);
 
-  SetDisplay_(mView, Bundle.IsRoot(Session.Selected()), Session);
+  SetDisplay_(mView, Session);
 qRR;
 qRT;
 qRE;
@@ -282,13 +281,13 @@ qRB;
   flx::rStringTWFlow(Script) << "renderMarkdown('DescriptionView','" << xdhcmn::Escape(Description, 0) << "');";
   Session.Execute(Script);
 
-  Session.RemoveClass(bso::Convert(*Session.Selected(), Buffer), "selected");
+  Session.RemoveClass(bso::Convert(Session.Selected == qNIL ? *Bundle.Root() : *Session.Selected, Buffer), "selected");
 
   Session.AddClass(bso::Convert(*Row, Buffer), L_( cSelected ));
 
-  Session.Selected(Row);
+  Session.Selected = Row == Bundle.Root() ? qNIL : Row;
 
-  SetDisplay_(mView, Bundle.IsRoot(Row), Session);
+  SetDisplay_(mView, Session);
 qRR;
 qRT;
 qRE;
@@ -310,7 +309,7 @@ namespace {
     flx::rStringTWFlow(Script) << "markdown = editMarkdown('DescriptionEdition','" << xdhcmn::Escape(Description, EscapedDescription, 0) << "');";
     Session.Execute(Script);
 
-    SetDisplay_(mEdition, SelectedIsRoot, Session);
+    SetDisplay_(mEdition, Session);
 
     Session.Focus(L_( iTitleEdition ));
   qRR;
@@ -373,17 +372,17 @@ qRB;
 
   RetrieveContent_(Session, NewTitle, NewDescription);
 
-  CBNDL();
-
   if ( !Session.IsNew ) {
+    CBNDL();
+
     Bundle.Get(Session.Selected(), OldTitle, OldDescription);
   }
 
   if ( ( OldTitle != NewTitle) || ( OldDescription != NewDescription ) ) {
     if ( Session.ConfirmB(str::wString("Are sure you want to cancel your modifications?")) )
-      SetDisplay_(mView, Bundle.IsRoot(Session.Selected()), Session);
+      SetDisplay_(mView, Session);
   } else
-    SetDisplay_(mView, Bundle.IsRoot(Session.Selected()), Session);
+    SetDisplay_(mView, Session);
 qRR;
 qRT;
 qRE;
@@ -416,7 +415,7 @@ qRB;
 
     FillTree_(Bundle, Session);
 
-    SetDisplay_(mView, Bundle.IsRoot(Session.Selected()), Session);
+    SetDisplay_(mView, Session);
   }
 qRR;
 qRT;

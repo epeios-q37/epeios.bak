@@ -31,14 +31,13 @@ namespace main {
   class sSession
   : public sclx::sProxy
   {
-  private:
-    tasqtasks::sTRow Selected_;
   public:
+    tasqtasks::sTRow Selected;
     bso::sBool IsNew;
     void reset(bso::sBool P = true)
     {
       sProxy::reset(P);
-      Selected_ = qNIL;
+      Selected = qNIL;
       IsNew = false;
     }
     qCDTOR( sSession );
@@ -46,26 +45,9 @@ namespace main {
 			xdhcuc::cSingle &Callback,
 			const scli::sInfo &Info)
     {
-    qRH;
-      tasqtasks::hGuard Guard;
-    qRB;
       sProxy::Init(Callback, Info, sclx::xfh_Default);
-      Selected_ = tasqtasks::Get(Guard).Root();
+      Selected = qNIL;
       IsNew = false;
-    qRR;
-    qRT;
-    qRE;
-    }
-    tasqtasks::sTRow Selected(void) const
-    {
-      if ( Selected_ == qNIL )
-        qRGnr();
-
-      return Selected_;
-    }
-    void Selected(tasqtasks::sTRow Row)
-    {
-      Selected_ = Row;
     }
   };
 

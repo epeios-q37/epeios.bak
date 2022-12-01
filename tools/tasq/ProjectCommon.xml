@@ -1,0 +1,14 @@
+ <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+   <xpp:define name="TasQModules">
+		<Modules Group="TasQ" Path="../">
+      <Module>tasqregistry</Module>
+      <Module>tasqtasks</Module>
+		  <Module>tasqxml</Module>
+    </Modules>
+  </xpp:define>
+  <xpp:define name="CoreModules">
+    <xpp:bloc>
+      <Module>btr</Module>
+    </xpp:bloc>
+  </xpp:define>
+</xpp:bloc>

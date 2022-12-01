@@ -110,56 +110,6 @@ namespace {
   }
 }
 
-#if 0
-void tasqxml::Write(
-  const tasqtasks::dBundle &Bundle,
-  int Flags,
-  xml::rWriter &Writer)
-{
-qRH;
-  tasks::sTask Task;
-  tasks::sTRow Row = qNIL,
-  Candidate = qNIL;
-  bso::sBool SkipChildren = false;
-qRB;
-  Row = Bundle.First(Row);
-
-  if ( Row != qNIL ) {
-    Writer.PushTag(L_( Items ));
-
-    while ( Row != qNIL ) {
-      if ( !SkipChildren ) {
-        Writer.PushTag(L_( Item ));
-        if ( Flags & ffId )
-          Writer.PutAttribute(L_( Id ), *Row);
-
-        Task.Init();
-        Bundle.Tasks.Recall(Row, Task);
-        Writer.PutAttribute(L_( Title ), Bundle.Strings(Task.Title));
-        if ( ( Flags & ffDescription ) && ( Task.Description != qNIL ) )
-          WriteDescription_(Bundle.Strings(Task.Description), Writer);
-      }
-
-      if ( !SkipChildren && ( Candidate = Bundle.First(Row) ) != qNIL ) {
-        Writer.PushTag(L_( Items ) );
-        Row = Candidate;
-      } else if( ( Candidate = Bundle.Next(Row) ) != qNIL ) {
-        Writer.PopTag();  // 'Item'
-        Row = Candidate;
-        SkipChildren = false;
-      } else {
-        Row = Bundle.Parent(Row);
-        Writer.PopTag();  // 'Item'
-        Writer.PopTag();  // 'Items'.
-        SkipChildren = true;
-      }
-    }
-  }
-qRR;
-qRT;
-qRE;
-}
-#else
 void tasqxml::Write(
   const tasqtasks::dBundle &Bundle,
   int Flags,
@@ -219,12 +169,12 @@ qRR;
 qRT;
 qRE;
 }
-#endif
 
 namespace {
-  void ParseItems_(
-    xml::rParser &Parser,
-    tasqtasks::dBundle &Bundle)
+  namespace _ {
+    void ParseItems(
+      xml::rParser &Parser,
+      tasqtasks::dBundle &Bundle)
     {
     qRH;
       bso::sBool Continue = true;
@@ -315,6 +265,48 @@ namespace {
     qRT;
     qRE;
     }
+  }
+
+  void ParseTasks_(
+    xml::rParser &Parser,
+    tasqtasks::dBundle &Bundle)
+  {
+  qRH;
+    bso::sBool Continue = true;
+  qRB;
+    if ( GetToken_(Parser.TagName()) != tTasks )
+      qRGnr();
+
+    while ( Continue ) {
+      switch ( Parser.Parse(xml::tfObvious) ) {
+      case xml::tStartTag:
+        switch ( GetToken_(Parser.TagName() ) ) {
+        case tItems:
+          _::ParseItems(Parser, Bundle);
+          break;
+        default:
+          qRGnr();
+          break;
+      }
+      break;
+      case xml::tEndTag:
+        if ( GetToken_(Parser.TagName()) != tTasks )
+          qRGnr();
+        Continue = false;
+        break;
+      case xml::t_Error:
+        qRGnr();
+        break;
+      default:
+        qRGnr();
+        break;
+      }
+    }
+  qRR;
+  qRT;
+  qRE;
+  }
+
 }
 
 void tasqxml::Parse(
@@ -328,14 +320,15 @@ qRB;
     switch ( Parser.Parse(xml::tfObvious) ) {
     case xml::tStartTag:
       switch ( GetToken_(Parser.TagName() ) ) {
-      case tItems:
-        ParseItems_(Parser, Bundle);
+      case tTasks:
+        ParseTasks_(Parser, Bundle);
         break;
       default:
         qRGnr();
         break;
     }
-    case xml::t_Processed:
+    break;
+    case xml::tEndTag:
       Continue = false;
       break;
     case xml::t_Error:
